@@ -1,10 +1,38 @@
 import React from 'react';
-import {} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+// User side
+import UserLogin from './components/User_side/Login';
+import UserRegister from './components/User_side/Register';
+import UserProfile from './components/User_side/Profile';
+import UserAddress from './components/User_side/Address';
+import UserBookingHistoryTable from './components/User_side/History_booking';
+import UserHistoryViewMore from './components/User_side/HistoryViewMore';
+
+// Admin side
+
+// Technician side
+
+import "../public/css/index.css";
 
 function App() {
   return (
     <>
-    
+      <BrowserRouter>
+        <Routes>
+
+          {/* User side */}
+          <Route path='/login' element={<UserLogin />} />;
+          <Route path='/register' element={<UserRegister />} />;
+          <Route path='/profile' element={<UserProfile />} />;
+          <Route path='/address' element={<UserAddress />} />;
+          <Route path='/bookingHistory' element={<UserBookingHistoryTable />} />;
+          <Route path='/viewmoreHistory' element={<UserHistoryViewMore />} />;
+
+          {/* Admin side */}
+
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }
