@@ -1,5 +1,5 @@
 import React from "react";
-import { AboutUS, Account, Address, Booking, Contact, Home, Logout } from "../../../public/svgs/Icons";
+import { AboutUS, Account, Address, Booking, Contact, Home, Logout, Worker } from "../../../public/svgs/Icons";
 import { useNavigate } from "react-router-dom";
 
 const UserSideBar = ({ openSideBar, setOpenSideBar }) => {
@@ -36,7 +36,7 @@ const UserSideBar = ({ openSideBar, setOpenSideBar }) => {
                 <Account />
                 <span className="text nav-text">Account</span>
               </li>
-              <li className="nav-link">
+              <li className="nav-link" onClick={() => navigate("/address")}>
                 <Address />
                 <span className="text nav-text">Address settings</span>
               </li>
@@ -51,6 +51,10 @@ const UserSideBar = ({ openSideBar, setOpenSideBar }) => {
               <li className="nav-link">
                 <AboutUS />
                 <span className="text nav-text">About us</span>
+              </li>
+              <li className="nav-link">
+                <Worker />
+                <span className="text nav-text">Technician console</span>
               </li>
             </ul>
           </div>

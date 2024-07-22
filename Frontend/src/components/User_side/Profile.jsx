@@ -28,8 +28,8 @@ const UserProfile = () => {
                       <input type="password" className="form-control mt-3" placeholder="Change Password" />
                       <input type="password" className="form-control mt-3" placeholder="Confirm Password" />
                       <div className="buttons mt-3">
-                        <button className="btn btn-outline-primary px-3" onClick={() => setIsEdit(false)}>Cancel</button>
-                        <button className="btn bg-gradient-primary px-4 ms-3">Save</button>
+                        <button className="btn btn-outline-primary w-30 px-3" onClick={() => setIsEdit(false)}>Cancel</button>
+                        <button className="btn bg-gradient-primary w-30 px-4 ms-3">Save</button>
                       </div>
                     </>
                   ) : (
