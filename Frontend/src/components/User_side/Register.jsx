@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import backgroundImage from "/images/Login&RegisterBackground.jpg";
 import { useNavigate } from 'react-router-dom';
-import { user_Base_URL } from '../../config/credentials';
+import { Base_URL } from '../../config/credentials';
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
 
 const UserRegister = () => {
   const [name, setName] = useState("");
@@ -13,17 +14,51 @@ const UserRegister = () => {
   const navigate = useNavigate();
 
   const handleRegister = async () => {
-    event.preventDefault()
-    try {
-      const response = await axios.post(`${user_Base_URL}/register`, { name, email, phone, password, confirm_password });
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
+    event.preventDefault();
+    let isValid = true;
+    if (name.length < 3 || name.length > 20) {
+      toast("Username must be between 3 and 20 characters.", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+      isValid = false;
+    }
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      toast("Please enter a valid email address.", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+      isValid = false;
+    }
+    const phonePattern = /^\d{10}$/;
+    if (!phonePattern.test(phone)) {
+      toast("Please enter a valid 10-digit phone number.", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+      isValid = false;
+    }
+    if (password.length < 8) {
+      toast("Password must be at least 8 characters long.", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+      isValid = false;
+    }
+    if (password !== confirm_password) {
+      toast("Confirm password does not match.", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+      isValid = false;
+    }
+    if (isValid) {
+      try {
+        const response = await axios.post(`${Base_URL}/register`, { name, email, phone, password, confirm_password });
+        if (response.data.serviceResponse == "Email already exists") {
+          toast("Email already exists.", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+        } else if (response.data.serviceResponse == "OTP not sended") {
+          toast.error("Something wrong please try again later", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+        } else {
+          localStorage.setItem("userOTP", response.data.serviceResponse);
+          localStorage.setItem("userDatas", JSON.stringify(response.data.userData));
+          navigate("/otp");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
   return (
     <>
+      <ToastContainer position='bottom-right' className="text-dark font-weight-light text-sm" />
       <div className="page-header pt-3 pb-10 m-3 border-radius-lg" style={{ backgroundImage: `url(${backgroundImage})` }}>
         <span className="mask bg-gradient-primary opacity-8"></span>
         <div className="container">
@@ -43,8 +78,11 @@ const UserRegister = () => {
               <div className="card-body">
                 <form onSubmit={() => handleRegister()}>
                   <input type="text" className="form-control mb-3" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-                  <input type="email" className="form-control mb-3" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                  <input type="text" className="form-control mb-3" placeholder="Phone number" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                  <input type="text" className="form-control mb-3" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                  <div className='d-flex'>
+                    <input className="form-control mb-3 w-20 me-2" readOnly defaultValue={"+91"} />
+                    <input type="text" className="form-control mb-3" placeholder="Phone number" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                  </div>
                   <input type="password" className="form-control mb-3" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                   <input type="password" className="form-control mb-3" placeholder="Confirm Password" value={confirm_password} onChange={(e) => setConfirm_password(e.target.value)} />
                   <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2">Sign up</button>

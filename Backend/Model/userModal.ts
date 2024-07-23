@@ -5,6 +5,7 @@ type userType = {
    email: string;
    phone: string;
    password: string;
+   isBlocked?: boolean
 }
 
 const userSchema = new Schema<userType>({
@@ -19,6 +20,10 @@ const userSchema = new Schema<userType>({
    },
    password: {
       type: String
+   },
+   isBlocked: {
+      type: Boolean,
+      default: false
    }
 }, {
    versionKey: false

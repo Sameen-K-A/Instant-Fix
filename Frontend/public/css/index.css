@@ -2658,6 +2658,16 @@ progress {
   color: #6c757d;
 }
 
+.otp-div {
+  border-radius: 10px;
+  text-align: center;
+  font-size: 25px;
+  outline: none;
+  border: 1px solid gray;
+  height: 55px;
+  width: 55px;
+}
+
 .form-control {
   display: block;
   width: 100%;

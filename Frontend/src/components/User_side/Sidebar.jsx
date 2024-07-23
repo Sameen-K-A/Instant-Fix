@@ -28,7 +28,7 @@ const UserSideBar = ({ openSideBar, setOpenSideBar }) => {
         <div className="menu-bar">
           <div className="menu">
             <ul className="menu-links">
-              <li className="nav-link">
+              <li className="nav-link" onClick={() => navigate("/")}>
                 <Home />
                 <span className="text nav-text">Home</span>
               </li>

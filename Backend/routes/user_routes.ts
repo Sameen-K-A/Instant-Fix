@@ -5,5 +5,6 @@ const router = Router();
 const userController = new UserController()
 
 router.post("/register", userController.register_controller);
+router.post("/verifyotp", userController.verifyOTP_controller);
 
 export default router;
