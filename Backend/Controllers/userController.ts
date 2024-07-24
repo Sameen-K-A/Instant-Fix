@@ -8,6 +8,16 @@ const userServices = new UserServices(userRepository);
 
 class UserController {
 
+   async login_controller(req: Request, res: Response) {
+      try {
+         const loginDatas = req.body;
+         const serviceResponse = await userServices.loginUserService(loginDatas.email, loginDatas.password);
+         res.json(serviceResponse);
+      } catch (error) {
+         console.log(error);
+      }
+   }
+
    async register_controller(req: Request, res: Response): Promise<void> {
       try {
          const userData: userType = req.body;

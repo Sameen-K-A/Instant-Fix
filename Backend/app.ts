@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import session from "express-session";
 import user_routes from "./routes/user_routes";
+import admin_routes from "./routes/admin_routes";
 import DB_Connection from "./Config/DB_config";
 
 dotenv.config();
@@ -15,12 +16,14 @@ app.use(session({
    resave: false,
    saveUninitialized: false,
    cookie: {
-      httpOnly: true,   
+      httpOnly: true,
    }
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 app.use(cors());
+app.use("/admin", admin_routes);
 app.use("/", user_routes);
 
 app.listen(3000, (): void => {

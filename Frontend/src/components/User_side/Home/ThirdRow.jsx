@@ -1,18 +1,27 @@
 import React from "react";
+import leftIMG from "../../../../public/images/workersIMG_1.png";
 
 const ThirdRow = () => {
   return (
-    <div className="ThirdRowContainer">
-      <div className="leftThirdRowContent shadow-xl"></div>
-      <div className="rightThirdRowContent">
-        <h1>Heading</h1>
-        <h5>Subheading</h5>
-        <p>Lorem Ipsum is simply dummy text of the printing and typesetting <br />
-          industry. Lorem Ipsum has been the industry's standard dummy <br />
-          text ever since the 1500s, when an unknown printer took a galley of <br />
-          type and scrambled it to make a type specimen book.</p>
+    <section className="section">
+      <div className="container">
+        <div className="row">
+          <div className="col-lg-6 col-md-12 col-sm-12">
+            <img src={leftIMG} width={"400px"} className="rounded d-block mx-auto" alt="App" />
+          </div>
+          <div className="col-lg-6 col-md-12 col-sm-12 align-self-center mobile-top-fix">
+            <div className="left-heading">
+              <h3 className="font-weight-bolder">We can help you to grow your business</h3>
+            </div>
+            <div className="left-text">
+              <p>Nullam sit amet purus libero. Etiam ullamcorper nisl ut augue blandit, at finibus leo
+                efficitur. Nam gravida purus non sapien auctor, ut aliquam magna ullamcorper.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   )
 }
 

@@ -2,7 +2,7 @@ import { userModel, userType } from "../Model/userModal";
 
 class UserRepository {
 
-  async userAlreadyExists(email: string) {
+  async fineUser(email: string) {
     return await userModel.findOne({ email: email });
   }
 

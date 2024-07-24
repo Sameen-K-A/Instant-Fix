@@ -1,15 +1,20 @@
 import { Schema, model } from "mongoose";
 
 type userType = {
-   user_name: string;
+   user_id?: string,
+   name: string;
    email: string;
    phone: string;
    password: string;
-   isBlocked?: boolean
+   isBlocked?: boolean;
+   profileIMG: string;
 }
 
 const userSchema = new Schema<userType>({
-   user_name: {
+   user_id: {
+      type: String
+   },
+   name: {
       type: String
    },
    email: {
@@ -24,6 +29,10 @@ const userSchema = new Schema<userType>({
    isBlocked: {
       type: Boolean,
       default: false
+   },
+   profileIMG: {
+      type: String,
+      default: "userDefaultProfile.png"
    }
 }, {
    versionKey: false

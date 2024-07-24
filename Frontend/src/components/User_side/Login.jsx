@@ -1,14 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import backgroundImage from "/images/Login&RegisterBackground.jpg";
 import GoogleIcon from "../../../public/svgs/GoogleIcon";
+import { ToastContainer, toast } from 'react-toastify';
+import axios from 'axios';
+import { Base_URL } from '../../config/credentials';
 
 const UserLogin = () => {
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const handleLogin = async () => {
+    event.preventDefault();
+    if (email.trim().length && password.trim().length) {
+      const response = await axios.post(`${Base_URL}/login`, { email, password });
+      if (response.data === "email not found") {
+        toast("Email is not found", { hideProgressBar: true, autoClose: 5000, closeButton: false })
+      } else if (response.data === "Wrong password") {
+        toast("Password is wrong", { hideProgressBar: true, autoClose: 5000, closeButton: false })
+      } else {
+        sessionStorage.setItem("userToken", response.data.userToken);
+        sessionStorage.setItem("userDetails", JSON.stringify(response.data.userData));
+        navigate("/");
+      }
+    } else {
+      toast("All fields are required", { hideProgressBar: true, autoClose: 5000, closeButton: false })
+    }
+  }
 
   return (
     <>
+      <ToastContainer position='bottom-right' className="text-dark font-weight-light text-sm" />
       <div className="page-header pt-3 pb-10 m-3 border-radius-lg" style={{ backgroundImage: `url(${backgroundImage})` }}>
         <span className="mask bg-gradient-primary opacity-8"></span>
         <div className="container">
@@ -30,12 +53,12 @@ const UserLogin = () => {
                   <GoogleIcon />Login with Google
                 </div>
                 <p className="text-sm my-2 mb-3 text-center font-weight-bold">or</p>
-                <form role="form text-left">
-                  <input type="email" className="form-control mb-3" placeholder="Email" />
-                  <input type="password" className="form-control mb-3" placeholder="Password" />
-                  <button type="button" className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in</button>
-                  <p className="text-sm mt-3 mb-0">
-                    Don't have an account yet? <a className="text-dark font-weight-bolder" style={{ cursor: "pointer" }} onClick={() => navigate("/register")}>Register</a>
+                <form role="form text-left" onSubmit={handleLogin}>
+                  <input type="text" className="form-control mb-3" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                  <input type="password" className="form-control mb-3" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                  <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in</button>
+                  <p className="text-sm mt-3 mb-0">Don't have an account yet?
+                    <a className="text-dark font-weight-bolder" style={{ cursor: "pointer" }} onClick={() => navigate("/register")}> <u>Register</u></a>
                   </p>
                 </form>
               </div>
