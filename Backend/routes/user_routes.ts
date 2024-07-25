@@ -8,4 +8,9 @@ router.post("/login", userController.login_controller);
 router.post("/register", userController.register_controller);
 router.post("/verifyotp", userController.verifyOTP_controller);
 
+// user address session;
+router.get("/address", userController.fetchAddress_controller);
+router.post("/address", userController.addAddress_controller);
+router.delete("/address", userController.deleteAddress_controller);
+
 export default router;

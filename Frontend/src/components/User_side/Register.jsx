@@ -6,6 +6,7 @@ import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 
 const UserRegister = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -40,6 +41,7 @@ const UserRegister = () => {
     }
     if (isValid) {
       try {
+        setIsLoading(true)
         const response = await axios.post(`${Base_URL}/register`, { name, email, phone, password, confirm_password });
         if (response.data.serviceResponse == "Email already exists") {
           toast("Email already exists.", { hideProgressBar: true, autoClose: 5000, closeButton: false });
@@ -48,8 +50,10 @@ const UserRegister = () => {
         } else {
           localStorage.setItem("userOTP", response.data.serviceResponse);
           localStorage.setItem("userDatas", JSON.stringify(response.data.userData));
+          setIsLoading(false);
           navigate("/otp");
         }
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -85,9 +89,13 @@ const UserRegister = () => {
                   </div>
                   <input type="password" className="form-control mb-3" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                   <input type="password" className="form-control mb-3" placeholder="Confirm Password" value={confirm_password} onChange={(e) => setConfirm_password(e.target.value)} />
-                  <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2">Sign up</button>
+                  {!isLoading ? (
+                    <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2">Sign up</button>
+                  ) : (
+                    <button type="button" className="btn bg-gradient-primary w-100 my-4 mb-2">Loading . . .</button>
+                  )}
                   <p className="text-sm mt-3 mb-0">
-                    Already have an account? <a className="text-dark font-weight-bolder" style={{ cursor: "pointer" }} onClick={() => navigate("/login")}>Sign in</a>
+                    Already have an account? <a className="text-dark font-weight-bolder" style={{ cursor: "pointer" }} onClick={() => navigate("/login")}><u>Sign in</u></a>
                   </p>
                 </form>
               </div>

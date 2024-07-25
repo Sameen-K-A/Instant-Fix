@@ -152,9 +152,12 @@
 .circle {
    width: 30px;
    height: 30px;
-   background-color: #000000;
-   border-radius: 50%;
+   
    cursor: pointer;
+}
+
+.circle img {
+   border-radius: 50%;
 }
 
 
@@ -212,7 +215,11 @@
 .sidebar .text {
    color: #000000;
    font-size: 15px;
-   transition: all 0.2s ease;
+}
+
+.sidebar .text p {
+   color: #000000;
+   font-size: 15px;
 }
 
 .sidebar header {
@@ -243,7 +250,7 @@ header .image-text .name {
 }
 
 .sidebar header .image img {
-   width: 40px;
+   width: 50px;
    border-radius: 50%;
 }
 
@@ -297,7 +304,7 @@ header .image-text .name {
 .sidebar .bottom-content {
    position: absolute;
    bottom: 20px;
-   width: 100%;
+   width: 90%;
    display: flex;
    align-items: center;
    padding-left: 10px;

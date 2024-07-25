@@ -1,6 +1,7 @@
 import React from 'react'
 import TechnicianProfileCard from '../../components/User_side/TechnicianProfileCard';
 import UserNavbar from '../../components/User_side/NavbarPage';
+import Footer from "../../components/Common/Footer";
 
 const TechniciansListPage = () => {
    return (
@@ -19,10 +20,9 @@ const TechniciansListPage = () => {
                <TechnicianProfileCard />
                <TechnicianProfileCard />
                <TechnicianProfileCard />
-               <TechnicianProfileCard />
-               <TechnicianProfileCard />
             </div>
          </div>
+         <Footer />
       </>
    )
 }

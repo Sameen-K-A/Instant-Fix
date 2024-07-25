@@ -20,6 +20,7 @@ import AdminDashboard from './components/Admin_side/AdminDashboard';
 
 // Technician side
 import TechnicianHome from './components/Technician_side/TechnicianHome';
+import TechnicianRole from './components/Technician_side/TechnicianRole';
 
 // Style css and others
 import "../public/css/index.css";
@@ -39,10 +40,10 @@ function App() {
           <Route path='/register' element={<UserRegister />} />;
           <Route path='/otp' element={<UserOTP />} />;
           <Route path='/profile' element={<UserProtecter><UserProfile /></UserProtecter>} />;
-          <Route path='/address' element={<UserAddress />} />;
-          <Route path='/allTechnicians' element={<TechniciansListPage />} />;
-          <Route path='/bookingHistory' element={<UserBookingHistoryTable />} />;
-          <Route path='/viewmoreHistory' element={<UserHistoryViewMore />} />;
+          <Route path='/address' element={<UserProtecter><UserAddress /></UserProtecter>} />;
+          <Route path='/allTechnicians' element={<UserProtecter><TechniciansListPage /></UserProtecter>} />;
+          <Route path='/bookingHistory' element={<UserProtecter><UserBookingHistoryTable /></UserProtecter>} />;
+          <Route path='/viewmoreHistory' element={<UserProtecter><UserHistoryViewMore /></UserProtecter>} />;
 
           {/* Admin side */}
           <Route path='/admin/login' element={<AdminLogin />} />;
@@ -50,6 +51,7 @@ function App() {
 
           {/* Technician side */}
           <Route path='/technician' element={<TechnicianHome />} />;
+          <Route path='/technician/role' element={<TechnicianRole />} />;
 
         </Routes>
       </BrowserRouter>

@@ -56,6 +56,7 @@ const UserLogin = () => {
                 <form role="form text-left" onSubmit={handleLogin}>
                   <input type="text" className="form-control mb-3" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                   <input type="password" className="form-control mb-3" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                  <label style={{cursor: "pointer"}}><u>Forget your password?</u></label>
                   <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in</button>
                   <p className="text-sm mt-3 mb-0">Don't have an account yet?
                     <a className="text-dark font-weight-bolder" style={{ cursor: "pointer" }} onClick={() => navigate("/register")}> <u>Register</u></a>

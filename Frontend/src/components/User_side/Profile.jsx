@@ -22,11 +22,12 @@ const UserProfile = () => {
                 {userDetails && (
                   <>
                     <div className="text-center position-relative">
-                      <img src={`${Base_URL}/${userDetails?.profileIMG}`} width="200" className="rounded-circle" alt="User Profile" />
+                      <img src={`${Base_URL}/${userDetails?.profileIMG}`} width="160" className="rounded-circle" alt="User Profile" />
                     </div>
                     <div className="text-center mt-3">
                       {isEdit ? (
                         <>
+                        <button className='btn btn-outline-primary'>Choose a image</button>
                           <input type="text" className="form-control mt-3" placeholder="Name" defaultValue={userDetails?.name} />
                           <input type="text" className="form-control mt-3" placeholder="Phone Number" defaultValue={userDetails?.phone} />
                           <input type="password" className="form-control mt-3" placeholder="Change Password" />

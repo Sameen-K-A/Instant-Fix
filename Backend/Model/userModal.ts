@@ -8,6 +8,7 @@ type userType = {
    password: string;
    isBlocked?: boolean;
    profileIMG: string;
+   isTechnician?: boolean;
 }
 
 const userSchema = new Schema<userType>({
@@ -33,6 +34,10 @@ const userSchema = new Schema<userType>({
    profileIMG: {
       type: String,
       default: "userDefaultProfile.png"
+   },
+   isTechnician: {
+      type: Boolean,
+      default: false
    }
 }, {
    versionKey: false

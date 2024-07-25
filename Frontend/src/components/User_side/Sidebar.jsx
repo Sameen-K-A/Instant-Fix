@@ -1,10 +1,13 @@
 import React from "react";
 import { AboutUS, Account, Address, Booking, Contact, Home, Logout, Worker } from "../../../public/svgs/Icons";
 import { useNavigate } from "react-router-dom";
+import { Base_URL } from "../../config/credentials";
+import profile from "../../../public/images/userDefaultProfile.png";
 
 const UserSideBar = ({ openSideBar, setOpenSideBar }) => {
   const userAccessToken = sessionStorage.getItem("userToken");
   const navigate = useNavigate();
+  const userData = JSON.parse(sessionStorage.getItem("userDetails"));
   const handleCloseSidebar = (e) => {
     if (e.target.className === "backdrop") {
       setOpenSideBar(false);
@@ -26,10 +29,10 @@ const UserSideBar = ({ openSideBar, setOpenSideBar }) => {
             <header>
               <div className="image-text">
                 <span className="image">
-                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOH2aZnIHWjMQj2lQUOWIL2f4Hljgab0ecZQ&s" alt="" />
+                  <img src={userData?.profileIMG ? `${Base_URL}/${userData?.profileIMG}` : profile} alt="img" />
                 </span>
                 <div className="text logo-text">
-                  <span className="name">Sameen K A</span>
+                  <span className="name">{userData?.name}</span>
                 </div>
               </div>
             </header>
@@ -60,25 +63,30 @@ const UserSideBar = ({ openSideBar, setOpenSideBar }) => {
                     <AboutUS />
                     <span className="text nav-text">About us</span>
                   </li>
-                  <li className="nav-link">
+                  <li className="nav-link" onClick={() => navigate("/technician")}>
                     <Worker />
                     <span className="text nav-text">Technician console</span>
                   </li>
+                  <li className="bottom-content" onClick={() => { handleLogout() }}>
+                    <Logout />
+                    <span className="text nav-text">Logout</span>
+                  </li>
                 </ul>
               </div>
-              <li className="bottom-content" onClick={() => { handleLogout() }}>
-                <Logout />
-                <span className="text nav-text">Logout</span>
-              </li>
             </div>
           </>
         ) : (
-          <>
-            <h6 className="text-center">please login</h6>
-            <div className="d-flex justify-content-center">
-              <button className="btn bg-gradient-primary" onClick={() => navigate("/login")}>Login</button>
+          <div className="d-flex flex-column justify-content-center align-items-center min-vh-100">
+            <h5 className="text-center">Please login</h5>
+            <p className="text-center mt-2 text-sm">
+              Sign in to access your account and enjoy all the features. If you don't have an account,
+              you can easily create one.
+            </p>
+            <div className="d-flex justify-content-center mt-3 w-100">
+              <button className="btn bg-gradient-primary w-60" onClick={() => navigate("/login")}>Login</button>
             </div>
-          </>
+          </div>
+
         )}
       </nav>
     </div>
