@@ -11,23 +11,29 @@ const UserLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const handleLogin = async () => {
+
+  const handleLogin = async (event) => {
     event.preventDefault();
-    if (email.trim().length && password.trim().length) {
-      const response = await axios.post(`${Base_URL}/login`, { email, password });
-      if (response.data === "email not found") {
-        toast.error("Email is not found")
-      } else if (response.data === "Wrong password") {
-        toast.error("Password is wrong")
-      } else {
+    try {
+      if (email.trim().length && password.trim().length) {
+        const response = await axios.post(`${Base_URL}/login`, { email, password });
         sessionStorage.setItem("userToken", response.data.userToken);
         sessionStorage.setItem("userDetails", JSON.stringify(response.data.userData));
         navigate("/");
+      } else {
+        toast.warning("All fields are required");
       }
-    } else {
-      toast.warning("All fields are required")
+    } catch (error) {
+      if (error.response && error.response.data.message === "email not found") {
+        toast.error("Email not found");
+      } else if (error.response && error.response.data.message === "Wrong password") {
+        toast.error("Password is wrong");
+      } else {
+        console.error("login error => ", error);
+        toast.error("Something went wrong, please try again later.");
+      }
     }
-  }
+  };
 
   return (
     <>
@@ -52,10 +58,10 @@ const UserLogin = () => {
                   <GoogleIcon />Login with Google
                 </div>
                 <p className="text-sm my-2 mb-3 text-center font-weight-bold">or</p>
-                <form role="form text-left" onSubmit={handleLogin}>
+                <form role="form text-left" onSubmit={(e) => handleLogin(e)}>
                   <input type="text" className="form-control mb-3" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                   <input type="password" className="form-control mb-3" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                  <label style={{cursor: "pointer"}}><u>Forget your password?</u></label>
+                  <label style={{ cursor: "pointer" }}><u>Forget your password?</u></label>
                   <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in</button>
                   <p className="text-sm mt-3 mb-0">Don't have an account yet?
                     <a className="text-dark font-weight-bolder" style={{ cursor: "pointer" }} onClick={() => navigate("/register")}> <u>Register</u></a>

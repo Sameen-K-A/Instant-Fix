@@ -14,22 +14,20 @@ class UserServices {
    }
 
    async loginUserService(email: string, password: string) {
-      const userData = await this.userRepository.fineUser(email);
-      if (userData) {
+      try {
+         const userData = await this.userRepository.findUser(email);
+         if (!userData) throw new Error("email not found");
          const comparePassword = await bcrypt.compare(password, userData.password);
-         if (comparePassword) {
-            const userToken = createToken(userData.user_id as string);
-            return { userToken, userData }
-         } else {
-            return "Wrong password";
-         }
-      } else {
-         return "email not found";
+         if (!comparePassword) throw new Error("Wrong password");
+         const userToken = createToken(userData.user_id as string);
+         return { userToken, userData };
+      } catch (error) {
+         throw error;
       }
-   }
+   };
 
    async registerUserService(userData: userType) {
-      const alreadyExists = await this.userRepository.fineUser(userData.email);
+      const alreadyExists = await this.userRepository.findUser(userData.email);
       if (!alreadyExists) {
          const OTP: string = Math.floor(1000 + Math.random() * 9000).toString();
          console.log(OTP);

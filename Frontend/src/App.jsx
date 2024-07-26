@@ -55,7 +55,7 @@ function App() {
 
         </Routes>
       </BrowserRouter>
-      <Toaster richColors expand={false} position="bottom-right" toastOptions={{ style: { padding: '16px', borderRadius: '8px' } }} />
+      <Toaster richColors expand={false} position="bottom-right" toastOptions={{ style: { padding: '18px', borderRadius: '8px' } }} />
     </>
   )
 }

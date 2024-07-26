@@ -3,8 +3,12 @@ import { userAddressModal, userAddressType } from "../Model/userAddressModal";
 
 class UserRepository {
 
-  async fineUser(email: string) {
-    return await userModel.findOne({ email: email });
+  async findUser(email: string) {
+    try {
+      return await userModel.findOne({ email });
+    } catch (error) {
+      throw new Error("Database error");
+    }
   }
 
   async registerUserRepository(userData: userType) {

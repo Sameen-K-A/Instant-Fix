@@ -9,13 +9,19 @@ const userServices = new UserServices(userRepository);
 
 class UserController {
 
-   async login_controller(req: Request, res: Response) {
+   async loginController(req: Request, res: Response) {
       try {
-         const loginDatas = req.body;
-         const serviceResponse = await userServices.loginUserService(loginDatas.email, loginDatas.password);
-         res.json(serviceResponse);
-      } catch (error) {
-         console.log(error);
+         const { email, password } = req.body;
+         const serviceResponse = await userServices.loginUserService(email, password);
+         return res.status(200).json(serviceResponse);
+      } catch (error: any) {
+         if (error.message === "email not found") {
+            res.status(404).json({ message: "email not found" });
+         } else if (error.message === "Wrong password") {
+            res.status(401).json({ message: "Wrong password" });
+         } else {
+            res.status(500).json({ message: "Something wrong please try again later" });
+         }
       }
    }
 
