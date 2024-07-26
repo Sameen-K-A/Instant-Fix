@@ -23,6 +23,15 @@ class UserRepository {
     return await userAddressModal.deleteOne({ address_id: address_id });
   }
 
+  async accessIsTechnician(user_id: string) {
+    try {
+      return await userModel.updateOne({ user_id }, { isTechnician: true });
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
 }
 
 export default UserRepository;

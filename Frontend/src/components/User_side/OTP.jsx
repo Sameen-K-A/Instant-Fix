@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import backgroundImage from "/images/Login&RegisterBackground.jpg";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Base_URL } from '../../config/credentials';
@@ -60,13 +60,12 @@ const UserOTP = () => {
       localStorage.removeItem("userDatas");
       navigate("/login");
     } else {
-      toast.error("Invalid OTP", { hideProgressBar: true, autoClose: 4000, closeButton: false });
+      toast.error("Invalid OTP");
     }
   }
 
   return (
     <>
-      <ToastContainer position='bottom-right' className="text-dark font-weight-light text-sm" />
       <div className="page-header pt-3 pb-10 m-3 border-radius-lg" style={{ backgroundImage: `url(${backgroundImage})` }}>
         <span className="mask bg-gradient-primary opacity-8"></span>
         <div className="container">

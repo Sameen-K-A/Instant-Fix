@@ -1,17 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Footer from '../Common/Footer';
-import TechnicianNavbar from './NavbarPage copy';
-import { useNavigate } from 'react-router-dom';
+import TechnicianNavbar from './NavbarPage';
 
 const TechnicianHome = () => {
-  const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
-  //   if (!userDetails.isTechnician) {
-  //     navigate("/technician/role");
-  //   }
-  // }, [])
   return (
     <>
       <TechnicianNavbar />

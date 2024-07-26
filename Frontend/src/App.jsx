@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Toaster } from 'sonner';
 
 // User side
 import UserLogin from './components/User_side/Login';
@@ -26,7 +27,6 @@ import TechnicianRole from './components/Technician_side/TechnicianRole';
 import "../public/css/index.css";
 import "../public/css/user_home.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -51,10 +51,11 @@ function App() {
 
           {/* Technician side */}
           <Route path='/technician' element={<TechnicianHome />} />;
-          <Route path='/technician/role' element={<TechnicianRole />} />;
+          <Route path='/technician/joinTechnician' element={<TechnicianRole />} />;
 
         </Routes>
       </BrowserRouter>
+      <Toaster richColors expand={false} position="bottom-right" toastOptions={{ style: { padding: '16px', borderRadius: '8px' } }} />
     </>
   )
 }

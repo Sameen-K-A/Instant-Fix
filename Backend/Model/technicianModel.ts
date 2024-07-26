@@ -4,9 +4,9 @@ type technicianType = {
    user_id: string;
    technician_id: string;
    profession: string;
-   isBlocked: boolean;
-   availability: boolean;
-   rating: Number;
+   isBlocked?: boolean;
+   availability?: boolean;
+   rating?: Number;
 }
 
 const technicianSchema = new Schema<technicianType>({

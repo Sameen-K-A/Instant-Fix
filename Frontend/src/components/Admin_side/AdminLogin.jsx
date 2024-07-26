@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import backgroundImage from "/images/Login&RegisterBackground.jpg";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Base_URL } from '../../config/credentials';
@@ -16,22 +16,21 @@ const AdminLogin = () => {
     if (email.trim().length && password.trim().length) {
       const response = await axios.post(`${Base_URL}/admin/login`, { email, password });
       if (response.data === "Wrong email") {
-        toast("Entered email is wrong please check your email.", { hideProgressBar: true, autoClose: 4000, closeButton: false });
+        toast.error("Entered email is wrong please check your email.");
       } else if (response.data === "Wrong password") {
-        toast("Entered password is wrong please check your password.", { hideProgressBar: true, autoClose: 4000, closeButton: false });
+        toast.error("Entered password is wrong please check your password.");
       } else {
         const adminToken = response.data;
         sessionStorage.setItem("adminToken", adminToken);
         navigate("/admin/dashboard");
       }
     } else {
-      toast("All fields are required.", { hideProgressBar: true, autoClose: 4000, closeButton: false });
+      toast.warning("All fields are required.");
     }
   }
 
   return (
     <>
-      <ToastContainer position='bottom-right' className="text-dark font-weight-light text-sm" />
       <div className="page-header min-vh-75">
         <div className="container">
           <div className="row">

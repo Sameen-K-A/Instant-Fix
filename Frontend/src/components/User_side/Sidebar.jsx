@@ -20,6 +20,15 @@ const UserSideBar = ({ openSideBar, setOpenSideBar }) => {
     navigate("/");
   }
 
+  const accessTechnician = () => {
+    const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
+    if (!userDetails.isTechnician) {
+      navigate("/technician/joinTechnician");
+    } else {
+      navigate("/technician");
+    }
+  }
+
   return (
     <div className={`sidebar-container ${openSideBar && 'open'}`} onClick={handleCloseSidebar}>
       <div className="backdrop"></div>
@@ -63,7 +72,7 @@ const UserSideBar = ({ openSideBar, setOpenSideBar }) => {
                     <AboutUS />
                     <span className="text nav-text">About us</span>
                   </li>
-                  <li className="nav-link" onClick={() => navigate("/technician")}>
+                  <li className="nav-link" onClick={() => accessTechnician()}>
                     <Worker />
                     <span className="text nav-text">Technician console</span>
                   </li>

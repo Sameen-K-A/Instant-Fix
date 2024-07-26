@@ -3,7 +3,7 @@ import backgroundImage from "/images/Login&RegisterBackground.jpg";
 import { useNavigate } from 'react-router-dom';
 import { Base_URL } from '../../config/credentials';
 import axios from "axios";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'sonner';
 
 const UserRegister = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,35 +18,35 @@ const UserRegister = () => {
     event.preventDefault();
     let isValid = true;
     if (name.length < 3 || name.length > 20) {
-      toast("Username must be between 3 and 20 characters.", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+      toast.warning("Username must be between 3 and 20 characters.");
       isValid = false;
     }
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
-      toast("Please enter a valid email address.", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+      toast.warning("Please enter a valid email address.");
       isValid = false;
     }
     const phonePattern = /^\d{10}$/;
     if (!phonePattern.test(phone)) {
-      toast("Please enter a valid 10-digit phone number.", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+      toast.warning("Please enter a valid 10-digit phone number.");
       isValid = false;
     }
     if (password.length < 8) {
-      toast("Password must be at least 8 characters long.", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+      toast.warning("Password must be at least 8 characters long.");
       isValid = false;
     }
     if (password !== confirm_password) {
-      toast("Confirm password does not match.", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+      toast.warning("Confirm password does not match.");
       isValid = false;
     }
     if (isValid) {
       try {
         setIsLoading(true)
-        const response = await axios.post(`${Base_URL}/register`, { name, email, phone, password, confirm_password });
+        const response = await axios.post(`${Base_URL}/register`);
         if (response.data.serviceResponse == "Email already exists") {
-          toast("Email already exists.", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+          toast.error("Email already exists.");
         } else if (response.data.serviceResponse == "OTP not sended") {
-          toast.error("Something wrong please try again later", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+          toast.error("Something wrong please try again later");
         } else {
           localStorage.setItem("userOTP", response.data.serviceResponse);
           localStorage.setItem("userDatas", JSON.stringify(response.data.userData));
@@ -62,7 +62,6 @@ const UserRegister = () => {
 
   return (
     <>
-      <ToastContainer position='bottom-right' className="text-dark font-weight-light text-sm" />
       <div className="page-header pt-3 pb-10 m-3 border-radius-lg" style={{ backgroundImage: `url(${backgroundImage})` }}>
         <span className="mask bg-gradient-primary opacity-8"></span>
         <div className="container">

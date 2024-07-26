@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import backgroundImage from "/images/Login&RegisterBackground.jpg";
 import GoogleIcon from "../../../public/svgs/GoogleIcon";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'sonner';
 import axios from 'axios';
 import { Base_URL } from '../../config/credentials';
 
@@ -16,22 +16,21 @@ const UserLogin = () => {
     if (email.trim().length && password.trim().length) {
       const response = await axios.post(`${Base_URL}/login`, { email, password });
       if (response.data === "email not found") {
-        toast("Email is not found", { hideProgressBar: true, autoClose: 5000, closeButton: false })
+        toast.error("Email is not found")
       } else if (response.data === "Wrong password") {
-        toast("Password is wrong", { hideProgressBar: true, autoClose: 5000, closeButton: false })
+        toast.error("Password is wrong")
       } else {
         sessionStorage.setItem("userToken", response.data.userToken);
         sessionStorage.setItem("userDetails", JSON.stringify(response.data.userData));
         navigate("/");
       }
     } else {
-      toast("All fields are required", { hideProgressBar: true, autoClose: 5000, closeButton: false })
+      toast.warning("All fields are required")
     }
   }
 
   return (
     <>
-      <ToastContainer position='bottom-right' className="text-dark font-weight-light text-sm" />
       <div className="page-header pt-3 pb-10 m-3 border-radius-lg" style={{ backgroundImage: `url(${backgroundImage})` }}>
         <span className="mask bg-gradient-primary opacity-8"></span>
         <div className="container">

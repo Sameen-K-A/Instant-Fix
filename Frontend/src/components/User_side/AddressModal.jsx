@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { toast } from 'react-toastify';
+import { toast } from 'sonner';
 import axios from 'axios';
 import { Base_URL } from '../../config/credentials';
 
@@ -14,29 +14,29 @@ function AddressModal({ userAddress, setUserAddress }) {
     event.preventDefault();
     let isValid = true;
     if (name.trim().length < 4 || name.trim().length > 20) {
-      toast("Name must be between 4 and 20 characters", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+      toast.warning("Name must be between 4 and 20 characters");
       isValid = false;
     };
     if (address.trim().length < 4) {
-      toast("Address must be more than 3 characters", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+      toast.warning("Address must be more than 3 characters");
       isValid = false;
     };
     const pinCodeRegex = /^6\d{5}$/;
     const phoneNumberRegex = /^[6-9]\d{9}$/;
     if (!pinCodeRegex.test(pinCode.trim())) {
-      toast("Enter valid pincode", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+      toast.warning("Enter valid pincode");
       isValid = false;
     };
     if (!phoneNumberRegex.test(phoneNumber.trim())) {
-      toast("Enter valid phone number", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+      toast.warning("Enter valid phone number");
       isValid = false;
     };
     if (!phoneNumberRegex.test(alternateNumber.trim())) {
-      toast("Enter valid alternate number", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+      toast.warning("Enter valid alternate number");
       isValid = false;
     };
     if (phoneNumber.trim() === alternateNumber.trim()) {
-      toast("Primary number and Alternate number must need different.", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+      toast.warning("Primary number and Alternate number must need different.");
       isValid = false;
     }
     // everything is valid
@@ -62,7 +62,7 @@ function AddressModal({ userAddress, setUserAddress }) {
       if (backdrop) backdrop.remove();
       document.body.classList.remove('modal-open');
       document.body.style = '';
-      toast.success("The address has been added successfully.", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+      toast.success("The address has been added successfully.");
       setName("");
       setAddress("");
       setPinCode("");
@@ -85,9 +85,9 @@ function AddressModal({ userAddress, setUserAddress }) {
                 <input type="text" className="form-control me-2" placeholder="Phone number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
                 <input type="text" className="form-control" placeholder="Alternate number" value={alternateNumber} onChange={(e) => setAlternateNumber(e.target.value)} />
               </div>
-              <div className='d-flex justify-content-center align-items-center mt-5 mb-0'>
-                <button type="button" className="btn btn-outline-primary w-30 me-3" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" className="btn bg-gradient-primary w-30">Save</button>
+              <div className='d-flex justify-content-center align-items-center mt-4'>
+                <button type="button" className="btn btn-outline-primary w-30 me-3 my-0" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" className="btn bg-gradient-primary w-30 my-0">Save</button>
               </div>
             </form>
           </div>

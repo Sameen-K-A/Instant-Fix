@@ -5,7 +5,7 @@ import AddressModal from './AddressModal';
 import axios from "axios";
 import { Base_URL } from '../../config/credentials';
 import confirmAlert from "../Common/SweetAlert/confirmAlert";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'sonner';
 
 const UserAddress = () => {
 
@@ -30,7 +30,7 @@ const UserAddress = () => {
             setUserAddress(afterDeletedAddressArray);
             toast.success("The address has been deleted successfully.", { hideProgressBar: true, autoClose: 5000, closeButton: false });
           } else {
-            toast("Something wrong please try again later", { hideProgressBar: true, autoClose: 5000, closeButton: false });
+            toast.warning("Something wrong please try again later");
           }
         }
       })
@@ -38,7 +38,6 @@ const UserAddress = () => {
 
   return (
     <>
-      <ToastContainer position='bottom-right' className="text-dark font-weight-light text-sm" />
       <UserNavbar />
       <div className="page-header min-vh-75">
         <div className="container">
