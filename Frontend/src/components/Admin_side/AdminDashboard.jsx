@@ -1,14 +1,18 @@
 import React from 'react';
 import Boxes from './DashboardBoxes';
 import AdminNavbar from './AdminNavbar';
-import AdminSidebar from './AdminSidebar';
 
-const AdminDashboard = () => {
+const AdminDashboard = ({ openSideBar, setOpenSideBar }) => {
+  const handleCloseSidebar = (e) => {
+    if (e.target.className === "backdrop") {
+      setOpenSideBar(false);
+    }
+  };
   return (
     <>
-      <AdminSidebar />
-      <main className="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg">
       <AdminNavbar />
+      <main className="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg" onClick={handleCloseSidebar}>
+        <div className="backdrop"></div>
         <div className="container-fluid py-4">
           <div className="row mt-2">
             <div className="col-lg-5 mb-lg-0 mb-4">

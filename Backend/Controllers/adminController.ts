@@ -10,6 +10,35 @@ class AdminController {
       res.send(serviceResponse);
    };
 
+   async fetchUserController(req: Request, res: Response) {
+      try {
+         const serviceResponse = await adminServices.fetchUserService();
+         res.status(200).json(serviceResponse);
+      } catch (error) {
+         res.status(500).json("Something wrong please try again later");
+      }
+   }
+
+   async unblockUserController(req: Request, res: Response) {
+      try {
+         const user_id = req.query.user_id as string;
+         const serviceResponse = await adminServices.unblockUserService(user_id);
+         res.status(200).json(serviceResponse);
+      } catch (error: any) {
+         res.status(500).json("Something went wrong, please try again later");
+      }
+   }
+
+   async blockUserController(req: Request, res: Response) {
+      try {
+         const user_id = req.query.user_id as string;
+         const serviceResponse = await adminServices.blockUserService(user_id);
+         res.status(200).json(serviceResponse);
+      } catch (error: any) {
+         res.status(500).json("Something went wrong, please try again later");
+      }
+   }
+
 }
 
 export default AdminController;

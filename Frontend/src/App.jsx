@@ -5,6 +5,7 @@ import { Toaster } from 'sonner';
 // User side
 import UserLogin from './components/User_side/Login';
 import UserRegister from './components/User_side/Register';
+import UserForgotPassword from './components/User_side/ForgotPassword';
 import UserOTP from './components/User_side/OTP';
 import UserProtecter from './components/Auth/UserProtecter';
 import UserProfile from './components/User_side/Profile';
@@ -18,6 +19,7 @@ import UserHomePage from './pages/User/HomePage';
 import AdminLogin from './components/Admin_side/AdminLogin';
 import AdminProtecter from './components/Auth/AdminProtecter';
 import AdminDashboard from './components/Admin_side/AdminDashboard';
+import AdminUserList from './components/Admin_side/UserList';
 
 // Technician side
 import TechnicianHome from './components/Technician_side/TechnicianHome';
@@ -39,6 +41,7 @@ function App() {
           <Route path='/login' element={<UserLogin />} />;
           <Route path='/register' element={<UserRegister />} />;
           <Route path='/otp' element={<UserOTP />} />;
+          <Route path='/forgotpassword' element={<UserForgotPassword />} />;
           <Route path='/profile' element={<UserProtecter><UserProfile /></UserProtecter>} />;
           <Route path='/address' element={<UserProtecter><UserAddress /></UserProtecter>} />;
           <Route path='/allTechnicians' element={<UserProtecter><TechniciansListPage /></UserProtecter>} />;
@@ -46,8 +49,9 @@ function App() {
           <Route path='/viewmoreHistory' element={<UserProtecter><UserHistoryViewMore /></UserProtecter>} />;
 
           {/* Admin side */}
-          <Route path='/admin/login' element={<AdminLogin />} />;
+          <Route path='/admin' element={<AdminLogin />} />;
           <Route path='/admin/dashboard' element={<AdminProtecter><AdminDashboard />  </AdminProtecter>} />;
+          <Route path='/admin/users' element={<AdminProtecter><AdminUserList /></AdminProtecter>} />;
 
           {/* Technician side */}
           <Route path='/technician' element={<TechnicianHome />} />;
