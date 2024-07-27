@@ -7,12 +7,16 @@ class UserRepository {
     try {
       return await userModel.findOne({ email });
     } catch (error) {
-      throw new Error("Database error");
+      throw error;
     }
   }
 
   async registerUserRepository(userData: userType) {
-    return await userModel.create(userData);
+    try {
+      return await userModel.create(userData);
+    } catch (error) {
+      throw error;
+    }
   }
 
   async fetchAddressRepository(user_id: string) {

@@ -17,6 +17,7 @@ const UserSideBar = ({ openSideBar, setOpenSideBar }) => {
   const handleLogout = () => {
     sessionStorage.removeItem("userToken");
     sessionStorage.removeItem("userDetails");
+    sessionStorage.removeItem("technicianDetails");
     navigate("/");
   }
 

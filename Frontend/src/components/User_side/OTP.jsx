@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import backgroundImage from "/images/Login&RegisterBackground.jpg";
 import { toast } from 'sonner';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { Base_URL } from '../../config/credentials';
 
@@ -10,7 +10,15 @@ const UserOTP = () => {
   const inputRefs = useRef([]);
   const [minutes, setMinutes] = useState(2);
   const [seconds, setSeconds] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.message) {
+      toast.success(location.state.message);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -48,20 +56,52 @@ const UserOTP = () => {
     }
   };
 
-  const handleOTPverification = async () => {
+  const handleOTPverification = async (event) => {
     event.preventDefault();
     const enteredOTP = otp.join("");
-    const orginalOTP = localStorage.getItem("userOTP");
-    if (enteredOTP === orginalOTP) {
-      const userDatas = JSON.parse(localStorage.getItem("userDatas"));
-      const response = await axios.post(`${Base_URL}/verifyotp`, userDatas);
-      console.log(response.data);
-      localStorage.removeItem("userOTP");
-      localStorage.removeItem("userDatas");
-      navigate("/login");
-    } else {
-      toast.error("Invalid OTP");
+    const OTP_details = JSON.parse(sessionStorage.getItem("userOTPDetails"));
+    if (enteredOTP !== OTP_details.OTP) {
+      return toast.error("Invalid OTP");
     }
+    const currentTime = new Date();
+    const expiryTime = new Date(OTP_details.expiryTime);
+    if (currentTime > expiryTime) {
+      return toast.error("OTP has expired");
+    }
+    try {
+      const userDatas = JSON.parse(sessionStorage.getItem("userDatas"));
+      await axios.post(`${Base_URL}/verifyotp`, userDatas);
+      sessionStorage.removeItem("userOTPDetails");
+      sessionStorage.removeItem("userDatas");
+      navigate("/login", { state: { message: "Registration process completed successfully, please login" } });
+    } catch (error) {
+      console.log("OTP verification error =>", error);
+      toast.error("Something went wrong. Please try again later.");
+    }
+  };
+
+  const resendOTP_handle = async () => {
+    setIsLoading(true);
+    const userDetails = JSON.parse(sessionStorage.getItem("userDatas"));
+    const userEmail = userDetails.email;
+    try {
+      const response = await axios.post(`${Base_URL}/resendOTP`, { email: userEmail });
+      const OTP = response.data.OTP;
+      const expiryTime = response.data.expiryTime;
+      sessionStorage.setItem("userOTPDetails", JSON.stringify({ OTP: OTP, expiryTime: expiryTime }));
+      toast.success("OTP sent to your email. Please check it.");
+      setMinutes(2);
+      setSeconds(0);
+      setOtp(["", "", "", ""]);
+    } catch (error) {
+      if (error.response.data.message === "OTP not sent") {
+        toast.error("OTP not sent. We can't find your email.");
+      } else {
+        console.log("Resend OTP error =>", error);
+        toast.error("Something wrong please try again later.");
+      }
+    }
+    setIsLoading(false);
   }
 
   return (
@@ -71,7 +111,7 @@ const UserOTP = () => {
         <div className="container">
           <div className="col-lg-5 text-center mx-auto">
             <h1 className="text-white mb-2 mt-5">Welcome</h1>
-            <p className="text-white">Verify your OTP for the secure authentication</p>
+            <p className="text-white">Verify your OTP for secure authentication</p>
           </div>
         </div>
       </div>
@@ -84,38 +124,55 @@ const UserOTP = () => {
                 <p className='text-sm'>Enter the 4-digit OTP you have received in your email</p>
               </div>
               <div className="card-body" style={{ marginTop: "-30px" }}>
-                <form onSubmit={() => handleOTPverification()}>
-                  <div className='d-flex justify-content-center align-item-center'>
-                    {otp.map((value, index) => {
-                      return (
-                        <input
-                          key={index + 1}
-                          type="text"
-                          className="otp-div mx-2 text-dark font-weight-bolder"
-                          maxLength={1}
-                          value={value}
-                          autoFocus={index === 0}
-                          onChange={(e) => handleChange(e.target.value, index)}
-                          onKeyDown={(e) => handleKeyDown(e, index)}
-                          ref={(box) => inputRefs.current[index] = box}
-                        />
-                      );
-                    })}
+                <form onSubmit={handleOTPverification}>
+                  <div className='d-flex justify-content-center align-items-center'>
+                    {otp.map((value, index) => (
+                      <input
+                        key={index}
+                        type="text"
+                        className="otp-div mx-2 text-dark font-weight-bolder"
+                        maxLength={1}
+                        value={value}
+                        autoFocus={index === 0}
+                        onChange={(e) => handleChange(e.target.value, index)}
+                        onKeyDown={(e) => handleKeyDown(e, index)}
+                        ref={(box) => inputRefs.current[index] = box}
+                      />
+                    ))}
                   </div>
                   {(minutes || seconds) ? (
-                    <p className='mb-0 mt-4 text-center font-weight-bolder'>
-                      {minutes.toString().padStart(2, '0')} : {seconds.toString().padStart(2, '0')}
-                    </p>
-                  ) : <p className='mb-0 mt-4 text-center text-sm pb-4'>Timer has expired.
-                    <a className="font-weight-bolder" style={{ cursor: "pointer" }}> <u>Resend again</u></a>
-                  </p>}
-                  {(minutes || seconds) ? <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-4 ">Verify</button> : ""}
+                    <>
+                      <p className='mb-0 mt-4 text-center font-weight-bolder'>
+                        {minutes.toString().padStart(2, '0')} : {seconds.toString().padStart(2, '0')}
+                      </p>
+                      <div className="mt-2">
+                        <p className="font-weight-bolder text-xs " style={{ cursor: "pointer", marginBottom: "-10px" }} onClick={resendOTP_handle}>
+                          <u>Resend again?</u>
+                        </p>
+                        <br />
+                        {isLoading ? (
+                          <button type="button" className="btn bg-gradient-primary w-100 mt-0">Loading . . .</button>
+                        ) : (
+                          <button type="submit" className="btn bg-gradient-primary w-100 mt-0">Verify</button>
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    isLoading ? (
+                      <p className='mb-0 mt-4 text-center text-sm pb-4'>Please wait . . .</p>
+                    ) : (
+                      <p className='mb-0 mt-4 text-center text-sm pb-4'>
+                        Timer has expired.
+                        <a className="font-weight-bolder" style={{ cursor: "pointer" }} onClick={resendOTP_handle}> Resend OTP</a>
+                      </p>
+                    )
+                  )}
                 </form>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </div >
+      </div >
     </>
   );
 };

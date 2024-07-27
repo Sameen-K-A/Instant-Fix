@@ -29,9 +29,19 @@ class UserController {
       try {
          const userData: userType = req.body;
          const serviceResponse = await userServices.registerUserService(userData);
-         res.json({ serviceResponse, userData });
-      } catch (error) {
-         console.log(error);
+         res.status(200).json({
+            OTP: serviceResponse.OTP,
+            expiryTime: serviceResponse.expiryOTP_time,
+            userData: userData
+         });
+      } catch (error: any) {
+         if (error.message === "Email already exists") {
+            res.status(409).json({ message: "Email already exists" });
+         } else if (error.message === "Email not send") {
+            res.status(500).json({ message: "Email not send" });
+         } else {
+            res.status(500).json({ message: "Something wrong please try again later" });
+         }
       }
    }
 
@@ -39,9 +49,26 @@ class UserController {
       try {
          const userData: userType = req.body;
          const serviceResponse = await userServices.otpVerifiedService(userData);
-         res.json(serviceResponse);
-      } catch (error) {
-         console.log(error);
+         res.status(200).json(serviceResponse);
+      } catch (error: any) {
+         res.status(500).json({ message: "Something went wrong. Please try again later." });
+      }
+   }
+
+   async resendOTP_controller(req: Request, res: Response) {
+      try {
+         const email: string = req.body.email;
+         const serviceResponse = await userServices.resendOTPService(email);
+         res.status(200).json({
+            OTP: serviceResponse.OTP,
+            expiryTime: serviceResponse.expiryOTP_time,
+         });
+      } catch (error: any) {
+         if (error.message === "Email not send") {
+            res.status(500).json({ message: "Email not send" });
+         } else {
+            res.status(500).json({ message: "Something wrong please try again later" });
+         }
       }
    }
 

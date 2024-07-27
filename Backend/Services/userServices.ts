@@ -5,7 +5,6 @@ import { userType } from "../Model/userModal";
 import sendOTPmail from "../Config/Email_config";
 import { createToken } from "../Config/jwt_config";
 import { userAddressType } from "../Model/userAddressModal";
-
 class UserServices {
    private userRepository: UserRepository;
 
@@ -16,9 +15,13 @@ class UserServices {
    async loginUserService(email: string, password: string) {
       try {
          const userData = await this.userRepository.findUser(email);
-         if (!userData) throw new Error("email not found");
+         if (!userData) {
+            throw new Error("email not found");
+         }
          const comparePassword = await bcrypt.compare(password, userData.password);
-         if (!comparePassword) throw new Error("Wrong password");
+         if (!comparePassword) {
+            throw new Error("Wrong password");
+         }
          const userToken = createToken(userData.user_id as string);
          return { userToken, userData };
       } catch (error) {
@@ -26,24 +29,51 @@ class UserServices {
       }
    };
 
-   async registerUserService(userData: userType) {
-      const alreadyExists = await this.userRepository.findUser(userData.email);
-      if (!alreadyExists) {
+   async registerUserService(userData: userType): Promise<{ OTP: string; expiryOTP_time: Date }> {
+      try {
+         const alreadyExists = await this.userRepository.findUser(userData.email);
+         if (alreadyExists) {
+            throw new Error("Email already exists");
+         }
          const OTP: string = Math.floor(1000 + Math.random() * 9000).toString();
-         console.log(OTP);
+         console.log(`Generated OTP is : ${OTP}`);
          const isMailSended = await sendOTPmail(userData.email, OTP);
-         if (isMailSended) return OTP;
-         else return "OTP not sended";
-      } else {
-         return "Email already exists";
+         if (!isMailSended) {
+            throw new Error("Email not send");
+         }
+         const OTP_createdTime = new Date();
+         const expiryOTP_time = new Date(OTP_createdTime.getTime() + 2 * 60 * 1000);
+         return { OTP, expiryOTP_time };
+      } catch (error) {
+         throw error;
       }
    }
 
    async otpVerifiedService(userData: userType) {
-      const hashedPassword = await bcrypt.hash(userData.password, 10);
-      userData.password = hashedPassword;
-      userData.user_id = uuid();
-      return await this.userRepository.registerUserRepository(userData);
+      try {
+         const hashedPassword = await bcrypt.hash(userData.password, 10);
+         userData.password = hashedPassword;
+         userData.user_id = uuid();
+         return await this.userRepository.registerUserRepository(userData);
+      } catch (error) {
+         throw error;
+      }
+   }
+
+   async resendOTPService(email: string): Promise<{ OTP: string; expiryOTP_time: Date }> {
+      try {
+         const OTP: string = Math.floor(1000 + Math.random() * 9000).toString();
+         console.log(`Re-generated OTP is : ${OTP}`);
+         const isMailSended = await sendOTPmail(email, OTP);
+         if (!isMailSended) {
+            throw new Error("Email not send");
+         }
+         const OTP_createdTime = new Date();
+         const expiryOTP_time = new Date(OTP_createdTime.getTime() + 2 * 60 * 1000);
+         return { OTP, expiryOTP_time };
+      } catch (error) {
+         throw error;
+      }
    }
 
    async fetchAddressService(user_id: string) {

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import backgroundImage from "/images/Login&RegisterBackground.jpg";
 import GoogleIcon from "../../../public/svgs/GoogleIcon";
 import { toast } from 'sonner';
@@ -11,6 +11,13 @@ const UserLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.message) {
+      toast.success("Registration process completed successfully, please login.");
+    }
+  }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault();

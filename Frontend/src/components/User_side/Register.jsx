@@ -26,9 +26,9 @@ const UserRegister = () => {
       toast.warning("Please enter a valid email address.");
       isValid = false;
     }
-    const phonePattern = /^\d{10}$/;
-    if (!phonePattern.test(phone)) {
-      toast.warning("Please enter a valid 10-digit phone number.");
+    const phoneNumberRegex = /^[6-9]\d{9}$/;
+    if (!phoneNumberRegex.test(phone)) {
+      toast.warning("Please enter a valid phone number.");
       isValid = false;
     }
     if (password.length < 8) {
@@ -41,21 +41,25 @@ const UserRegister = () => {
     }
     if (isValid) {
       try {
-        setIsLoading(true)
-        const response = await axios.post(`${Base_URL}/register`);
-        if (response.data.serviceResponse == "Email already exists") {
-          toast.error("Email already exists.");
-        } else if (response.data.serviceResponse == "OTP not sended") {
-          toast.error("Something wrong please try again later");
-        } else {
-          localStorage.setItem("userOTP", response.data.serviceResponse);
-          localStorage.setItem("userDatas", JSON.stringify(response.data.userData));
-          setIsLoading(false);
-          navigate("/otp");
-        }
+        setIsLoading(true);
+        const response = await axios.post(`${Base_URL}/register`, { name, email, phone, password });
+        const OTP = response.data.OTP;
+        const expiryTime = response.data.expiryTime;
+        const userData = response.data.userData;
+        sessionStorage.setItem("userOTPDetails", JSON.stringify({ OTP: OTP, expiryTime: expiryTime }));
+        sessionStorage.setItem("userDatas", JSON.stringify(userData));
+        navigate("/otp", { state: { message: "OTP sent to your email. Please check it" } });
         setIsLoading(false);
       } catch (error) {
-        console.log(error);
+        setIsLoading(false);
+        if (error.response.data.message === "Email already exists") {
+          toast.error("Email already exists. Please check your email.");
+        } else if (error.response.data.message === "OTP not sent") {
+          toast.error("OTP not sent. We can't find your email.");
+        } else {
+          console.log("Registration error =>", error);
+          toast.error("Something wrong please try again later.");
+        }
       }
     }
   }
