@@ -28,12 +28,8 @@ class UserController {
    async register_controller(req: Request, res: Response): Promise<void> {
       try {
          const userData: userType = req.body;
-         const serviceResponse = await userServices.registerUserService(userData);
-         res.status(200).json({
-            OTP: serviceResponse.OTP,
-            expiryTime: serviceResponse.expiryOTP_time,
-            userData: userData
-         });
+         await userServices.registerUserService(userData);
+         res.status(200).send("OTP sended to mail");
       } catch (error: any) {
          if (error.message === "Email already exists") {
             res.status(409).json({ message: "Email already exists" });
@@ -47,22 +43,24 @@ class UserController {
 
    async verifyOTP_controller(req: Request, res: Response): Promise<void> {
       try {
-         const userData: userType = req.body;
-         const serviceResponse = await userServices.otpVerifiedService(userData);
+         const enteredOTP: string = req.body.enteredOTP;
+         const serviceResponse = await userServices.otpVerifiedService(enteredOTP);
          res.status(200).json(serviceResponse);
       } catch (error: any) {
-         res.status(500).json({ message: "Something went wrong. Please try again later." });
+         if (error.message === "Incorrect OTP") {
+            res.status(401).json({ message: "Incorrect OTP" })
+         } else if (error.message === "OTP is expired") {
+            res.status(410).json({ message: "OTP has expired" });
+         } else {
+            res.status(500).json({ message: "Something went wrong. Please try again later." });
+         }
       }
    }
 
    async resendOTP_controller(req: Request, res: Response) {
       try {
-         const email: string = req.body.email;
-         const serviceResponse = await userServices.resendOTPService(email);
-         res.status(200).json({
-            OTP: serviceResponse.OTP,
-            expiryTime: serviceResponse.expiryOTP_time,
-         });
+         await userServices.resendOTPService();
+         res.status(200).send("OTP sended");
       } catch (error: any) {
          if (error.message === "Email not send") {
             res.status(500).json({ message: "Email not send" });
@@ -76,9 +74,10 @@ class UserController {
       try {
          const user_id: string = req.query.user_id as string;
          const serviceResponse = await userServices.fetchAddressService(user_id);
-         res.json(serviceResponse);
+         res.status(200).json(serviceResponse);
       } catch (error) {
-         console.log(error);
+         console.log("fetch address controller error : ", error);
+         res.status(500).send("Something wrong please try again later.")
       }
    }
 
@@ -86,9 +85,10 @@ class UserController {
       try {
          const addressData: userAddressType = req.body;
          const serviceResponse = await userServices.addAddressService(addressData);
-         res.json(serviceResponse);
+         res.status(200).json(serviceResponse);
       } catch (error) {
-         console.log(error);
+         console.log("Add user address controller error : ", error);
+         res.status(500).json(error)
       }
    }
 
@@ -96,9 +96,10 @@ class UserController {
       try {
          const address_id: string = req.query.address_id as string;
          const serviceResponse = await userServices.deleteAddressService(address_id);
-         res.send(serviceResponse);
+         res.status(200).send(serviceResponse);
       } catch (error) {
-         console.log(error);
+         console.log("delete address controller error : ", error);
+         res.status(500).json(error);
       }
    }
 

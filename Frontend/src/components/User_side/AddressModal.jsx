@@ -41,33 +41,38 @@ function AddressModal({ userAddress, setUserAddress }) {
     }
     // everything is valid
     if (isValid) {
-      const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
-      const user_id = userDetails?.user_id;
-      const response = await axios.post(`${Base_URL}/address`, {
-        user_id: user_id,
-        name: name,
-        address: address,
-        pincode: pinCode,
-        phone: phoneNumber,
-        alternatePhone: alternateNumber
-      });
-      setUserAddress([...userAddress, response.data]);
+      try {
+        const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
+        const user_id = userDetails?.user_id;
+        const response = await axios.post(`${Base_URL}/address`, {
+          user_id: user_id,
+          name: name,
+          address: address,
+          pincode: pinCode,
+          phone: phoneNumber,
+          alternatePhone: alternateNumber
+        });
+        setUserAddress([...userAddress, response.data]);
 
-      // Close the modal
-      const modal = document.getElementById('exampleModal');
-      const backdrop = document.querySelector('.modal-backdrop');
-      modal.classList.remove('show');
-      modal.setAttribute('aria-hidden', 'true');
-      modal.style.display = 'none';
-      if (backdrop) backdrop.remove();
-      document.body.classList.remove('modal-open');
-      document.body.style = '';
-      toast.success("The address has been added successfully.");
-      setName("");
-      setAddress("");
-      setPinCode("");
-      setPhoneNumber("");
-      setAlternateNumber("");
+        // Close the modal
+        const modal = document.getElementById('exampleModal');
+        const backdrop = document.querySelector('.modal-backdrop');
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden', 'true');
+        modal.style.display = 'none';
+        if (backdrop) backdrop.remove();
+        document.body.classList.remove('modal-open');
+        document.body.style = '';
+        toast.success("The address has been added successfully.");
+        setName("");
+        setAddress("");
+        setPinCode("");
+        setPhoneNumber("");
+        setAlternateNumber("");
+      } catch (error) {
+        console.log(error);
+        toast.error("Can't add new Address, something wrong please try again later.")
+      }
     }
   };
 

@@ -11,18 +11,22 @@ const AdminLogin = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleLogin = async (event) => {
     event.preventDefault();
     if (email.trim().length && password.trim().length) {
-      const response = await axios.post(`${Base_URL}/admin/login`, { email, password });
-      if (response.data === "Wrong email") {
-        toast.error("Entered email is wrong please check your email.");
-      } else if (response.data === "Wrong password") {
-        toast.error("Entered password is wrong please check your password.");
-      } else {
-        const adminToken = response.data;
-        sessionStorage.setItem("adminToken", adminToken);
+      try {
+        const response = await axios.post(`${Base_URL}/admin/login`, { email, password });
+        sessionStorage.setItem("adminToken", response.data);
         navigate("/admin/dashboard");
+      } catch (error) {
+        console.log(error);
+        if (error.response.data.message === "Email not found") {
+          toast.error("Email not found");
+        } else if (error.response.data.message === "Password is wrong") {
+          toast.error("Password is wrong");
+        } else {
+          toast.error("Something wrong please try again later");
+        }
       }
     } else {
       toast.warning("All fields are required.");
@@ -41,7 +45,7 @@ const AdminLogin = () => {
                   <p className="mb-0">Enter your email and password to sign in.</p>
                 </div>
                 <div className="card-body">
-                  <form onSubmit={() => handleLogin()}>
+                  <form onSubmit={(e) => handleLogin(e)}>
                     <label>Email</label>
                     <input type="text" className="form-control mb-3" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                     <label>Password</label>

@@ -7,7 +7,7 @@ const userController = new UserController()
 router.post("/login", userController.loginController);
 router.post("/register", userController.register_controller);
 router.post("/verifyotp", userController.verifyOTP_controller);
-router.post("/resendOTP", userController.resendOTP_controller);
+router.get("/resendOTP", userController.resendOTP_controller);
 
 // user address session;
 router.get("/address", userController.fetchAddress_controller);

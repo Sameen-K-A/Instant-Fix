@@ -20,8 +20,10 @@ import AdminLogin from './components/Admin_side/AdminLogin';
 import AdminProtecter from './components/Auth/AdminProtecter';
 import AdminDashboard from './components/Admin_side/AdminDashboard';
 import AdminUserList from './components/Admin_side/UserList';
+import AdminTechnicianList from './components/Admin_side/TechnicianList';
 
 // Technician side
+import TechnicianProtecter from './components/Auth/TechnicianProtecter';
 import TechnicianHome from './components/Technician_side/TechnicianHome';
 import TechnicianRole from './components/Technician_side/TechnicianRole';
 
@@ -52,9 +54,10 @@ function App() {
           <Route path='/admin' element={<AdminLogin />} />;
           <Route path='/admin/dashboard' element={<AdminProtecter><AdminDashboard />  </AdminProtecter>} />;
           <Route path='/admin/users' element={<AdminProtecter><AdminUserList /></AdminProtecter>} />;
+          <Route path='/admin/technicians' element={<AdminProtecter><AdminTechnicianList /></AdminProtecter>} />;
 
           {/* Technician side */}
-          <Route path='/technician' element={<TechnicianHome />} />;
+          <Route path='/technician' element={<TechnicianProtecter><TechnicianHome /></TechnicianProtecter>} />;
           <Route path='/technician/joinTechnician' element={<TechnicianRole />} />;
 
         </Routes>

@@ -8,7 +8,7 @@ const UserProtecter = ({ children }) => {
 
   useEffect(() => {
     if (!userToken) {
-      navigate("/login");
+      navigate("/login", { state: { message: "Your session is expired, please login" } });
     }
   })
 

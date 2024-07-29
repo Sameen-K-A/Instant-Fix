@@ -6,6 +6,7 @@ import confirmAlert from '../Common/SweetAlert/confirmAlert';
 import axios from "axios";
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const TechnicianRole = () => {
   const [userDetails, setUserDetails] = useState({});
@@ -13,9 +14,13 @@ const TechnicianRole = () => {
   const [selectedProfessionIndex, setSelectedProfessionIndex] = useState(1);
   const [enteredOtherProfession, setEnteredOtherProfession] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     setUserDetails(JSON.parse(sessionStorage.getItem("userDetails")));
+    if (location.state?.message) {
+      toast.error(location.state?.message);
+    }
   }, []);
 
   const handleSave = () => {

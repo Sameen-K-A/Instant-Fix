@@ -4,16 +4,17 @@ import axios from "axios";
 import { Base_URL } from "../../config/credentials";
 import { toast } from "sonner";
 import AdminNavbar from "./AdminNavbar";
-import confirmAlert from "../Common/SweetAlert/confirmAlert"
+import confirmAlert from "../Common/SweetAlert/confirmAlert";
 
-const AdminUserList = () => {
-  const [usersArray, setUsersArray] = useState([]);
+const AdminTechnicianList = () => {
+  const [techniciansArray, setTechniciansArray] = useState([]);
 
   useEffect(() => {
     (async () => {
       try {
-        const response = await axios.get(`${Base_URL}/admin/fetchUser`);
-        setUsersArray(response.data);
+        const response = await axios.get(`${Base_URL}/admin/fetchTechnicians`);
+        console.log(response.data);
+        setTechniciansArray(response.data);
       } catch (error) {
         console.log(error);
         toast.error("Something went wrong, can't fetch users data. Please try again later");
@@ -22,15 +23,15 @@ const AdminUserList = () => {
   }, []);
 
   const unblockUser = (user_id) => {
-    confirmAlert("Do you want to unblock the user")
+    confirmAlert("Do you want to unblock the technician")
       .then(async (response) => {
         if (response.isConfirmed) {
           try {
             await axios.patch(`${Base_URL}/admin/unblockUser?user_id=${user_id}`);
-            const afterUnblocking = usersArray.map((user) =>
+            const afterUnblocking = techniciansArray.map((user) =>
               user.user_id === user_id ? { ...user, isBlocked: false } : user
             );
-            setUsersArray(afterUnblocking);
+            setTechniciansArray(afterUnblocking);
           } catch (error) {
             console.log(error);
             toast.error("Something went wrong, can't un-block user.");
@@ -40,15 +41,15 @@ const AdminUserList = () => {
   };
 
   const blockUser = async (user_id) => {
-    confirmAlert("Do you want to block this user")
+    confirmAlert("Do you want to block this technician")
       .then(async (response) => {
         if (response.isConfirmed) {
           try {
             await axios.patch(`${Base_URL}/admin/blockUser?user_id=${user_id}`);
-            const afterblocking = usersArray.map((user) =>
+            const afterblocking = techniciansArray.map((user) =>
               user.user_id === user_id ? { ...user, isBlocked: true } : user
             );
-            setUsersArray(afterblocking);
+            setTechniciansArray(afterblocking);
           } catch (error) {
             console.log(error);
             toast.error("Something went wrong, can't block users data.");
@@ -65,10 +66,10 @@ const AdminUserList = () => {
           <div className="row">
             <div className="col-xl-12 col-lg-12 col-md-12 d-flex flex-column" style={{ zIndex: "1" }}>
               <div className="container-fluid">
-                {usersArray ? (
+                {techniciansArray ? (
                   <div className="card mb-4 mt-6">
                     <div className="card-header pb-0 mb-3 mt-3">
-                      <h5 className="text-center mb-3">Users</h5>
+                      <h5 className="text-center mb-3">Technicians</h5>
                     </div>
                     <div className="card-body px-0 pt-0 pb-2">
                       <div className="table-responsive p-0 pb-3">
@@ -79,27 +80,29 @@ const AdminUserList = () => {
                               <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
                               <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email</th>
                               <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Phone</th>
+                              <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Profession</th>
                               <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                               <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
                             </tr>
                           </thead>
                           <tbody className="text-center">
-                            {usersArray.map((user, index) => {
+                            {techniciansArray.map((technician, index) => {
                               return (
-                                <tr key={user.user_id}>
+                                <tr key={technician.user_id}>
                                   <td><p className="text-xs font-weight-bold mb-0">{index + 1}</p></td>
-                                  <td><p className="text-xs font-weight-bold mb-0">{user?.name}</p></td>
-                                  <td><p className="text-xs font-weight-bold mb-0">{user?.email}</p></td>
-                                  <td><p className="text-xs font-weight-bold mb-0">{user?.phone}</p></td>
-                                  <td className="text-sm">{user.isBlocked ? (
-                                    <span className="badge badge-sm bg-gradient-faded-danger w-50">Blocked</span>
+                                  <td><p className="text-xs font-weight-bold mb-0">{technician?.name}</p></td>
+                                  <td><p className="text-xs font-weight-bold mb-0">{technician?.email}</p></td>
+                                  <td><p className="text-xs font-weight-bold mb-0">{technician?.phone}</p></td>
+                                  <td><p className="text-xs font-weight-bold mb-0">{technician?.technicianDetails[0]?.profession}</p></td>
+                                  <td className="text-sm">{technician.isBlocked ? (
+                                    <span className="badge badge-sm bg-gradient-faded-danger">Blocked</span>
                                   ) : (
-                                    <span className="badge badge-sm bg-gradient-faded-success w-50">Active</span>
+                                    <span className="badge badge-sm bg-gradient-faded-success">Active</span>
                                   )}</td>
-                                  <td className=" text-sm">{user.isBlocked ? (
-                                    <button className="btn bg-gradient-info mb-0 w-50" onClick={() => unblockUser(user.user_id)}>UnBlock</button>
+                                  <td className=" text-sm">{technician.isBlocked ? (
+                                    <button className="btn bg-gradient-info mb-0" onClick={() => unblockUser(technician.user_id)}>UnBlock</button>
                                   ) : (
-                                    <button className="btn btn-outline-primary mb-0 w-50" onClick={() => blockUser(user.user_id)}>Block</button>
+                                    <button className="btn btn-outline-primary mb-0" onClick={() => blockUser(technician.user_id)}>Block</button>
                                   )}</td>
                                 </tr>
                               )
@@ -110,7 +113,7 @@ const AdminUserList = () => {
                     </div>
                   </div>
                 ) : (
-                  <h5>No users found.</h5>
+                  <h5>No Technicians found.</h5>
                 )}
               </div>
             </div>
@@ -122,4 +125,4 @@ const AdminUserList = () => {
   );
 }
 
-export default AdminUserList;
+export default AdminTechnicianList;

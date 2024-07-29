@@ -3,43 +3,54 @@ import { userAddressModal, userAddressType } from "../Model/userAddressModal";
 
 class UserRepository {
 
-  async findUser(email: string) {
-    try {
-      return await userModel.findOne({ email });
-    } catch (error) {
-      throw error;
-    }
-  }
+   async findUser(email: string) {
+      try {
+         return await userModel.findOne({ email });
+      } catch (error) {
+         throw error;
+      }
+   };
 
-  async registerUserRepository(userData: userType) {
-    try {
-      return await userModel.create(userData);
-    } catch (error) {
-      throw error;
-    }
-  }
+   async registerUserRepository(userData: userType) {
+      try {
+         return await userModel.create(userData);
+      } catch (error) {
+         throw error;
+      }
+   };
 
-  async fetchAddressRepository(user_id: string) {
-    return await userAddressModal.find({ user_id: user_id });
-  }
+   async fetchAddressRepository(user_id: string) {
+      try {
+         return await userAddressModal.find({ user_id: user_id });
+      } catch (error) {
+         throw error;
+      }
+   };
 
-  async addAddressRepository(addressData: userAddressType) {
-    return await userAddressModal.create(addressData);
-  }
+   async addAddressRepository(addressData: userAddressType) {
+      try {
+         return await userAddressModal.create(addressData);
+      } catch (error) {
+         throw error;
+      }
+   };
 
-  async deleteAddressRepository(address_id: string) {
-    return await userAddressModal.deleteOne({ address_id: address_id });
-  }
+   async deleteAddressRepository(address_id: string) {
+      try {
+         return await userAddressModal.deleteOne({ address_id: address_id });
+      } catch (error) {
+         throw error
+      }
+   };
 
-  async accessIsTechnician(user_id: string) {
-    try {
-      return await userModel.updateOne({ user_id }, { isTechnician: true });
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  }
-
-}
+   async accessIsTechnician(user_id: string) {
+      try {
+         return await userModel.updateOne({ user_id }, { isTechnician: true });
+      } catch (error) {
+         console.log(error);
+         throw error;
+      }
+   };
+};
 
 export default UserRepository;

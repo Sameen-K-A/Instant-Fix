@@ -4,7 +4,6 @@ type technicianType = {
    user_id: string;
    technician_id: string;
    profession: string;
-   isBlocked?: boolean;
    availability?: boolean;
    rating?: Number;
 }
@@ -18,10 +17,6 @@ const technicianSchema = new Schema<technicianType>({
    },
    profession: {
       type: String
-   },
-   isBlocked: {
-      type: Boolean,
-      default: false
    },
    availability: {
       type: Boolean,

@@ -59,36 +59,25 @@ const UserOTP = () => {
   const handleOTPverification = async (event) => {
     event.preventDefault();
     const enteredOTP = otp.join("");
-    const OTP_details = JSON.parse(sessionStorage.getItem("userOTPDetails"));
-    if (enteredOTP !== OTP_details.OTP) {
-      return toast.error("Invalid OTP");
-    }
-    const currentTime = new Date();
-    const expiryTime = new Date(OTP_details.expiryTime);
-    if (currentTime > expiryTime) {
-      return toast.error("OTP has expired");
-    }
     try {
-      const userDatas = JSON.parse(sessionStorage.getItem("userDatas"));
-      await axios.post(`${Base_URL}/verifyotp`, userDatas);
-      sessionStorage.removeItem("userOTPDetails");
-      sessionStorage.removeItem("userDatas");
+      await axios.post(`${Base_URL}/verifyotp`, { enteredOTP: enteredOTP });
       navigate("/login", { state: { message: "Registration process completed successfully, please login" } });
     } catch (error) {
-      console.log("OTP verification error =>", error);
-      toast.error("Something went wrong. Please try again later.");
-    }
+      if (error.response.data.message === "Incorrect OTP") {
+        toast.error("Incorrect OTP.");
+      } else if (error.response.data.message === "OTP has expired") {
+        toast.error("OTP has expired.");
+      } else {
+        console.log("OTP verification error =>", error);
+        toast.error("Something went wrong. Please try again later.");
+      };
+    };
   };
 
   const resendOTP_handle = async () => {
     setIsLoading(true);
-    const userDetails = JSON.parse(sessionStorage.getItem("userDatas"));
-    const userEmail = userDetails.email;
     try {
-      const response = await axios.post(`${Base_URL}/resendOTP`, { email: userEmail });
-      const OTP = response.data.OTP;
-      const expiryTime = response.data.expiryTime;
-      sessionStorage.setItem("userOTPDetails", JSON.stringify({ OTP: OTP, expiryTime: expiryTime }));
+      await axios.get(`${Base_URL}/resendOTP`);
       toast.success("OTP sent to your email. Please check it.");
       setMinutes(2);
       setSeconds(0);

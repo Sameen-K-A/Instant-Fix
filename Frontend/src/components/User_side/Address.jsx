@@ -14,26 +14,32 @@ const UserAddress = () => {
     const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
     const user_id = userDetails?.user_id;
     const fetchAddress = async () => {
-      const response = await axios.get(`${Base_URL}/address?user_id=${user_id}`);
-      setUserAddress(response.data);
+      try {
+        const response = await axios.get(`${Base_URL}/address?user_id=${user_id}`);
+        setUserAddress(response.data);
+      } catch (error) {
+        console.log(error);
+        toast.error("Can't fetch address details. Please try again later.")
+      }
     };
     fetchAddress();
   }, []);
 
   const handleDelete = (address_id) => {
     confirmAlert("Do you want to delete this Address")
-      .then(async (result) => {
-        if (result.isConfirmed) {
-          const response = await axios.delete(`${Base_URL}/address?address_id=${address_id}`);
-          if (response.data === "Deleted successfully") {
-            const afterDeletedAddressArray = userAddress.filter((address) => address.address_id != address_id);
-            setUserAddress(afterDeletedAddressArray);
-            toast.success("The address has been deleted successfully.", { hideProgressBar: true, autoClose: 5000, closeButton: false });
-          } else {
-            toast.warning("Something wrong please try again later");
-          }
+    .then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`${Base_URL}/address?address_id=${address_id}`);
+          const afterDeletedAddressArray = userAddress.filter((address) => address.address_id != address_id);
+          setUserAddress(afterDeletedAddressArray);
+          toast.success("The address has been deleted successfully.");
+        } catch (error) {
+          console.log(error);
+          toast.warning("Something wrong please try again later");
         }
-      })
+      }
+    })
   }
 
   return (

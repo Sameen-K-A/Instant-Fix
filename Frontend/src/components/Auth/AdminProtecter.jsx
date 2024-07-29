@@ -8,7 +8,7 @@ const AdminProtecter = ({ children }) => {
 
   useEffect(() => {
     if (!adminToken) {
-      navigate("/admin/login");
+      navigate("/admin");
     }
   })
 

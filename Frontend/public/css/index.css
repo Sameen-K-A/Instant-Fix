@@ -50,7 +50,7 @@ body {
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
-  color: #67748e;
+  color: #000000;
   background-color: #f8f9fa;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -9837,7 +9837,7 @@ fieldset:disabled .btn {
 }
 
 .text-dark {
-  color: #344767 !important;
+  color: #000000 !important;
 }
 
 .text-white {
@@ -24907,20 +24907,11 @@ pre[class*="language-"] {
   }
 }
 
-
-
-
-/* Technician side css*/
-
+/* General Styles */
 .section {
   position: relative;
   padding-top: 100px;
   padding-bottom: 80px;
-}
-
-
-.left-heading.light .section-title {
-  color: #ffffff;
 }
 
 .left-heading .section-title {
@@ -24964,12 +24955,6 @@ pre[class*="language-"] {
   color: #fff;
 }
 
-.center-text p {
-  font-size: 15px;
-  color: #777;
-  margin-bottom: 30px;
-}
-
 .left-text {
   font-weight: 400;
   font-size: 16px;
@@ -24982,118 +24967,15 @@ pre[class*="language-"] {
   color: #fff;
 }
 
-.left-text p {
-  margin-bottom: 30px;
-}
-
 .left-text p.dark {
   color: #3B566E;
-}
-
-.padding-bottom-top-60 {
-  padding-top: 60px !important;
-  padding-bottom: 60px !important;
-}
-
-.padding-bottom-80 {
-  padding-bottom: 80px !important;
 }
 
 .padding-bottom-100 {
   padding-bottom: 100px !important;
 }
 
-.border-bottom {
-  border-bottom: 1px solid #eee !important;
-}
-
-.mbottom-30 {
-  margin-bottom: 30px !important;
-}
-
-.align-self-center {
-  -ms-flex-item-align: center !important;
-  align-self: center !important;
-}
-
-.align-self-bottom {
-  -ms-flex-item-align: flex-end !important;
-  align-self: flex-end !important;
-}
-
-.padding-bottom-0 {
-  padding-bottom: 0px !important;
-}
-
-.padding-top-0 {
-  padding-top: 0px !important;
-}
-
-.padding-top-80 {
-  padding-top: 80px !important;
-}
-
-.padding-top-70 {
-  padding-top: 70px !important;
-}
-
-.padding-top-20 {
-  padding-top: 20px !important;
-}
-
-.margin-bottom-0 {
-  margin-bottom: 0px !important;
-}
-
-.margin-bottom-30 {
-  margin-bottom: 30px !important;
-}
-
-.margin-top-30 {
-  margin-top: 30px !important;
-}
-
-.margin-top-15 {
-  margin-top: 15px !important;
-}
-
-.margin-bottom-45 {
-  margin-bottom: 45px !important;
-}
-
-.margin-bottom-20 {
-  margin-bottom: 20px !important;
-}
-
-.margin-bottom-60 {
-  margin-bottom: 60px !important;
-}
-
-.margin-bottom-100 {
-  margin-bottom: 100px !important;
-}
-
-@media (max-width: 991px) {
-
-  .mobile-top-fix {
-    margin-top: 30px;
-    margin-bottom: 0px;
-  }
-
-  .mobile-bottom-fix {
-    margin-bottom: 30px;
-  }
-
-  .mobile-bottom-fix-big {
-    margin-bottom: 60px;
-  }
-}
-
-/* 
----------------------------------------------
-welcome
---------------------------------------------- 
-*/
+/* Welcome Area */
 .welcome-area {
   overflow: hidden;
   position: relative;
@@ -25128,17 +25010,25 @@ welcome
   line-height: 28px;
   letter-spacing: 0.25px;
   margin-bottom: 40px;
-  position: relative;
 }
 
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+}
 
+.btn-secondary {
+  background-color: #6c757d;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+}
 
-
-/* 
----------------------------------------------
-features
---------------------------------------------- 
-*/
+/* Features */
 .features-small-item {
   cursor: pointer;
   display: block;
@@ -25156,15 +25046,7 @@ features
   height: 90px;
   line-height: 90px;
   margin: auto;
-  position: relative;
-  margin-bottom: 30px;
-  background: #8261ee;
   border-radius: 50%;
-}
-
-.features-small-item .icon i {
-  font-size: 18px;
-  color: #fff;
 }
 
 .features-small-item .features-title {
@@ -25173,8 +25055,6 @@ features
   color: #1e1e1e;
   letter-spacing: 0.7px;
   margin-bottom: 15px;
-  position: relative;
-  z-index: 2;
 }
 
 .features-small-item p {
@@ -25183,8 +25063,6 @@ features
   color: #777;
   letter-spacing: 0.5px;
   line-height: 25px;
-  position: relative;
-  z-index: 2;
 }
 
 .home-feature {
@@ -25202,6 +25080,7 @@ features
     z-index: 9;
   }
 }
+
 
 /* 
 ---------------------------------------------

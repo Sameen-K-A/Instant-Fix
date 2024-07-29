@@ -9,8 +9,9 @@
 .banner {
    height: 100%;
    width: 250px;
-   background-position: center;
    background-size: cover;
+   background-position: center;
+   background-repeat: no-repeat;
    border-radius: 20px;
    position: relative;
    transition: width 0.3s ease, opacity 0.3s ease;
@@ -25,12 +26,14 @@
    height: 100%;
    background: linear-gradient(to top, #ffffff 0%, rgba(255, 255, 255, 0) 50%);
    border-radius: 20px;
+   transition: opacity 0.3s ease;
 }
 
 .banner-content {
    position: absolute;
    bottom: 0;
-   padding: 10px 20px;
+   color: white;
+   padding: 20px;
    opacity: 0;
    transition: opacity 0.3s ease;
 }
@@ -39,13 +42,14 @@
    opacity: 1;
 }
 
+
+.banner:hover::before {
+   background: linear-gradient(to top, #ffffff 20%, #ffffff00 80%);
+}
+
 .banner:hover {
    width: 500px;
    opacity: 1;
-}
-
-.banner:hover::before {
-   background: linear-gradient(to top, #ffffff 10%, #ffffff00 70%);
 }
 
 .wrappingCat:hover .banner:not(:hover) {

@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import AdminRepository from "../Repository/adminRepository";
 import { createToken } from "../Config/jwt_config";
+import TechnicianRepository from "../Repository/technicianRepository";
 dotenv.config();
 
 class AdminServices {
@@ -12,16 +13,21 @@ class AdminServices {
    }
 
    async loginService(email: string, password: string) {
-      const orginalEmail = process.env.Admin_email;
-      const orginalPassword = process.env.Admin_password;
-      if (orginalEmail === email) {
-         if (orginalPassword === password) {
-            const adminToken = createToken(email);
-            return adminToken;
+      try {
+         const orginalEmail = process.env.Admin_email;
+         const orginalPassword = process.env.Admin_password;
+         if (orginalEmail === email) {
+            if (orginalPassword === password) {
+               const adminToken = createToken(email);
+               return adminToken;
+            }
+            else throw new Error("Wrong password");
          }
-         else return "Wrong password";
+         else throw new Error("Wrong email");
+      } catch (error) {
+         console.log("Login service error : ", error);
+         throw error;
       }
-      else return "Wrong email";
    }
 
    async fetchUserService() {
@@ -58,7 +64,14 @@ class AdminServices {
       }
    }
 
-
+   async fetchTechnicianService() {
+      try {
+         const repositoryResponse = await this.adminRepository.fetchTechnicianRepository();
+         return repositoryResponse;
+      } catch (error) {
+         throw error;
+      }
+   }
 }
 
 export default AdminServices;

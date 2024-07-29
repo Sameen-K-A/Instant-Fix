@@ -14,7 +14,7 @@ const UserRegister = () => {
   const [confirm_password, setConfirm_password] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = async () => {
+  const handleRegister = async (event) => {
     event.preventDefault();
     let isValid = true;
     if (name.length < 3 || name.length > 20) {
@@ -42,12 +42,7 @@ const UserRegister = () => {
     if (isValid) {
       try {
         setIsLoading(true);
-        const response = await axios.post(`${Base_URL}/register`, { name, email, phone, password });
-        const OTP = response.data.OTP;
-        const expiryTime = response.data.expiryTime;
-        const userData = response.data.userData;
-        sessionStorage.setItem("userOTPDetails", JSON.stringify({ OTP: OTP, expiryTime: expiryTime }));
-        sessionStorage.setItem("userDatas", JSON.stringify(userData));
+        await axios.post(`${Base_URL}/register`, { name, email, phone, password });
         navigate("/otp", { state: { message: "OTP sent to your email. Please check it" } });
         setIsLoading(false);
       } catch (error) {
@@ -83,7 +78,7 @@ const UserRegister = () => {
                 <h5>Register</h5>
               </div>
               <div className="card-body">
-                <form onSubmit={() => handleRegister()}>
+                <form onSubmit={(e) => handleRegister(e)}>
                   <input type="text" className="form-control mb-3" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
                   <input type="text" className="form-control mb-3" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                   <div className='d-flex'>
