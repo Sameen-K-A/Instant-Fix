@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
-import axios from 'axios';
-import { Base_URL } from '../../config/credentials';
+import userAxiosInstance from '../../config/AxiosInstance/userInstance';
+import { useNavigate } from 'react-router-dom';
 
 function AddressModal({ userAddress, setUserAddress }) {
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [pinCode, setPinCode] = useState('');
@@ -44,7 +45,7 @@ function AddressModal({ userAddress, setUserAddress }) {
       try {
         const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
         const user_id = userDetails?.user_id;
-        const response = await axios.post(`${Base_URL}/address`, {
+        const response = await userAxiosInstance.post(`/address`, {
           user_id: user_id,
           name: name,
           address: address,
@@ -53,6 +54,7 @@ function AddressModal({ userAddress, setUserAddress }) {
           alternatePhone: alternateNumber
         });
         setUserAddress([...userAddress, response.data]);
+
 
         // Close the modal
         const modal = document.getElementById('exampleModal');
@@ -70,8 +72,15 @@ function AddressModal({ userAddress, setUserAddress }) {
         setPhoneNumber("");
         setAlternateNumber("");
       } catch (error) {
-        console.log(error);
-        toast.error("Can't add new Address, something wrong please try again later.")
+        if (error.response.status === 401) {
+          navigate("/login", { state: { message: "Authorization failed please login" } });
+        } else {
+          console.log(error);
+          toast.warning("Something wrong please try again later");
+        }
+        // Close the modal
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) backdrop.remove();
       }
     }
   };

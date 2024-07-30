@@ -1,22 +1,26 @@
 import { useEffect, useState } from "react";
 import BackgroundShape from "../Common/backgroundShape";
-import axios from "axios";
-import { Base_URL } from "../../config/credentials";
 import { toast } from "sonner";
-import AdminNavbar from "./AdminNavbar";
-import confirmAlert from "../Common/SweetAlert/confirmAlert"
+import confirmAlert from "../Common/SweetAlert/confirmAlert";
+import adminAxiosInstance from "../../config/AxiosInstance/adminInstance";
+import { useNavigate } from "react-router-dom";
 
 const AdminUserList = () => {
   const [usersArray, setUsersArray] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
       try {
-        const response = await axios.get(`${Base_URL}/admin/fetchUser`);
+        const response = await adminAxiosInstance.get(`/fetchUser`);
         setUsersArray(response.data);
       } catch (error) {
-        console.log(error);
-        toast.error("Something went wrong, can't fetch users data. Please try again later");
+        if (error.response.status === 401) {
+          navigate("/admin", { state: { message: "Authorization failed please login" } });
+        } else {
+          console.log(error);
+          toast.warning("Something wrong please try again later");
+        }
       }
     })();
   }, []);
@@ -26,14 +30,18 @@ const AdminUserList = () => {
       .then(async (response) => {
         if (response.isConfirmed) {
           try {
-            await axios.patch(`${Base_URL}/admin/unblockUser?user_id=${user_id}`);
+            await adminAxiosInstance.patch(`/unblockUser?user_id=${user_id}`);
             const afterUnblocking = usersArray.map((user) =>
               user.user_id === user_id ? { ...user, isBlocked: false } : user
             );
             setUsersArray(afterUnblocking);
           } catch (error) {
-            console.log(error);
-            toast.error("Something went wrong, can't un-block user.");
+            if (error.response.status === 401) {
+              navigate("/admin", { state: { message: "Authorization failed please login" } });
+            } else {
+              console.log(error);
+              toast.warning("Something wrong please try again later");
+            }
           }
         }
       })
@@ -44,14 +52,18 @@ const AdminUserList = () => {
       .then(async (response) => {
         if (response.isConfirmed) {
           try {
-            await axios.patch(`${Base_URL}/admin/blockUser?user_id=${user_id}`);
+            await adminAxiosInstance.patch(`/blockUser?user_id=${user_id}`);
             const afterblocking = usersArray.map((user) =>
               user.user_id === user_id ? { ...user, isBlocked: true } : user
             );
             setUsersArray(afterblocking);
           } catch (error) {
-            console.log(error);
-            toast.error("Something went wrong, can't block users data.");
+            if (error.response.status === 401) {
+              navigate("/admin", { state: { message: "Authorization failed please login" } });
+            } else {
+              console.log(error);
+              toast.warning("Something wrong please try again later");
+            }
           }
         }
       })
@@ -59,7 +71,6 @@ const AdminUserList = () => {
 
   return (
     <>
-      <AdminNavbar />
       <div className="page-header min-vh-75">
         <div className="container">
           <div className="row">

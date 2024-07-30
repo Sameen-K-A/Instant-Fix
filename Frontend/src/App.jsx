@@ -7,7 +7,7 @@ import UserLogin from './components/User_side/Login';
 import UserRegister from './components/User_side/Register';
 import UserForgotPassword from './components/User_side/ForgotPassword';
 import UserOTP from './components/User_side/OTP';
-import UserProtecter from './components/Auth/UserProtecter';
+import UserProtecter from './components/Services/UserProtecter';
 import UserProfile from './components/User_side/Profile';
 import UserAddress from './components/User_side/Address';
 import UserBookingHistoryTable from './components/User_side/History_booking';
@@ -17,13 +17,13 @@ import UserHomePage from './pages/User/HomePage';
 
 // Admin side
 import AdminLogin from './components/Admin_side/AdminLogin';
-import AdminProtecter from './components/Auth/AdminProtecter';
+import AdminProtecter from './components/Services/AdminProtecter';
 import AdminDashboard from './components/Admin_side/AdminDashboard';
 import AdminUserList from './components/Admin_side/UserList';
 import AdminTechnicianList from './components/Admin_side/TechnicianList';
 
 // Technician side
-import TechnicianProtecter from './components/Auth/TechnicianProtecter';
+import TechnicianProtecter from './components/Services/TechnicianProtecter';
 import TechnicianHome from './components/Technician_side/TechnicianHome';
 import TechnicianRole from './components/Technician_side/TechnicianRole';
 

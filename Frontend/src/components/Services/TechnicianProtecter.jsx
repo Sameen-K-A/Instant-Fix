@@ -8,7 +8,7 @@ const TechnicianProtecter = ({ children }) => {
 
   useEffect(() => {
     if (!userToken) {
-      navigate("/login");
+      navigate("/login", { state: { message: "Authorization failed please login" } });
       return;
     }
     if (!userDetails?.isTechnician) {

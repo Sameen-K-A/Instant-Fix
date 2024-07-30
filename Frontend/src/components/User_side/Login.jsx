@@ -8,14 +8,18 @@ import { Base_URL } from '../../config/credentials';
 
 const UserLogin = () => {
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("sameensameen60@gmail.com");
+  const [password, setPassword] = useState("00000000");
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    if (location.state?.message === "Registration process completed successfully, please login") {
-      toast.success("Registration process completed successfully, please login.");
+    if (location.state?.message) {
+      if (location.state?.message === "Registration process completed successfully, please login") {
+        toast.success("Registration process completed successfully, please login.");
+      } else if (location.state?.message === "Authorization failed please login") {
+        toast.error(location.state?.message)
+      }
     }
   }, [])
 

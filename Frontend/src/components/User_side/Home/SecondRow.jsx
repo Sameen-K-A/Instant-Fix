@@ -10,7 +10,7 @@ const SecondRow = () => {
           <div className="col-lg-6 col-md-12 col-sm-12">
             <img 
               src="https://img.freepik.com/free-photo/group-workers-having-meeting-with-company-managers-factory-focus-is-female-worker-is-presenting-development-reports_637285-4146.jpg?t=st=1722195349~exp=1722198949~hmac=d4079756387b55d4b20dddd91da52810d176e49421fea9c47886b987f59c87ff&w=1060" 
-              className="rounded d-block mx-auto col-10" 
+              className="rounded d-block mx-auto col-10 mb-4" 
               alt="Technician" 
             />
           </div>

@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import BackgroundShape from '../Common/backgroundShape';
 import UserNavbar from '../User_side/NavbarPage';
-import { Base_URL } from '../../config/credentials';
 import confirmAlert from '../Common/SweetAlert/confirmAlert';
-import axios from "axios";
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { Backbtn } from '../../../public/svgs/Icons';
+import userAxiosInstance from '../../config/AxiosInstance/userInstance';
 
 const TechnicianRole = () => {
   const [userDetails, setUserDetails] = useState({});
   const professions = ["Painter", "Welder", "Electrician", "Plumber", "Automobile Mechanic", "AC Mechanic", "Other"];
-  const [selectedProfessionIndex, setSelectedProfessionIndex] = useState(1);
+  const [selectedProfessionIndex, setSelectedProfessionIndex] = useState(null);
   const [enteredOtherProfession, setEnteredOtherProfession] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
@@ -24,6 +24,10 @@ const TechnicianRole = () => {
   }, []);
 
   const handleSave = () => {
+    if (selectedProfessionIndex === null) {
+      toast.error("Choose your correct profession.");
+      return;
+    }
     let finalProfession = professions[selectedProfessionIndex];
     if (finalProfession === "Other") {
       const professionRegex = /^[A-Za-z\s]+$/;
@@ -42,20 +46,20 @@ const TechnicianRole = () => {
       .then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const response = await axios.patch(`${Base_URL}/technician/joinTechnician?user_id=${userDetails?.user_id}&profession=${finalProfession}`);
-            console.log(response.data);
-            if (response.status === 200) {
-              const technicianDetails = JSON.stringify(response.data.seriveResult);
-              sessionStorage.setItem("technicianDetails", technicianDetails);
-              const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
-              userDetails.isTechnician = true;
-              sessionStorage.setItem("userDetails", JSON.stringify(userDetails));
-              navigate("/technician");
-            } else {
-              toast.error("Failed to save technician details.");
-            }
+            const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
+            const response = await userAxiosInstance.patch(`/technician/joinTechnician?user_id=${userDetails?.user_id}&profession=${finalProfession}`);
+            const technicianDetails = JSON.stringify(response.data);
+            sessionStorage.setItem("technicianDetails", technicianDetails);
+            userDetails.isTechnician = true;
+            sessionStorage.setItem("userDetails", JSON.stringify(userDetails));
+            navigate("/technician");
           } catch (error) {
-            toast.error("Something wrong please try again later.");
+            if (error.response.status === 401) {
+              navigate("/login", { state: { message: "Authorization failed please login" } });
+            } else {
+              console.log(error);
+              toast.warning("Something wrong please try again later");
+            }
           }
         }
       });
@@ -71,7 +75,8 @@ const TechnicianRole = () => {
               <div className="mt-5">
                 {!userDetails?.isTechnician ? (
                   <div className="text-center mt-3">
-                    <h5 className='w-70 text-start'>Choose your Profession </h5>
+                    <h5 className='w-70 text-start'><span onClick={() => navigate("/")}><Backbtn /></span>Profession </h5>
+                    <p className='w-70 text-start text-sm'>Choose your correct Profession </p>
                     <br />
                     {professions.map((prof, index) => (
                       <p

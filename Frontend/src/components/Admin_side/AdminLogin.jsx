@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import backgroundImage from "/images/Login&RegisterBackground.jpg";
 import { toast } from 'sonner';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Base_URL } from '../../config/credentials';
 
 const AdminLogin = () => {
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("adminadmin123@gmail.com");
+  const [password, setPassword] = useState("000");
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.message === "Authorization failed please login") {
+      toast.error("Authorization failed please login.")
+    };
+  }, [])
 
   const handleLogin = async (event) => {
     event.preventDefault();

@@ -13,15 +13,15 @@ const createToken = (user_id: string): string => {
 const verifyToken = (req: Request, res: Response, next: NextFunction) => {
    const authHeader = req.headers['authorization'];
    if (!authHeader) {
-      return res.status(403).send('Access denied. No token provided.');
+      return res.status(401).json({ message: 'Access denied. access token not valid' });
    }
-   const token = authHeader.split(' ')[1];
-   if (!token) {
-      return res.status(403).send('Access denied. No token provided.');
+   const accessToken = authHeader.split(' ')[1];
+   if (!accessToken) {
+      return res.status(401).json({ message: 'Access denied. access token not valid' });
    }
-   jwt.verify(token, secret_key, (err, decoded) => {
+   jwt.verify(accessToken, secret_key, (err, decoded) => {
       if (err) {
-         return res.status(401).send('Authentication failed. Invalid token.');
+         return res.status(401).json({ message: 'Access denied. access token not valid' });
       } else {
          (req as any).id = decoded;
          next();

@@ -2,24 +2,30 @@ import React, { useEffect, useState } from 'react';
 import BackgroundShape from '../Common/backgroundShape';
 import UserNavbar from './NavbarPage';
 import AddressModal from './AddressModal';
-import axios from "axios";
-import { Base_URL } from '../../config/credentials';
 import confirmAlert from "../Common/SweetAlert/confirmAlert";
 import { toast } from 'sonner';
+import userAxiosInstance from '../../config/AxiosInstance/userInstance';
+import { useNavigate } from 'react-router-dom';
 
 const UserAddress = () => {
 
   const [userAddress, setUserAddress] = useState([]);
+  const navigate = useNavigate();
+
   useEffect(() => {
     const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
     const user_id = userDetails?.user_id;
     const fetchAddress = async () => {
       try {
-        const response = await axios.get(`${Base_URL}/address?user_id=${user_id}`);
+        const response = await userAxiosInstance.get(`/address?user_id=${user_id}`);
         setUserAddress(response.data);
       } catch (error) {
-        console.log(error);
-        toast.error("Can't fetch address details. Please try again later.")
+        if (error.response.status === 401) {
+          navigate("/login", { state: { message: "Authorization failed please login" } });
+        } else {
+          console.log(error);
+          toast.warning("Something wrong please try again later");
+        }
       }
     };
     fetchAddress();
@@ -27,19 +33,23 @@ const UserAddress = () => {
 
   const handleDelete = (address_id) => {
     confirmAlert("Do you want to delete this Address")
-    .then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          await axios.delete(`${Base_URL}/address?address_id=${address_id}`);
-          const afterDeletedAddressArray = userAddress.filter((address) => address.address_id != address_id);
-          setUserAddress(afterDeletedAddressArray);
-          toast.success("The address has been deleted successfully.");
-        } catch (error) {
-          console.log(error);
-          toast.warning("Something wrong please try again later");
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await userAxiosInstance.delete(`/address?address_id=${address_id}`);
+            const afterDeletedAddressArray = userAddress.filter((address) => address.address_id != address_id);
+            setUserAddress(afterDeletedAddressArray);
+            toast.success("The address has been deleted successfully.");
+          } catch (error) {
+            if (error.response.status === 401) {
+              navigate("/login", { state: { message: "Authorization failed please login" } });
+            } else {
+              console.log(error);
+              toast.warning("Something wrong please try again later");
+            }
+          }
         }
-      }
-    })
+      })
   }
 
   return (

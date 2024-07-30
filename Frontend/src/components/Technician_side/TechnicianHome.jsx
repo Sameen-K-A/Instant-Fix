@@ -7,7 +7,6 @@ const TechnicianHome = () => {
   return (
     <>
       <TechnicianNavbar />
-
       <section className="welcome-area py-5">
         <div className="container">
           <div className="row">
@@ -62,7 +61,7 @@ const TechnicianHome = () => {
       <section className="section py-5 mt-3">
         <div className="container">
           <div className="row align-items-center">
-            <div className="col-lg-6 col-md-12 col-sm-12 d-flex justify-content-start">
+            <div className="col-lg-6 col-md-12 col-sm-12 d-flex justify-content-start mb-3">
               <img src="https://img.freepik.com/free-photo/portrait-engineers-work-hours-job-site_23-2151589571.jpg?t=st=1722228287~exp=1722231887~hmac=4dcfda7dbd859c0cf13104de851d9526efca23136c69a4509036397f764df67f&w=1380" className="col-10 rounded d-block mx-auto" alt="Training" />
             </div>
             <div className="col-lg-6 col-md-12">
@@ -74,7 +73,7 @@ const TechnicianHome = () => {
         </div>
       </section>
 
-      <section className="section mt-5">
+      <section className="section mt-0">
         <div className="container">
           <div className="row">
             <div className="col-lg-6 col-md-12 col-sm-12 align-self-center mobile-bottom-fix">
@@ -86,7 +85,7 @@ const TechnicianHome = () => {
                 <p>Access resources and training opportunities to further develop your skills. Stay ahead in the industry with our continuous learning options.</p>
               </div>
             </div>
-            <div className="col-lg-6 col-md-12 d-flex justify-content-end">
+            <div className="col-lg-6 col-md-12 d-flex justify-content-center mt-3">
               <img src="https://img.freepik.com/free-photo/portrait-engineers-work-hours-job-site_23-2151589576.jpg?t=st=1722228243~exp=1722231843~hmac=846c3902241b7819324915615a3d30984a5d1849baa567c6c9d321e4f130ffac&w=1380" className="col-10 img-fluid rounded" alt="App Features" />
             </div>
           </div>

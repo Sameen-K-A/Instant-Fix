@@ -3,6 +3,7 @@ import { AboutUS, Account, Address, Booking, Contact, Home, Logout, Worker } fro
 import { useNavigate } from "react-router-dom";
 import { Base_URL } from "../../config/credentials";
 import profile from "../../../public/images/userDefaultProfile.png";
+import confirmAlert from "../Common/SweetAlert/confirmAlert";
 
 const UserSideBar = ({ openSideBar, setOpenSideBar }) => {
   const userAccessToken = sessionStorage.getItem("userToken");
@@ -15,11 +16,16 @@ const UserSideBar = ({ openSideBar, setOpenSideBar }) => {
   };
 
   const handleLogout = () => {
-    sessionStorage.removeItem("userToken");
-    sessionStorage.removeItem("userDetails");
-    sessionStorage.removeItem("technicianDetails");
-    navigate("/");
-  }
+    confirmAlert("Do you want to logout? ")
+      .then((result) => {
+        if (result.isConfirmed) {
+          sessionStorage.removeItem("userToken");
+          sessionStorage.removeItem("userDetails");
+          sessionStorage.removeItem("technicianDetails");
+          navigate("/");
+        };
+      });
+  };
 
   return (
     <div className={`sidebar-container ${openSideBar && 'open'}`} onClick={handleCloseSidebar}>

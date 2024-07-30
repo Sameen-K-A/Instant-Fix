@@ -31,7 +31,7 @@ class TechnicianService {
             throw new Error('Failed to update user to technician');
          }
       } catch (error) {
-         console.log(error);
+         console.log("error form service : ", error);
          throw error;
       }
    }

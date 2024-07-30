@@ -10,9 +10,11 @@ const confirmAlert = (content) => {
       customClass: {
          popup: 'custom-width',
          confirmButton: 'confirm-btn',
-         cancelButton: 'cancel-btn'
+         cancelButton: 'cancel-btn',
+         title: 'custom-title',
+         content: 'custom-content'
       },
-      buttonsStyling: false
+      buttonsStyling: false,
    })
 }
 
