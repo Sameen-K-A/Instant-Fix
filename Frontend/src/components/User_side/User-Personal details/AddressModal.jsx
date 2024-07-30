@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from 'sonner';
-import userAxiosInstance from '../../config/AxiosInstance/userInstance';
+import userAxiosInstance from '../../../config/AxiosInstance/userInstance';
 import { useNavigate } from 'react-router-dom';
 
 function AddressModal({ userAddress, setUserAddress }) {
@@ -57,7 +57,7 @@ function AddressModal({ userAddress, setUserAddress }) {
 
 
         // Close the modal
-        const modal = document.getElementById('exampleModal');
+        const modal = document.getElementById('addressModal');
         const backdrop = document.querySelector('.modal-backdrop');
         modal.classList.remove('show');
         modal.setAttribute('aria-hidden', 'true');
@@ -86,11 +86,11 @@ function AddressModal({ userAddress, setUserAddress }) {
   };
 
   return (
-    <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div className="modal fade" id="addressModal" tabIndex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
       <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-body p-4 pt-5">
-            <h5 className="modal-title" id="exampleModalLabel">Add address</h5>
+            <h5 className="modal-title" id="addressModalLabel">Add address</h5>
             <form className='my-4' onSubmit={handleSubmit}>
               <input type="text" className="form-control mb-3" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
               <textarea className="form-control mb-3" placeholder="House name, House/ Flat number, District" style={{ minHeight: "50px", maxHeight: "150px" }} value={address} onChange={(e) => setAddress(e.target.value)} />

@@ -2,7 +2,7 @@ import React from 'react';
 
 const TechnicianProfileCard = () => {
   return (
-    <div className="col-12 col-sm-6 col-lg-3 mt-5">
+    <div className="col-12 col-sm-6 col-lg-3 mt-4">
       <div className="card text-center">
         <div className='p-3 d-flex align-items-center justify-content-center'>
           <div className="rounded-circle overflow-hidden" style={{ width: "150px", height: "150px" }}>

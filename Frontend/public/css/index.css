@@ -20116,6 +20116,10 @@ label,
   background-image: radial-gradient(370px circle at 80% 50%, rgba(203, 12, 159, 0.6) 0, #9b0979 100%);
 }
 
+.bg-gradient-navbar {
+  background-image: radial-gradient(at 31% 6%, hsla(279, 100%, 50%, 0.25) 0px, transparent 50%);
+}
+
 .bg-gradient-faded-secondary {
   background-image: radial-gradient(370px circle at 80% 50%, rgba(131, 146, 171, 0.6) 0, #657796 100%);
 }

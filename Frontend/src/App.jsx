@@ -9,7 +9,6 @@ import UserForgotPassword from './components/User_side/ForgotPassword';
 import UserOTP from './components/User_side/OTP';
 import UserProtecter from './components/Services/UserProtecter';
 import UserProfile from './components/User_side/Profile';
-import UserAddress from './components/User_side/Address';
 import UserBookingHistoryTable from './components/User_side/History_booking';
 import UserHistoryViewMore from './components/User_side/HistoryViewMore';
 import TechniciansListPage from './pages/User/TechniciansListPage';
@@ -31,6 +30,7 @@ import TechnicianRole from './components/Technician_side/TechnicianRole';
 import "../public/css/index.css";
 import "../public/css/user_home.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import AccountDetails from './components/User_side/AccountDetails';
 
 function App() {
   return (
@@ -45,7 +45,7 @@ function App() {
           <Route path='/otp' element={<UserOTP />} />;
           <Route path='/forgotpassword' element={<UserForgotPassword />} />;
           <Route path='/profile' element={<UserProtecter><UserProfile /></UserProtecter>} />;
-          <Route path='/address' element={<UserProtecter><UserAddress /></UserProtecter>} />;
+          <Route path='/address' element={<UserProtecter><AccountDetails /></UserProtecter>} />;
           <Route path='/allTechnicians' element={<UserProtecter><TechniciansListPage /></UserProtecter>} />;
           <Route path='/bookingHistory' element={<UserProtecter><UserBookingHistoryTable /></UserProtecter>} />;
           <Route path='/viewmoreHistory' element={<UserProtecter><UserHistoryViewMore /></UserProtecter>} />;
@@ -62,7 +62,7 @@ function App() {
 
         </Routes>
       </BrowserRouter>
-      <Toaster richColors expand={false} position="bottom-right" toastOptions={{ style: { padding: '18px', borderRadius: '8px' } }} />
+      <Toaster richColors expand={false} position="bottom-right" closeButton="true" toastOptions={{ style: { padding: '18px', borderRadius: '8px' } }} />
     </>
   )
 }
