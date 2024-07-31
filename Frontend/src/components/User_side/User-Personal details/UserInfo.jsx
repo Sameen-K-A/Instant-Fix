@@ -1,16 +1,11 @@
 import { useState } from "react";
 import UserChangePassword from "./ChangePassword";
 import EditUserInfo from "./EditInfo";
-import { Base_URL } from "../../../config/credentials";
 
 const UserInformation = ({ userDetails }) => {
   const [isEdit, setIsEdit] = useState(false);
 
   const cancelEdit = () => {
-    setIsEdit(false);
-  };
-
-  const saveChanges = () => {
     setIsEdit(false);
   };
 
@@ -24,7 +19,7 @@ const UserInformation = ({ userDetails }) => {
           {userDetails && (
             <div className="mt-3">
               {isEdit ? (
-                <EditUserInfo userDetails={userDetails} cancelEdit={cancelEdit} saveChanges={saveChanges} />
+                <EditUserInfo userDetails={userDetails} cancelEdit={cancelEdit} />
               ) : (
                 <li className="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
                   <div className="d-flex flex-column">

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import UserController from "../Controllers/userController";
 import { verifyToken } from "../Config/jwt_config";
+import upload from "../Config/Multer_config"
 
 const router = Router();
 const userController = new UserController()
@@ -18,5 +19,8 @@ router.put("/address", verifyToken, userController.editAddress_controller);
 
 // user change password
 router.patch("/changepassword", verifyToken, userController.changePassword_controller);
+
+// user change personal details
+router.patch("/editprofile", verifyToken, upload.single('profile'), userController.editprofile_controller);
 
 export default router;

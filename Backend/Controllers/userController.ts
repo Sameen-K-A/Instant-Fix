@@ -133,7 +133,27 @@ class UserController {
          }
       }
    }
-   
+
+   async editprofile_controller(req: Request, res: Response) {
+      try {
+         const { user_id, name, phone } = req.body;
+         const profileImage = req.file;
+
+         console.log('User ID:', user_id);
+         console.log('Name:', name);
+         console.log('Phone:', phone);
+         if (profileImage) {
+            console.log('Profile Image:', profileImage.originalname);
+         }
+         // res.status(200).json({ message: 'Profile updated successfully' });
+      } catch (error) {
+         console.log(error);
+         res.status(500).json({ message: 'Internal Server Error' });
+      }
+   }
+
+
+
 }
 
 export default UserController;
