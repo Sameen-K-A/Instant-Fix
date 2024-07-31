@@ -8,7 +8,10 @@ const AdminProtecter = ({ children }) => {
 
   useEffect(() => {
     if (!adminToken) {
-      navigate("/admin", {state: {message: "Authorization failed please login"}});
+      navigate("/admin", {
+        state: { message: "Authorization failed please login" },
+        replace: true
+      });
     }
   })
 

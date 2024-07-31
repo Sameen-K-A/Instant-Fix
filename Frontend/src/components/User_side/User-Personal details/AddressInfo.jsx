@@ -61,7 +61,7 @@ const AddressInformation = () => {
                ) : (
                   userAddress.map((address, index) => {
                      return (
-                        <li className="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
+                        <li key={address?.address_id} className="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
                            <div className="d-flex flex-column">
                               <h6 className="mb-3 text-sm">Address {index + 1}</h6>
                               <span className="mb-2 text-xs text-dark">{address?.name},</span>

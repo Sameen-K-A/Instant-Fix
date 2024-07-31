@@ -45,7 +45,7 @@ function App() {
           <Route path='/otp' element={<UserOTP />} />;
           <Route path='/forgotpassword' element={<UserForgotPassword />} />;
           <Route path='/profile' element={<UserProtecter><UserProfile /></UserProtecter>} />;
-          <Route path='/address' element={<UserProtecter><AccountDetails /></UserProtecter>} />;
+          <Route path='/accountdetails' element={<UserProtecter><AccountDetails /></UserProtecter>} />;
           <Route path='/allTechnicians' element={<UserProtecter><TechniciansListPage /></UserProtecter>} />;
           <Route path='/bookingHistory' element={<UserProtecter><UserBookingHistoryTable /></UserProtecter>} />;
           <Route path='/viewmoreHistory' element={<UserProtecter><UserHistoryViewMore /></UserProtecter>} />;

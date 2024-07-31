@@ -8,11 +8,17 @@ const TechnicianProtecter = ({ children }) => {
 
   useEffect(() => {
     if (!userToken) {
-      navigate("/login", { state: { message: "Authorization failed please login" } });
+      navigate("/login", {
+        state: { message: "Authorization failed please login" },
+        replace: true
+      });
       return;
     }
     if (!userDetails?.isTechnician) {
-      navigate("/technician/joinTechnician", { state: { message: "Please fulfill your details." } });
+      navigate("/technician/joinTechnician", {
+        state: { message: "Please fulfill your details." },
+        replace: true
+      });
       return;
     }
   }, []);

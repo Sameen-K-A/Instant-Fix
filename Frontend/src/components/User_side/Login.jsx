@@ -7,7 +7,6 @@ import axios from 'axios';
 import { Base_URL } from '../../config/credentials';
 
 const UserLogin = () => {
-
   const [email, setEmail] = useState("sameensameen60@gmail.com");
   const [password, setPassword] = useState("00000000");
   const navigate = useNavigate();
@@ -15,13 +14,13 @@ const UserLogin = () => {
 
   useEffect(() => {
     if (location.state?.message) {
-      if (location.state?.message === "Registration process completed successfully, please login") {
+      if (location.state.message === "Registration process completed successfully, please login") {
         toast.success("Registration process completed successfully, please login.");
-      } else if (location.state?.message === "Authorization failed please login") {
-        toast.error(location.state?.message)
+      } else if (location.state.message === "Authorization failed, please login") {
+        toast.error(location.state.message);
       }
     }
-  }, [])
+  }, []);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -65,7 +64,7 @@ const UserLogin = () => {
                 <h5>Login</h5>
               </div>
               <div className="card-body">
-                <form role="form text-left" onSubmit={(e) => handleLogin(e)}>
+                <form role="form text-left" onSubmit={handleLogin}>
                   <input type="text" className="form-control mb-3" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                   <input type="password" className="form-control mb-3" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                   <label style={{ cursor: "pointer" }} onClick={() => navigate("/forgotpassword")}><u>Forget your password?</u></label>

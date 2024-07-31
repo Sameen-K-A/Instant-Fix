@@ -103,6 +103,22 @@ class UserController {
       }
    }
 
+   async changePassword_controller(req: Request, res: Response): Promise<void> {
+      try {
+         const { user_id, currentPass, newPass } = req.body;
+         await userServices.changePasswordService(user_id, currentPass, newPass);
+         res.status(200).send("Password changed successfully");
+      } catch (error: any) {
+         if (error.message === "Current password is wrong") {
+            res.status(401).json({ message: "Current password is wrong" });
+         } else if (error.message === "User not found") {
+            res.status(404).json({ message: "User not found" });
+         } else {
+            res.status(500).json({ message: "Internal server error" });
+         }
+      }
+   }
+
 }
 
 export default UserController;

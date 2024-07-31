@@ -35,7 +35,7 @@ const AccountDetails = () => {
             </div>
             <div className="container-fluid py-4">
                <div className="row">
-                  <UserInformation />
+                  <UserInformation userDetails={userDetails} />
                   <AddressInformation />
                   <FollowingInformation />
                </div>

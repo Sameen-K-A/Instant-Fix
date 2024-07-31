@@ -3,9 +3,17 @@ import { userAddressModal, userAddressType } from "../Model/userAddressModal";
 
 class UserRepository {
 
-   async findUser(email: string) {
+   async findUserByEmail(email: string) {
       try {
          return await userModel.findOne({ email });
+      } catch (error) {
+         throw error;
+      }
+   };
+
+   async findUserByUser_id(user_id: string) {
+      try {
+         return await userModel.findOne({ user_id: user_id });
       } catch (error) {
          throw error;
       }
@@ -51,6 +59,14 @@ class UserRepository {
          throw error;
       }
    };
+
+   async changepasswordRepository(user_id: string, hashedNewPassword: string) {
+      try {
+         return await userModel.updateOne({ user_id: user_id }, { password: hashedNewPassword });
+      } catch (error) {
+         throw error;
+      }
+   }
 };
 
 export default UserRepository;

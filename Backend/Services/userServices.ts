@@ -17,7 +17,7 @@ class UserServices {
 
    async loginUserService(email: string, password: string) {
       try {
-         const userData = await this.userRepository.findUser(email);
+         const userData = await this.userRepository.findUserByEmail(email);
          if (!userData) {
             throw new Error("email not found");
          }
@@ -34,7 +34,7 @@ class UserServices {
 
    async registerUserService(userData: userType): Promise<void> {
       try {
-         const alreadyExists = await this.userRepository.findUser(userData.email);
+         const alreadyExists = await this.userRepository.findUserByEmail(userData.email);
          if (alreadyExists) {
             throw new Error("Email already exists");
          }
@@ -122,6 +122,23 @@ class UserServices {
          throw error;
       }
    };
+
+   async changePasswordService(user_id: string, currentPass: string, newPass: string) {
+      try {
+         const userDetails = await this.userRepository.findUserByUser_id(user_id);
+         if (!userDetails) {
+            throw new Error("User not found");
+         }
+         const validCurrentPass = await bcrypt.compare(currentPass, userDetails.password);
+         if (!validCurrentPass) {
+            throw new Error("Current password is wrong");
+         }
+         const hashedNewPassword = await bcrypt.hash(newPass, 10);
+         await this.userRepository.changepasswordRepository(user_id, hashedNewPassword);
+      } catch (error) {
+         throw error;
+      }
+   }
 }
 
 export default UserServices;
