@@ -32,7 +32,7 @@ const UserInformation = ({ userDetails }) => {
                     <span className="mb-2 text-xs text-dark">{userDetails?.email}</span>
                     <span className="mb-2 text-xs text-dark">+91 {userDetails?.phone}</span>
                   </div>
-                  <div className="ms-auto text-end">
+                  <div className="ms-auto text-end mb-0">
                     <button className="btn text-xs btn-outline-dark border-radius-xl p-1 px-4 me-1" onClick={() => setIsEdit(true)}>
                       Edit
                     </button>

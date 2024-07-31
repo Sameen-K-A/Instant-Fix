@@ -1,5 +1,6 @@
 import { userModel, userType } from "../Model/userModal";
 import { userAddressModal, userAddressType } from "../Model/userAddressModal";
+import { editAddressType } from "../Interfaces";
 
 class UserRepository {
 
@@ -43,6 +44,14 @@ class UserRepository {
       }
    };
 
+   async editAddressRepository(address_id: string, editedAddressData: editAddressType) {
+      try {
+         return await userAddressModal.updateOne({ address_id }, { $set: editedAddressData });
+      } catch (error) {
+         throw error;
+      }
+   }
+
    async deleteAddressRepository(address_id: string) {
       try {
          return await userAddressModal.deleteOne({ address_id: address_id });
@@ -66,7 +75,7 @@ class UserRepository {
       } catch (error) {
          throw error;
       }
-   }
+   };
 };
 
 export default UserRepository;

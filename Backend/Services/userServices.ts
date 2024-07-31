@@ -5,6 +5,8 @@ import { userType } from "../Model/userModal";
 import sendOTPmail from "../Config/Email_config";
 import { createToken } from "../Config/jwt_config";
 import { userAddressType } from "../Model/userAddressModal";
+import { editAddressType } from "../Interfaces";
+
 class UserServices {
    private userRepository: UserRepository;
    private OTP: string | null = null;
@@ -110,6 +112,25 @@ class UserServices {
          throw error
       }
    };
+
+   async editAddressService(address_id: string, name: string, address: string, pincode: string, phone: string, alternatePhone: string): Promise<string> {
+      try {
+         const editedAddressData: editAddressType = {
+            name,
+            address,
+            pincode,
+            phone,
+            alternatePhone
+         };
+         const repositoryResponse = await this.userRepository.editAddressRepository(address_id, editedAddressData);
+         if (repositoryResponse.modifiedCount === 0) {
+            throw new Error("No changes founded");
+         }
+         return "okay";
+      } catch (error) {
+         throw error;
+      }
+   }
 
    async deleteAddressService(address_id: string) {
       try {

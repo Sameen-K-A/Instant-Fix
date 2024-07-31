@@ -50,7 +50,7 @@ const UserChangePassword = ({ userDetails }) => {
         <input type="text" className="form-control mt-1" placeholder="Enter current password" value={currentPass} onChange={(e) => setCurrentPass(e.target.value)} />
         <input type="text" className="form-control mt-3" placeholder="Enter new password" value={newPass} onChange={(e) => setNewPass(e.target.value)} />
         <div className="ms-auto mt-3 text-end">
-          <button className="btn text-xs bg-gradient-primary border-radius-xl" onClick={() => handleChange()}>Save</button>
+          <button className="btn text-xs bg-gradient-primary border-radius-xl mb-0" onClick={() => handleChange()}>Save</button>
         </div>
       </li>
     </>

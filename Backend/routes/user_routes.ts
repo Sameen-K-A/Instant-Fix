@@ -14,6 +14,7 @@ router.get("/resendOTP", userController.resendOTP_controller);
 router.get("/address", verifyToken, userController.fetchAddress_controller);
 router.post("/address", verifyToken, userController.addAddress_controller);
 router.delete("/address", verifyToken, userController.deleteAddress_controller);
+router.put("/address", verifyToken, userController.editAddress_controller);
 
 // user change password
 router.patch("/changepassword", verifyToken, userController.changePassword_controller);

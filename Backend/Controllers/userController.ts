@@ -103,6 +103,21 @@ class UserController {
       }
    }
 
+   async editAddress_controller(req: Request, res: Response): Promise<void> {
+      try {
+         const { address_id, name, address, pincode, phone, alternatePhone } = req.body;
+         await userServices.editAddressService(address_id, name, address, pincode, phone, alternatePhone);
+         res.status(200).send("Address changed successfully");
+      } catch (error: any) {
+         if (error.message === "No changes founded") {
+            res.status(304).json({ message: "No changes founded" });
+         } else {
+            console.error("Internal Server Error:", error);
+            res.status(500).send("Internal server error");
+         }
+      }
+   }
+
    async changePassword_controller(req: Request, res: Response): Promise<void> {
       try {
          const { user_id, currentPass, newPass } = req.body;
@@ -118,7 +133,7 @@ class UserController {
          }
       }
    }
-
+   
 }
 
 export default UserController;
