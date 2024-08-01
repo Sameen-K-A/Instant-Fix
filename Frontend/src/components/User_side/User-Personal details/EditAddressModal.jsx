@@ -71,7 +71,7 @@ function EditAddressModal({ changingAddress, userAddress, setUserAddress }) {
         );
         setUserAddress(updatedAddresses);
         toast.success("Address updated successfully!");
-        
+
         // closing my edit address modal
         const modal = document.getElementById('editAddressModal');
         const backdrop = document.querySelector('.modal-backdrop');

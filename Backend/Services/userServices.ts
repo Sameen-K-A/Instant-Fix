@@ -160,6 +160,25 @@ class UserServices {
          throw error;
       }
    }
+
+   async editProfileService(user_id: string, name: string, phone: string, profileIMG: string | null): Promise<string> {
+      try {
+         const updatedInformation: { name: string; phone: string; profileIMG?: string } = {
+            name: name,
+            phone: phone,
+         };
+         if (profileIMG) {
+            updatedInformation.profileIMG = profileIMG;
+         }
+         const repositoryResponse = await this.userRepository.editProfileRepository(user_id, updatedInformation);
+         if (repositoryResponse.modifiedCount === 0) {
+            throw new Error("No changes founded");
+         }
+         return "okay";
+      } catch (error) {
+         throw error;
+      }
+   }
 }
 
 export default UserServices;

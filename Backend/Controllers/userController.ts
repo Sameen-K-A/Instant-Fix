@@ -136,23 +136,24 @@ class UserController {
 
    async editprofile_controller(req: Request, res: Response) {
       try {
-         const { user_id, name, phone } = req.body;
-         const profileImage = req.file;
-
-         console.log('User ID:', user_id);
-         console.log('Name:', name);
-         console.log('Phone:', phone);
-         if (profileImage) {
-            console.log('Profile Image:', profileImage.originalname);
+         const { user_id, name, phone, defaultProfileImage } = req.body;
+         const selectedProfileImage = req.file;
+         let profileIMG: string | null = null;
+         if (selectedProfileImage) {
+            profileIMG = selectedProfileImage.filename;
+         } else if (defaultProfileImage) {
+            profileIMG = defaultProfileImage.split("/").pop();
          }
-         // res.status(200).json({ message: 'Profile updated successfully' });
-      } catch (error) {
-         console.log(error);
-         res.status(500).json({ message: 'Internal Server Error' });
+         await userServices.editProfileService(user_id, name, phone, profileIMG);
+         res.status(200).send("Changes completed successfully");
+      } catch (error: any) {
+         if (error.message === "No changes founded") {
+            res.status(304).json({ message: "No changes founded" });
+         } else {
+            res.status(500).json({ message: 'Internal Server Error' });
+         }
       }
    }
-
-
 
 }
 

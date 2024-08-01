@@ -5,10 +5,9 @@ import { Base_URL } from "../../config/credentials";
 import profile from "../../../public/images/userDefaultProfile.png";
 import confirmAlert from "../Common/SweetAlert/confirmAlert";
 
-const UserSideBar = ({ openSideBar, setOpenSideBar }) => {
+const UserSideBar = ({ openSideBar, setOpenSideBar, userData }) => {
   const userAccessToken = sessionStorage.getItem("userToken");
   const navigate = useNavigate();
-  const userData = JSON.parse(sessionStorage.getItem("userDetails"));
   const handleCloseSidebar = (e) => {
     if (e.target.className === "backdrop") {
       setOpenSideBar(false);
@@ -33,6 +32,7 @@ const UserSideBar = ({ openSideBar, setOpenSideBar }) => {
       <nav className={`sidebar ${openSideBar && 'open'}`}>
         {userAccessToken ? (
           <>
+          {console.log("sidebar work")}
             <header>
               <div className="image-text">
                 <span className="image">

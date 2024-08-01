@@ -9,6 +9,7 @@ const TechnicianProfileCard = () => {
             <img src="https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001884.png" width={"150px"} alt="Technician Profile" />
           </div>
         </div>
+        {console.log("technician profile card")}
         <div className="card-body p-3 card-details">
           <h6 className="card-title">Samantha Sarah</h6>
           <p className="card-text text-muted mb-2">Founder & CEO</p>

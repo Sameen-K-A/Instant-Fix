@@ -23,7 +23,7 @@ const UserNavbar = () => {
           </div>
         </div>
       </nav>
-      {openSideBar && <UserSideBar openSideBar={openSideBar} setOpenSideBar={setOpenSideBar} />}
+      {openSideBar && <UserSideBar openSideBar={openSideBar} setOpenSideBar={setOpenSideBar} userData={userData} />}
     </>
   );
 }

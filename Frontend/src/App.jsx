@@ -8,7 +8,6 @@ import UserRegister from './components/User_side/Register';
 import UserForgotPassword from './components/User_side/ForgotPassword';
 import UserOTP from './components/User_side/OTP';
 import UserProtecter from './components/Services/UserProtecter';
-import UserProfile from './components/User_side/Profile';
 import UserBookingHistoryTable from './components/User_side/History_booking';
 import UserHistoryViewMore from './components/User_side/HistoryViewMore';
 import TechniciansListPage from './pages/User/TechniciansListPage';
@@ -44,7 +43,6 @@ function App() {
           <Route path='/register' element={<UserRegister />} />;
           <Route path='/otp' element={<UserOTP />} />;
           <Route path='/forgotpassword' element={<UserForgotPassword />} />;
-          <Route path='/profile' element={<UserProtecter><UserProfile /></UserProtecter>} />;
           <Route path='/accountdetails' element={<UserProtecter><AccountDetails /></UserProtecter>} />;
           <Route path='/allTechnicians' element={<UserProtecter><TechniciansListPage /></UserProtecter>} />;
           <Route path='/bookingHistory' element={<UserProtecter><UserBookingHistoryTable /></UserProtecter>} />;

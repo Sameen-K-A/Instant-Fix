@@ -76,6 +76,14 @@ class UserRepository {
          throw error;
       }
    };
+
+   async editProfileRepository(user_id: string, updatedInformation: { name: string, phone: string, profileIMG?: string }) {
+      try {
+         return await userModel.updateOne({ user_id: user_id }, { $set: updatedInformation });
+      } catch (error) {
+         throw error;
+      }
+   }
 };
 
 export default UserRepository;

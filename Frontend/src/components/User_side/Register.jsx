@@ -92,6 +92,7 @@ const UserRegister = () => {
                   ) : (
                     <button type="button" className="btn bg-gradient-primary w-100 my-4 mb-2">Loading . . .</button>
                   )}
+                            {console.log("register")}
                   <p className="text-sm mt-3 mb-0">
                     Already have an account? <a className="text-dark font-weight-bolder" style={{ cursor: "pointer" }} onClick={() => navigate("/login")}><u>Sign in</u></a>
                   </p>

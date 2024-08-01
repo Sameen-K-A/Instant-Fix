@@ -2,7 +2,7 @@ import { useState } from "react";
 import UserChangePassword from "./ChangePassword";
 import EditUserInfo from "./EditInfo";
 
-const UserInformation = ({ userDetails }) => {
+const UserInformation = ({ userDetails, setUserDetails }) => {
   const [isEdit, setIsEdit] = useState(false);
 
   const cancelEdit = () => {
@@ -19,7 +19,7 @@ const UserInformation = ({ userDetails }) => {
           {userDetails && (
             <div className="mt-3">
               {isEdit ? (
-                <EditUserInfo userDetails={userDetails} cancelEdit={cancelEdit} />
+                <EditUserInfo userDetails={userDetails} setUserDetails={setUserDetails} cancelEdit={cancelEdit} />
               ) : (
                 <li className="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
                   <div className="d-flex flex-column">
