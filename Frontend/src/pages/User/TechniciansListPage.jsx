@@ -10,14 +10,8 @@ const TechniciansListPage = () => {
     (async () => {
       try {
         const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
-        const techniciansList = JSON.parse(sessionStorage.getItem("techniciansList"));
-        if (!techniciansList) {
-          const responseDetails = await userAxiosInstance.get(`/fetchTechnician?user_id=${userDetails.user_id}`);
-          setTechniciansArray(responseDetails.data);
-          sessionStorage.setItem("techniciansList", JSON.stringify(responseDetails.data));
-        } else {
-          setTechniciansArray(techniciansList)
-        }
+        const responseDetails = await userAxiosInstance.get(`/fetchTechnician?user_id=${userDetails.user_id}`);
+        setTechniciansArray(responseDetails.data);
       } catch (error) {
         if (error.response.status === 401) {
           navigate("/login", { state: { message: "Authorization failed please login" } });
@@ -49,11 +43,14 @@ const TechniciansListPage = () => {
             <div className="row d-flex justify-content-start">
               {techniciansArray.map((technician) => {
                 return (
-                  <TechnicianProfileCard key={technician.user_id} technicianData={technician} />
+                  technician.technicianDetails[0].availability && (
+                    <TechnicianProfileCard key={technician.user_id} technicianData={technician} />
+                  )
                 );
               })}
             </div>
           </div>
+
         </div>
       </div>
       <Footer />

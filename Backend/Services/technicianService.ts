@@ -35,6 +35,19 @@ class TechnicianService {
          throw error;
       }
    }
+
+   async changeProfessionService(user_id: string, profession: string): Promise<boolean> {
+      try {
+         const response = await this.technicianRepository.changeProfessionRepository(user_id, profession);
+         if (response.modifiedCount === 1) {
+            return true;
+         } else {
+            throw new Error("No changes found");
+         }
+      } catch (error) {
+         throw error;
+      }
+   }
 }
 
 export default TechnicianService;

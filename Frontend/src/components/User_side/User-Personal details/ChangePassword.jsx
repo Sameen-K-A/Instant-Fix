@@ -42,18 +42,20 @@ const UserChangePassword = ({ userDetails }) => {
   };
 
   return (
-    <>
-      <div className="card-header pb-0 p-3">
-        <h6 className="mb-0 mt-3 text-center">Change password</h6>
-      </div>
-      <li className="list-group-item border-0 p-4 mb-0 mt-3 bg-gray-100 border-radius-lg">
-        <input type="text" className="form-control mt-1" placeholder="Enter current password" value={currentPass} onChange={(e) => setCurrentPass(e.target.value)} />
-        <input type="text" className="form-control mt-3" placeholder="Enter new password" value={newPass} onChange={(e) => setNewPass(e.target.value)} />
-        <div className="ms-auto mt-3 text-end">
-          <button className="btn text-xs bg-gradient-primary border-radius-xl mb-0" onClick={() => handleChange()}>Save</button>
+    <div className="card col-12 mt-3 min-height-200">
+      <div className="card-body p-3">
+        <div className="card-header pb-0 p-3">
+          <h6 className="mb-0 mt-3 text-center">Change password</h6>
         </div>
-      </li>
-    </>
+        <li className="list-group-item border-0 p-4 mb-0 mt-3 bg-gray-100 border-radius-lg">
+          <input type="text" className="form-control mt-1" placeholder="Enter current password" value={currentPass} onChange={(e) => setCurrentPass(e.target.value)} />
+          <input type="text" className="form-control mt-3" placeholder="Enter new password" value={newPass} onChange={(e) => setNewPass(e.target.value)} />
+          <div className="ms-auto mt-3 text-end">
+            <button className="btn text-xs bg-gradient-primary border-radius-xl mb-0" onClick={() => handleChange()}>Save</button>
+          </div>
+        </li>
+      </div>
+    </div>
   )
 }
 

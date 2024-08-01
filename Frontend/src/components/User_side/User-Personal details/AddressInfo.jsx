@@ -13,20 +13,26 @@ const AddressInformation = () => {
 
   useEffect(() => {
     const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
+    const AddressList = sessionStorage.getItem("AddressList");
     const user_id = userDetails?.user_id;
-    (async () => {
-      try {
-        const response = await userAxiosInstance.get(`/address?user_id=${user_id}`);
-        setUserAddress(response.data);
-      } catch (error) {
-        if (error.response.status === 401) {
-          navigate("/login", { state: { message: "Authorization failed please login" } });
-        } else {
-          console.log(error);
-          toast.warning("Something wrong please try again later");
+    if (!AddressList) {
+      (async () => {
+        try {
+          const response = await userAxiosInstance.get(`/address?user_id=${user_id}`);
+          setUserAddress(response.data);
+          sessionStorage.setItem("AddressList", JSON.stringify(response.data));
+        } catch (error) {
+          if (error.response?.status === 401) {
+            navigate("/login", { state: { message: "Authorization failed please login" } });
+          } else {
+            console.log(error);
+            toast.warning("Something went wrong, please try again later");
+          }
         }
-      }
-    })();
+      })();
+    } else {
+      setUserAddress(JSON.parse(AddressList));
+    }
   }, []);
 
   const handleDelete = (address_id) => {
@@ -37,6 +43,7 @@ const AddressInformation = () => {
             await userAxiosInstance.delete(`/address?address_id=${address_id}`);
             const afterDeletedAddressArray = userAddress.filter((address) => address.address_id !== address_id);
             setUserAddress(afterDeletedAddressArray);
+            sessionStorage.setItem("AddressList", JSON.stringify(afterDeletedAddressArray));
             toast.success("The address has been deleted successfully.");
           } catch (error) {
             if (error.response.status === 401) {
@@ -51,7 +58,7 @@ const AddressInformation = () => {
   };
 
   return (
-    <div className="col-12 col-xl-4 mb-4">
+    <>
       <div className="card min-height-200">
         <div className="card-header pb-0 p-3">
           <h6 className="mb-0 mt-3 text-center">Address Details</h6>
@@ -89,7 +96,7 @@ const AddressInformation = () => {
       </div>
       <EditAddressModal changingAddress={selectedEditAddress} userAddress={userAddress} setUserAddress={setUserAddress} />
       <AddressModal userAddress={userAddress} setUserAddress={setUserAddress} />
-    </div>
+    </>
   );
 };
 

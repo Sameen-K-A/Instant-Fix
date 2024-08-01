@@ -40,6 +40,10 @@ const AdminSidebar = ({ openSideBar, setOpenSideBar }) => {
                   <Home />
                   <span className="text nav-text">Home</span>
                 </li>
+                <li className="nav-link" onClick={() => navigate("/technician/accountdetails")}>
+                  <Account />
+                  <span className="text nav-text">Account details</span>
+                </li>
                 <li className="nav-link">
                   <Send />
                   <span className="text nav-text">Booking requests</span>

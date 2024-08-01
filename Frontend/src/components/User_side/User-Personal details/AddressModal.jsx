@@ -53,8 +53,9 @@ function AddressModal({ userAddress, setUserAddress }) {
           phone: phoneNumber,
           alternatePhone: alternateNumber
         });
-        setUserAddress([...userAddress, response.data]);
-
+        const afterAddAddress = [...userAddress, response.data];
+        setUserAddress(afterAddAddress);
+        sessionStorage.setItem("AddressList", JSON.stringify(afterAddAddress));
 
         // Close the modal
         const modal = document.getElementById('addressModal');

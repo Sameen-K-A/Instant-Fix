@@ -12,6 +12,7 @@ import UserBookingHistoryTable from './components/User_side/History_booking';
 import UserHistoryViewMore from './components/User_side/HistoryViewMore';
 import TechniciansListPage from './pages/User/TechniciansListPage';
 import UserHomePage from './pages/User/HomePage';
+import AccountDetails from './components/User_side/AccountDetails';
 
 // Admin side
 import AdminLogin from './components/Admin_side/AdminLogin';
@@ -29,7 +30,6 @@ import TechnicianRole from './components/Technician_side/TechnicianRole';
 import "../public/css/index.css";
 import "../public/css/user_home.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import AccountDetails from './components/User_side/AccountDetails';
 
 function App() {
   return (
@@ -57,6 +57,7 @@ function App() {
           {/* Technician side */}
           <Route path='/technician' element={<TechnicianProtecter><TechnicianHome /></TechnicianProtecter>} />;
           <Route path='/technician/joinTechnician' element={<TechnicianRole />} />;
+          <Route path='/technician/accountdetails' element={<TechnicianProtecter><AccountDetails /></TechnicianProtecter>} />;
 
         </Routes>
       </BrowserRouter>

@@ -70,6 +70,7 @@ function EditAddressModal({ changingAddress, userAddress, setUserAddress }) {
             : addr
         );
         setUserAddress(updatedAddresses);
+        sessionStorage.setItem("AddressList", JSON.stringify(updatedAddresses));
         toast.success("Address updated successfully!");
 
         // closing my edit address modal
