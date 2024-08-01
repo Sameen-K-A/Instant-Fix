@@ -1,18 +1,29 @@
 import React from 'react';
+import { Base_URL } from '../../config/credentials';
+import { Star } from '../../../public/svgs/Icons';
 
-const TechnicianProfileCard = () => {
+const TechnicianProfileCard = ({ technicianData }) => {
+  const ratingArray = [1, 2, 3, 4, 5];
   return (
     <div className="col-12 col-sm-6 col-lg-3 mt-4">
       <div className="card text-center">
         <div className='p-3 d-flex align-items-center justify-content-center'>
-          <div className="rounded-circle overflow-hidden" style={{ width: "150px", height: "150px" }}>
-            <img src="https://png.pngtree.com/png-clipart/20230927/original/pngtree-man-avatar-image-for-profile-png-image_13001884.png" width={"150px"} alt="Technician Profile" />
+          <div className="avatar avatar-xxl mt-3">
+            <img src={`${Base_URL}/${technicianData?.profileIMG}`} alt="profile_image" className="w-100 border-radius-lg shadow-sm" />
           </div>
         </div>
-        {console.log("technician profile card")}
         <div className="card-body p-3 card-details">
-          <h6 className="card-title">Samantha Sarah</h6>
-          <p className="card-text text-muted mb-2">Founder & CEO</p>
+          <h6 className="card-title mb-0">{technicianData?.name}</h6>
+          <p className="card-text text-muted text-sm text-bold mb-0">{technicianData.technicianDetails[0]?.profession}</p>
+          <div className="d-flex justify-content-center mb-3">
+            {ratingArray.map((value) => {
+              return (
+                <span key={value} className='me-1'>
+                  {value <= technicianData.technicianDetails[0]?.rating ? <Star color={"#ffbb00"} /> : <Star />}
+                </span>
+              )
+            })}
+          </div>
           <button type="button" className="btn bg-gradient-primary">View more</button>
         </div>
       </div>

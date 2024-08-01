@@ -48,10 +48,10 @@ const TechnicianRole = () => {
           try {
             const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
             const response = await userAxiosInstance.patch(`/technician/joinTechnician?user_id=${userDetails?.user_id}&profession=${finalProfession}`);
-            const technicianDetails = JSON.stringify(response.data);
-            sessionStorage.setItem("technicianDetails", technicianDetails);
             userDetails.isTechnician = true;
+            userDetails.technicianDetails.push(response.data);
             sessionStorage.setItem("userDetails", JSON.stringify(userDetails));
+            setUserDetails(userDetails);
             navigate("/technician");
           } catch (error) {
             if (error.response.status === 401) {

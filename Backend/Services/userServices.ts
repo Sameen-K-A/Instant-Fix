@@ -19,7 +19,7 @@ class UserServices {
 
    async loginUserService(email: string, password: string) {
       try {
-         const userData = await this.userRepository.findUserByEmail(email);
+         const userData = await this.userRepository.loginUserRepository(email);
          if (!userData) {
             throw new Error("email not found");
          }
@@ -176,6 +176,15 @@ class UserServices {
          }
          return "okay";
       } catch (error) {
+         throw error;
+      }
+   }
+
+   async fetchTechnicianService(user_id: string) {
+      try {
+         return await this.userRepository.fetchTechnicianRepository(user_id);
+      } catch (error) {
+         console.log("Fetch technician service error : ", error);
          throw error;
       }
    }

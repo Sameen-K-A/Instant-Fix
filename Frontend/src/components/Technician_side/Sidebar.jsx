@@ -52,9 +52,6 @@ const AdminSidebar = ({ openSideBar, setOpenSideBar }) => {
                   <Wallet />
                   <span className="text nav-text">Wallet</span>
                 </li>
-                <li className="nav-link">
-                  <span className="text nav-text">Availability</span>
-                </li>
                 <li className="nav-link" onClick={() => navigate("/")}>
                   <Account />
                   <span className="text nav-text">User console</span>

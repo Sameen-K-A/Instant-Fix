@@ -20,7 +20,7 @@ const UserSideBar = ({ openSideBar, setOpenSideBar, userData }) => {
         if (result.isConfirmed) {
           sessionStorage.removeItem("userToken");
           sessionStorage.removeItem("userDetails");
-          sessionStorage.removeItem("technicianDetails");
+          sessionStorage.removeItem("techniciansList");
           navigate("/");
         };
       });
@@ -32,7 +32,6 @@ const UserSideBar = ({ openSideBar, setOpenSideBar, userData }) => {
       <nav className={`sidebar ${openSideBar && 'open'}`}>
         {userAccessToken ? (
           <>
-          {console.log("sidebar work")}
             <header>
               <div className="image-text">
                 <span className="image">
@@ -89,7 +88,6 @@ const UserSideBar = ({ openSideBar, setOpenSideBar, userData }) => {
               <button className="btn bg-gradient-primary w-60" onClick={() => navigate("/login")}>Login</button>
             </div>
           </div>
-
         )}
       </nav>
     </div>

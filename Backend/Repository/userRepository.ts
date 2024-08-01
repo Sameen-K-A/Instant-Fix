@@ -20,6 +20,18 @@ class UserRepository {
       }
    };
 
+   async loginUserRepository(email: string) {
+      try {
+         const userDetails = await userModel.aggregate([
+            { $match: { email: email } },
+            { $lookup: { from: 'technicians', localField: 'user_id', foreignField: 'user_id', as: 'technicianDetails' } }
+         ]);
+         return userDetails[0];
+      } catch (error) {
+         throw error;
+      }
+   };
+
    async registerUserRepository(userData: userType) {
       try {
          return await userModel.create(userData);
@@ -83,7 +95,22 @@ class UserRepository {
       } catch (error) {
          throw error;
       }
-   }
+   };
+
+   async fetchTechnicianRepository(user_id: string, skipCount: number = 0, limitCount: number = 10) {
+      try {
+         return await userModel.aggregate([
+            { $match: { isTechnician: true, user_id: { $ne: user_id } } },
+            { $lookup: { from: "technicians", localField: "user_id", foreignField: "user_id", as: "technicianDetails" } },
+            { $skip: skipCount },
+            { $limit: limitCount }
+         ]);
+      } catch (error) {
+         console.log("Fetch technician repository error : ", error);
+         throw error;
+      }
+   };
+
 };
 
 export default UserRepository;

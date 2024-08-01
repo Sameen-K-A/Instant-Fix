@@ -155,6 +155,16 @@ class UserController {
       }
    }
 
+   async fetchTechnician_controller(req: Request, res: Response) {
+      try {
+         const user_id = req.query.user_id as string;
+         const serviceResponse = await userServices.fetchTechnicianService(user_id);
+         res.status(200).json(serviceResponse);
+      } catch (error) {
+         res.status(500).json(error)
+      }
+   }
+
 }
 
 export default UserController;

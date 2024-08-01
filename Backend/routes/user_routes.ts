@@ -23,4 +23,7 @@ router.patch("/changepassword", verifyToken, userController.changePassword_contr
 // user change personal details
 router.patch("/editprofile", verifyToken, upload.single('profile'), userController.editprofile_controller);
 
+//fetching technicians details
+router.get("/fetchTechnician", verifyToken, userController.fetchTechnician_controller)
+
 export default router;
