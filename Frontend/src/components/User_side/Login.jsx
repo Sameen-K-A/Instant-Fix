@@ -67,7 +67,7 @@ const UserLogin = () => {
                 <form role="form text-left" onSubmit={handleLogin}>
                   <input type="text" className="form-control mb-3" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                   <input type="password" className="form-control mb-3" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                  <label style={{ cursor: "pointer" }} onClick={() => navigate("/forgotpassword")}><u>Forget your password?</u></label>
+                  {/* <label style={{ cursor: "pointer" }} onClick={() => navigate("/forgotpassword")}><u>Forget your password?</u></label> */}
                   <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in</button>
                   <p className="text-sm my-2 mt-3 mb-3 text-center font-weight-bold">or</p>
                   <div className="btn btn-outline-light w-100 text-dark d-flex align-items-center justify-content-center">

@@ -18,7 +18,7 @@ const UserNavbar = () => {
           <div className="d-flex align-items-center my-2">
             <p className="font-weight-bold text-dark text-sm mb-0 me-3" style={{ cursor: "pointer" }} onClick={() => { navigate("/allTechnicians") }}>Technicians</p>
             <div className="circle" onClick={() => setOpenSideBar(true)}>
-              <img src={userProfile ? `${Base_URL}/${userProfile}` : profile} width={"30px"} alt="img" />
+              <img src={userProfile ? `${Base_URL}/${userProfile}` : profile} width={"30px"} height={"30px"} alt="img" />
             </div>
           </div>
         </div>

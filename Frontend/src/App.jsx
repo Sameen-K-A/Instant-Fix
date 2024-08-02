@@ -5,7 +5,6 @@ import { Toaster } from 'sonner';
 // User side
 import UserLogin from './components/User_side/Login';
 import UserRegister from './components/User_side/Register';
-import UserForgotPassword from './components/User_side/ForgotPassword';
 import UserOTP from './components/User_side/OTP';
 import UserProtecter from './components/Services/UserProtecter';
 import UserBookingHistoryTable from './components/User_side/History_booking';
@@ -42,7 +41,6 @@ function App() {
           <Route path='/login' element={<UserLogin />} />;
           <Route path='/register' element={<UserRegister />} />;
           <Route path='/otp' element={<UserOTP />} />;
-          <Route path='/forgotpassword' element={<UserForgotPassword />} />;
           <Route path='/accountdetails' element={<UserProtecter><AccountDetails /></UserProtecter>} />;
           <Route path='/allTechnicians' element={<UserProtecter><TechniciansListPage /></UserProtecter>} />;
           <Route path='/bookingHistory' element={<UserProtecter><UserBookingHistoryTable /></UserProtecter>} />;

@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import confirmAlert from "../Common/SweetAlert/confirmAlert";
 import adminAxiosInstance from "../../config/AxiosInstance/adminInstance";
 import { useNavigate } from "react-router-dom";
+import AdminNavbar from "./AdminNavbar";
 
 const AdminUserList = () => {
   const [usersArray, setUsersArray] = useState([]);
@@ -71,6 +72,7 @@ const AdminUserList = () => {
 
   return (
     <>
+      <AdminNavbar />
       <div className="page-header min-vh-75">
         <div className="container">
           <div className="row">

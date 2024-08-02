@@ -15,6 +15,8 @@ const AdminLogin = () => {
   useEffect(() => {
     if (location.state?.message === "Authorization failed please login") {
       toast.error("Authorization failed please login.")
+    } else if (location.state?.message === "Logout successfully") {
+      toast.success(location.state?.message);
     };
   }, [])
 

@@ -36,7 +36,7 @@ const UserSideBar = ({ openSideBar, setOpenSideBar, userData }) => {
             <header>
               <div className="image-text">
                 <span className="image">
-                  <img src={userData?.profileIMG ? `${Base_URL}/${userData?.profileIMG}` : profile} alt="img" />
+                  <img src={userData?.profileIMG ? `${Base_URL}/${userData?.profileIMG}` : profile} height={"48px"} alt="img" />
                 </span>
                 <div className="text logo-text">
                   <span className="name">{userData?.name}</span>
@@ -48,7 +48,7 @@ const UserSideBar = ({ openSideBar, setOpenSideBar, userData }) => {
                 <ul className="menu-links">
                   <li className="nav-link" onClick={() => navigate("/")}>
                     <Home />
-                    <span className="text nav-text">Home</span>
+                    <span className="text nav-text text-dark">Home</span>
                   </li>
                   <li className="nav-link" onClick={() => navigate("/accountdetails")}>
                     <Account />

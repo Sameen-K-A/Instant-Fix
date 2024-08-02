@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import confirmAlert from "../Common/SweetAlert/confirmAlert";
 import adminAxiosInstance from "../../config/AxiosInstance/adminInstance"
 import { useNavigate } from "react-router-dom";
+import AdminNavbar from "./AdminNavbar";
 
 const AdminTechnicianList = () => {
   const [techniciansArray, setTechniciansArray] = useState([]);
@@ -13,7 +14,6 @@ const AdminTechnicianList = () => {
     (async () => {
       try {
         const response = await adminAxiosInstance.get(`/fetchTechnicians`);
-        console.log(response.data);
         setTechniciansArray(response.data);
       } catch (error) {
         if (error.response.status === 401) {
@@ -72,6 +72,7 @@ const AdminTechnicianList = () => {
 
   return (
     <>
+    <AdminNavbar />
       <div className="page-header min-vh-75">
         <div className="container">
           <div className="row">
