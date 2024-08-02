@@ -21,6 +21,7 @@ const UserSideBar = ({ openSideBar, setOpenSideBar, userData }) => {
           sessionStorage.removeItem("userToken");
           sessionStorage.removeItem("userDetails");
           sessionStorage.removeItem("techniciansList");
+          sessionStorage.removeItem("AddressList");
           navigate("/");
         };
       });

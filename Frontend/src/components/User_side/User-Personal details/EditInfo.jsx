@@ -37,6 +37,19 @@ const EditUserInfo = ({ userDetails, setUserDetails, cancelEdit }) => {
   const handleChangeDetails = async (e) => {
     e.preventDefault();
     try {
+      const nameRegex = /^[A-Za-z\s]+$/;
+      const phoneNumberRegex = /^[6-9]\d{9}$/;
+      if (name.trim().length < 3 || name.trim().length > 20) {
+        toast.warning("Name must be between 3 and 20 characters.");
+        return;
+      } else if (!nameRegex.test(name)) {
+        toast.warning("Name only supports alphabets.");
+        return;
+      } else if (!phoneNumberRegex.test(phone)) {
+        toast.warning("Please enter a valid phone number.");
+        return;
+      };
+      
       const formData = new FormData();
       formData.append("user_id", userDetails.user_id);
       formData.append("name", name);

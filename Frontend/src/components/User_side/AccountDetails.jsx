@@ -8,7 +8,7 @@ import FollowingInformation from './User-Personal details/FollowingInfo';
 import { useLocation } from 'react-router-dom';
 import TechnicianNavbar from '../Technician_side/NavbarPage';
 import TechnicianFeedbacks from '../Technician_side/TechnicianFeedbacks';
-import { AvailabilityDot } from '../../../public/svgs/Icons';
+import { AvailabilityDot, Star } from '../../../public/svgs/Icons';
 import UserChangePassword from "./User-Personal details/ChangePassword";
 import TechnicianChangeProfession from '../Technician_side/TechnicianChangeProfession';
 
@@ -21,7 +21,7 @@ const AccountDetails = () => {
     if (location.pathname === "/technician/accountdetails") {
       setNowTechnician(true);
     }
-  }, [])
+  }, []);
   return (
     <>
       {nowTechnician ? <TechnicianNavbar /> : <UserNavbar />}
@@ -49,15 +49,19 @@ const AccountDetails = () => {
               </div>
             </div>
             {nowTechnician && (
-              <div className="col-lg-2 px-5 col-md-4 my-auto ms-auto">
+              <div className="col-lg-4 px-5 col-md-4 my-auto ms-auto">
                 <ul className="nav nav-fill bg-transparent">
-                  <li className="nav-item">
+                  <li className="nav-item mt-1">
+                    <p className='text-sm text-bold mb-1'>Rating</p>
+                    {[1, 2, 3, 4, 5].map((value) => (
+                      <strong key={value} className='me-1'>{value <= userDetails.technicianDetails[0]?.rating ? <Star color={"#ffbb00"} /> : <Star />}</strong>
+                    ))}
+                  </li>
+                  <li className="nav-item px-3">
                     <p className='mb-0 text-sm mb-1 text-bold'>Availability status</p>
                     <select
                       className="form-select"
-                      defaultValue={userDetails.technicianDetails[0]?.availability ? "Active" : "Non active"}
-                    // onChange={(e) => handleAvailabilityChange(e.target.value)}
-                    >
+                      defaultValue={userDetails.technicianDetails[0]?.availability ? "Active" : "Non active"}>
                       <option value="Active">Active</option>
                       <option value="Non active">Non active</option>
                     </select>
