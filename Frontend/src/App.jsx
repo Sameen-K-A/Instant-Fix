@@ -29,6 +29,7 @@ import TechnicianRole from './components/Technician_side/TechnicianRole';
 import "../public/css/index.css";
 import "../public/css/user_home.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import NotFound from './components/Common/404page';
 
 function App() {
   return (
@@ -56,6 +57,9 @@ function App() {
           <Route path='/technician' element={<TechnicianProtecter><TechnicianHome /></TechnicianProtecter>} />;
           <Route path='/technician/joinTechnician' element={<TechnicianRole />} />;
           <Route path='/technician/accountdetails' element={<TechnicianProtecter><AccountDetails /></TechnicianProtecter>} />;
+
+          {/* common */}
+          <Route path='*' element={<NotFound />} />;
 
         </Routes>
       </BrowserRouter>

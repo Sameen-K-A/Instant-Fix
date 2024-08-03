@@ -2,8 +2,12 @@ import React from "react";
 import plumberIMG from "/public/images/Banner-plumber-image.png";
 import electricanIMG from "/public/images/Banner-electrician-image.png";
 import cleanerIMG from "/public/images/Banner-cleaner-image.png";
+import { useNavigate } from "react-router-dom";
 
 const Banner = () => {
+
+  const navigate = useNavigate();
+
   return (
     <section className="section position-relative">
       <div className="container">
@@ -27,7 +31,7 @@ const Banner = () => {
                   <h4 className="text-end text-dark">Reliable Cleaners</h4>
                   <p className="text-end text-dark">Trustworthy cleaners to keep your space spotless.</p>
                   <div className="d-flex justify-content-end">
-                    <button className="btn bg-gradient-primary">View More</button>
+                    <button className="btn bg-gradient-primary" onClick={() => navigate("/allTechnicians")}>View More</button>
                   </div>
                 </div>
               </div>
@@ -36,7 +40,7 @@ const Banner = () => {
                   <h4 className="text-end text-dark">Professional Plumbers</h4>
                   <p className="text-end text-dark">Expert plumbers ready to fix your plumbing issues swiftly.</p>
                   <div className="d-flex justify-content-end">
-                    <button className="btn bg-gradient-primary">View More</button>
+                    <button className="btn bg-gradient-primary" onClick={() => navigate("/allTechnicians")}>View More</button>
                   </div>
                 </div>
               </div>
@@ -45,7 +49,7 @@ const Banner = () => {
                   <h4 className="text-end text-dark">Skilled Electricians</h4>
                   <p className="text-end text-dark">Certified electricians to handle all your electrical needs.</p>
                   <div className="d-flex justify-content-end">
-                    <button className="btn bg-gradient-primary">View More</button>
+                    <button className="btn bg-gradient-primary" onClick={() => navigate("/allTechnicians")}>View More</button>
                   </div>
                 </div>
               </div>

@@ -25256,3 +25256,60 @@ footer .copyright {
   color: #a83ce2;
   font-weight: bold;
 }
+
+
+/* 404 page css */
+
+#notfound .notfound {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 520px;
+  line-height: 1.4;
+}
+
+.notfound-404 {
+  height: 200px;
+  margin: 0 auto 20px;
+  z-index: -1;
+}
+
+.notfound-404 h1 {
+  font-size: 236px;
+  font-weight: 200;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.notfound-404 h2 {
+  font-size: 28px;
+  font-weight: 400;
+  background-color: #f8f9fa;
+  padding: 20px 0px;
+  display: inline-block;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+@media only screen and (max-width: 767px) {
+  .notfound-404 h1 {
+    font-size: 148px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .notfound-404 {
+    height: 148px;
+    margin: 0 auto 10px;
+  }
+
+  .notfound-404 h1 {
+    font-size: 86px;
+  }
+
+  .notfound-404 h2 {
+    font-size: 16px;
+  }
+}
