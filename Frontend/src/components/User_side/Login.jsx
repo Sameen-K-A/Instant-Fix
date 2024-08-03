@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import backgroundImage from "/images/Login&RegisterBackground.jpg";
 import GoogleIcon from "../../../public/svgs/GoogleIcon";
 import { toast } from 'sonner';
@@ -7,8 +9,6 @@ import axios from 'axios';
 import { Base_URL } from '../../config/credentials';
 
 const UserLogin = () => {
-  const [email, setEmail] = useState("sameensameen60@gmail.com");
-  const [password, setPassword] = useState("00000000");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -20,28 +20,51 @@ const UserLogin = () => {
         toast.error(location.state.message);
       }
     }
-  }, []);
+  }, [location.state]);
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    try {
-      if (email.trim().length && password.trim().length) {
-        const response = await axios.post(`${Base_URL}/login`, { email, password });
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: ''
+    },
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .email('Please enter a valid email address.')
+        .required('Email is required'),
+      password: Yup.string()
+        .min(8, 'Password must be at least 8 characters long.')
+        .required('Password is required')
+    }),
+    validateOnChange: true,
+    validateOnBlur: true,
+    onSubmit: async (values) => {
+      try {
+        const response = await axios.post(`${Base_URL}/login`, values);
         sessionStorage.setItem("userToken", response.data.userToken);
         sessionStorage.setItem("userDetails", JSON.stringify(response.data.userData));
         navigate("/");
-      } else {
-        toast.warning("All fields are required");
+      } catch (error) {
+        if (error.response && error.response.data.message === "email not found") {
+          toast.error("Email not found");
+        } else if (error.response && error.response.data.message === "Wrong password") {
+          toast.error("Password is wrong");
+        } else {
+          console.error("login error => ", error);
+          toast.error("Something went wrong, please try again later.");
+        }
       }
+    }
+  });
+
+  const handleGoogleLogin = () => {
+    try {
+      const width = 1000;
+      const height = 400;
+      const left = (window.screen.width / 2) - (width / 2);
+      const top = (window.screen.height / 2) - (height / 2);
+      window.open('http://localhost:3000/auth/google', '_blank', `width=${width},height=${height},top=${top},left=${left}`);
     } catch (error) {
-      if (error.response && error.response.data.message === "email not found") {
-        toast.error("Email not found");
-      } else if (error.response && error.response.data.message === "Wrong password") {
-        toast.error("Password is wrong");
-      } else {
-        console.error("login error => ", error);
-        toast.error("Something went wrong, please try again later.");
-      }
+      console.log(error);
     }
   };
 
@@ -64,14 +87,15 @@ const UserLogin = () => {
                 <h5>Login</h5>
               </div>
               <div className="card-body">
-                <form role="form text-left" onSubmit={handleLogin}>
-                  <input type="text" className="form-control mb-3" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                  <input type="password" className="form-control mb-3" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                  {/* <label style={{ cursor: "pointer" }} onClick={() => navigate("/forgotpassword")}><u>Forget your password?</u></label> */}
-                  <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2">Sign in</button>
+                <form onSubmit={formik.handleSubmit}>
+                  <input type="text" className="form-control" placeholder="Email" {...formik.getFieldProps('email')} />
+                  {formik.touched.email && formik.errors.email ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.email}</div> : null}
+                  <input type="password" className="form-control mt-3" placeholder="Password" {...formik.getFieldProps('password')} />
+                  {formik.touched.password && formik.errors.password ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.password}</div> : null}
+                  <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2" disabled={formik.isSubmitting}> {formik.isSubmitting ? 'Loading . . .' : 'Sign in'}</button>
                   <p className="text-sm my-2 mt-3 mb-3 text-center font-weight-bold">or</p>
-                  <div className="btn btn-outline-light w-100 text-dark d-flex align-items-center justify-content-center">
-                    <GoogleIcon />Login with Google
+                  <div className="btn btn-outline-light w-100 text-dark d-flex align-items-center justify-content-center" onClick={handleGoogleLogin}>
+                    <GoogleIcon /> Login with Google
                   </div>
                   <p className="text-sm mt-3 mb-0">Don't have an account yet?
                     <a className="text-dark font-weight-bolder" style={{ cursor: "pointer" }} onClick={() => navigate("/register")}> <u>Register</u></a>

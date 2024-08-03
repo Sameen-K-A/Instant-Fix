@@ -1,54 +1,51 @@
-import React, { useState } from 'react';
-import backgroundImage from "/images/Login&RegisterBackground.jpg";
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { Base_URL } from '../../config/credentials';
-import axios from "axios";
+import axios from 'axios';
+import backgroundImage from "/images/Login&RegisterBackground.jpg";
 import { toast } from 'sonner';
 
 const UserRegister = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirm_password, setConfirm_password] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = async (event) => {
-    event.preventDefault();
-    let isValid = true;
-    if (name.length < 3 || name.length > 20) {
-      toast.warning("Username must be between 3 and 20 characters.");
-      isValid = false;
-    }
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailPattern.test(email)) {
-      toast.warning("Please enter a valid email address.");
-      isValid = false;
-    }
-    const phoneNumberRegex = /^[6-9]\d{9}$/;
-    if (!phoneNumberRegex.test(phone)) {
-      toast.warning("Please enter a valid phone number.");
-      isValid = false;
-    }
-    if (password.length < 8) {
-      toast.warning("Password must be at least 8 characters long.");
-      isValid = false;
-    }
-    if (password !== confirm_password) {
-      toast.warning("Confirm password does not match.");
-      isValid = false;
-    }
-    if (isValid) {
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      email: '',
+      phone: '',
+      password: '',
+      confirm_password: ''
+    },
+    validationSchema: Yup.object({
+      name: Yup.string()
+        .trim()
+        .min(3, 'Username must be between 3 and 20 characters.')
+        .max(20, 'Username must be between 3 and 20 characters.')
+        .required('Name is required'),
+      email: Yup.string()
+        .email('Please enter a valid email address.')
+        .required('Email is required'),
+      phone: Yup.string()
+        .matches(/^[6-9]\d{9}$/, 'Please enter a valid phone number.')
+        .required('Phone number is required'),
+      password: Yup.string()
+        .min(8, 'Password must be at least 8 characters long.')
+        .required('Password is required'),
+      confirm_password: Yup.string()
+        .oneOf([Yup.ref('password'), null], 'Confirm password does not match.')
+        .required('Confirm password is required')
+    }),
+    validateOnChange: true,
+    validateOnBlur: true,
+    onSubmit: async (values) => {
       try {
-        setIsLoading(true);
-        await axios.post(`${Base_URL}/register`, { name, email, phone, password });
+        await axios.post(`${Base_URL}/register`, { ...values });
         navigate("/otp", { state: { message: "OTP sent to your email. Please check it" } });
-        setIsLoading(false);
       } catch (error) {
-        setIsLoading(false);
         if (error.response.data.message === "Email already exists") {
-          toast.error("Email already exists. Please check your email.");
+          toast.error("Email already exists.");
         } else if (error.response.data.message === "OTP not sent") {
           toast.error("OTP not sent. We can't find your email.");
         } else {
@@ -57,7 +54,7 @@ const UserRegister = () => {
         }
       }
     }
-  }
+  });
 
   return (
     <>
@@ -78,21 +75,21 @@ const UserRegister = () => {
                 <h5>Register</h5>
               </div>
               <div className="card-body">
-                <form onSubmit={(e) => handleRegister(e)}>
-                  <input type="text" className="form-control mb-3" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-                  <input type="text" className="form-control mb-3" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <form onSubmit={formik.handleSubmit}>
+                  <input type="text" className="form-control" placeholder="Name" {...formik.getFieldProps('name')} />
+                  {formik.touched.name && formik.errors.name ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.name}</div> : null}
+                  <input type="text" className="form-control mt-3" placeholder="Email" {...formik.getFieldProps('email')} />
+                  {formik.touched.email && formik.errors.email ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.email}</div> : null}
                   <div className='d-flex'>
-                    <input className="form-control mb-3 w-20 me-2" readOnly defaultValue={"+91"} />
-                    <input type="text" className="form-control mb-3" placeholder="Phone number" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                    <input className="form-control mt-3 w-20 me-2" readOnly defaultValue={"+91"} />
+                    <input type="text" className="form-control mt-3" placeholder="Phone number" {...formik.getFieldProps('phone')} />
                   </div>
-                  <input type="password" className="form-control mb-3" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                  <input type="password" className="form-control mb-3" placeholder="Confirm Password" value={confirm_password} onChange={(e) => setConfirm_password(e.target.value)} />
-                  {!isLoading ? (
-                    <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2">Sign up</button>
-                  ) : (
-                    <button type="button" className="btn bg-gradient-primary w-100 my-4 mb-2">Loading . . .</button>
-                  )}
-                            {console.log("register")}
+                  {formik.touched.phone && formik.errors.phone ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.phone}</div> : null}
+                  <input type="password" className="form-control mt-3" placeholder="Password" {...formik.getFieldProps('password')} />
+                  {formik.touched.password && formik.errors.password ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.password}</div> : null}
+                  <input type="password" className="form-control mt-3" placeholder="Confirm Password" {...formik.getFieldProps('confirm_password')} />
+                  {formik.touched.confirm_password && formik.errors.confirm_password ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.confirm_password}</div> : null}
+                  <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2" disabled={formik.isSubmitting} > {formik.isSubmitting ? 'Loading . . .' : 'Sign up'}</button>
                   <p className="text-sm mt-3 mb-0">
                     Already have an account? <a className="text-dark font-weight-bolder" style={{ cursor: "pointer" }} onClick={() => navigate("/login")}><u>Sign in</u></a>
                   </p>

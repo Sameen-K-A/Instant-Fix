@@ -1,57 +1,53 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { toast } from 'sonner';
 import userAxiosInstance from '../../../config/AxiosInstance/userInstance';
 import { useNavigate } from 'react-router-dom';
 
-function AddressModal({ userAddress, setUserAddress }) {
+const AddressModal = ({ userAddress, setUserAddress }) => {
   const navigate = useNavigate();
-  const [name, setName] = useState('');
-  const [address, setAddress] = useState('');
-  const [pinCode, setPinCode] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [alternateNumber, setAlternateNumber] = useState('');
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    let isValid = true;
-    if (name.trim().length < 4 || name.trim().length > 20) {
-      toast.warning("Name must be between 4 and 20 characters");
-      isValid = false;
-    };
-    if (address.trim().length < 4) {
-      toast.warning("Address must be more than 3 characters");
-      isValid = false;
-    };
-    const pinCodeRegex = /^6\d{5}$/;
-    const phoneNumberRegex = /^[6-9]\d{9}$/;
-    if (!pinCodeRegex.test(pinCode.trim())) {
-      toast.warning("Enter valid pincode");
-      isValid = false;
-    };
-    if (!phoneNumberRegex.test(phoneNumber.trim())) {
-      toast.warning("Enter valid phone number");
-      isValid = false;
-    };
-    if (!phoneNumberRegex.test(alternateNumber.trim())) {
-      toast.warning("Enter valid alternate number");
-      isValid = false;
-    };
-    if (phoneNumber.trim() === alternateNumber.trim()) {
-      toast.warning("Primary number and Alternate number must need different.");
-      isValid = false;
-    }
-    // everything is valid
-    if (isValid) {
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      address: '',
+      pinCode: '',
+      phoneNumber: '',
+      alternateNumber: ''
+    },
+    validationSchema: Yup.object({
+      name: Yup.string()
+        .trim()
+        .min(4, 'Name must be between 4 and 20 characters')
+        .max(20, 'Name must be between 4 and 20 characters')
+        .required('Name is required'),
+      address: Yup.string()
+        .trim()
+        .min(4, 'Address must be more than 3 characters')
+        .required('Address is required'),
+      pinCode: Yup.string()
+        .matches(/^6\d{5}$/, 'Enter a valid pincode')
+        .required('PIN code is required'),
+      phoneNumber: Yup.string()
+        .matches(/^[6-9]\d{9}$/, 'Enter a valid phone number')
+        .required('Phone number is required'),
+      alternateNumber: Yup.string()
+        .matches(/^[6-9]\d{9}$/, 'Enter a valid alternate number')
+        .required('Alternate number is required')
+        .notOneOf([Yup.ref('phoneNumber')], 'Primary and alternate numbers must be different')
+    }),
+    onSubmit: async (values) => {
       try {
         const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
         const user_id = userDetails?.user_id;
         const response = await userAxiosInstance.post(`/address`, {
           user_id: user_id,
-          name: name,
-          address: address,
-          pincode: pinCode,
-          phone: phoneNumber,
-          alternatePhone: alternateNumber
+          name: values.name,
+          address: values.address,
+          pincode: values.pinCode,
+          phone: values.phoneNumber,
+          alternatePhone: values.alternateNumber
         });
         const afterAddAddress = [...userAddress, response.data];
         setUserAddress(afterAddAddress);
@@ -66,25 +62,22 @@ function AddressModal({ userAddress, setUserAddress }) {
         if (backdrop) backdrop.remove();
         document.body.classList.remove('modal-open');
         document.body.style = '';
+
         toast.success("The address has been added successfully.");
-        setName("");
-        setAddress("");
-        setPinCode("");
-        setPhoneNumber("");
-        setAlternateNumber("");
+        formik.resetForm();
       } catch (error) {
         if (error.response.status === 401) {
           navigate("/login", { state: { message: "Authorization failed please login" } });
         } else {
           console.log(error);
-          toast.warning("Something wrong please try again later");
+          toast.warning("Something went wrong, please try again later");
         }
         // Close the modal
         const backdrop = document.querySelector('.modal-backdrop');
         if (backdrop) backdrop.remove();
       }
     }
-  };
+  });
 
   return (
     <div className="modal fade" id="addressModal" tabIndex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
@@ -92,17 +85,27 @@ function AddressModal({ userAddress, setUserAddress }) {
         <div className="modal-content">
           <div className="modal-body p-4 pt-5">
             <h5 className="modal-title" id="addressModalLabel">Add address</h5>
-            <form className='my-4' onSubmit={handleSubmit}>
-              <input type="text" className="form-control mb-3" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-              <textarea className="form-control mb-3" placeholder="House name, House/ Flat number, District" style={{ minHeight: "50px", maxHeight: "150px" }} value={address} onChange={(e) => setAddress(e.target.value)} />
-              <input type="text" className="form-control mb-3" placeholder="PIN Code" value={pinCode} onChange={(e) => setPinCode(e.target.value)} />
-              <div className='d-flex'>
-                <input type="text" className="form-control me-2" placeholder="Phone number" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
-                <input type="text" className="form-control" placeholder="Alternate number" value={alternateNumber} onChange={(e) => setAlternateNumber(e.target.value)} />
+            <form className='my-4' onSubmit={formik.handleSubmit}>
+              <input type="text" className="form-control" placeholder="Name" {...formik.getFieldProps('name')} />
+              {formik.touched.name && formik.errors.name ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.name}</div> : null}
+              <textarea className="form-control mt-3" placeholder="House name, House/ Flat number, District" style={{ minHeight: "50px", maxHeight: "150px" }} {...formik.getFieldProps('address')} />
+              {formik.touched.address && formik.errors.address ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.address}</div> : null}
+              <input type="text" className="form-control mt-3" placeholder="PIN Code" {...formik.getFieldProps('pinCode')} />
+              {formik.touched.pinCode && formik.errors.pinCode ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.pinCode}</div> : null}
+
+              <div className='d-flex justify-content-between'>
+                <div className='w-100 me-1'>
+                  <input type="text" className="form-control mt-3" placeholder="Phone number" {...formik.getFieldProps('phoneNumber')} />
+                  {formik.touched.phoneNumber && formik.errors.phoneNumber ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.phoneNumber}</div> : null}
+                </div>
+                <div className='w-100 ms-1'>
+                  <input type="text" className="form-control mt-3" placeholder="Alternate number" {...formik.getFieldProps('alternateNumber')} />
+                  {formik.touched.alternateNumber && formik.errors.alternateNumber ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.alternateNumber}</div> : null}
+                </div>
               </div>
               <div className='d-flex justify-content-center align-items-center mt-4'>
                 <button type="button" className="btn btn-outline-primary w-30 me-3 my-0" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" className="btn bg-gradient-primary w-30 my-0">Save</button>
+                <button type="submit" className="btn bg-gradient-primary w-30 my-0" disabled={formik.isSubmitting}>{formik.isSubmitting ? 'Saving...' : 'Save'}</button>
               </div>
             </form>
           </div>
