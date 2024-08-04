@@ -48,6 +48,19 @@ class TechnicianService {
          throw error;
       }
    }
+
+   async changeAvailabilityStatusService(user_id: string, newStatus: string | boolean) {
+      try {
+         if (newStatus === "Active") {
+            newStatus = true;
+         } else {
+            newStatus = false;
+         }
+         return await this.technicianRepository.changeAvailabilityStatusRepository(user_id, newStatus);
+      } catch (error) {
+         throw error;
+      }
+   }
 }
 
 export default TechnicianService;

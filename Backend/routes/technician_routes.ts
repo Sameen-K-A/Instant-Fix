@@ -7,6 +7,7 @@ const router = Router();
 
 router.patch("/joinTechnician", verifyToken, technicianController.joinNewTechnicianController);
 router.patch("/changeprofession", verifyToken, technicianController.changeProfessionController);
+router.patch("/changeAvailabilityStatus", verifyToken, technicianController.changeAvailabilityStatusController);
 
 
 export default router;

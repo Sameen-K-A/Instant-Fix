@@ -31,6 +31,16 @@ class TechnicianController {
     }
   };
 
+  async changeAvailabilityStatusController(req: Request, res: Response) {
+    try {
+      const { user_id, newStatus } = req.body;
+      await technicianService.changeAvailabilityStatusService(user_id, newStatus);
+      res.status(200).send("Changes completed successfully");
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  }
+
 }
 
 export default TechnicianController;

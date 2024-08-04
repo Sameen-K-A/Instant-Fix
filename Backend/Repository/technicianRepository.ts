@@ -19,6 +19,14 @@ class TechnicianRepository {
     }
   };
 
+  async changeAvailabilityStatusRepository(user_id: string, newStatus: boolean) {
+    try {
+      return await technicianModel.updateOne({ user_id: user_id }, { $set: { availability: newStatus } });
+    } catch (error) {
+      throw error;
+    }
+  };
+
 }
 
 export default TechnicianRepository;

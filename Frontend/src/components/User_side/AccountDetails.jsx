@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import backgroundImage from "/images/Login&RegisterBackground.jpg";
-import { Base_URL } from '../../config/credentials';
 import UserNavbar from './NavbarPage';
+import TechnicianNavbar from '../Technician_side/NavbarPage';
 import UserInformation from './User-Personal details/UserInfo';
 import AddressInformation from './User-Personal details/AddressInfo';
 import FollowingInformation from './User-Personal details/FollowingInfo';
-import { useLocation } from 'react-router-dom';
-import TechnicianNavbar from '../Technician_side/NavbarPage';
 import TechnicianFeedbacks from '../Technician_side/TechnicianFeedbacks';
-import { AvailabilityDot, Star } from '../../../public/svgs/Icons';
 import UserChangePassword from "./User-Personal details/ChangePassword";
 import TechnicianChangeProfession from '../Technician_side/TechnicianChangeProfession';
+import userAxiosInstance from '../../config/AxiosInstance/userInstance';
+import backgroundImage from "/images/Login&RegisterBackground.jpg";
+import { Base_URL } from '../../config/credentials';
+import { useLocation } from 'react-router-dom';
+import { AvailabilityDot, Star } from '../../../public/svgs/Icons';
+import { toast } from 'sonner';
 
 const AccountDetails = () => {
   const [userDetails, setUserDetails] = useState(null);
@@ -22,12 +24,28 @@ const AccountDetails = () => {
       setNowTechnician(true);
     }
   }, []);
+
+  const changeAvailabilityStatus = async (e) => {
+    try {
+      const changedStatus = e.target.value;
+      await userAxiosInstance.patch("/technician/changeAvailabilityStatus", { user_id: userDetails.user_id, newStatus: changedStatus });
+      const afterChanged = {
+        ...userDetails, technicianDetails: [{ ...userDetails.technicianDetails[0], availability: changedStatus === "Active" ? true : false }]
+      };
+      sessionStorage.setItem("userDetails", JSON.stringify(afterChanged));
+      setUserDetails(afterChanged);
+      toast.success("Status changed successfully");
+    } catch (error) {
+      toast.error("Something wrong please try again later");
+    };
+  };
+
   return (
     <>
       {nowTechnician ? <TechnicianNavbar /> : <UserNavbar />}
       <nav className="bg-transparent shadow-none position-absolute ps-5 mt-5 w-100 z-index-2">
         <h6 className="text-white font-weight-bolder mb-0 ms-2">{nowTechnician && "Technician "}Account Details</h6>
-        <p className="text-light text-sm text-white mt-0 ms-2">{nowTechnician ? "Profile/ Technician details": "Profile/ Account Details"}</p>
+        <p className="text-light text-sm text-white mt-0 ms-2">{nowTechnician ? "Profile/ Technician details" : "Profile/ Account Details"}</p>
       </nav>
       <div className="container-fluid">
         <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }}>
@@ -65,7 +83,8 @@ const AccountDetails = () => {
                     <p className='mb-0 text-sm mb-1 text-bold'>Availability status</p>
                     <select
                       className="form-select"
-                      defaultValue={userDetails.technicianDetails[0]?.availability ? "Active" : "Non active"}>
+                      value={userDetails.technicianDetails[0]?.availability ? "Active" : "Non active"}
+                      onChange={(e) => changeAvailabilityStatus(e)}>
                       <option value="Active">Active</option>
                       <option value="Non active">Non active</option>
                     </select>

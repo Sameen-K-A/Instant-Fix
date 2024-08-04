@@ -26,8 +26,8 @@ const AdminSidebar = ({ openSideBar, setOpenSideBar }) => {
               <div className="text logo-text">
                 <span className="name">{userData?.name}</span>
                 <div className="d-flex justify-content-start align-items-center">
-                  <AvailabilityDot color={"#00e6a1"} />
-                  <span className="availability">Available</span>
+                  <AvailabilityDot color={userData.technicianDetails[0]?.availability ? "#00e6a1" : "#FF0000"} />
+                  <p className="mb-0 text-sm">{userData.technicianDetails[0]?.availability ? "Active" : "Not active"}</p>
                 </div>
 
               </div>
