@@ -1,5 +1,5 @@
 import React from "react";
-import { AboutUS, Account, Booking, Contact, Home, Logout, Worker } from "../../../public/svgs/Icons";
+import { AboutUS, Account, Booking, Chat, Communication, Contact, Home, Logout, Worker } from "../../../public/svgs/Icons";
 import { useNavigate } from "react-router-dom";
 import { Base_URL } from "../../config/credentials";
 import profile from "../../../public/images/userDefaultProfile.png";
@@ -53,6 +53,10 @@ const UserSideBar = ({ openSideBar, setOpenSideBar, userData }) => {
                   <li className="nav-link" onClick={() => navigate("/accountdetails")}>
                     <Account />
                     <span className="text nav-text">Account details</span>
+                  </li>
+                  <li className="nav-link" onClick={() => navigate("/chat")}>
+                    <Chat />
+                    <span className="text nav-text">Chats</span>
                   </li>
                   <li className="nav-link" onClick={() => navigate("/bookingHistory")}>
                     <Booking />

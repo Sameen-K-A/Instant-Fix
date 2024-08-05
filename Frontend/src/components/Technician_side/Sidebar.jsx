@@ -1,5 +1,5 @@
 import React from "react";
-import { Account, Booking, Home, Send, Wallet, AvailabilityDot } from "../../../public/svgs/Icons";
+import { Account, Booking, Home, Send, Wallet, AvailabilityDot, Chat } from "../../../public/svgs/Icons";
 import { useNavigate } from "react-router-dom";
 import { Base_URL } from "../../config/credentials";
 import profile from "../../../public/images/userDefaultProfile.png";
@@ -43,6 +43,10 @@ const AdminSidebar = ({ openSideBar, setOpenSideBar }) => {
                 <li className="nav-link" onClick={() => navigate("/technician/accountdetails")}>
                   <Account />
                   <span className="text nav-text">Account details</span>
+                </li>
+                <li className="nav-link" onClick={() => navigate("/technician/chat")}>
+                  <Chat />
+                  <span className="text nav-text">Chats</span>
                 </li>
                 <li className="nav-link">
                   <Send />

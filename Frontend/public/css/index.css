@@ -9865,7 +9865,7 @@ fieldset:disabled .btn {
 }
 
 .bg-primary {
-  background-color: #cb0c9f !important;
+  background-color: rgba(184, 69, 255, 0.2) !important;
 }
 
 .bg-secondary {
@@ -20118,6 +20118,14 @@ label,
 
 .bg-gradient-navbar {
   background-image: radial-gradient(at 31% 6%, hsla(279, 100%, 50%, 0.25) 0px, transparent 50%);
+}
+
+.bg-gradient-chatSender {
+  background-image: radial-gradient(at 0% 100%, hsla(268, 100%, 71%, 0.19) 0px, transparent 50%), radial-gradient(at 100% 88%, hsla(277, 100%, 70%, 0.46) 0px, transparent 50%), radial-gradient(at 54% 0%, hsla(283, 100%, 76%, 0.32) 0px, transparent 50%);
+}
+
+.bg-gradient-chatReciever {
+  background-image: radial-gradient(at 0% 100%, hsla(267, 0%, 0%, 0.06) 0px, transparent 50%), radial-gradient(at 100% 88%, hsla(277, 0%, 0%, 0.04) 0px, transparent 50%), radial-gradient(at 54% 0%, hsla(283, 0%, 0%, 0.14) 0px, transparent 50%);
 }
 
 .bg-gradient-faded-secondary {

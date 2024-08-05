@@ -19,6 +19,6 @@ app.use('/admin', admin_routes);
 app.use('/technician', technician_routes);
 app.use('/', user_routes);
 
-app.listen(3000, (): void => {
+app.listen(process.env.PORT, (): void => {
    console.log('Server is started');
 });

@@ -13,10 +13,12 @@ import UserHistoryViewMore from './components/User_side/HistoryViewMore';
 import TechniciansListPage from './pages/User/TechniciansListPage';
 import UserHomePage from './pages/User/HomePage';
 import AccountDetails from './components/User_side/AccountDetails';
+import ChatPage from './pages/User/ChatPage';
 
 // Admin side
-import AdminLogin from './components/Admin_side/AdminLogin';
 import AdminProtecter from './components/Services/AdminProtecter';
+import NotAdminProtector from './components/Services/NotAdmin';
+import AdminLogin from './components/Admin_side/AdminLogin';
 import AdminDashboard from './components/Admin_side/AdminDashboard';
 import AdminUserList from './components/Admin_side/UserList';
 import AdminTechnicianList from './components/Admin_side/TechnicianList';
@@ -33,7 +35,6 @@ import NotFound from './components/Common/404page';
 import "../public/css/index.css";
 import "../public/css/user_home.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import NotAdminProtector from './components/Services/NotAdmin';
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
           <Route path='/allTechnicians' element={<UserProtecter><TechniciansListPage /></UserProtecter>} />;
           <Route path='/bookingHistory' element={<UserProtecter><UserBookingHistoryTable /></UserProtecter>} />;
           <Route path='/viewmoreHistory' element={<UserProtecter><UserHistoryViewMore /></UserProtecter>} />;
+          <Route path='/chat' element={<UserProtecter><ChatPage /></UserProtecter>} />;
 
           {/* Admin side */}
           <Route path='/admin' element={<NotAdminProtector><AdminLogin /></NotAdminProtector>} />;
@@ -61,6 +63,7 @@ function App() {
           <Route path='/technician' element={<TechnicianProtecter><TechnicianHome /></TechnicianProtecter>} />;
           <Route path='/technician/joinTechnician' element={<UserProtecter><TechnicianRole /></UserProtecter>} />;
           <Route path='/technician/accountdetails' element={<TechnicianProtecter><AccountDetails /></TechnicianProtecter>} />;
+          <Route path='/technician/chat' element={<UserProtecter><ChatPage /></UserProtecter>} />;
 
           {/* common */}
           <Route path='*' element={<NotFound />} />;
