@@ -23,6 +23,9 @@ class UserServices {
          if (!userData) {
             throw new Error("email not found");
          }
+         if (userData.isBlocked) {
+            throw new Error("User is blocked");
+         }
          const comparePassword = await bcrypt.compare(password, userData.password);
          if (!comparePassword) {
             throw new Error("Wrong password");

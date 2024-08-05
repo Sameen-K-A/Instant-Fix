@@ -19,6 +19,8 @@ class UserController {
             res.status(404).json({ message: "email not found" });
          } else if (error.message === "Wrong password") {
             res.status(401).json({ message: "Wrong password" });
+         } else if (error.message === "User is blocked") {
+            res.status(403).json({ message: "User is blocked" });
          } else {
             res.status(500).json({ message: "Something wrong please try again later" });
          }

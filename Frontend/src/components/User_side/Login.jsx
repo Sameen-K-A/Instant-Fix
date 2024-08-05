@@ -48,6 +48,8 @@ const UserLogin = () => {
           toast.error("Email not found");
         } else if (error.response && error.response.data.message === "Wrong password") {
           toast.error("Password is wrong");
+        } else if (error.response && error.response.data.message === "User is blocked") {
+          toast.error("Your account has been blocked, please contact with our team.");
         } else {
           console.error("login error => ", error);
           toast.error("Something went wrong, please try again later.");
@@ -92,7 +94,7 @@ const UserLogin = () => {
                   {formik.touched.email && formik.errors.email ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.email}</div> : null}
                   <input type="password" className="form-control mt-3" placeholder="Password" {...formik.getFieldProps('password')} />
                   {formik.touched.password && formik.errors.password ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.password}</div> : null}
-                  <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2" disabled={formik.isSubmitting}> {formik.isSubmitting ? 'Loading . . .' : 'Sign in'}</button>
+                  <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2" disabled={formik.isSubmitting}>Sign in</button>
                   <p className="text-sm my-2 mt-3 mb-3 text-center font-weight-bold">or</p>
                   <div className="btn btn-outline-light w-100 text-dark d-flex align-items-center justify-content-center" onClick={handleGoogleLogin}>
                     <GoogleIcon /> Login with Google
