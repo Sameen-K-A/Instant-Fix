@@ -19,11 +19,10 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
    if (!accessToken) {
       return res.status(401).json({ message: 'Access denied. access token not valid' });
    }
-   jwt.verify(accessToken, secret_key, (err, decoded) => {
+   jwt.verify(accessToken, secret_key, (err) => {
       if (err) {
          return res.status(401).json({ message: 'Access denied. access token not valid' });
       } else {
-         (req as any).id = decoded;
          next();
       }
    });

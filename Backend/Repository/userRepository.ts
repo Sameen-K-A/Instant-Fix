@@ -111,6 +111,30 @@ class UserRepository {
       }
    };
 
+   async fetchAlreadyChattedTechniciansRepository(user_id: string) {
+      try {
+         return await userModel.aggregate([
+            { $match: { user_id: user_id } },
+            { $unwind: "$alreadychattedtechnician" },
+            { $lookup: { from: "users", localField: "alreadychattedtechnician", foreignField: "user_id", as: "technicianPersonalDetails" } },
+            { $lookup: { from: "technicians", localField: "alreadychattedtechnician", foreignField: "user_id", as: "technicianDetails" } },
+            { $unwind: "$technicianPersonalDetails" },
+            { $unwind: "$technicianDetails" },
+            {
+               $addFields: {
+                  name: "$technicianPersonalDetails.name",
+                  profileIMG: "$technicianPersonalDetails.profileIMG",
+                  user_id: "$technicianPersonalDetails.user_id",
+                  profession: "$technicianDetails.profession",
+               }
+            },
+            { $project: { name: 1, profileIMG: 1, user_id: 1, profession: 1 } }
+         ]);
+      } catch (error) {
+         throw error;
+      }
+   };
+
 };
 
 export default UserRepository;

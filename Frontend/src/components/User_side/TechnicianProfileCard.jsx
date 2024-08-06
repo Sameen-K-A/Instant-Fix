@@ -1,9 +1,16 @@
 import React from 'react';
 import { Base_URL } from '../../config/credentials';
 import { Star } from '../../../public/svgs/Icons';
+import { useNavigate } from 'react-router-dom';
 
 const TechnicianProfileCard = ({ technicianData }) => {
+
+  const navigate = useNavigate();
+  const handleViewTechnician = (details) => {
+    navigate("/techniciandetails", { state: { details: details } });
+  };
   const ratingArray = [1, 2, 3, 4, 5];
+
   return (
     <div className="col-12 col-sm-6 col-lg-3 mt-4">
       <div className="card text-center">
@@ -24,7 +31,7 @@ const TechnicianProfileCard = ({ technicianData }) => {
               )
             })}
           </div>
-          <button type="button" className="btn bg-gradient-primary">View more</button>
+          <button type="button" className="btn bg-gradient-primary" onClick={() => handleViewTechnician(technicianData)}>View more</button>
         </div>
       </div>
     </div>

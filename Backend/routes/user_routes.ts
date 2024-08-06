@@ -24,6 +24,9 @@ router.patch("/changepassword", verifyToken, userController.changePassword_contr
 router.patch("/editprofile", verifyToken, upload.single('profile'), userController.editprofile_controller);
 
 //fetching technicians details
-router.get("/fetchTechnician", verifyToken, userController.fetchTechnician_controller)
+router.get("/fetchTechnician", verifyToken, userController.fetchTechnician_controller);
+
+// chatting area
+router.get("/fetchAlreadyChattedTechnicians", verifyToken, userController.fetchAlreadyChattedTechnicians_controller);
 
 export default router;

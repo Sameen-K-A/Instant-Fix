@@ -165,7 +165,17 @@ class UserController {
       } catch (error) {
          res.status(500).json(error)
       }
-   }
+   };
+
+   async fetchAlreadyChattedTechnicians_controller(req: Request, res: Response) {
+      try {
+         const user_id = req.query.user_id as string;
+         const techniciansList = await userServices.fetchAlreadyChattedTechniciansService(user_id);
+         res.status(200).json(techniciansList);
+      } catch (error) {
+         res.status(500).json(error);
+      };
+   };
 
 }
 

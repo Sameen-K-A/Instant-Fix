@@ -9,6 +9,7 @@ type userType = {
    isBlocked?: boolean;
    profileIMG: string;
    isTechnician?: boolean;
+   alreadychattedtechnician?: string[];
 }
 
 const userSchema = new Schema<userType>({
@@ -38,6 +39,10 @@ const userSchema = new Schema<userType>({
    isTechnician: {
       type: Boolean,
       default: false
+   },
+   alreadychattedtechnician: {
+      type: [String],
+      default: [],
    }
 }, {
    versionKey: false

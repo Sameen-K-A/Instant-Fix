@@ -14,6 +14,7 @@ import TechniciansListPage from './pages/User/TechniciansListPage';
 import UserHomePage from './pages/User/HomePage';
 import AccountDetails from './components/User_side/AccountDetails';
 import ChatPage from './pages/User/ChatPage';
+import TechnicianProfileDetails from './components/User_side/TechnicianProfileDetails';
 
 // Admin side
 import AdminProtecter from './components/Services/AdminProtecter';
@@ -52,6 +53,7 @@ function App() {
           <Route path='/bookingHistory' element={<UserProtecter><UserBookingHistoryTable /></UserProtecter>} />;
           <Route path='/viewmoreHistory' element={<UserProtecter><UserHistoryViewMore /></UserProtecter>} />;
           <Route path='/chat' element={<UserProtecter><ChatPage /></UserProtecter>} />;
+          <Route path='/techniciandetails' element={<UserProtecter><TechnicianProfileDetails /></UserProtecter>} />;
 
           {/* Admin side */}
           <Route path='/admin' element={<NotAdminProtector><AdminLogin /></NotAdminProtector>} />;

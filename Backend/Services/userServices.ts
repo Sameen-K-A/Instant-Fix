@@ -190,6 +190,14 @@ class UserServices {
          console.log("Fetch technician service error : ", error);
          throw error;
       }
+   };
+
+   async fetchAlreadyChattedTechniciansService(user_id: string) {
+      try {
+         return await this.userRepository.fetchAlreadyChattedTechniciansRepository(user_id);
+      } catch (error) {
+         throw error;
+      }
    }
 }
 
