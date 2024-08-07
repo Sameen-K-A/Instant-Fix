@@ -6797,6 +6797,10 @@ fieldset:disabled .btn {
   max-width: 500px !important;
 }
 
+.max-width-800 {
+  max-width: 800px !important;
+}
+
 @media (min-width: 768px) {
   .float-md-start {
     float: left !important;
