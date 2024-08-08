@@ -16,26 +16,6 @@ class ChatController {
     };
   };
 
-  async saveNewMessageController(req: Request, res: Response) {
-    try {
-      const { messageDetails } = req.body;
-      await chatService.saveNewChatService(messageDetails.senderID, messageDetails.receiverID, messageDetails.message);
-      res.status(200).json({ message: "Message sent successfully!" });
-    } catch (error) {
-      res.status(500).json(error);
-    }
-  }
-
-  async createConnectionAndSaveMessageController(req: Request, res: Response) {
-    try {
-      const { messageDetails } = req.body;
-      await chatService.createConnectionAndSaveMessageService(messageDetails);
-      res.status(200).json({ message: "Connection build and save message" });
-    } catch (error) {
-      res.status(500).json(error);
-    }
-  }
-
 }
 
 export default ChatController;

@@ -33,7 +33,8 @@ class ChatServices {
         receiverID: receiverID,
         message: message
       }
-      return await this.chatRepository.saveNewChatRepository(newMessageDetails);
+      await this.chatRepository.saveNewChatRepository(newMessageDetails);
+      return newMessageDetails;
     } catch (error) {
       throw error;
     }
@@ -49,11 +50,12 @@ class ChatServices {
           message: messageDetails.message
         }]
       };
+      const connectionDetails = this.chatRepository.createConnectionAndSaveMessageRepository(newChatDocument);
       await Promise.all([
         this.userRepository.addNewConnectionToAlreadyChattedTechnicianListRepository(messageDetails.receiverID, messageDetails.senderID),
-        this.chatRepository.createConnectionAndSaveMessageRepository(newChatDocument)
+        connectionDetails
       ])
-      return true;
+      return connectionDetails;
     } catch (error) {
       return error;
     }

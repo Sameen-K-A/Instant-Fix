@@ -5,6 +5,8 @@ import SenderMsg from "./SenderMsg";
 import { Send } from '../../../public/svgs/Icons';
 import { toast } from 'sonner';
 import userAxiosInstance from "../../config/AxiosInstance/userInstance";
+import io from "socket.io-client";
+const socket = io(Base_URL);
 
 const ChatScreen = ({ currentChatting }) => {
   const [chatHistory, setChatHistory] = useState(null);
@@ -16,11 +18,17 @@ const ChatScreen = ({ currentChatting }) => {
     (async () => {
       try {
         const userInfo = JSON.parse(sessionStorage.getItem("userDetails"));
-        const response = await userAxiosInstance.get(`/chat/fetchTwoMembersChat`, { params: { senderID: userInfo?.user_id, receiverID: currentChatting?.user_id } });
+        const response = await userAxiosInstance.get(`/chat/fetchTwoMembersChat`, {
+          params: {
+            senderID: userInfo?.user_id,
+            receiverID: currentChatting?.user_id
+          }
+        });
         setUserDetails(userInfo);
         setChatHistory(response.data);
+        socket.emit("joinRoom", { senderID: userInfo?.user_id, receiverID: currentChatting?.user_id });
       } catch (error) {
-        toast.error("Something wrong, Can't fetch chat history please try again later");
+        toast.error("Something wrong, Can't fetch chat history. Please try again later");
       }
     })();
   }, [currentChatting]);
@@ -31,19 +39,25 @@ const ChatScreen = ({ currentChatting }) => {
     }
   }, [chatHistory]);
 
+  useEffect(() => {
+    socket.on("receiveMessage", (messageDetails) => {
+      setChatHistory((prevChatHistory) => [...prevChatHistory, { details: messageDetails }]);
+    });
+    return () => {
+      socket.off("receiveMessage");
+    };
+  }, []);
+
   const handleSendMsg = async () => {
     if (newMsg.trim()) {
       try {
         const messageDetails = {
           senderID: userDetails?.user_id,
           receiverID: currentChatting?.user_id,
-          message: newMsg,
+          message: newMsg
         };
-        if (chatHistory.length === 0) {
-          await userAxiosInstance.post("/chat/createConnectionAndSaveMessage", { messageDetails });
-        } else {
-          await userAxiosInstance.post("/chat/sendAndSave_NewMessage", { messageDetails });
-        }
+        const firstTimeChat = chatHistory.length === 0 ? true : false;
+        socket.emit("sendMessage", { messageDetails, firstTimeChat });
         setNewMsg("");
       } catch (error) {
         toast.error("Something went wrong, please try again later");
@@ -56,6 +70,7 @@ const ChatScreen = ({ currentChatting }) => {
       handleSendMsg();
     }
   };
+  
 
   return (
     <>
@@ -81,7 +96,7 @@ const ChatScreen = ({ currentChatting }) => {
       </div>
       <div className='mt-3 px-3 d-flex align-items-center justify-content-center gap-3'>
         <input type="text" className='form-control py-3' placeholder='Enter your message' value={newMsg} onChange={(e) => setNewMsg(e.target.value)} onKeyDown={handleKeyDown} />
-        <button className='btn btn-outline-primary mb-0 py-3 d-flex align-items-center justify-content-center' onClick={handleSendMsg}><Send /></button>
+        <button className='btn btn-outline-primary mb-0 py-3 d-flex align-items-center justify-content-center' onClick={handleSendMsg} ><Send /></button>
       </div>
     </>
   );

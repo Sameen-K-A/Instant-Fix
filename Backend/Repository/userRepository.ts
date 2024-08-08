@@ -117,22 +117,12 @@ class UserRepository {
         { $match: { user_id: user_id } },
         { $unwind: "$alreadychattedtechnician" },
         { $lookup: { from: "users", localField: "alreadychattedtechnician", foreignField: "user_id", as: "technicianPersonalDetails" } },
-        { $lookup: { from: "technicians", localField: "alreadychattedtechnician", foreignField: "user_id", as: "technicianDetails" } },
         { $unwind: "$technicianPersonalDetails" },
-        { $unwind: "$technicianDetails" },
-        {
-          $addFields: {
-            name: "$technicianPersonalDetails.name",
-            profileIMG: "$technicianPersonalDetails.profileIMG",
-            user_id: "$technicianPersonalDetails.user_id",
-            profession: "$technicianDetails.profession",
-          }
-        },
-        { $project: { name: 1, profileIMG: 1, user_id: 1, profession: 1 } }
+        { $project: { "technicianPersonalDetails.name": 1, "technicianPersonalDetails.profileIMG": 1, "technicianPersonalDetails.user_id": 1, _id: 0 } }
       ]);
     } catch (error) {
       throw error;
-    }
+    };
   };
 
   async addNewConnectionToAlreadyChattedTechnicianListRepository(user_id: string, technicianUser_id: string) {

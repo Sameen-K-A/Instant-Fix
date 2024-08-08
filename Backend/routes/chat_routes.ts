@@ -6,7 +6,5 @@ const router = Router();
 const chatController = new ChatController();
 
 router.get("/fetchTwoMembersChat", verifyToken, chatController.fetchTwoMembersChatController);
-router.post("/sendAndSave_NewMessage", verifyToken, chatController.saveNewMessageController);
-router.post("/createConnectionAndSaveMessage", verifyToken, chatController.createConnectionAndSaveMessageController);
 
 export default router;

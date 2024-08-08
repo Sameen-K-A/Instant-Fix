@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import ChatScreen from "../../components/Chat/ChatScreen";
 
 const ChatPage = () => {
+  
   const location = useLocation();
   const [instantChatTechnicianDetails, setInstantChatTechnicianDetails] = useState(null);
   const [previousChattedTechnicians, setPreviousChattedTechnicians] = useState([]);
