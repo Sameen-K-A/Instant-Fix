@@ -29,4 +29,8 @@ router.get("/fetchTechnician", verifyToken, userController.fetchTechnician_contr
 // chatting area
 router.get("/fetchAlreadyChattedTechnicians", verifyToken, userController.fetchAlreadyChattedTechnicians_controller);
 
+// booking new technician area
+router.get("/fetchAnyPendingRequestAvailable", verifyToken, userController.fetchAnyPendingRequestAvailable_controller);
+router.post("/bookTechnician", verifyToken, userController.bookTechnician_controller);
+
 export default router;

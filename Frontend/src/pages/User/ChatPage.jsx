@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 import userAxiosInstance from "../../config/AxiosInstance/userInstance";
 import { toast } from "sonner";
 import ChatScreen from "../../components/Chat/ChatScreen";
+import TechnicianNavbar from "../../components/Technician_side/NavbarPage";
 
 const ChatPage = () => {
-  
+
   const location = useLocation();
   const [instantChatTechnicianDetails, setInstantChatTechnicianDetails] = useState(null);
   const [previousChattedTechnicians, setPreviousChattedTechnicians] = useState([]);
@@ -29,7 +30,7 @@ const ChatPage = () => {
 
   return (
     <>
-      <UserNavbar />
+      {location.pathname === "/technician/chat" ? <TechnicianNavbar /> : <UserNavbar />}
       <div className="row m-3" style={{ overflow: 'hidden', minHeight: '88vh' }}>
         <ChatFriends instantChatTechnicianDetails={instantChatTechnicianDetails} previousChattedTechnicians={previousChattedTechnicians} setCurrentChatting={setCurrentChatting} />
         <section className="chat col-lg-9">

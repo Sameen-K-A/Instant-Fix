@@ -1,5 +1,5 @@
 import React from "react";
-import { Account, Booking, Home, Send, Wallet, AvailabilityDot, Chat } from "../../../public/svgs/Icons";
+import { Account, Booking, Home, Wallet, AvailabilityDot, Chat } from "../../../public/svgs/Icons";
 import { useNavigate } from "react-router-dom";
 import { Base_URL } from "../../config/credentials";
 import profile from "../../../public/images/userDefaultProfile.png";
@@ -48,11 +48,7 @@ const AdminSidebar = ({ openSideBar, setOpenSideBar }) => {
                   <Chat />
                   <span className="text nav-text">Chats</span>
                 </li>
-                <li className="nav-link">
-                  <Send />
-                  <span className="text nav-text">Booking requests</span>
-                </li>
-                <li className="nav-link">
+                <li className="nav-link" onClick={() => navigate("/technician/technicianBookingHistory")}>
                   <Booking />
                   <span className="text nav-text">Bookings & History</span>
                 </li>

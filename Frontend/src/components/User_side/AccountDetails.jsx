@@ -72,15 +72,15 @@ const AccountDetails = () => {
             </div>
             {nowTechnician && (
               <div className="col-lg-4 px-5 col-md-4 my-auto ms-auto">
-                <ul className="nav nav-fill bg-transparent">
+                <ul className="nav nav-fill bg-transparent d-flex justify-content-end">
                   <li className="nav-item mt-1">
-                    <p className='text-sm text-bold mb-1'>Rating</p>
+                    <p className='text-sm text-bold mb-1 text-center'>Rating</p>
                     {[1, 2, 3, 4, 5].map((value) => (
                       <strong key={value} className='me-1'>{value <= userDetails.technicianDetails[0]?.rating ? <Star color={"#ffbb00"} /> : <Star />}</strong>
                     ))}
                   </li>
                   <li className="nav-item px-3">
-                    <p className='mb-0 text-sm mb-1 text-bold'>Availability status</p>
+                    <p className='mb-0 text-sm mb-1 text-bold text-center'>Availability status</p>
                     <select
                       className="form-select"
                       value={userDetails.technicianDetails[0]?.availability ? "Active" : "Non active"}

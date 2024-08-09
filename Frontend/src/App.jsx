@@ -36,6 +36,7 @@ import NotFound from './components/Common/404page';
 import "../public/css/index.css";
 import "../public/css/user_home.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import TechnicianBookingHistoryTable from './components/Technician_side/TechnicianBookingHistory';
 
 function App() {
   return (
@@ -66,6 +67,7 @@ function App() {
           <Route path='/technician/joinTechnician' element={<UserProtecter><TechnicianRole /></UserProtecter>} />;
           <Route path='/technician/accountdetails' element={<TechnicianProtecter><AccountDetails /></TechnicianProtecter>} />;
           <Route path='/technician/chat' element={<UserProtecter><ChatPage /></UserProtecter>} />;
+          <Route path='/technician/technicianBookingHistory' element={<UserProtecter><TechnicianBookingHistoryTable /></UserProtecter>} />;
 
           {/* common */}
           <Route path='*' element={<NotFound />} />;

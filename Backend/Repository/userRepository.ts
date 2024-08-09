@@ -1,6 +1,7 @@
 import { userModel, userType } from "../Model/userModal";
 import { userAddressModal, userAddressType } from "../Model/userAddressModal";
-import { editAddressType } from "../Interfaces";
+import BookingModel from "../Model/bookingModel"
+import { editAddressType, newBookingType } from "../Interfaces";
 
 class UserRepository {
 
@@ -111,6 +112,19 @@ class UserRepository {
     }
   };
 
+  async fetchSingleTechnicianDetailsRepository(technicianUserID: string): Promise<any[]> {
+    try {
+      return await userModel.aggregate([
+        { $match: { user_id: technicianUserID } },
+        { $lookup: { from: "technicians", localField: "user_id", foreignField: "user_id", as: "technicianDetails" } },
+        { $unwind: "$technicianDetails" },
+        { $project: { _id: 0, password: 0 } },
+      ]);
+    } catch (error) {
+      throw error;
+    };
+  };
+
   async fetchAlreadyChattedTechniciansRepository(user_id: string) {
     try {
       return await userModel.aggregate([
@@ -141,6 +155,26 @@ class UserRepository {
           }
         }
       ]);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  async bookTechnicianRepository(newBookingDetails: newBookingType) {
+    try {
+      return await BookingModel.create(newBookingDetails);
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  async fetchAnyPendingRequestAvailableRepository(clientID: string, technicianUserID: string) {
+    try {
+      return await BookingModel.findOne({
+        client_id: clientID,
+        technicianUser_id: technicianUserID,
+        booking_status: { $in: ["Pending", "Requested"] }
+      });
     } catch (error) {
       throw error;
     }

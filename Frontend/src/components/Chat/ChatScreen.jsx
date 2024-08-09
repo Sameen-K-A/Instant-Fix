@@ -26,7 +26,7 @@ const ChatScreen = ({ currentChatting }) => {
         });
         setUserDetails(userInfo);
         setChatHistory(response.data);
-        socket.emit("joinRoom", { senderID: userInfo?.user_id, receiverID: currentChatting?.user_id });
+        socket.emit("joinChatRoom", { senderID: userInfo?.user_id, receiverID: currentChatting?.user_id });
       } catch (error) {
         toast.error("Something wrong, Can't fetch chat history. Please try again later");
       }

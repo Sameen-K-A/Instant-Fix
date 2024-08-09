@@ -1,14 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TechnicianSideBar from "./Sidebar"
 import { Base_URL } from "../../config/credentials";
 import profile from "../../../public/images/userDefaultProfile.png";
 import "../../../public/css/user_home.css";
 import { Bell } from "../../../public/svgs/Icons";
+import io from "socket.io-client";
+import { toast } from "sonner";
+
+const socket = io(Base_URL);
 
 const TechnicianNavbar = () => {
   const [openSideBar, setOpenSideBar] = useState(false);
   const userData = JSON.parse(sessionStorage.getItem("userDetails"));
   const userProfile = userData?.profileIMG;
+
+  useEffect(() => {
+    socket.emit("joinTechnicianNoficationRoom", (userData?.user_id));
+    socket.on("newJobRequest", (data) => {
+      toast.info(data.message);
+    })
+    return () => {
+      socket.off("newJobRequest");
+    }
+  }, []);
+
   return (
     <>
       <nav className="navbar navbar-light bg-light" style={{ zIndex: "4" }}>

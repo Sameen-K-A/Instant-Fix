@@ -10,7 +10,7 @@ class TechnicianService {
    constructor() {
       this.technicianRepository = new TechnicianRepository();
       this.userRepository = new UserRepository();
-   }
+   };
 
    async joinNewTechnicianService(user_id: string, profession: string) {
       try {
@@ -34,7 +34,7 @@ class TechnicianService {
          console.log("error form service : ", error);
          throw error;
       }
-   }
+   };
 
    async changeProfessionService(user_id: string, profession: string): Promise<boolean> {
       try {
@@ -47,7 +47,7 @@ class TechnicianService {
       } catch (error) {
          throw error;
       }
-   }
+   };
 
    async changeAvailabilityStatusService(user_id: string, newStatus: string | boolean) {
       try {
@@ -57,6 +57,14 @@ class TechnicianService {
             newStatus = false;
          }
          return await this.technicianRepository.changeAvailabilityStatusRepository(user_id, newStatus);
+      } catch (error) {
+         throw error;
+      }
+   };
+
+   async fetchTechnicianBookingHistoryService(technicianUserID: string) {
+      try {
+         return await this.technicianRepository.fetchTechnicianBookingHistoryRepository(technicianUserID);
       } catch (error) {
          throw error;
       }

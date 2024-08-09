@@ -5,7 +5,8 @@ import { userType } from "../Model/userModal";
 import sendOTPmail from "../Config/Email_config";
 import { createToken } from "../Config/jwt_config";
 import { userAddressType } from "../Model/userAddressModal";
-import { editAddressType } from "../Interfaces";
+import { editAddressType, newBookingType } from "../Interfaces";
+import { io } from "../Config/Socket_config";
 
 class UserServices {
    private userRepository: UserRepository;
@@ -198,7 +199,42 @@ class UserServices {
       } catch (error) {
          throw error;
       }
+   };
+
+   async bookTechnicianService(clientID: string, technicianUserID: string) {
+      try {
+         const technicianInformation: any = await this.userRepository.fetchSingleTechnicianDetailsRepository(technicianUserID);
+         if (technicianInformation[0].isBlocked === true || technicianInformation[0].technicianDetails.availability === false) {
+            throw new Error("Technician not available now");
+         };
+         const date: Date = new Date();
+         const newBookingDetails: newBookingType = {
+            booking_id: uuid() as string,
+            client_id: clientID,
+            technicianUser_id: technicianUserID,
+            bookingTime: date.toLocaleTimeString(),
+            bookingDate: date.toLocaleDateString(),
+            Booking_profession: technicianInformation?.technicianDetails?.profession,
+            booking_status: "Requested",
+         };
+         const repositoryResponse = await this.userRepository.bookTechnicianRepository(newBookingDetails);
+         if (!repositoryResponse) {
+            throw new Error("Booking failed");
+         };
+         io.to(`technicianNotificaionRoom${technicianUserID}`).emit("newJobRequest", { message: "You have a new booking request" });
+         return repositoryResponse;
+      } catch (error) {
+         throw error
+      };
+   };
+
+   async fetchAnyPendingRequestAvailableService(clientID: string, technicianUserID: string) {
+      try {
+         return this.userRepository.fetchAnyPendingRequestAvailableRepository(clientID, technicianUserID);
+      } catch (error) {
+         throw error;
+      }
    }
-}
+};
 
 export default UserServices;

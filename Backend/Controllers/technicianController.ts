@@ -39,7 +39,17 @@ class TechnicianController {
     } catch (error) {
       res.status(500).json(error);
     }
-  }
+  };
+
+  async fetchTechnicianBookingHistoryController(req: Request, res: Response) {
+    try {
+      const technicianUserID = req.query.technicianUserID as string
+      const result = await technicianService.fetchTechnicianBookingHistoryService(technicianUserID);
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(500).json({ message: "Something wrong please try again later" });
+    }
+  };
 
 }
 

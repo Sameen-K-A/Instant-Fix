@@ -2,9 +2,10 @@ import { Server as SocketServer } from "socket.io";
 import { Server as HttpServer } from "http";
 import ChatServices from "../Services/chatServices";
 const chatService = new ChatServices();
+let io:SocketServer;
 
 const configSocketIO = (server: HttpServer) => {
-   const io = new SocketServer(server, {
+   io = new SocketServer(server, {
       cors: {
          origin: "http://localhost:5173",
          methods: ["GET", "POST"],
@@ -14,7 +15,7 @@ const configSocketIO = (server: HttpServer) => {
    io.on("connection", (socket) => {
       console.log(`User connected: ${socket.id}`);
 
-      socket.on("joinRoom", ({ senderID, receiverID }) => {
+      socket.on("joinChatRoom", ({ senderID, receiverID }) => {
          const roomName = [senderID, receiverID].sort().join("-");
          socket.join(roomName);
          console.log(`User ${senderID} joined room: ${roomName}`);
@@ -26,7 +27,7 @@ const configSocketIO = (server: HttpServer) => {
             if (firstTimeChat === true) {
                const connectionDetails: any = await chatService.createConnectionAndSaveMessageService(messageDetails);
                savedMessage = connectionDetails?.details[0];
-            } else { 
+            } else {
                savedMessage = await chatService.saveNewChatService(messageDetails.senderID, messageDetails.receiverID, messageDetails.message);
             };
             const chatRoom = [messageDetails.senderID, messageDetails.receiverID].sort().join("-");
@@ -36,10 +37,15 @@ const configSocketIO = (server: HttpServer) => {
          }
       })
 
+      socket.on("joinTechnicianNoficationRoom", (technicianUserID) => {
+         socket.join(`technicianNotificaionRoom${technicianUserID}`);
+         console.log(`Technician ${technicianUserID} joined his notification room`);
+      });
+
       socket.on("disconnect", () => {
          console.log(`User disconnected: ${socket.id}`);
       });
    });
 }
 
-export default configSocketIO;
+export {configSocketIO, io};

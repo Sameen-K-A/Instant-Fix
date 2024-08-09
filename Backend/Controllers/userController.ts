@@ -177,6 +177,32 @@ class UserController {
       };
    };
 
-}
+   async bookTechnician_controller(req: Request, res: Response) {
+      try {
+         const { clientID, technicianUserID } = req.body;
+         const response = await userServices.bookTechnicianService(clientID, technicianUserID);
+         res.status(200).json(response);
+      } catch (error: any) {
+         if (error.message === "Booking failed") {
+            res.status(409).send("Booking failed")
+         } else if (error.message === "Technician not available now") {
+            res.status(404).send("Technician not available now")
+         } else {
+            res.status(500).json(error);
+         };
+      };
+   };
+
+   async fetchAnyPendingRequestAvailable_controller(req: Request, res: Response) {
+      try {
+         const clientID = req.query.clientID as string;
+         const technicianUserID = req.query.technicianUserID as string;
+         const response = await userServices.fetchAnyPendingRequestAvailableService(clientID, technicianUserID);
+         res.status(200).send(response);
+      } catch (error) {
+         res.status(500).json(error);
+      }
+   }
+};
 
 export default UserController;
