@@ -76,13 +76,15 @@ const TechnicianHome = () => {
       <section className="section mt-0">
         <div className="container">
           <div className="row">
-            <div className="col-lg-6 col-md-12 col-sm-12 align-self-center mobile-bottom-fix">
-              <div className="left-heading">
-                <h3 className="font-weight-bolder text-info text-gradient">Grow Your Skills with Us</h3>
-              </div>
-              <div className="left-text">
-                <h5 className="pb-2">Training and Development</h5>
-                <p>Access resources and training opportunities to further develop your skills. Stay ahead in the industry with our continuous learning options.</p>
+            <div className="col-lg-6 col-md-12 col-sm-12 d-flex align-items-center mobile-bottom-fix">
+              <div>
+                <div className="left-heading">
+                  <h3 className="font-weight-bolder text-info text-gradient">Grow Your Skills with Us</h3>
+                </div>
+                <div className="left-text">
+                  <h5 className="pb-2">Training and Development</h5>
+                  <p>Access resources and training opportunities to further develop your skills. Stay ahead in the industry with our continuous learning options.</p>
+                </div>
               </div>
             </div>
             <div className="col-lg-6 col-md-12 d-flex justify-content-center mt-3">

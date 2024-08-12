@@ -5,6 +5,7 @@ import UserNavbar from '../../components/User_side/NavbarPage';
 import Footer from "../../components/Common/Footer";
 import userAxiosInstance from "../../config/AxiosInstance/userInstance";
 import { toast } from 'sonner';
+import GetCurrentLocation from '../../components/Common/CurrentLocation';
 
 const TechniciansListPage = () => {
   const [techniciansArray, setTechniciansArray] = useState([]);
@@ -42,7 +43,8 @@ const TechniciansListPage = () => {
           </div>
         </div>
         <div className="col-lg-9">
-          <div className="container mt-5 col-12 d-flex justify-content-end">
+          <div className="container p-0 mt-5 col-12 d-flex justify-content-between">
+            <GetCurrentLocation />
             <div className="col-lg-3 col-md-5 col-sm-12 col-12">
               <input type="text" className='form-control' placeholder='Search Technician or Category' />
             </div>

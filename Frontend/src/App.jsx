@@ -28,6 +28,7 @@ import AdminTechnicianList from './components/Admin_side/TechnicianList';
 import TechnicianProtecter from './components/Services/TechnicianProtecter';
 import TechnicianHome from './components/Technician_side/TechnicianHome';
 import TechnicianRole from './components/Technician_side/TechnicianRole';
+import TechnicianBookingHistoryTable from './components/Technician_side/TechnicianBookingHistory';
 
 // common side
 import NotFound from './components/Common/404page';
@@ -36,7 +37,6 @@ import NotFound from './components/Common/404page';
 import "../public/css/index.css";
 import "../public/css/user_home.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import TechnicianBookingHistoryTable from './components/Technician_side/TechnicianBookingHistory';
 
 function App() {
   return (

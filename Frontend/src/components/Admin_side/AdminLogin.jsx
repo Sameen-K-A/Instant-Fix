@@ -62,13 +62,13 @@ const AdminLogin = () => {
                 </div>
                 <div className="card-body">
                   <form onSubmit={formik.handleSubmit}>
-                    <label>Email</label>
+                    <label className='text-xs text-black-50'>Email</label>
                     <input type="text" className="form-control" placeholder="Email" {...formik.getFieldProps('email')} />
                     {formik.touched.email && formik.errors.email ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.email}</div> : null}
-                    <label className='mt-3'>Password</label>
+                    <label className='text-xs text-black-50 mt-3'>Password</label>
                     <input type="password" className="form-control" placeholder="Password" {...formik.getFieldProps('password')} />
                     {formik.touched.password && formik.errors.password ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.password}</div> : null}
-                    <button type="submit" className="btn bg-gradient-info w-100 mt-4 mb-0 text-center" disabled={formik.isSubmitting} >{formik.isSubmitting ? 'Signing in...' : 'Sign in'}</button>
+                    <button type="submit" className="btn bg-gradient-primary w-100 mt-4 mb-0 text-center" disabled={formik.isSubmitting} >{formik.isSubmitting ? 'Signing in...' : 'Sign in'}</button>
                   </form>
                 </div>
               </div>
