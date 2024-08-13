@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import UserServices from "../Services/userServices";
 import UserRepository from "../Repository/userRepository";
-import { userType } from "../Model/userModal";
-import { userAddressType } from "../Model/userAddressModal";
+import { userType } from "../Interfaces";
 
 const userRepository = new UserRepository();
 const userServices = new UserServices(userRepository);
@@ -25,7 +24,7 @@ class UserController {
             res.status(500).json({ message: "Something wrong please try again later" });
          }
       }
-   }
+   };
 
    async register_controller(req: Request, res: Response): Promise<void> {
       try {
@@ -41,7 +40,7 @@ class UserController {
             res.status(500).json({ message: "Something wrong please try again later" });
          }
       }
-   }
+   };
 
    async verifyOTP_controller(req: Request, res: Response): Promise<void> {
       try {
@@ -57,7 +56,7 @@ class UserController {
             res.status(500).json({ message: "Something went wrong. Please try again later." });
          }
       }
-   }
+   };
 
    async resendOTP_controller(req: Request, res: Response) {
       try {
@@ -70,55 +69,29 @@ class UserController {
             res.status(500).json({ message: "Something wrong please try again later" });
          }
       }
-   }
+   };
 
-   async fetchAddress_controller(req: Request, res: Response): Promise<void> {
+   async add_EditAddress_controller(req: Request, res: Response): Promise<void> {
       try {
-         const user_id: string = req.query.user_id as string;
-         const serviceResponse = await userServices.fetchAddressService(user_id);
-         res.status(200).json(serviceResponse);
-      } catch (error) {
-         console.log("fetch address controller error : ", error);
-         res.status(500).send("Something wrong please try again later.")
-      }
-   }
-
-   async addAddress_controller(req: Request, res: Response): Promise<void> {
-      try {
-         const addressData: userAddressType = req.body;
-         const serviceResponse = await userServices.addAddressService(addressData);
-         res.status(200).json(serviceResponse);
+         const { addAndEditAddressDetails, user_id } = req.body;
+         await userServices.add_EditAddressService(addAndEditAddressDetails, user_id);
+         res.status(200).json({ message: "Address modified successfully" });
       } catch (error) {
          console.log("Add user address controller error : ", error);
          res.status(500).json(error)
       }
-   }
+   };
 
    async deleteAddress_controller(req: Request, res: Response): Promise<void> {
       try {
-         const address_id: string = req.query.address_id as string;
-         const serviceResponse = await userServices.deleteAddressService(address_id);
+         const user_id: string = req.query.user_id as string;
+         const serviceResponse = await userServices.deleteAddressService(user_id);
          res.status(200).send(serviceResponse);
       } catch (error) {
          console.log("delete address controller error : ", error);
          res.status(500).json(error);
       }
-   }
-
-   async editAddress_controller(req: Request, res: Response): Promise<void> {
-      try {
-         const { address_id, name, address, pincode, phone, alternatePhone } = req.body;
-         await userServices.editAddressService(address_id, name, address, pincode, phone, alternatePhone);
-         res.status(200).send("Address changed successfully");
-      } catch (error: any) {
-         if (error.message === "No changes founded") {
-            res.status(304).json({ message: "No changes founded" });
-         } else {
-            console.error("Internal Server Error:", error);
-            res.status(500).send("Internal server error");
-         }
-      }
-   }
+   };
 
    async changePassword_controller(req: Request, res: Response): Promise<void> {
       try {
@@ -134,7 +107,7 @@ class UserController {
             res.status(500).json({ message: "Internal server error" });
          }
       }
-   }
+   };
 
    async editprofile_controller(req: Request, res: Response) {
       try {
@@ -155,7 +128,7 @@ class UserController {
             res.status(500).json({ message: 'Internal Server Error' });
          }
       }
-   }
+   };
 
    async fetchTechnician_controller(req: Request, res: Response) {
       try {
@@ -202,7 +175,7 @@ class UserController {
       } catch (error) {
          res.status(500).json(error);
       }
-   }
+   };
 };
 
 export default UserController;

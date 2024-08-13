@@ -6,7 +6,7 @@ import admin_routes from './routes/admin_routes';
 import technician_routes from './routes/technician_routes';
 import chat_routes from "./routes/chat_routes";
 import DB_Connection from './Config/DB_config';
-import {configSocketIO} from './Config/Socket_config';
+import { configSocketIO } from './Config/Socket_config';
 import { createServer } from "http";
 
 dotenv.config();

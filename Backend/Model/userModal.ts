@@ -1,16 +1,5 @@
 import { Schema, model } from "mongoose";
-
-type userType = {
-   user_id?: string,
-   name: string;
-   email: string;
-   phone: string;
-   password: string;
-   isBlocked?: boolean;
-   profileIMG: string;
-   isTechnician?: boolean;
-   alreadychattedtechnician?: string[];
-}
+import { userType } from "../Interfaces";
 
 const userSchema = new Schema<userType>({
    user_id: {
@@ -40,6 +29,22 @@ const userSchema = new Schema<userType>({
       type: Boolean,
       default: false
    },
+   addressDetails: {
+      type: {
+         name: { type: String },
+         address: { type: String },
+         district: { type: String },
+         state: { type: String },
+         pincode: { type: String },
+         phone: { type: String },
+         alternatePhone: { type: String },
+         location: {
+            type: { type: String, enum: ["Point"], default: "Point" },
+            coordinates: { type: [Number], default: [0, 0] },
+         }
+      },
+      default: null,
+   },
    alreadychattedtechnician: {
       type: [String],
       default: [],
@@ -48,5 +53,5 @@ const userSchema = new Schema<userType>({
    versionKey: false
 });
 
-const userModel = model<userType>("User", userSchema);
-export { userModel, userType };
+const User = model<userType>("User", userSchema);
+export default User;

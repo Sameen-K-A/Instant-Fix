@@ -1,13 +1,13 @@
-import { userModel, userType } from "../Model/userModal";
-import { userAddressModal, userAddressType } from "../Model/userAddressModal";
+import User from "../Model/userModal";
+import { userAddressType, userType } from "../Interfaces";
 import BookingModel from "../Model/bookingModel"
-import { editAddressType, newBookingType } from "../Interfaces";
+import { newBookingType } from "../Interfaces";
 
 class UserRepository {
 
   async findUserByEmail(email: string) {
     try {
-      return await userModel.findOne({ email });
+      return await User.findOne({ email });
     } catch (error) {
       throw error;
     }
@@ -15,7 +15,7 @@ class UserRepository {
 
   async findUserByUser_id(user_id: string) {
     try {
-      return await userModel.findOne({ user_id: user_id });
+      return await User.findOne({ user_id: user_id });
     } catch (error) {
       throw error;
     }
@@ -23,9 +23,10 @@ class UserRepository {
 
   async loginUserRepository(email: string) {
     try {
-      const userDetails = await userModel.aggregate([
+      const userDetails = await User.aggregate([
         { $match: { email: email } },
-        { $lookup: { from: 'technicians', localField: 'user_id', foreignField: 'user_id', as: 'technicianDetails' } }
+        { $lookup: { from: 'technicians', localField: 'user_id', foreignField: 'user_id', as: 'technicianDetails' } },
+        { $project: { _id: 0, alreadychattedtechnician: 0 } },
       ]);
       return userDetails[0];
     } catch (error) {
@@ -35,39 +36,23 @@ class UserRepository {
 
   async registerUserRepository(userData: userType) {
     try {
-      return await userModel.create(userData);
+      return await User.create(userData);
     } catch (error) {
       throw error;
     }
   };
 
-  async fetchAddressRepository(user_id: string) {
+  async add_EditAddressRepository(addressData: userAddressType, user_id: string) {
     try {
-      return await userAddressModal.find({ user_id: user_id });
+      return await User.updateOne({ user_id: user_id }, { $set: { addressDetails: addressData } },);
     } catch (error) {
       throw error;
     }
   };
 
-  async addAddressRepository(addressData: userAddressType) {
+  async deleteAddressRepository(user_id: string) {
     try {
-      return await userAddressModal.create(addressData);
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  async editAddressRepository(address_id: string, editedAddressData: editAddressType) {
-    try {
-      return await userAddressModal.updateOne({ address_id }, { $set: editedAddressData });
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async deleteAddressRepository(address_id: string) {
-    try {
-      return await userAddressModal.deleteOne({ address_id: address_id });
+      return await User.updateOne({ user_id: user_id }, { $set: { addressDetails: null } });
     } catch (error) {
       throw error
     }
@@ -75,7 +60,7 @@ class UserRepository {
 
   async accessIsTechnician(user_id: string) {
     try {
-      return await userModel.updateOne({ user_id }, { isTechnician: true });
+      return await User.updateOne({ user_id }, { isTechnician: true });
     } catch (error) {
       console.log(error);
       throw error;
@@ -84,7 +69,7 @@ class UserRepository {
 
   async changepasswordRepository(user_id: string, hashedNewPassword: string) {
     try {
-      return await userModel.updateOne({ user_id: user_id }, { password: hashedNewPassword });
+      return await User.updateOne({ user_id: user_id }, { password: hashedNewPassword });
     } catch (error) {
       throw error;
     }
@@ -92,7 +77,7 @@ class UserRepository {
 
   async editProfileRepository(user_id: string, updatedInformation: { name: string, phone: string, profileIMG?: string }) {
     try {
-      return await userModel.updateOne({ user_id: user_id }, { $set: updatedInformation });
+      return await User.updateOne({ user_id: user_id }, { $set: updatedInformation });
     } catch (error) {
       throw error;
     }
@@ -100,7 +85,7 @@ class UserRepository {
 
   async fetchTechnicianRepository(user_id: string, skipCount: number = 0, limitCount: number = 10) {
     try {
-      return await userModel.aggregate([
+      return await User.aggregate([
         { $match: { isTechnician: true, user_id: { $ne: user_id } } },
         { $lookup: { from: "technicians", localField: "user_id", foreignField: "user_id", as: "technicianDetails" } },
         { $skip: skipCount },
@@ -114,7 +99,7 @@ class UserRepository {
 
   async fetchSingleTechnicianDetailsRepository(technicianUserID: string): Promise<any[]> {
     try {
-      return await userModel.aggregate([
+      return await User.aggregate([
         { $match: { user_id: technicianUserID } },
         { $lookup: { from: "technicians", localField: "user_id", foreignField: "user_id", as: "technicianDetails" } },
         { $unwind: "$technicianDetails" },
@@ -127,7 +112,7 @@ class UserRepository {
 
   async fetchAlreadyChattedTechniciansRepository(user_id: string) {
     try {
-      return await userModel.aggregate([
+      return await User.aggregate([
         { $match: { user_id: user_id } },
         { $unwind: "$alreadychattedtechnician" },
         { $lookup: { from: "users", localField: "alreadychattedtechnician", foreignField: "user_id", as: "technicianPersonalDetails" } },
@@ -141,7 +126,7 @@ class UserRepository {
 
   async addNewConnectionToAlreadyChattedTechnicianListRepository(user_id: string, technicianUser_id: string) {
     try {
-      return await userModel.bulkWrite([
+      return await User.bulkWrite([
         {
           updateOne: {
             filter: { user_id: user_id },

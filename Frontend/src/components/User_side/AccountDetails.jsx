@@ -104,7 +104,7 @@ const AccountDetails = () => {
               {nowTechnician && (
                 <TechnicianChangeProfession profession={userDetails.technicianDetails[0]?.profession} userDetails={userDetails} setUserDetails={setUserDetails} />
               )}
-              <AddressInformation />
+              <AddressInformation userDetails={userDetails} setUserDetails={setUserDetails} />
             </div>
             {nowTechnician ? <TechnicianFeedbacks /> : <FollowingInformation />}
           </div>

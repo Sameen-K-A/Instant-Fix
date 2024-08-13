@@ -1,12 +1,12 @@
 import UserRepository from "../Repository/userRepository";
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from "uuid";
-import { userType } from "../Model/userModal";
+import { userAddressType, userType } from "../Interfaces";
 import sendOTPmail from "../Config/Email_config";
 import { createToken } from "../Config/jwt_config";
-import { userAddressType } from "../Model/userAddressModal";
-import { editAddressType, newBookingType } from "../Interfaces";
+import { newBookingType } from "../Interfaces";
 import { io } from "../Config/Socket_config";
+import axios from "axios";
 
 class UserServices {
    private userRepository: UserRepository;
@@ -20,18 +20,19 @@ class UserServices {
 
    async loginUserService(email: string, password: string) {
       try {
-         const userData = await this.userRepository.loginUserRepository(email);
+         let userData = await this.userRepository.loginUserRepository(email);
          if (!userData) {
             throw new Error("email not found");
-         }
-         if (userData.isBlocked) {
-            throw new Error("User is blocked");
          }
          const comparePassword = await bcrypt.compare(password, userData.password);
          if (!comparePassword) {
             throw new Error("Wrong password");
          }
+         if (userData.isBlocked) {
+            throw new Error("User is blocked");
+         }
          const userToken = createToken(userData.user_id as string);
+         userData = { ...userData, password: null };
          return { userToken, userData };
       } catch (error) {
          throw error;
@@ -43,7 +44,7 @@ class UserServices {
          const alreadyExists = await this.userRepository.findUserByEmail(userData.email);
          if (alreadyExists) {
             throw new Error("Email already exists");
-         }
+         };
          this.userData = userData;
          const Generated_OTP: string = Math.floor(1000 + Math.random() * 9000).toString();
          this.OTP = Generated_OTP;
@@ -54,6 +55,7 @@ class UserServices {
          }
          const OTP_createdTime = new Date();
          this.expiryOTP_time = new Date(OTP_createdTime.getTime() + 2 * 60 * 1000);
+         console.log("step 2");
          return;
       } catch (error) {
          throw error;
@@ -98,48 +100,40 @@ class UserServices {
       }
    };
 
-   async fetchAddressService(user_id: string) {
+   async add_EditAddressService(addAndEditAddressDetails: userAddressType, user_id: string) {
       try {
-         const userAddressDetails = await this.userRepository.fetchAddressRepository(user_id);
-         return userAddressDetails;
-      } catch (error) {
-         console.log("fetch address service error : ", error);
-         throw error;
-      }
-   };
+         const response = await axios.get(`https://nominatim.openstreetmap.org/search?postalcode=${addAndEditAddressDetails.pincode}&format=json&addressdetails=1`);
+         if (response.data.length === 0) {
+            throw new Error('Enter valid pincode');
+         };
 
-   async addAddressService(addressData: userAddressType) {
-      try {
-         addressData.address_id = uuid();
-         return await this.userRepository.addAddressRepository(addressData);
+         const latitide = parseFloat(response.data[0].lat);
+         const longitude = parseFloat(response.data[0].lon);
+
+         const addressDetails: userAddressType = {
+            name: addAndEditAddressDetails.name,
+            address: addAndEditAddressDetails.address,
+            state: addAndEditAddressDetails.state,
+            phone: addAndEditAddressDetails.phone,
+            alternatePhone: addAndEditAddressDetails.alternatePhone,
+            district: addAndEditAddressDetails.district,
+            pincode: addAndEditAddressDetails.pincode,
+            location: {
+               type: "Point",
+               coordinates: [longitude, latitide],
+            }
+         };
+
+         return await this.userRepository.add_EditAddressRepository(addressDetails, user_id);
       } catch (error) {
          throw error
       }
    };
 
-   async editAddressService(address_id: string, name: string, address: string, pincode: string, phone: string, alternatePhone: string): Promise<string> {
-      try {
-         const editedAddressData: editAddressType = {
-            name,
-            address,
-            pincode,
-            phone,
-            alternatePhone
-         };
-         const repositoryResponse = await this.userRepository.editAddressRepository(address_id, editedAddressData);
-         if (repositoryResponse.modifiedCount === 0) {
-            throw new Error("No changes founded");
-         }
-         return "okay";
-      } catch (error) {
-         throw error;
-      }
-   }
-
    async deleteAddressService(address_id: string) {
       try {
          const repositoryResponse = await this.userRepository.deleteAddressRepository(address_id);
-         if (repositoryResponse.deletedCount == 1) {
+         if (repositoryResponse.modifiedCount == 1) {
             return "Deleted successfully"
          }
          else throw new Error("Not deleted");
