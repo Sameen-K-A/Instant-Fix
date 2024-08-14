@@ -6,6 +6,8 @@ import { FollowTechnician, MsgToTechnician, Star } from '../../../public/svgs/Ic
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from "sonner";
 import userAxiosInstance from "../../config/AxiosInstance/userInstance";
+import image from "../../../public/images/profile_2.jpg";
+import BookingConfirmModal from './BookingConfirmModal';
 
 const TechnicianProfileDetails = () => {
   const location = useLocation();
@@ -39,6 +41,10 @@ const TechnicianProfileDetails = () => {
   };
 
   const bookTechnician = async () => {
+    if (!userDetails.addressDetails) {
+      toast.error("Please add your address for booking.");
+      return;
+    }
     setIsLoading(true);
     try {
       const bookingResponse = await userAxiosInstance.post("/bookTechnician", { clientID: userDetails.user_id, technicianUserID: technicianDetails?.user_id });
@@ -66,38 +72,246 @@ const TechnicianProfileDetails = () => {
         <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }}>
           <span className="mask bg-gradient-primary opacity-8"></span>
         </div>
-        <div className="card card-body col-lg-6 col-md-8 blur shadow-blur mx-auto mt-n7 overflow-hidden">
-          <div className='d-flex justify-content-center'>
-            <div className="avatar avatar-xxl mb-3 mt-3">
-              <img src={`${Base_URL}/${technicianDetails?.profileIMG}`} alt="profile_image" className="w-100 border-radius-lg shadow-sm" />
+        <div className="card card-body blur shadow-blur mx-4 mt-n6 overflow-hidden">
+          <div className="row gx-4">
+            <div className="col-auto">
+              <div className="avatar avatar-xl position-relative">
+                <img src={`${Base_URL}/${technicianDetails?.profileIMG}`} alt="profile_image" className="w-100 h-100 border-radius-lg shadow-sm" />
+              </div>
+            </div>
+            <div className="col-auto my-auto">
+              <div className="h-100">
+                <h5 className="mb-1 text-dark">{technicianDetails?.name}</h5>
+                <p className="m-0 text-sm">{technicianDetails?.technicianDetails[0]?.profession}</p>
+                {[1, 2, 3, 4, 5].map((value) => (
+                  <strong key={value} className='me-1'>{value <= technicianDetails?.technicianDetails[0]?.rating ? <Star color={"#ffbb00"} /> : <Star />}</strong>
+                ))}
+              </div>
+            </div>
+            <div className="col-lg-4 px-5 col-md-4 my-auto ms-auto">
+              <ul className="nav nav-fill bg-transparent d-flex justify-content-end">
+                <button className='btn btn-outline-primary px-3 mx-1 mb-0'><FollowTechnician /></button>
+                <button className='btn btn-outline-primary px-3 mx-1 mb-0' onClick={() => handleMessageOpen()}><MsgToTechnician /></button>
+              </ul>
             </div>
           </div>
-          <div className="text-center">
-            <h5 className="mb-1 text-dark">{technicianDetails?.name}</h5>
-            <h6 className="mb-1 text-dark text-md">{technicianDetails?.technicianDetails[0]?.profession}</h6>
-            {[1, 2, 3, 4, 5].map((value) => (
-              <strong key={value} className='me-1'>{value <= technicianDetails?.technicianDetails[0]?.rating ? <Star color={"#ffbb00"} /> : <Star />}</strong>
-            ))}
-            <p className="mt-2 text-sm">{technicianDetails?.email}</p>
+        </div>
+        <div className="container-fluid py-4">
+          <div className="row">
+            <div className="col-12 col-xl-6 mb-2">
+              <div className="card col-12 min-height-200">
+                <div className="card-header pb-0 p-3">
+                  <h6 className="mb-0 mt-3 text-center">Feedbacks</h6>
+                </div>
+                <div className='p-2'>
+                  <div className="card-body p-3" style={{ overflowY: 'auto', maxHeight: "285px" }}>
+                    <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center">
+                      <a className="avatar rounded-circle me-3">
+                        <img alt="Image placeholder" src={image} />
+                      </a>
+                      <div className="flex-grow-1 d-flex justify-content-between align-items-center">
+                        <div>
+                          <p className="text-bold text-sm m-0">User name</p>
+                          <p className="text-xs mt-1 m-0">User feedback</p>
+                        </div>
+                        <p className="text-xs m-0 text-black-50">Date</p>
+                      </div>
+                    </li>
+                    <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center">
+                      <a className="avatar rounded-circle me-3">
+                        <img alt="Image placeholder" src={image} />
+                      </a>
+                      <div className="flex-grow-1 d-flex justify-content-between align-items-center">
+                        <div>
+                          <p className="text-bold text-sm m-0">User name</p>
+                          <p className="text-xs mt-1 m-0">User feedback</p>
+                        </div>
+                        <p className="text-xs m-0 text-black-50">Date</p>
+                      </div>
+                    </li>
+                    <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center">
+                      <a className="avatar rounded-circle me-3">
+                        <img alt="Image placeholder" src={image} />
+                      </a>
+                      <div className="flex-grow-1 d-flex justify-content-between align-items-center">
+                        <div>
+                          <p className="text-bold text-sm m-0">User name</p>
+                          <p className="text-xs mt-1 m-0">User feedback</p>
+                        </div>
+                        <p className="text-xs m-0 text-black-50">Date</p>
+                      </div>
+                    </li>
+                    <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center">
+                      <a className="avatar rounded-circle me-3">
+                        <img alt="Image placeholder" src={image} />
+                      </a>
+                      <div className="flex-grow-1 d-flex justify-content-between align-items-center">
+                        <div>
+                          <p className="text-bold text-sm m-0">User name</p>
+                          <p className="text-xs mt-1 m-0">User feedback</p>
+                        </div>
+                        <p className="text-xs m-0 text-black-50">Date</p>
+                      </div>
+                    </li>
+                    <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center">
+                      <a className="avatar rounded-circle me-3">
+                        <img alt="Image placeholder" src={image} />
+                      </a>
+                      <div className="flex-grow-1 d-flex justify-content-between align-items-center">
+                        <div>
+                          <p className="text-bold text-sm m-0">User name</p>
+                          <p className="text-xs mt-1 m-0">User feedback</p>
+                        </div>
+                        <p className="text-xs m-0 text-black-50">Date</p>
+                      </div>
+                    </li>
+                    <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center">
+                      <a className="avatar rounded-circle me-3">
+                        <img alt="Image placeholder" src={image} />
+                      </a>
+                      <div className="flex-grow-1 d-flex justify-content-between align-items-center">
+                        <div>
+                          <p className="text-bold text-sm m-0">User name</p>
+                          <p className="text-xs mt-1 m-0">User feedback</p>
+                        </div>
+                        <p className="text-xs m-0 text-black-50">Date</p>
+                      </div>
+                    </li>
+                    <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center">
+                      <a className="avatar rounded-circle me-3">
+                        <img alt="Image placeholder" src={image} />
+                      </a>
+                      <div className="flex-grow-1 d-flex justify-content-between align-items-center">
+                        <div>
+                          <p className="text-bold text-sm m-0">User name</p>
+                          <p className="text-xs mt-1 m-0">User feedback</p>
+                        </div>
+                        <p className="text-xs m-0 text-black-50">Date</p>
+                      </div>
+                    </li>
+                    <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center">
+                      <a className="avatar rounded-circle me-3">
+                        <img alt="Image placeholder" src={image} />
+                      </a>
+                      <div className="flex-grow-1 d-flex justify-content-between align-items-center">
+                        <div>
+                          <p className="text-bold text-sm m-0">User name</p>
+                          <p className="text-xs mt-1 m-0">User feedback</p>
+                        </div>
+                        <p className="text-xs m-0 text-black-50">Date</p>
+                      </div>
+                    </li>
+                    <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center">
+                      <a className="avatar rounded-circle me-3">
+                        <img alt="Image placeholder" src={image} />
+                      </a>
+                      <div className="flex-grow-1 d-flex justify-content-between align-items-center">
+                        <div>
+                          <p className="text-bold text-sm m-0">User name</p>
+                          <p className="text-xs mt-1 m-0">User feedback</p>
+                        </div>
+                        <p className="text-xs m-0 text-black-50">Date</p>
+                      </div>
+                    </li>
+                    <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center">
+                      <a className="avatar rounded-circle me-3">
+                        <img alt="Image placeholder" src={image} />
+                      </a>
+                      <div className="flex-grow-1 d-flex justify-content-between align-items-center">
+                        <div>
+                          <p className="text-bold text-sm m-0">User name</p>
+                          <p className="text-xs mt-1 m-0">User feedback</p>
+                        </div>
+                        <p className="text-xs m-0 text-black-50">Date</p>
+                      </div>
+                    </li>
+                    <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center">
+                      <a className="avatar rounded-circle me-3">
+                        <img alt="Image placeholder" src={image} />
+                      </a>
+                      <div className="flex-grow-1 d-flex justify-content-between align-items-center">
+                        <div>
+                          <p className="text-bold text-sm m-0">User name</p>
+                          <p className="text-xs mt-1 m-0">User feedback</p>
+                        </div>
+                        <p className="text-xs m-0 text-black-50">Date</p>
+                      </div>
+                    </li>
+                    <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center">
+                      <a className="avatar rounded-circle me-3">
+                        <img alt="Image placeholder" src={image} />
+                      </a>
+                      <div className="flex-grow-1 d-flex justify-content-between align-items-center">
+                        <div>
+                          <p className="text-bold text-sm m-0">User name</p>
+                          <p className="text-xs mt-1 m-0">User feedback</p>
+                        </div>
+                        <p className="text-xs m-0 text-black-50">Date</p>
+                      </div>
+                    </li>
+                    <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center">
+                      <a className="avatar rounded-circle me-3">
+                        <img alt="Image placeholder" src={image} />
+                      </a>
+                      <div className="flex-grow-1 d-flex justify-content-between align-items-center">
+                        <div>
+                          <p className="text-bold text-sm m-0">User name</p>
+                          <p className="text-xs mt-1 m-0">User feedback</p>
+                        </div>
+                        <p className="text-xs m-0 text-black-50">Date</p>
+                      </div>
+                    </li>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-12 col-xl-6 mb-4">
+              <div className="card col-12">
+                <div className="card-header pb-0 p-3">
+                  <h6 className="mb-0 mt-3 text-center">Your Address details</h6>
+                </div>
+                <div className="card-body p-4 min-height-300">
+                  <li className="list-group-item border-0 d-flex p-4 mb-2 mt-4 bg-gray-100 border-radius-lg">
+                    {userDetails?.addressDetails ? (
+                      <div className="d-flex flex-column">
+                        <span className="mb-2 text-xs text-dark">{userDetails?.addressDetails?.name},</span>
+                        <span className="mb-2 text-xs text-dark">{userDetails?.addressDetails?.address}</span>
+                        <span className="mb-2 text-xs text-dark">{userDetails?.addressDetails?.district}, <span className='mx-2'>{userDetails?.addressDetails?.state}</span></span>
+                        <span className="mb-2 text-xs text-dark">{userDetails?.addressDetails?.pincode}</span>
+                        <span className="mb-2 text-xs text-dark">{userDetails?.addressDetails?.phone}, <span className='mx-2'>{userDetails?.addressDetails?.alternatePhone}</span></span>
+                      </div>
+                    ) : (
+                      <div>
+                        <h6 className="text-dark">Address found</h6>
+                        <p className="text-sm text-black-50 mb-2">To add your address, follow these steps:</p>
+                        <ul className="text-sm text-black-50">
+                          <li>Tap on your profile in the top right corner.</li>
+                          <li>Click on "Account Details."</li>
+                          <li>Add your address.</li>
+                        </ul>
+                      </div>
+                    )}
+                  </li>
+
+                  <div className='d-flex justify-content-end mt-4'>
+                    <button className='btn bg-gradient-primary mx-1 mb-0'  data-bs-toggle="modal" data-bs-target="#bookingConfirmModal">Book Now</button>
+                    {/* {bookingInformation ? (
+                      <button className='btn bg-gradient-primary mx-1 mb-0' onClick={() => navigate("/bookingHistory")}>Check booking history</button>
+                    ) : (
+                      isLoading ? (
+                        <button className='btn bg-gradient-primary mx-1 mb-0'>Loading . . .</button>
+                      ) : (
+                        <button className='btn bg-gradient-primary mx-1 mb-0' onClick={() => bookTechnician()}>Book Now</button>
+                      )
+                    )} */}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="gap-2 d-flex justify-content-center">
-            <button className='btn btn-outline-primary px-3'><FollowTechnician /></button>
-            <button className='btn btn-outline-primary px-3' onClick={() => handleMessageOpen()}><MsgToTechnician /></button>
-            {bookingInformation ? (
-              <button className='btn bg-gradient-primary' onClick={() => navigate("/bookingHistory")}>Check booking history</button>
-            ) : (
-              isLoading ? (
-                <button className='btn bg-gradient-primary'>Loading . . .</button>
-              ) : (
-                <button button className='btn bg-gradient-primary' onClick={() => bookTechnician()}>Book Now</button>
-              )
-            )}
-          </div>
-          {bookingInformation && (
-            <p className='text-center text-sm mt-2'>You have already booked this technician. Click the <b>'Check Booking History'</b><br /> button to view more details about your booking.</p>
-          )}
         </div>
       </div >
+      <BookingConfirmModal />
     </>
   );
 };

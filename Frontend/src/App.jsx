@@ -37,6 +37,7 @@ import NotFound from './components/Common/404page';
 import "../public/css/index.css";
 import "../public/css/user_home.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import Sidebaaaar from './components/User_side/example';
 
 function App() {
   return (
@@ -74,6 +75,7 @@ function App() {
 
         </Routes>
       </BrowserRouter>
+      <Sidebaaaar />
       <Toaster richColors expand={false} position="bottom-right" closeButton="true" toastOptions={{ style: { padding: '18px', borderRadius: '8px' } }} />
     </>
   )

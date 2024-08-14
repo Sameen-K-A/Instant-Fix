@@ -4346,3 +4346,17 @@ hr.horizontal.dark {
 .cursor-pointer {
   cursor: pointer;
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 50px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(331deg, rgb(202, 117, 255) 46%, rgb(232, 167, 255) 76%, rgba(166, 23, 255, 1) 100%);
+  border-radius: 50px;
+}
