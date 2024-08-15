@@ -68,7 +68,7 @@ const TechnicianProfileDetails = () => {
   return (
     <>
       <UserNavbar />
-      <div className="container-fluid">
+      <div className="container-fluid pe-6">
         <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }}>
           <span className="mask bg-gradient-primary opacity-8"></span>
         </div>

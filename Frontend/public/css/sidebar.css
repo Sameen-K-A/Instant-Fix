@@ -1,0 +1,112 @@
+.sidebar {
+   position: fixed;
+   top: 0;
+   right: 0;
+   height: 100%;
+   width: 260px;
+   background: #ffffff;
+   transition: all 0.5s ease;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   z-index: 100;
+}
+
+.sidebar ul.nav-links li:hover::after {
+   content: attr(title);
+   position: absolute;
+   left: 60px;
+   padding: 5px 10px;
+   border-radius: 5px;
+   z-index: 1000;
+   white-space: nowrap;
+   font-size: 14px;
+}
+
+.sidebar.close {
+   width: 50px;
+}
+
+.sidebar .logo-details {
+   height: 60px;
+   width: 100%;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.sidebar .logo-details .image img {
+   width: 40px;
+   height: 40px;
+   border-radius: 50%;
+}
+
+.sidebar .menu-bar {
+   height: calc(100% - 60px);
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+}
+
+.sidebar .menu {
+   margin-top: 20px;
+}
+
+.sidebar ul.nav-links {
+   padding: 0;
+   list-style: none;
+   margin: 0;
+}
+
+.sidebar ul.nav-links li {
+   position: relative;
+   list-style: none;
+   transition: all 0.4s ease;
+   display: flex;
+   align-items: center;
+   height: 50px;
+}
+
+.sidebar ul.nav-links li:hover {
+   background: #e7e7e7;
+   border-radius: 10px;
+}
+
+.sidebar ul.nav-links li .icon {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.sidebar ul.nav-links li .text {
+   color: #000000;
+   font-size: 15px;
+   margin-left: 10px;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   transition: opacity 0.3s ease;
+}
+
+.sidebar.close .text {
+   opacity: 0;
+   pointer-events: none;
+}
+
+.expand-btn {
+   cursor: pointer;
+   background-color: rgb(255, 255, 255);
+   height: 70px;
+   padding: 5px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   position: absolute;
+   top: 50%;
+   z-index: 100;
+   position: fixed;
+   margin-left: -25px;
+   border-top-left-radius: 10px;
+   border-bottom-left-radius: 10px;
+   border-left: 1px solid rgb(208, 69, 255);
+}

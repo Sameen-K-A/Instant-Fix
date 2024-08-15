@@ -12,7 +12,7 @@ const NotFound = () => {
           <h2 className="text-dark m-auto position-absolute">404 - The page can't be found.</h2>
         </div>
         <button className="btn bg-gradient-primary btn-lg" onClick={() => navigate(-1)}>
-          Go To Homepage
+          Go Back
         </button>
       </div>
     </div>

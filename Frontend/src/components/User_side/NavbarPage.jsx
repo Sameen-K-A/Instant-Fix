@@ -1,34 +1,32 @@
-import React, { useState } from "react";
-import UserSideBar from "./Sidebar";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Base_URL } from "../../config/credentials";
 import profile from "../../../public/images/userDefaultProfile.png";
-import "../../../public/css/user_home.css";
+import UserSideBar from "./UserSidebar";
 
 const UserNavbar = () => {
-  const [openSideBar, setOpenSideBar] = useState(false);
   const navigate = useNavigate();
   const userData = JSON.parse(sessionStorage.getItem("userDetails"));
   const userProfile = userData?.profileIMG;
-  return (  
+  return (
     <>
       <nav className="navbar navbar-light bg-light ">
         <div className="container-fluid">
           <p className="navbar-brand mb-0">Logo</p>
           <div className="d-flex align-items-center my-2">
-            <p className="font-weight-bold text-dark text-sm mb-0 me-3 cursor-pointer" onClick={() => { navigate("/allTechnicians") }}>Technicians</p>
+            <p className="font-weight-bold text-dark text-sm mb-0 me-3 cursor-pointer bg-gradient-primary px-3 py-1 rounded-3 text-white" onClick={() => { navigate("/allTechnicians") }}>Technicians</p>
             {!userData && (
               <p className="text-dark text-sm mb-0 me-3 cursor-pointer" onClick={() => { navigate("/login") }}>Login</p>
             )}
-            <div className="circle" onClick={() => setOpenSideBar(true)}>
+            <div className="circle">
               <img src={userProfile ? `${Base_URL}/${userProfile}` : profile} width={"30px"} height={"30px"} alt="img" />
             </div>
           </div>
         </div>
       </nav>
-      {openSideBar && <UserSideBar openSideBar={openSideBar} setOpenSideBar={setOpenSideBar} userData={userData} />}
+      <UserSideBar userData={userData} />
     </>
   );
 }
 
-export default UserNavbar;
+export default UserNavbar; 
