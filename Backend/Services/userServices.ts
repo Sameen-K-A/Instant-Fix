@@ -1,7 +1,7 @@
 import UserRepository from "../Repository/userRepository";
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from "uuid";
-import { userAddressType, userType } from "../Interfaces";
+import { technicianType, userAddressType, userType } from "../Interfaces";
 import sendOTPmail from "../Config/Email_config";
 import { createToken } from "../Config/jwt_config";
 import { newBookingType } from "../Interfaces";
@@ -195,27 +195,38 @@ class UserServices {
       }
    };
 
-   async bookTechnicianService(clientID: string, technicianUserID: string) {
+   async bookTechnicianService(clientDetails: userType, technicianDetails: any) {
       try {
-         const technicianInformation: any = await this.userRepository.fetchSingleTechnicianDetailsRepository(technicianUserID);
+         const technicianInformation: any = await this.userRepository.fetchSingleTechnicianDetailsRepository(technicianDetails.user_id as string);
          if (technicianInformation[0].isBlocked === true || technicianInformation[0].technicianDetails.availability === false) {
             throw new Error("Technician not available now");
          };
          const date: Date = new Date();
          const newBookingDetails: newBookingType = {
             booking_id: uuid() as string,
-            client_id: clientID,
-            technicianUser_id: technicianUserID,
+            client_id: clientDetails.user_id as string,
+            technicianUser_id: technicianDetails.user_id as string,
             bookingTime: date.toLocaleTimeString(),
             bookingDate: date.toLocaleDateString(),
-            Booking_profession: technicianInformation?.technicianDetails?.profession,
+            Booking_profession: technicianDetails?.technicianDetails[0].profession as string,
             booking_status: "Requested",
+            serviceDate: "Pending",
+            serviceCost: "Pending",
+            Payment_Status: "Pending",
+            serviceLocation: {
+               address: clientDetails.addressDetails?.address as string,
+               district: clientDetails.addressDetails?.district as string,
+               state: clientDetails.addressDetails?.state as string,
+               phone: clientDetails.addressDetails?.phone as string,
+               alternatePhone: clientDetails.addressDetails?.alternatePhone as string,
+               pincode: clientDetails.addressDetails?.pincode as string,
+            }
          };
          const repositoryResponse = await this.userRepository.bookTechnicianRepository(newBookingDetails);
          if (!repositoryResponse) {
             throw new Error("Booking failed");
          };
-         io.to(`technicianNotificaionRoom${technicianUserID}`).emit("newJobRequest", { message: "You have a new booking request" });
+         io.to(`technicianNotificaionRoom${technicianDetails.user_id}`).emit("newJobRequest", { message: "You have a new booking request" });
          return repositoryResponse;
       } catch (error) {
          throw error
@@ -228,7 +239,15 @@ class UserServices {
       } catch (error) {
          throw error;
       }
-   }
+   };
+
+   async fetchUserBookingHistoryService(user_id: string) {
+      try {
+         return await this.userRepository.fetchUserBookingHistoryRepository(user_id);
+      } catch (error) {
+         throw error;
+      }
+   };
 };
 
 export default UserServices;

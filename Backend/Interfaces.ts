@@ -11,8 +11,16 @@ export type userType = {
    alreadychattedtechnician?: string[];
 };
 
+export type technicianType = {
+   user_id: string;
+   technician_id: string;
+   profession: string;
+   availability?: boolean;
+   rating?: Number;
+};
+
 export type userAddressType = {
-   name: string;
+   name?: string;
    address: string;
    district: string;
    state: string;
@@ -37,8 +45,12 @@ export type newBookingType = {
    booking_id: string;
    client_id: string;
    technicianUser_id: string;
+   Booking_profession: string;
    bookingTime: string;
    bookingDate: string;
-   Booking_profession: string;
+   serviceDate?: String;
+   serviceLocation?: userAddressType;
+   serviceCost?: String;
    booking_status: "Requested" | "Rejected" | "Pending" | "Completed" | "Cancelled";
+   Payment_Status: "Pending" | "Completed" | "Cancelled";
 }

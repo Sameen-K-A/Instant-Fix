@@ -1,12 +1,5 @@
 import { Schema, model } from "mongoose";
-
-type technicianType = {
-   user_id: string;
-   technician_id: string;
-   profession: string;
-   availability?: boolean;
-   rating?: Number;
-}
+import {technicianType} from "../Interfaces";
 
 const technicianSchema = new Schema<technicianType>({
    user_id: {

@@ -163,7 +163,30 @@ class UserRepository {
     } catch (error) {
       throw error;
     }
-  }
+  };
+
+  async fetchUserBookingHistoryRepository(user_id: string) {
+    try {
+      return await BookingModel.aggregate([
+        { $match: { client_id: user_id } },
+        { $lookup: { from: "users", localField: "technicianUser_id", foreignField: "user_id", as: "technicianPersonal" } },
+        { $unwind: "$technicianPersonal" },
+        {
+          $project: {
+            _id: 0,
+            "technicianPersonal._id": 0,
+            "technicianPersonal.addressDetails": 0,
+            "technicianPersonal.alreadychattedtechnician": 0,
+            "technicianPersonal.isBlocked": 0,
+            "technicianPersonal.isTechnician": 0,
+            "technicianPersonal.password": 0,
+          },
+        },
+      ]);
+    } catch (error) {
+      throw error;
+    }
+  };
 
 };
 

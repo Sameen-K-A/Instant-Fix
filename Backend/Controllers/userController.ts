@@ -152,8 +152,8 @@ class UserController {
 
    async bookTechnician_controller(req: Request, res: Response) {
       try {
-         const { clientID, technicianUserID } = req.body;
-         const response = await userServices.bookTechnicianService(clientID, technicianUserID);
+         const { clientDetails, technicianDetails } = req.body;
+         const response = await userServices.bookTechnicianService(clientDetails, technicianDetails);
          res.status(200).json(response);
       } catch (error: any) {
          if (error.message === "Booking failed") {
@@ -175,6 +175,16 @@ class UserController {
       } catch (error) {
          res.status(500).json(error);
       }
+   };
+
+   async fetchUserBookingHistory_controller(req: Request, res: Response) {
+      try {
+         const user_id = req.query.user_id as string;
+         const response = await userServices.fetchUserBookingHistoryService(user_id);
+         res.status(200).json(response);
+      } catch (error) {
+         res.status(500).json(error);
+      };
    };
 };
 

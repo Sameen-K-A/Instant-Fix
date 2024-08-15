@@ -22,6 +22,23 @@ const bookingSchema = new Schema<newBookingType>({
    },
    bookingDate: {
       type: String
+   },
+   serviceDate: {
+      type: String
+   },
+   serviceCost: {
+      type: String
+   },
+   Payment_Status: {
+      type: String
+   },
+   serviceLocation: {
+      address: { type: String },
+      district: { type: String },
+      state: { type: String },
+      phone: { type: String },
+      alternatePhone: { type: String },
+      pincode: { type: String },
    }
 }, {
    versionKey: false

@@ -31,4 +31,7 @@ router.get("/fetchAlreadyChattedTechnicians", verifyToken, userController.fetchA
 router.get("/fetchAnyPendingRequestAvailable", verifyToken, userController.fetchAnyPendingRequestAvailable_controller);
 router.post("/bookTechnician", verifyToken, userController.bookTechnician_controller);
 
+// booking history and its related details
+router.get("/fetchUserBookingHistory", verifyToken, userController.fetchUserBookingHistory_controller);
+
 export default router;
