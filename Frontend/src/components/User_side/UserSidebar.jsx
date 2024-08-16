@@ -63,7 +63,7 @@ const UserSideBar = ({ userData }) => {
                     <span className="text">Technician console</span>
                   </li>
                   <li className="nav-link" onClick={handleLogout} title={isSidebarClosed ? "Logout" : undefined}>
-                    <div className="icon"><PowerBtn color={"#d96eff"} /></div>
+                    <div className="icon"><PowerBtn color={"#22C55E"} /></div>
                     <span className="text">Logout</span>
                   </li>
                 </ul>

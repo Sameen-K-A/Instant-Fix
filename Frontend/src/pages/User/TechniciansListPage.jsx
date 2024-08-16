@@ -36,7 +36,7 @@ const TechniciansListPage = () => {
       <UserNavbar />
       <div className="d-flex col-12 pe-4" style={{ overflow: 'hidden', minHeight: '88vh' }}>
         <div className="col-lg-3 mt-5 ps-5">
-          <div className="col-10">
+          <div className="col-10">  
             <div className="card" style={{ height: "100vh" }}>
             </div>
           </div>

@@ -112,7 +112,7 @@ const AdminTechnicianList = () => {
                                     <span className="badge badge-sm bg-gradient-faded-success">Active</span>
                                   )}</td>
                                   <td className=" text-sm">{technician.isBlocked ? (
-                                    <button className="btn bg-gradient-info mb-0" onClick={() => unblockUser(technician.user_id)}>UnBlock</button>
+                                    <button className="btn bg-gradient-primary mb-0" onClick={() => unblockUser(technician.user_id)}>UnBlock</button>
                                   ) : (
                                     <button className="btn btn-outline-primary mb-0" onClick={() => blockUser(technician.user_id)}>Block</button>
                                   )}</td>

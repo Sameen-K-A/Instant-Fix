@@ -54,7 +54,7 @@ const TechnicianBookingHistoryTable = () => {
                                   <td><p className="text-xs font-weight-bold mb-0">{data?.bookingDate}</p></td>
                                   <td><p className="text-xs font-weight-bold mb-0">{data?.bookingTime}</p></td>
                                   <td className=" text-sm"><span className="badge badge-sm bg-gradient-faded-warning">{data?.booking_status}</span></td>
-                                  <td><button className="btn bg-gradient-info mb-0 text-center" onClick={() => goToViewMore(data)}>View more</button></td>
+                                  <td><button className="btn bg-gradient-primary mb-0 text-center" onClick={() => goToViewMore(data)}>View more</button></td>
                                 </tr>
                               );
                             })}
