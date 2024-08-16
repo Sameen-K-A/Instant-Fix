@@ -47,7 +47,7 @@ const AccountDetails = () => {
         <h6 className="text-white font-weight-bolder mb-0 ms-2">{nowTechnician && "Technician "}Account Details</h6>
         <p className="text-light text-sm text-white mt-0 ms-2">{nowTechnician ? "Profile/ Technician details" : "Profile/ Account Details"}</p>
       </nav>
-      <div className="container-fluid pe-6">
+      <div className={`container-fluid ${!nowTechnician && " pe-6"}`}>
         <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }}>
           <span className="mask bg-gradient-primary opacity-8"></span>
         </div>

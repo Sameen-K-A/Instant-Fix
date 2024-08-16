@@ -94,7 +94,7 @@ const ChatScreen = ({ currentChatting }) => {
         )}
         <div ref={messagesEndRef} />
       </div>
-      <div className='mt-3 px-3 d-flex align-items-center justify-content-center gap-3'>
+      <div className='mt-3 px-3 d-flex align-items-center justify-content-center gap-3 me-5'>
         <input type="text" className='form-control py-3' placeholder='Enter your message' value={newMsg} onChange={(e) => setNewMsg(e.target.value)} onKeyDown={handleKeyDown} />
         <button className='btn btn-outline-primary mb-0 py-3 d-flex align-items-center justify-content-center' onClick={handleSendMsg} ><Send /></button>
       </div>

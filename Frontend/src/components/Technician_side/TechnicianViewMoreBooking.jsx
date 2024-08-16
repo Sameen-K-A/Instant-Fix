@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import BackgroundShape from '../Common/backgroundShape';
-import RatingStar from '../Common/StarRating';
-import UserNavbar from './NavbarPage';
 import { useLocation } from 'react-router-dom';
-import { Base_URL } from '../../config/credentials';
+import TechnicianNavbar from './NavbarPage';
 
-const UserHistoryViewMore = () => {
+const TechnicianViewMoreBooking = () => {
 
-  const [bookingDetails, setBookingDetails] = useState({});
+  const [bookingDetails, setBookingDetails] = useState(null);
   const location = useLocation();
+
   useEffect(() => {
-    setBookingDetails(location.state?.bookingDetails);
-  });
+    setBookingDetails(location.state?.bookingDetails || null);
+  }, [location.state]);
 
   return (
     <>
-      <UserNavbar />
+      <TechnicianNavbar />
       <div className="page-header min-vh-75">
         <div className="container">
           <div className="row">
@@ -24,13 +23,48 @@ const UserHistoryViewMore = () => {
                 <div className="card card-plain mt-8">
                   <div className="container-fluid">
                     <div className="row">
-                      <div className="col-lg-6 mb-lg-0 mb-4">
-                        <h3 className="font-weight-bolder mt-3 mb-4 text-info text-gradient">Completed</h3>
+                      <div className="col-lg-12 mb-lg-0 mb-4">
+                        <h3 className="font-weight-bolder mt-3 mb-4 text-info text-gradient">{bookingDetails.booking_status}</h3>
                         <div className="row">
-                          <div className="col-lg-12">
-                            <div className="table-responsive pb-3 col-xl-12 col-lg-12 col-md-11 col-11">
+                          <div className="col-lg-6 col-12">
+                            <div className="table-responsive pb-3">
                               <table className="table align-items-center mb-0">
                                 <tbody>
+                                  <tr>
+                                    <td colSpan="2">
+                                      <p className='text-bolder text-sm'>⦿ <u>Client Details</u></p>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td><p className="text-xs mb-0">Name</p></td>
+                                    <td><p className="text-xs font-weight-bold mb-0">{bookingDetails.userDetails?.name}</p></td>
+                                  </tr>
+                                  <tr>
+                                    <td><p className="text-xs mb-0">Email</p></td>
+                                    <td><p className="text-xs font-weight-bold mb-0">{bookingDetails.userDetails?.email}</p></td>
+                                  </tr>
+                                  <tr>
+                                    <td><p className="text-xs mb-0">Phone</p></td>
+                                    <td><p className="text-xs font-weight-bold mb-0">{bookingDetails.userDetails?.phone}</p></td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+
+                          <div className="col-lg-6 col-12">
+                            <div className="table-responsive pb-3">
+                              <table className="table align-items-center mb-0">
+                                <tbody>
+                                  <tr>
+                                    <td colSpan="2">
+                                      <p className='text-bolder text-sm'>⦿ <u>Booking Details</u></p>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td><p className="text-xs mb-0">Booking ID</p></td>
+                                    <td><p className="text-xs font-weight-bold mb-0">{bookingDetails?.booking_id}</p></td>
+                                  </tr>
                                   <tr>
                                     <td><p className="text-xs mb-0">Service type</p></td>
                                     <td><p className="text-xs font-weight-bold mb-0">{bookingDetails?.Booking_profession}</p></td>
@@ -69,19 +103,6 @@ const UserHistoryViewMore = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="col-lg-6 mb-5 px-5 mt-5">
-                        <div className="text-center mb-3" style={{ width: "150px", borderRadius: "50%", margin: "0 auto" }}>
-                          <img src={`${Base_URL}/${bookingDetails?.technicianPersonal?.profileIMG}`} width="120" className="rounded-circle mb-3" alt="User Profile" />
-                          <h6 className='mb-3'>{bookingDetails?.technicianPersonal?.name}</h6>
-                        </div>
-                        <hr className='horizontal dark' />
-                        <div className='d-flex justify-content-around'>
-                          <p className='text-sm font-weight-bold text-dark'>Give your rating</p>
-                          <RatingStar />
-                        </div>
-                        <textarea placeholder='Enter you feedback' className='form-control' style={{ padding: "10px", maxHeight: "120px", minHeight: "50px" }} />
-                        <button className='btn bg-gradient-primary w-100 mt-3'>Submit</button>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -97,7 +118,7 @@ const UserHistoryViewMore = () => {
         </div>
       </div>
     </>
-  )
+  );
 };
 
-export default UserHistoryViewMore;
+export default TechnicianViewMoreBooking;

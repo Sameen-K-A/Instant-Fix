@@ -2810,7 +2810,7 @@ h4 {
   z-index: 1040;
   width: 100vw;
   height: 100vh;
-  background-color: #000;
+  background-color: #00000069;
 }
 
 .modal-backdrop.fade {
@@ -3696,7 +3696,7 @@ footer .copyright {
   background-color: white !important;
   padding-bottom: 0.5rem;
   padding-left: 1rem;
-  z-index: 9999;
+  z-index: 2001;
 }
 
 .navbar>.container,
@@ -3871,7 +3871,6 @@ footer .copyright {
   transition: all 0.15s ease-in;
   margin-bottom: 1rem;
   letter-spacing: -0.025rem;
-  text-transform: uppercase;
   box-shadow: 0 4px 7px -1px rgba(0, 0, 0, 0.11), 0 2px 4px -1px rgba(0, 0, 0, 0.07);
   background-size: 150%;
   background-position-x: 25%;
@@ -4360,4 +4359,30 @@ hr.horizontal.dark {
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(331deg, rgb(202, 117, 255) 46%, rgb(232, 167, 255) 76%, rgba(166, 23, 255, 1) 100%);
   border-radius: 50px;
+}
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  50% {
+    transform: translateX(5px);
+  }
+
+  75% {
+    transform: translateX(-5px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.bell-icon:hover {
+  animation: shake 0.5s ease-in-out;
 }

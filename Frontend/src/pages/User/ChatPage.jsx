@@ -31,9 +31,9 @@ const ChatPage = () => {
   return (
     <>
       {location.pathname === "/technician/chat" ? <TechnicianNavbar /> : <UserNavbar />}
-      <div className="row m-3 me-6" style={{ overflow: 'hidden', minHeight: '88vh' }}>
+      <div className="row m-3" style={{ overflow: 'hidden', minHeight: '88vh' }}>
         <ChatFriends instantChatTechnicianDetails={instantChatTechnicianDetails} previousChattedTechnicians={previousChattedTechnicians} setCurrentChatting={setCurrentChatting} />
-        <section className="chat col-lg-9">
+        <section className={`chat col-lg-9 ${location.pathname === "/chat" && "pe-6"}`}>
           {currentChatting ? (
             <ChatScreen currentChatting={currentChatting} />
           ) : (

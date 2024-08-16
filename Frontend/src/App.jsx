@@ -29,6 +29,7 @@ import TechnicianProtecter from './components/Services/TechnicianProtecter';
 import TechnicianHome from './components/Technician_side/TechnicianHome';
 import TechnicianRole from './components/Technician_side/TechnicianRole';
 import TechnicianBookingHistoryTable from './components/Technician_side/TechnicianBookingHistory';
+import TechnicianViewMoreBooking from './components/Technician_side/TechnicianViewMoreBooking';
 
 // common side
 import NotFound from './components/Common/404page';
@@ -66,8 +67,9 @@ function App() {
           <Route path='/technician' element={<TechnicianProtecter><TechnicianHome /></TechnicianProtecter>} />;
           <Route path='/technician/joinTechnician' element={<UserProtecter><TechnicianRole /></UserProtecter>} />;
           <Route path='/technician/accountdetails' element={<TechnicianProtecter><AccountDetails /></TechnicianProtecter>} />;
-          <Route path='/technician/chat' element={<UserProtecter><ChatPage /></UserProtecter>} />;
-          <Route path='/technician/technicianBookingHistory' element={<UserProtecter><TechnicianBookingHistoryTable /></UserProtecter>} />;
+          <Route path='/technician/chat' element={<TechnicianProtecter><ChatPage /></TechnicianProtecter>} />;
+          <Route path='/technician/technicianBookingHistory' element={<TechnicianProtecter><TechnicianBookingHistoryTable /></TechnicianProtecter>} />;
+          <Route path='/technician/technicianBookingViewmore' element={<TechnicianProtecter><TechnicianViewMoreBooking /></TechnicianProtecter>} />;
 
           {/* common */}
           <Route path='*' element={<NotFound />} />;

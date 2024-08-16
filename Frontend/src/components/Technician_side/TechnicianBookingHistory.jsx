@@ -1,27 +1,23 @@
 import { useEffect, useState } from "react";
 import BackgroundShape from "../Common/backgroundShape";
-import TechnicianNavbar from "./NavbarPage"
-import userAxiosInstance from "../../config/AxiosInstance/userInstance";
-import { toast } from "sonner";
+import TechnicianNavbar from "./NavbarPage";
+import { useNavigate } from "react-router-dom";
 
 const TechnicianBookingHistoryTable = () => {
 
   const [bookingDetailsArray, setBookingDetailsArray] = useState([]);
+  const navigate = useNavigate();
+
   useEffect(() => {
-    (async () => {
-      try {
-        const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
-        const response = await userAxiosInstance.get("/technician/fetchTechnicianBookingHistory", {
-          params: {
-            technicianUserID: userDetails?.user_id
-          }
-        });
-        setBookingDetailsArray(response.data);
-      } catch (error) {
-        toast.error("Can't fetch booking history, Please try again later");
-      }
-    })();
+    const sessionStorageBookingDetails = sessionStorage.getItem("technicianBookings");
+    if (sessionStorageBookingDetails !== null) {
+      setBookingDetailsArray(JSON.parse(sessionStorageBookingDetails));
+    }
   }, []);
+
+  const goToViewMore = (bookingDetails) => {
+    navigate("/technician/technicianBookingViewmore", { state: { bookingDetails: bookingDetails } });
+  }
 
   return (
     <>
@@ -53,12 +49,12 @@ const TechnicianBookingHistoryTable = () => {
                             {bookingDetailsArray.map((data, index) => {
                               return (
                                 <tr key={data?.booking_id}>
-                                  <td className="text-xs text-bold"><p className="text-xs font-weight-bold mb-0"></p>{index + 1 < 10 ? `0${index+1}` : index + 1}</td>
+                                  <td className="text-xs text-bold"><p className="text-xs font-weight-bold mb-0"></p>{index + 1 < 10 ? `0${index + 1}` : index + 1}</td>
                                   <td><p className="text-xs font-weight-bold mb-0">{data?.userDetails?.name}</p></td>
                                   <td><p className="text-xs font-weight-bold mb-0">{data?.bookingDate}</p></td>
                                   <td><p className="text-xs font-weight-bold mb-0">{data?.bookingTime}</p></td>
                                   <td className=" text-sm"><span className="badge badge-sm bg-gradient-faded-warning">{data?.booking_status}</span></td>
-                                  <td><button className="btn bg-gradient-info mb-0 text-center">View more</button></td>
+                                  <td><button className="btn bg-gradient-info mb-0 text-center" onClick={() => goToViewMore(data)}>View more</button></td>
                                 </tr>
                               );
                             })}
