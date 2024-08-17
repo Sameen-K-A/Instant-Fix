@@ -1,7 +1,7 @@
 import UserRepository from "../Repository/userRepository";
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from "uuid";
-import { technicianType, userAddressType, userType } from "../Interfaces";
+import { userAddressType, userType } from "../Interfaces";
 import sendOTPmail from "../Config/Email_config";
 import { createToken } from "../Config/jwt_config";
 import { newBookingType } from "../Interfaces";
@@ -248,6 +248,14 @@ class UserServices {
          throw error;
       }
    };
+
+   async fetchIndividualBookingInformationService(booking_id: string) {
+      try {
+         return await this.userRepository.fetchIndividualBookingInformationRepository(booking_id)
+      } catch (error) {
+         throw error;
+      }
+   }
 };
 
 export default UserServices;

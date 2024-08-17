@@ -18,6 +18,7 @@ const UserSideBar = ({ userData }) => {
         if (result.isConfirmed) {
           sessionStorage.removeItem("userToken");
           sessionStorage.removeItem("userDetails");
+          sessionStorage.removeItem("technicianBookings");
           navigate("/");
         }
       });

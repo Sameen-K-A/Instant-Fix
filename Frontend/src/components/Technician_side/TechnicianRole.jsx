@@ -82,7 +82,7 @@ const TechnicianRole = () => {
                       <p
                         key={index}
                         className='w-70 text-start border-radius-md mb-1 p-1 px-3'
-                        style={{ backgroundColor: index === selectedProfessionIndex ? "#f1ccff" : "#f2f2f2", cursor: "pointer" }}
+                        style={{ backgroundColor: index === selectedProfessionIndex ? "#D1F4D6" : "#f2f2f2", cursor: "pointer" }}
                         onClick={() => setSelectedProfessionIndex(index)}>
                         {prof}
                       </p>

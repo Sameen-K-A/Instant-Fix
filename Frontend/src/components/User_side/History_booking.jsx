@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import BackgroundShape from "../Common/backgroundShape";
 import UserNavbar from "./NavbarPage";
 import userAxiosInstance from "../../config/AxiosInstance/userInstance";
 import { toast } from "sonner";
 import { Base_URL } from "../../config/credentials";
 import { useNavigate } from "react-router-dom";
+import backgroundImage from "../../../public/images/Login&RegisterBackground.jpg";
 
 const UserBookingHistoryTable = () => {
 
@@ -23,66 +23,78 @@ const UserBookingHistoryTable = () => {
   }, []);
 
   const handleViewmore = (bookingDetails) => {
-    navigate("/viewmoreHistory", { state: { bookingDetails: bookingDetails } });
+    navigate("/viewmoreHistory", { state: { booking_id: bookingDetails?.booking_id } });
   };
 
   return (
     <>
       <UserNavbar />
-      <div className="page-header min-vh-75">
-        <div className="container">
-          <div className="row">
-            <div className="col-xl-12 col-lg-12 col-md-12 d-flex flex-column" style={{ zIndex: "1" }}>
-              <div className="container-fluid">
-                {bookingDetailsArray.length !== 0 ? (
-                  <div className="card mb-4 mt-7">
-                    <div className="card-header pb-0 mb-3 mt-3">
-                      <h5 className="text-center mb-3">Booking History</h5>
-                    </div>
-                    <div className="card-body px-0 pt-0 pb-2">
-                      <div className="table-responsive p-0 pb-3">
-                        <table className="table align-items-center mb-0">
-                          <thead>
-                            <tr>
-                              <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">SL</th>
-                              <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Technician Name</th>
-                              <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Booking Date</th>
-                              <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Booking Time</th>
-                              <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                              <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">More Details</th>
-                            </tr>
-                          </thead>
-                          <tbody className="text-center">
-                            {bookingDetailsArray.map((data, index) => {
-                              return (
-                                <tr key={data?.booking_id}>
-                                  <td className="text-xs text-bold"><p className="text-xs font-weight-bold mb-0"></p>{index + 1 < 10 ? `0${index + 1}` : index + 1}</td>
-                                  <td><p className="text-xs font-weight-bold mb-0">{data?.technicianPersonal?.name}</p></td>
-                                  <td><p className="text-xs font-weight-bold mb-0">{data?.bookingDate}</p></td>
-                                  <td><p className="text-xs font-weight-bold mb-0">{data?.bookingTime}</p></td>
-                                  <td className=" text-sm"><span className="badge badge-sm bg-gradient-faded-warning">{data?.booking_status}</span></td>
-                                  <td><button className="btn bg-gradient-primary mb-0 text-center" onClick={() => handleViewmore(data)}>View more</button></td>
-                                </tr>
-                              );
-                            })}
-                          </tbody>
-                        </table>
-                      </div>
+      <nav className="bg-transparent shadow-none position-absolute ps-5 mt-5 w-100 z-index-2">
+        <h6 className="text-white font-weight-bolder mb-0 ms-2">Booking History</h6>
+        <p className="text-light text-sm text-white mt-0 ms-2">Profile/ Booking history</p>
+      </nav>
+      <div className="container-fluid pe-6">
+        <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }}>
+          <span className="mask bg-gradient-primary opacity-5"></span>
+        </div>
+        <div className="card card-body blur shadow-blur mx-4 mt-n6 overflow-hidden">
+          <div className="col-xl-12 col-lg-12 col-md-12 d-flex flex-column" style={{ zIndex: "1" }}>
+            <div className="container-fluid">
+              {bookingDetailsArray.length !== 0 ? (
+                <>
+                  <div className="card-header pb-0 mb-3 mt-3">
+                    <h5 className="text-center mb-3">Booking History</h5>
+                  </div>
+                  <div className="card-body px-0 pt-0 pb-2">
+                    <div className="table-responsive p-0 pb-3">
+                      <table className="table align-items-center mb-0">
+                        <thead>
+                          <tr>
+                            <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">SL</th>
+                            <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Technician Name</th>
+                            <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Booking Date</th>
+                            <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Booking Time</th>
+                            <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                            <th className="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">More Details</th>
+                          </tr>
+                        </thead>
+                        <tbody className="text-center">
+                          {bookingDetailsArray.map((data, index) => {
+                            return (
+                              <tr key={data?.booking_id}>
+                                <td className="text-xs text-bold"><p className="text-xs font-weight-bold mb-0"></p>{index + 1 < 10 ? `0${index + 1}` : index + 1}</td>
+                                <td><p className="text-xs font-weight-bold mb-0">{data?.technicianPersonal?.name}</p></td>
+                                <td><p className="text-xs font-weight-bold mb-0">{data?.bookingDate}</p></td>
+                                <td><p className="text-xs font-weight-bold mb-0">{data?.bookingTime}</p></td>
+                                <td className="text-sm">
+                                  <span
+                                    className={`badge badge-sm 
+                                      ${(data?.booking_status === "Rejected" || data?.booking_status === "Canceled") && "bg-gradient-faded-danger"}  
+                                      ${(data?.booking_status === "Requested" || data?.booking_status === "Pending") && "bg-gradient-faded-warning"} 
+                                      ${data?.booking_status === "Completed" && "bg-success"}`}
+                                  >{data?.booking_status}
+                                  </span>
+                                </td>
+                                <td><button className="btn bg-gradient-primary mb-0 text-center" onClick={() => handleViewmore(data)}>View more</button></td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
                     </div>
                   </div>
-                ) : (
-                  <>
-                    <h5 className="mt-7 text-dark">No details recorded</h5>
-                    <p>Find the technicians you want based on your nearest location.</p>
-                    <ol className="text-sm text-black-50">
-                      <li>Click right top 'Technicians' button</li>
-                      <li>Find technicians based on your desired category.</li>
-                    </ol>
-                  </>
-                )}
-              </div>
+                </>
+              ) : (
+                <>
+                  <h5 className="mt-7 text-dark">No details recorded</h5>
+                  <p>Find the technicians you want based on your nearest location.</p>
+                  <ol className="text-sm text-black-50 mb-7">
+                    <li>Click right top 'Technicians' button</li>
+                    <li>Find technicians based on your desired category.</li>
+                  </ol>
+                </>
+              )}
             </div>
-            <BackgroundShape />
           </div>
         </div>
       </div>

@@ -10,5 +10,7 @@ router.patch("/changeprofession", verifyToken, technicianController.changeProfes
 router.patch("/changeAvailabilityStatus", verifyToken, technicianController.changeAvailabilityStatusController);
 router.get("/fetchTechnicianBookingHistory", verifyToken, technicianController.fetchTechnicianBookingHistoryController);
 
+router.get("/fetchingIndividualBookingDetails", verifyToken, technicianController.fetchingIndividualBookingDetailsController);
+router.patch("/acceptRejectCancelNewBooking", verifyToken, technicianController.acceptRejectCancelNewBookingController);
 
 export default router;

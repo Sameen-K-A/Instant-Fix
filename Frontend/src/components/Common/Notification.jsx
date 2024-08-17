@@ -5,8 +5,8 @@ const NotificationCard = ({ bookingDetailsArray = [] }) => {
 
   const navigate = useNavigate();
 
-  const goToViewMore = (bookingDetails) => {
-    navigate("/technician/technicianBookingViewmore", { state: { bookingDetails: bookingDetails } });
+  const goToViewMore = (booking_id) => {
+    navigate("/technician/technicianBookingViewmore", { state: { booking_id: booking_id } });
   };
 
   return (
@@ -24,9 +24,9 @@ const NotificationCard = ({ bookingDetailsArray = [] }) => {
               if (booking?.booking_status === "Requested") {
                 return (
                   <li key={index} className="list-group-item border-0 p-2 mb-2 mt-2 bg-gray-100 border-radius-lg">
-                    <p className="text-xs m-0">You have a booking request from <b>Sameen K. A</b>. from <strong>{booking?.serviceLocation?.address}, {booking?.serviceLocation?.state}, {booking?.serviceLocation?.district}.</strong></p>
+                    <p className="text-xs m-0">You have a booking request from <b>{booking?.userDetails?.name}</b> on <b>{booking?.bookingDate}</b> at <b>{booking?.bookingTime}</b></p>
                     <div className="d-flex justify-content-end">
-                      <button className="btn bg-gradient-primary p-1 px-3 m-0 mt-1" onClick={() => goToViewMore(booking)}>View more</button>
+                      <button className="btn bg-gradient-primary p-1 px-3 m-0 mt-1" onClick={() => goToViewMore(booking?.booking_id)}>View more</button>
                     </div>
                   </li>
                 );

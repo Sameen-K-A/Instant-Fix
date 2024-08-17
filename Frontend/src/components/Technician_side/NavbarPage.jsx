@@ -42,7 +42,7 @@ const TechnicianNavbar = () => {
   useEffect(() => {
     socket.emit("joinTechnicianNoficationRoom", userData?.user_id);
     socket.on("newJobRequest", (data) => {
-      toast.info(data.message);
+      toast(data.message);
       fetchBookingDetails();
     });
     return () => {

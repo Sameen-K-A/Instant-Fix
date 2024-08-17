@@ -180,6 +180,10 @@ class UserRepository {
             "technicianPersonal.isBlocked": 0,
             "technicianPersonal.isTechnician": 0,
             "technicianPersonal.password": 0,
+            "technicianPersonal.email": 0,
+            "technicianPersonal.phone": 0,
+            "technicianPersonal.profileIMG": 0,
+            "technicianPersonal.user_id": 0,
           },
         },
       ]);
@@ -187,6 +191,31 @@ class UserRepository {
       throw error;
     }
   };
+
+  async fetchIndividualBookingInformationRepository(booking_id: string) {
+    try {
+      const response = await BookingModel.aggregate([
+        { $match: { booking_id: booking_id } },
+        { $lookup: { from: "users", localField: "technicianUser_id", foreignField: "user_id", as: "technicianDetails" } },
+        { $unwind: "$technicianDetails" },
+        {
+          $project: {
+            _id: 0,
+            "technicianDetails._id": 0,
+            "technicianDetails.user_id": 0,
+            "technicianDetails.password": 0,
+            "technicianDetails.isBlocked": 0,
+            "technicianDetails.isTechnician": 0,
+            "technicianDetails.addressDetails": 0,
+            "technicianDetails.alreadychattedtechnician": 0,
+          }
+        }
+      ]);
+      return response[0];
+    } catch (error) {
+      throw error;
+    }
+  }
 
 };
 

@@ -49,7 +49,7 @@ const TechnicianSidebar = () => {
               </li>
               <li className="nav-link" onClick={() => navigate("/technician/wallet")}>
                 <div className="icon"><Wallet /></div>
-                <div className="tooltip">About us</div>
+                <div className="tooltip">Wallet</div>
               </li>
               <li className="nav-link" onClick={() => navigate("/")}>
                 <div className="icon"><Leave /></div>

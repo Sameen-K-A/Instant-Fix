@@ -75,7 +75,7 @@ const TechnicianChangeProfession = ({ profession, userDetails, setUserDetails })
                 <p className='text-start text-sm text-bold'>Choose your correct Profession</p>
                 <br />
                 {professions.map((prof, index) => (
-                  <p key={index} className='text-start text-sm border-radius-md mb-1 p-1 px-3 cursor-pointer' style={{ backgroundColor: index === selectedProfessionIndex ? "#f1ccff" : "#f2f2f2" }}
+                  <p key={index} className='text-start text-sm border-radius-md mb-1 p-1 px-3 cursor-pointer' style={{ backgroundColor: index === selectedProfessionIndex ? "#D1F4D6" : "#f2f2f2" }}
                     onClick={() => setSelectedProfessionIndex(index)}
                   >{prof}</p>
                 ))}

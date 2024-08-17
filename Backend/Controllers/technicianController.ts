@@ -51,6 +51,32 @@ class TechnicianController {
     }
   };
 
-}
+  async fetchingIndividualBookingDetailsController(req: Request, res: Response) {
+    try {
+      const booking_id: string = req.query.booking_id as string;
+      const response = await technicianService.fetchingIndividualBookingDetailsService(booking_id);
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(500).send("Can't collect booking details");
+    }
+  };
+
+  async acceptRejectCancelNewBookingController(req: Request, res: Response) {
+    try {
+      const booking_id = req.body.booking_id as string;
+      const newStatus = req.body.newStatus as string;
+      const technician_id = req.body.technician_id as string;
+      await technicianService.acceptRejectCancelNewBookingService(booking_id, newStatus, technician_id);
+      res.status(200).json({ message: "Status changed successfully" });
+    } catch (error: any) {
+      if (error.message === "Status is not changed") {
+        res.status(304).send("Status is not changed");
+      } else {
+        res.status(500).json(error);
+      };
+    };
+  };
+
+};
 
 export default TechnicianController;

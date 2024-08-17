@@ -45,7 +45,7 @@ const TechnicianProfileDetails = () => {
       <UserNavbar />
       <div className="container-fluid pe-6">
         <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }}>
-          <span className="mask bg-gradient-primary opacity-8"></span>
+          <span className="mask bg-gradient-primary opacity-5"></span>
         </div>
         <div className="card card-body blur shadow-blur mx-4 mt-n6 overflow-hidden">
           <div className="row gx-4">

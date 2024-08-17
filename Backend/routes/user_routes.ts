@@ -33,5 +33,6 @@ router.post("/bookTechnician", verifyToken, userController.bookTechnician_contro
 
 // booking history and its related details
 router.get("/fetchUserBookingHistory", verifyToken, userController.fetchUserBookingHistory_controller);
+router.get("/fetchIndividualBookingInformation", verifyToken, userController.fetchIndividualBookingInformation_controller);
 
 export default router;

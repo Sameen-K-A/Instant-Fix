@@ -186,6 +186,16 @@ class UserController {
          res.status(500).json(error);
       };
    };
+
+   async fetchIndividualBookingInformation_controller(req: Request, res: Response) {
+      try {
+         const booking_id: string = req.query.booking_id as string;
+         const response = await userServices.fetchIndividualBookingInformationService(booking_id);
+         res.status(200).json(response);
+      } catch (error) {
+         res.status(500).send("Something wrong please try again later.");
+      }
+   }
 };
 
 export default UserController;

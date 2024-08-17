@@ -2,6 +2,7 @@ import { v4 as uuid } from "uuid";
 import { technicianType } from "../Model/technicianModel"
 import TechnicianRepository from "../Repository/technicianRepository";
 import UserRepository from "../Repository/userRepository";
+import { io } from "../Config/Socket_config";
 
 class TechnicianService {
    private technicianRepository: TechnicianRepository;
@@ -46,7 +47,7 @@ class TechnicianService {
          }
       } catch (error) {
          throw error;
-      }
+      };
    };
 
    async changeAvailabilityStatusService(user_id: string, newStatus: string | boolean) {
@@ -55,11 +56,11 @@ class TechnicianService {
             newStatus = true;
          } else {
             newStatus = false;
-         }
+         };
          return await this.technicianRepository.changeAvailabilityStatusRepository(user_id, newStatus);
       } catch (error) {
          throw error;
-      }
+      };
    };
 
    async fetchTechnicianBookingHistoryService(technicianUserID: string) {
@@ -67,8 +68,30 @@ class TechnicianService {
          return await this.technicianRepository.fetchTechnicianBookingHistoryRepository(technicianUserID);
       } catch (error) {
          throw error;
+      };
+   };
+
+   async fetchingIndividualBookingDetailsService(booking_id: string) {
+      try {
+         return await this.technicianRepository.fetchingIndividualBookingDetailsRepository(booking_id);
+      } catch (error) {
+         throw error;
       }
    }
-}
+
+   async acceptRejectCancelNewBookingService(booking_id: string, newStatus: string, technician_id: string): Promise<boolean> {
+      try {
+         let status: string = newStatus === "Accept" ? "Pending" : (newStatus === "Reject" ? "Rejected" : "Cancelled");
+         const response = await this.technicianRepository.acceptRejectCancelNewBookingRepository(booking_id, status);
+         if (response.modifiedCount === 0) {
+            throw new Error("Status is not changed");
+         }
+         io.to(`technicianNotificaionRoom${technician_id}`).emit("newJobRequest", { message: "Your Booking history updated successfully" });
+         return true;
+      } catch (error) {
+         throw error;
+      }
+   };
+};
 
 export default TechnicianService;

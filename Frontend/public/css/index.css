@@ -1976,7 +1976,7 @@ h4 {
 }
 
 .bg-gradient-chatSender {
-  background-image: radial-gradient(at 0% 100%, hsla(165, 100%, 71%, 0.19) 0px, transparent 50%), radial-gradient(at 100% 88%, hsla(143, 100%, 70%, 0.46) 0px, transparent 50%), radial-gradient(at 54% 0%, hsla(151, 100%, 76%, 0.32) 0px, transparent 50%);
+  background-color: #E3F9E6;
 }
 
 .bg-gradient-chatReciever {
@@ -2914,11 +2914,15 @@ h4 {
 }
 
 .text-gradient.text-info {
-  background-image: linear-gradient(90deg, rgba(73,221,127,1) 0%, rgba(34,197,94,1) 56%, rgba(22,163,74,1) 100%);
+  background-image: linear-gradient(90deg, rgba(73, 221, 127, 1) 0%, rgba(34, 197, 94, 1) 56%, rgba(22, 163, 74, 1) 100%);
 }
 
 .text-black-50 {
   color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.text-black-65 {
+  color: rgba(0, 0, 0, 0.65) !important;
 }
 
 .text-decoration-none {
@@ -4119,7 +4123,8 @@ textarea {
 }
 
 .userProfileImg {
-  background: linear-gradient(90deg, rgba(73,221,127,1) 0%, rgba(34,197,94,1) 56%, rgba(22,163,74,1) 100%);;
+  background: linear-gradient(90deg, rgba(73, 221, 127, 1) 0%, rgba(34, 197, 94, 1) 56%, rgba(22, 163, 74, 1) 100%);
+  ;
   border-radius: 10px;
   width: 40px;
   height: 40px;
@@ -4354,7 +4359,8 @@ hr.horizontal.dark {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(90deg, rgba(73,221,127,1) 0%, rgba(34,197,94,1) 56%, rgba(22,163,74,1) 100%);;
+  background: linear-gradient(45deg, rgba(73, 221, 127, 1) 0%, rgba(34, 197, 94, 1) 56%, rgba(22, 163, 74, 1) 100%);
+  ;
   border-radius: 50px;
 }
 

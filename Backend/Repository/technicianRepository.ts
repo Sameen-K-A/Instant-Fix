@@ -39,7 +39,41 @@ class TechnicianRepository {
     } catch (error) {
       throw error;
     }
+  };
+
+  async fetchingIndividualBookingDetailsRepository(booking_id: string) {
+    try {
+      const response = await BookingModel.aggregate([
+        { $match: { booking_id: booking_id } },
+        { $lookup: { from: "users", localField: "client_id", foreignField: "user_id", as: "userDetails" } },
+        { $unwind: "$userDetails" },
+        {
+          $project: {
+            _id: 0,
+            "userDetails._id": 0,
+            "userDetails.user_id": 0,
+            "userDetails.password": 0,
+            "userDetails.isBlocked": 0,
+            "userDetails.profileIMG": 0,
+            "userDetails.isTechnician": 0,
+            "userDetails.addressDetails": 0,
+            "userDetails.alreadychattedtechnician": 0,
+          }
+        }
+      ]);
+      return response[0];
+    } catch (error) {
+      throw error;
+    }
   }
+
+  async acceptRejectCancelNewBookingRepository(booking_id: string, status: string) {
+    try {
+      return await BookingModel.updateOne({ booking_id: booking_id }, { $set: { booking_status: status } });
+    } catch (error) {
+      throw error;
+    }
+  };
 
 }
 

@@ -42,6 +42,7 @@ const BookingConfirmModal = ({ userDetails, setBookingInformation, technicianDet
       }
       closeModal();
     } finally {
+      closeModal();
       setIsLoading(false);
     }
   };
