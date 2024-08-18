@@ -41,12 +41,12 @@ const TechnicianNavbar = () => {
 
   useEffect(() => {
     socket.emit("joinTechnicianNoficationRoom", userData?.user_id);
-    socket.on("newJobRequest", (data) => {
+    socket.on("notification_to_technician", (data) => {
       toast(data.message);
       fetchBookingDetails();
     });
     return () => {
-      socket.off("newJobRequest");
+      socket.off("notification_to_technician");
     };
   }, [userData?.user_id]);
 

@@ -62,7 +62,7 @@ const TechnicianBookingHistoryTable = () => {
                                 <td className="text-sm">
                                   <span
                                     className={`badge badge-sm 
-                                      ${(data?.booking_status === "Rejected" || data?.booking_status === "Canceled") ? "bg-gradient-faded-danger" :
+                                      ${(data?.booking_status === "Rejected" || data?.booking_status === "Cancelled") ? "bg-gradient-faded-danger" :
                                         (data?.booking_status === "Requested" || data?.booking_status === "Pending") ? "bg-gradient-faded-warning" :
                                           data?.booking_status === "Completed" ? "bg-success" : ""}`}
                                   >

@@ -157,7 +157,7 @@ class UserServices {
       } catch (error) {
          throw error;
       }
-   }
+   };
 
    async editProfileService(user_id: string, name: string, phone: string, profileIMG: string | null): Promise<string> {
       try {
@@ -176,7 +176,7 @@ class UserServices {
       } catch (error) {
          throw error;
       }
-   }
+   };
 
    async fetchTechnicianService(user_id: string) {
       try {
@@ -226,7 +226,7 @@ class UserServices {
          if (!repositoryResponse) {
             throw new Error("Booking failed");
          };
-         io.to(`technicianNotificaionRoom${technicianDetails.user_id}`).emit("newJobRequest", { message: "You have a new booking request" });
+         io.to(`technicianNotificaionRoom${technicianDetails.user_id}`).emit("notification_to_technician", { message: "You have a new booking request" });
          return repositoryResponse;
       } catch (error) {
          throw error
@@ -255,7 +255,22 @@ class UserServices {
       } catch (error) {
          throw error;
       }
-   }
+   };
+
+   async cancelBookingService(booking_id: string, technician_id: string, userName: string) {
+      try {
+         const response = await this.userRepository.cancelBookingRepository(booking_id);
+         if (response.modifiedCount === 1) {
+            io.to(`technicianNotificaionRoom${technician_id}`).emit("notification_to_technician", { message: `${userName} cancelled there booking` });
+            return true;
+         } else {
+            throw new Error("Booking status is not changed");
+         };
+      } catch (error) {
+         throw error;
+      };
+   };
+
 };
 
 export default UserServices;

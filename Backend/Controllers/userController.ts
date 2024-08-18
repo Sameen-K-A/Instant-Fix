@@ -195,7 +195,24 @@ class UserController {
       } catch (error) {
          res.status(500).send("Something wrong please try again later.");
       }
-   }
+   };
+
+   async cancelBooking_controller(req: Request, res: Response) {
+      try {
+         const booking_id: string = req.body.booking_id as string;
+         const technician_id: string = req.body.technician_id as string;
+         const userName: string = req.body.userName as string;
+         await userServices.cancelBookingService(booking_id, technician_id, userName);
+         res.status(200).send("Booking cancelled successfully.");
+      } catch (error: any) {
+         if (error.message === "Booking status is not changed") {
+            res.status(304).json("Booking status is not changed");
+         } else {
+            res.status(500).send("Something wrong please try again later.");
+         };
+      };
+   };
+
 };
 
 export default UserController;

@@ -77,7 +77,7 @@ class TechnicianService {
       } catch (error) {
          throw error;
       }
-   }
+   };
 
    async acceptRejectCancelNewBookingService(booking_id: string, newStatus: string, technician_id: string): Promise<boolean> {
       try {
@@ -85,13 +85,14 @@ class TechnicianService {
          const response = await this.technicianRepository.acceptRejectCancelNewBookingRepository(booking_id, status);
          if (response.modifiedCount === 0) {
             throw new Error("Status is not changed");
-         }
-         io.to(`technicianNotificaionRoom${technician_id}`).emit("newJobRequest", { message: "Your Booking history updated successfully" });
+         };
+         io.to(`technicianNotificaionRoom${technician_id}`).emit("notification_to_technician", { message: "Your Booking history updated successfully" });
          return true;
       } catch (error) {
          throw error;
-      }
+      };
    };
+   
 };
 
 export default TechnicianService;

@@ -215,7 +215,15 @@ class UserRepository {
     } catch (error) {
       throw error;
     }
-  }
+  };
+
+  async cancelBookingRepository(booking_id: string) {
+    try {
+      return await BookingModel.updateOne({ booking_id: booking_id }, { $set: { booking_status: "Cancelled" } });
+    } catch (error) {
+      throw error;
+    };
+  };
 
 };
 

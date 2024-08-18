@@ -5,6 +5,8 @@ import { useLocation } from 'react-router-dom';
 import { Base_URL } from '../../config/credentials';
 import userAxiosInstance from "../../config/AxiosInstance/userInstance";
 import backgroundImage from "../../../public/images/Login&RegisterBackground.jpg";
+import confirmAlert from '../Common/SweetAlert/confirmAlert';
+import { toast } from "sonner";
 
 const UserHistoryViewMore = () => {
 
@@ -19,6 +21,29 @@ const UserHistoryViewMore = () => {
       })();
     };
   }, []);
+
+  const handleCancelBooking = () => {
+    confirmAlert("Do you want to cancel your booking request.")
+      .then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
+            await userAxiosInstance.patch("/cancelBooking", {
+              booking_id: bookingDetails.booking_id, technician_id: bookingDetails.technicianUser_id, userName: userDetails.name
+            });
+            const afterCancelling = { ...bookingDetails, booking_status: "Cancelled" };
+            setBookingDetails(afterCancelling);
+            toast.success("Booking cancelled successfully");
+          } catch (error) {
+            if (error.response && error.response.status === 304) {
+              toast.error("Can't cancel booking request, please try again later");
+            } else {
+              toast.error("Something wrong. please try again later");
+            };
+          };
+        };
+      });
+  };
 
   return (
     <>
@@ -84,7 +109,7 @@ const UserHistoryViewMore = () => {
                         </tbody>
                       </table>
                       {(bookingDetails?.booking_status === "Requested" || bookingDetails?.booking_status === "Pending") && (
-                        <button className="btn bg-gradient-danger mt-3">Cancel Booking</button>
+                        <button className="btn bg-gradient-danger mt-3" onClick={() => handleCancelBooking()}>Cancel Booking</button>
                       )}
 
                     </div>
