@@ -21,12 +21,12 @@ const TechnicianProfileCard = ({ technicianData }) => {
         </div>
         <div className="card-body p-3 card-details">
           <h6 className="card-title text-dark mb-0">{technicianData?.name}</h6>
-          <p className="card-text text-black-65 text-sm text-bold mb-0">{technicianData.technicianDetails[0]?.profession}</p>
+          <p className="card-text text-black-65 text-sm text-bold mb-0">{technicianData.technicianDetails?.profession}</p>
           <div className="d-flex justify-content-center mb-3">
             {ratingArray.map((value) => {
               return (
                 <span key={value} className='me-1'>
-                  {value <= technicianData.technicianDetails[0]?.rating ? <Star color={"#ffbb00"} /> : <Star />}
+                  {value <= technicianData.technicianDetails?.rating ? <Star color={"#ffbb00"} /> : <Star />}
                 </span>
               )
             })}

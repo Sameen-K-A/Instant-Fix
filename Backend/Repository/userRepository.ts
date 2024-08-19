@@ -88,8 +88,20 @@ class UserRepository {
       return await User.aggregate([
         { $match: { isTechnician: true, user_id: { $ne: user_id } } },
         { $lookup: { from: "technicians", localField: "user_id", foreignField: "user_id", as: "technicianDetails" } },
+        { $unwind: "$technicianDetails" },
+        {
+          $project: {
+            _id: 0,
+            password: 0,
+            isBlocked: 0,
+            isTechnician: 0,
+            addressDetails: 0,
+            alreadychattedtechnician: 0,
+            "technicianDetails._id": 0,
+          }
+        },
         { $skip: skipCount },
-        { $limit: limitCount }
+        { $limit: limitCount },
       ]);
     } catch (error) {
       console.log("Fetch technician repository error : ", error);
