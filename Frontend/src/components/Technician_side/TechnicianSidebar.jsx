@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Account, Booking, Chat, Home, Leave, PowerBtn, Settings, Wallet } from '../../../public/svgs/Icons';
 import confirmAlert from "../Common/SweetAlert/confirmAlert";
+import AlertRedDot from "../Common/AlertRedDot";
 import '../../../public/css/techniciansidebar.css';
 
 const TechnicianSidebar = () => {
   const [showMore, setShowMore] = useState(false);
+  const userData = JSON.parse(sessionStorage.getItem("userDetails"));
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -25,7 +27,7 @@ const TechnicianSidebar = () => {
       <div className="techniciansidebar card p-2 mb-3 border-1 me-3">
         <ul className="nav-links">
           <li className="nav-link" onClick={() => setShowMore(!showMore)}>
-            <div className="icon"><Settings /></div>
+            <div className="icon d-flex"><Settings />{(userData?.addressDetails === null && userData?.isTechnician === true && showMore === false) && <AlertRedDot />}</div>
             <div className="tooltip">More</div>
           </li>
 
@@ -36,7 +38,7 @@ const TechnicianSidebar = () => {
                 <div className="tooltip">Home</div>
               </li>
               <li className="nav-link" onClick={() => navigate("/technician/accountdetails")}>
-                <div className="icon"><Account /></div>
+                <div className="icon d-flex"><Account />{(userData?.addressDetails === null && userData?.isTechnician === true && showMore === true) && <AlertRedDot />}</div>
                 <div className="tooltip">Account details</div>
               </li>
               <li className="nav-link" onClick={() => navigate("/technician/chat")}>

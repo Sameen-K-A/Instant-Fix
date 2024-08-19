@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import '../../../public/css/sidebar.css';
 import { AboutUS, Account, Booking, Chat, CloseSideBarIcon, Contact, Home, OpenSideBarIcon, PowerBtn, Worker } from '../../../public/svgs/Icons';
 import confirmAlert from "../Common/SweetAlert/confirmAlert";
+import AlertRedDot from "../Common/AlertRedDot";
 
 const UserSideBar = ({ userData }) => {
   const [isSidebarClosed, setIsSidebarClosed] = useState(true);
@@ -60,7 +61,7 @@ const UserSideBar = ({ userData }) => {
                     <span className="text">About us</span>
                   </li>
                   <li className="nav-link mb-2" onClick={() => navigate("/technician")} title={isSidebarClosed ? "Technician console" : undefined}>
-                    <div className="icon"><Worker /></div>
+                    <div className="icon"><Worker />{(userData?.addressDetails === null && userData?.isTechnician === true) && <AlertRedDot />}</div>
                     <span className="text">Technician console</span>
                   </li>
                   <li className="nav-link" onClick={handleLogout} title={isSidebarClosed ? "Logout" : undefined}>

@@ -202,13 +202,14 @@ class UserServices {
             throw new Error("Technician not available now");
          };
          const date: Date = new Date();
+         console.log(technicianDetails)
          const newBookingDetails: newBookingType = {
             booking_id: uuid() as string,
             client_id: clientDetails.user_id as string,
             technicianUser_id: technicianDetails.user_id as string,
             bookingTime: date.toLocaleTimeString(),
             bookingDate: date.toLocaleDateString(),
-            Booking_profession: technicianDetails?.technicianDetails[0].profession as string,
+            Booking_profession: technicianDetails?.technicianDetails.profession as string,
             booking_status: "Requested",
             serviceDate: "Pending",
             serviceCost: "Pending",

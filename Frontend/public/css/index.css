@@ -4370,15 +4370,15 @@ hr.horizontal.dark {
   }
 
   25% {
-    transform: translateX(-5px);
+    transform: translateX(-3px);
   }
 
   50% {
-    transform: translateX(5px);
+    transform: translateX(3px);
   }
 
   75% {
-    transform: translateX(-5px);
+    transform: translateX(-3px);
   }
 
   100% {
@@ -4388,4 +4388,24 @@ hr.horizontal.dark {
 
 .bell-icon:hover {
   animation: shake 0.5s ease-in-out;
+}
+
+.alert-red-dot {
+  width: 5px;
+  height: 5px;
+  background-color: red;
+  border-radius: 50%;
+  animation: beat 1s infinite;
+}
+
+@keyframes beat {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.5);
+  }
 }

@@ -86,7 +86,7 @@ class UserRepository {
   async fetchTechnicianRepository(user_id: string, skipCount: number = 0, limitCount: number = 10) {
     try {
       return await User.aggregate([
-        { $match: { isTechnician: true, user_id: { $ne: user_id } } },
+        { $match: { isTechnician: true, user_id: { $ne: user_id }, addressDetails: { $ne: null } } },
         { $lookup: { from: "technicians", localField: "user_id", foreignField: "user_id", as: "technicianDetails" } },
         { $unwind: "$technicianDetails" },
         {
@@ -95,7 +95,6 @@ class UserRepository {
             password: 0,
             isBlocked: 0,
             isTechnician: 0,
-            addressDetails: 0,
             alreadychattedtechnician: 0,
             "technicianDetails._id": 0,
           }
@@ -183,6 +182,7 @@ class UserRepository {
         { $match: { client_id: user_id } },
         { $lookup: { from: "users", localField: "technicianUser_id", foreignField: "user_id", as: "technicianPersonal" } },
         { $unwind: "$technicianPersonal" },
+        { $sort: { _id: -1 } },
         {
           $project: {
             _id: 0,

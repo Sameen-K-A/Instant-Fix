@@ -1,6 +1,7 @@
 import userAxiosInstance from "../../../config/AxiosInstance/userInstance";
 import confirmAlert from "../../Common/SweetAlert/confirmAlert";
 import { toast } from "sonner";
+import AlertRedDot from "../../Common/AlertRedDot";
 import AddressModal from "./AddressModal";
 
 const AddressInformation = ({ userDetails, setUserDetails }) => {
@@ -30,8 +31,9 @@ const AddressInformation = ({ userDetails, setUserDetails }) => {
   return (
     <>
       <div className="card min-height-200">
-        <div className="card-header pb-0 p-3">
+        <div className="card-header pb-0 p-3 d-flex align-items-center justify-content-center">
           <h6 className="mb-0 mt-3 text-center">Address Details</h6>
+          {!userDetails?.addressDetails && <AlertRedDot />}
         </div>
         <div className="card-body p-3">
           {!userDetails?.addressDetails ? (

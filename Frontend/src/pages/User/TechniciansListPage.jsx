@@ -11,7 +11,10 @@ const TechniciansListPage = () => {
   const [primaryTechniciansList, setPrimaryTechnicianList] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [techniciansArray, setTechniciansArray] = useState([]);
-
+  const [selectedDistrict, setSelectedDistrict] = useState([]);
+  const [selectedProfession, setSelectedProfession] = useState([]);
+  const professions = ["Painter", "Welder", "Electrician", "Plumber", "Automobile Mechanic", "AC Mechanic", "Carpenter"];
+  const district = ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kollam", "Kottayam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"];
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,16 +39,47 @@ const TechniciansListPage = () => {
     })();
   }, [navigate]);
 
-  const handleSearch = (event) => {
-    const searchInputResult = event.target.value;
-    setSearchInput(searchInputResult);
-    if (searchInputResult.length !== 0) {
-      const searchResult = primaryTechniciansList.filter((technician) => {
-        return technician.name.toLowerCase().includes(searchInputResult.toLowerCase()) || technician?.technicianDetails?.profession.toLowerCase().includes(searchInputResult.toLowerCase());
+  useEffect(() => {
+    let afterFiltering = primaryTechniciansList;
+
+    if (selectedDistrict.length !== 0) {
+      afterFiltering = afterFiltering.filter((data) => {
+        return selectedDistrict.includes(data?.addressDetails?.district);
       });
-      setTechniciansArray(searchResult);
+    };
+
+    if(selectedProfession.length !== 0) {
+      afterFiltering = afterFiltering.filter((data) => {
+        return selectedProfession.includes(data?.technicianDetails?.profession);
+      });
+    };
+
+    if (searchInput.length !== 0) {
+      afterFiltering = afterFiltering.filter((data) => {
+        return data.name.toLowerCase().includes(searchInput.toLowerCase()) || data?.technicianDetails?.profession.toLowerCase().includes(searchInput.toLowerCase());
+      })
+    };
+
+    setTechniciansArray(afterFiltering)
+  }, [searchInput, selectedDistrict, selectedProfession, primaryTechniciansList]);
+
+  const handleChangeDistrict = (event) => {
+    const { value, checked } = event.target;
+    if (checked === true) {
+      setSelectedDistrict([...selectedDistrict, value]);
     } else {
-      setTechniciansArray(primaryTechniciansList)
+      const afterUnchecked = selectedDistrict.filter((district) => district !== value);
+      setSelectedDistrict(afterUnchecked);
+    };
+  };
+
+  const handleSelectProfessions = (event) => {
+    const { value, checked } = event.target;
+    if (checked === true) {
+      setSelectedProfession([...selectedProfession, value]);
+    } else {
+      const afterUnselect = selectedProfession.filter((profession) => profession !== value);
+      setSelectedProfession(afterUnselect);
     };
   };
 
@@ -53,19 +87,48 @@ const TechniciansListPage = () => {
     <>
       <UserNavbar />
       <div className="d-flex col-12 pe-4" style={{ overflow: 'hidden', minHeight: '88vh' }}>
-        <div className="col-lg-3 mt-5 ps-5">
-          <div className="col-10">
-            <div className="card" style={{ height: "100vh" }}>
+        <div className="col-lg-3 col-12 col-sm-6 mt-5 ps-5">
+          <div className="col-11">
+            <div className="card" style={{ minHeight: "100vh", padding: "20px" }}>
+
+              <div className=" mt-5">
+                <h6>Profession</h6>
+                <ul className='d-flex flex-column mt-3 ps-0 ms-0'>
+                  {professions.map((pro, index) => {
+                    return (
+                      <li key={index + 1} className='d-inline-block d-flex mb-1' >
+                        <input type="checkbox" id={pro} value={pro} onChange={(e) => handleSelectProfessions(e)} />
+                        <label htmlFor={pro} className="ms-2 text-sm">{pro}</label>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+
+              <div className=" mt-3">
+                <h6>Location</h6>
+                <ul className='d-flex flex-column mt-3 ps-0 ms-0'>
+                  {district.map((dist, index) => {
+                    return (
+                      <li key={index + 1} className='d-inline-block d-flex mb-1' >
+                        <input type="checkbox" id={dist} value={dist} onChange={(e) => handleChangeDistrict(e)} />
+                        <label htmlFor={dist} className="ms-2 text-sm">{dist}</label>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
-        <div className="col-lg-9">
-          <div className="container p-0 mt-5 col-12 d-flex justify-content-end pe-5">
-            <div className="col-lg-3 col-md-5 col-sm-12 col-12">
-              <input type="text" className='form-control' placeholder='Search Technician or Category' value={searchInput} onChange={(e) => handleSearch(e)} />
+
+        <div className="col-lg-9 col-12 pe-5">
+          <div className="container p-0 mt-5 col-12 d-flex justify-content-end">
+            <div className="col-lg-3 col-12">
+              <input type="text" className='form-control' placeholder='Search Technician or Category' value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
             </div>
           </div>
-          <div className="pe-5">
+          <div className="col-12">
             {techniciansArray.length === 0 ? (
               <div className='d-flex flex-column justify-content-center align-items-center mt-8'>
                 <img src={NoResultFoundImage} alt="No result found" className='mb-0' width={"400px"} />

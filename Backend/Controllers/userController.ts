@@ -161,6 +161,7 @@ class UserController {
          } else if (error.message === "Technician not available now") {
             res.status(404).send("Technician not available now")
          } else {
+            console.log(error);
             res.status(500).json(error);
          };
       };

@@ -10,7 +10,7 @@ const UserNavbar = () => {
   const userProfile = userData?.profileIMG;
   return (
     <>
-      <nav className="navbar navbar-light bg-light ">
+      <nav className="navbar navbar-light bg-light">
         <div className="container-fluid">
           <p className="navbar-brand mb-0">Logo</p>
           <div className="d-flex align-items-center my-2">
