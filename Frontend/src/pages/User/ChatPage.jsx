@@ -23,7 +23,11 @@ const ChatPage = () => {
         const response = await userAxiosInstance.get(`/fetchAlreadyChattedTechnicians?user_id=${userDetails?.user_id}`);
         setPreviousChattedTechnicians(response.data);
       } catch (error) {
-        toast.error("Something wrong, can't collection chatting details. Please try again later.")
+        if (error.response.status === 401) {
+          navigate("/login", { state: { message: "Authorization failed, please login" } });
+        } else {
+          toast.error("Something wrong, can't collection chatting details. Please try again later.")
+        }
       }
     })();
   }, []);

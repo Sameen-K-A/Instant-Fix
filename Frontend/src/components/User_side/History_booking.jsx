@@ -17,7 +17,11 @@ const UserBookingHistoryTable = () => {
         const response = await userAxiosInstance.get(`${Base_URL}/fetchUserBookingHistory`, { params: { user_id: userDetails.user_id } });
         setBookingDetailsArray(response.data);
       } catch (error) {
-        toast.error("Can't find booking history, please wait for a moment.");
+        if (error.response.status === 401) {
+          navigate("/login", { state: { message: "Authorization failed, please login" } });
+        } else {
+          toast.error("Can't find booking history, please wait for a moment.");
+        }
       }
     })();
   }, []);

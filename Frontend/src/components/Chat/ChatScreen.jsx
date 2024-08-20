@@ -28,7 +28,11 @@ const ChatScreen = ({ currentChatting }) => {
         setChatHistory(response.data);
         socket.emit("joinChatRoom", { senderID: userInfo?.user_id, receiverID: currentChatting?.user_id });
       } catch (error) {
-        toast.error("Something wrong, Can't fetch chat history. Please try again later");
+        if (error.response.status === 401) {
+          navigate("/login", { state: { message: "Authorization failed, please login" } });
+        } else {
+          toast.error("Something wrong, Can't fetch chat history. Please try again later");
+        }
       }
     })();
   }, [currentChatting]);
@@ -60,7 +64,11 @@ const ChatScreen = ({ currentChatting }) => {
         socket.emit("sendMessage", { messageDetails, firstTimeChat });
         setNewMsg("");
       } catch (error) {
-        toast.error("Something went wrong, please try again later");
+        if (error.response.status === 401) {
+          navigate("/login", { state: { message: "Authorization failed, please login" } });
+        } else {
+          toast.error("Something went wrong, please try again later");
+        }
       }
     }
   };
@@ -70,7 +78,6 @@ const ChatScreen = ({ currentChatting }) => {
       handleSendMsg();
     }
   };
-  
 
   return (
     <>

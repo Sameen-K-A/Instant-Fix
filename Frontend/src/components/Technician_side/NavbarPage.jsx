@@ -26,7 +26,11 @@ const TechnicianNavbar = () => {
       sessionStorage.setItem("technicianBookings", JSON.stringify(response.data));
       setBookingDetailsArray(response.data);
     } catch (error) {
-      toast.error("Can't fetch booking history, Please try again later");
+      if (error.response.status === 401) {
+        navigate("/login", { state: { message: "Authorization failed, please login" } });
+      } else {
+        toast.error("Can't fetch booking history, Please try again later");
+      }
     }
   };
 

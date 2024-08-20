@@ -31,7 +31,11 @@ const TechnicianProfileDetails = () => {
         });
         setBookingInformation(response.data);
       } catch (error) {
-        toast.error("Can't fetch previous booking status");
+        if (error.response.status === 401) {
+          navigate("/login", { state: { message: "Authorization failed, please login" } });
+        } else {
+          toast.error("Can't fetch previous booking status");
+        }
       }
     })();
   }, []);

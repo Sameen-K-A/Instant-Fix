@@ -24,7 +24,11 @@ const TechnicianViewMoreBooking = () => {
           });
           setBookingDetails(response.data);
         } catch (error) {
-          toast.error("Can't collect booking details. Please try again later.");
+          if (error.response.status === 401) {
+            navigate("/login", { state: { message: "Authorization failed, please login" } });
+          } else {
+            toast.error("Can't collect booking details. Please try again later.");
+          }
         };
       })();
     };
@@ -45,7 +49,9 @@ const TechnicianViewMoreBooking = () => {
             setBookingDetails(afterChange);
             toast.success(`Booking updated sucessfully successfully.`);
           } catch (error) {
-            if (error.response && error.response.status === 304) {
+            if (error.response.status === 401) {
+              navigate("/login", { state: { message: "Authorization failed, please login" } });
+            } else if (error.response && error.response.status === 304) {
               toast.error("Booking status is not changed.");
             } else {
               toast.error("Something went wrong, please try again later.");

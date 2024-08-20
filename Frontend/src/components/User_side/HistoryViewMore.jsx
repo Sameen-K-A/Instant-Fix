@@ -16,8 +16,16 @@ const UserHistoryViewMore = () => {
     const booking_id = location.state?.booking_id
     if (booking_id) {
       (async () => {
-        const response = await userAxiosInstance.get("/fetchIndividualBookingInformation", { params: { booking_id: booking_id } });
-        setBookingDetails(response.data);
+        try {
+          const response = await userAxiosInstance.get("/fetchIndividualBookingInformation", { params: { booking_id: booking_id } });
+          setBookingDetails(response.data);
+        } catch (error) {
+          if (error.response.status === 401) {
+            navigate("/login", { state: { message: "Authorization failed, please login" } });
+          } else {
+            toast.error("Something wrong please try again later.")
+          }
+        }
       })();
     };
   }, []);
@@ -35,7 +43,9 @@ const UserHistoryViewMore = () => {
             setBookingDetails(afterCancelling);
             toast.success("Booking cancelled successfully");
           } catch (error) {
-            if (error.response && error.response.status === 304) {
+            if (error.response.status === 401) {
+              navigate("/login", { state: { message: "Authorization failed, please login" } });
+            } else if (error.response && error.response.status === 304) {
               toast.error("Can't cancel booking request, please try again later");
             } else {
               toast.error("Something wrong. please try again later");
