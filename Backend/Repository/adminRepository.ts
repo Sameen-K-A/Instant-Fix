@@ -1,4 +1,5 @@
 import User from "../Model/userModal";
+import BookingModel from "../Model/bookingModel";
 
 class AdminRepository {
 
@@ -7,7 +8,7 @@ class AdminRepository {
          return await User.find({}).sort({ _id: -1 });
       } catch (error) {
          console.log("Error from database : ", error);
-         throw error;
+         ; throw error;
       }
    };
 
@@ -17,7 +18,7 @@ class AdminRepository {
       } catch (error) {
          console.log("Error from database:", error);
          throw error;
-      }
+      };
    };
 
    async blockUserRepository(user_id: string) {
@@ -42,6 +43,41 @@ class AdminRepository {
       }
    };
 
-}
+   async fetchBookingsRepository() {
+      try {
+         return await BookingModel.aggregate([
+            { $match: {} },
+            { $sort: { _id: -1 } },
+            { $lookup: { from: "users", localField: "technicianUser_id", foreignField: "user_id", as: "technicianDetails" } },
+            { $unwind: "$technicianDetails" },
+            { $lookup: { from: "users", localField: "client_id", foreignField: "user_id", as: "userDetails" } },
+            { $unwind: "$userDetails" },
+            {
+               $project: {
+                  _id: 0,
+                  "technicianDetails._id": 0,
+                  "technicianDetails.user_id": 0,
+                  "technicianDetails.password": 0,
+                  "technicianDetails.isBlocked": 0,
+                  "technicianDetails.isTechnician": 0,
+                  "technicianDetails.addressDetails": 0,
+                  "technicianDetails.alreadychattedtechnician": 0,
+
+                  "userDetails._id": 0,
+                  "userDetails.user_id": 0,
+                  "userDetails.password": 0,
+                  "userDetails.isBlocked": 0,
+                  "userDetails.isTechnician": 0,
+                  "userDetails.addressDetails": 0,
+                  "userDetails.alreadychattedtechnician": 0,
+               },
+            },
+         ]);
+      } catch (error) {
+         throw error;
+      };
+   };
+
+};
 
 export default AdminRepository;

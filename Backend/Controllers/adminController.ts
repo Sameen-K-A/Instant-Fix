@@ -27,7 +27,7 @@ class AdminController {
       } catch (error) {
          res.status(500).json("Something wrong please try again later");
       }
-   }
+   };
 
    async unblockUserController(req: Request, res: Response) {
       try {
@@ -37,7 +37,7 @@ class AdminController {
       } catch (error: any) {
          res.status(500).json("Something went wrong, please try again later");
       }
-   }
+   };
 
    async blockUserController(req: Request, res: Response) {
       try {
@@ -47,7 +47,7 @@ class AdminController {
       } catch (error: any) {
          res.status(500).json("Something went wrong, please try again later");
       }
-   }
+   };
 
    async fetchTechnicians(req: Request, res: Response) {
       try {
@@ -56,8 +56,17 @@ class AdminController {
       } catch (error) {
          res.status(500).send("Something wrong please try again later");
       }
-   }
+   };
 
-}
+   async fetchBookingsController(req: Request, res: Response) {
+      try {
+         const response = await adminServices.fetchBookingsService();
+         res.status(200).json(response);
+      } catch (error) {
+         res.status(500).send("Something wrong please try again later");
+      }
+   };
+
+};
 
 export default AdminController;

@@ -10,7 +10,7 @@ class AdminServices {
 
    constructor() {
       this.adminRepository = new AdminRepository();
-   }
+   };
 
    async loginService(email: string, password: string) {
       try {
@@ -22,21 +22,20 @@ class AdminServices {
                return adminToken;
             }
             else throw new Error("Wrong password");
-         }
-         else throw new Error("Wrong email");
+         } else throw new Error("Wrong email");
       } catch (error) {
          console.log("Login service error : ", error);
          throw error;
-      }
-   }
+      };
+   };
 
    async fetchUserService() {
       try {
          return this.adminRepository.fetchUserRepository();
       } catch (error) {
          throw error;
-      }
-   }
+      };
+   };
 
    async unblockUserService(user_id: string) {
       try {
@@ -48,8 +47,8 @@ class AdminServices {
          }
       } catch (error) {
          throw error;
-      }
-   }
+      };
+   };
 
    async blockUserService(user_id: string) {
       try {
@@ -58,11 +57,11 @@ class AdminServices {
             return "User blocked successfully";
          } else {
             throw new Error("Can't block user");
-         }
+         };
       } catch (error) {
          throw error;
-      }
-   }
+      };
+   };
 
    async fetchTechnicianService() {
       try {
@@ -70,8 +69,17 @@ class AdminServices {
          return repositoryResponse;
       } catch (error) {
          throw error;
-      }
-   }
-}
+      };
+   };
+
+   async fetchBookingsService() {
+      try {
+         return await this.adminRepository.fetchBookingsRepository();
+      } catch (error) {
+         throw error;
+      };
+   };
+
+};
 
 export default AdminServices;

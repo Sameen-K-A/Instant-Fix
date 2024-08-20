@@ -23,6 +23,7 @@ import AdminLogin from './components/Admin_side/AdminLogin';
 import AdminDashboard from './components/Admin_side/AdminDashboard';
 import AdminUserList from './components/Admin_side/UserList';
 import AdminTechnicianList from './components/Admin_side/TechnicianList';
+import AdminBookingHistoryTable from './components/Admin_side/BookingList';
 
 // Technician side
 import TechnicianProtecter from './components/Services/TechnicianProtecter';
@@ -38,6 +39,7 @@ import NotFound from './components/Common/404page';
 import "../public/css/index.css";
 import "../public/css/user_home.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import AdminViewMoreBookingDetails from './components/Admin_side/AdminViewMoreBookingDetails';
 
 function App() {
   return (
@@ -62,6 +64,8 @@ function App() {
           <Route path='/admin/dashboard' element={<AdminProtecter><AdminDashboard />  </AdminProtecter>} />;
           <Route path='/admin/users' element={<AdminProtecter><AdminUserList /></AdminProtecter>} />;
           <Route path='/admin/technicians' element={<AdminProtecter><AdminTechnicianList /></AdminProtecter>} />;
+          <Route path='/admin/bookings' element={<AdminProtecter><AdminBookingHistoryTable /></AdminProtecter>} />;
+          <Route path='/admin/viewmoreBookingDetails' element={<AdminProtecter><AdminViewMoreBookingDetails /></AdminProtecter>} />;
 
           {/* Technician side */}
           <Route path='/technician' element={<TechnicianProtecter><TechnicianHome /></TechnicianProtecter>} />;

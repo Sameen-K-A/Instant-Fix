@@ -15,4 +15,6 @@ router.patch("/blockUser", verifyToken, adminController.blockUserController);
 // Actions on Technician
 router.get("/fetchTechnicians", verifyToken, adminController.fetchTechnicians);
 
+// booking and its details
+router.get("/fetchbookings", verifyToken, adminController.fetchBookingsController)
 export default router;
