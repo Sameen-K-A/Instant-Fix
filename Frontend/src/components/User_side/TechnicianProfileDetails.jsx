@@ -76,8 +76,7 @@ const TechnicianProfileDetails = () => {
           <div className="row d-flex justify-content-between mx-4">
             <div className="col-lg-7 col-sm-12">
               <div className="card card-body blur-sm mt-n5 min-height-500">
-              #341919
-              background: linear-gradient(90deg, rgba(87,67,66,1) 14%, rgba(31,20,20,1) 68%, rgba(57,36,36,1) 100%);
+                
               </div>
             </div>
 

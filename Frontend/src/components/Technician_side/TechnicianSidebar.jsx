@@ -58,7 +58,7 @@ const TechnicianSidebar = () => {
                 <div className="tooltip">Leave from console</div>
               </li>
               <li className="nav-link" onClick={handleLogout}>
-                <div className="icon"><PowerBtn color={"#22C55E"} /></div>
+                <div className="icon"><PowerBtn color={"#341919"} /></div>
                 <div className="tooltip">Logout</div>
               </li>
             </div>

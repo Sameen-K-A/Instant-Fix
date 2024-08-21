@@ -102,7 +102,7 @@ const EditUserInfo = ({ userDetails, setUserDetails, cancelEdit }) => {
         ))}
       </div>
       <div className="d-flex justify-content-center">
-        <button className="btn btn-sm px-1 mt-2 btn-outline-dark" onClick={triggerFileSelect}>Choose from files</button>
+        <button className="btn btn-sm px-1 mt-2 btn-outline-primary" onClick={triggerFileSelect}>Choose from files</button>
         <input type="file" ref={fileInputRef} hidden accept=".png, .jpeg, .jpg" onChange={handleFileChange} />
       </div>
       <form onSubmit={formik.handleSubmit}>
@@ -111,7 +111,7 @@ const EditUserInfo = ({ userDetails, setUserDetails, cancelEdit }) => {
         <input type="text" className="form-control mt-3" placeholder="Phone Number" {...formik.getFieldProps('phone')} />
         {formik.touched.phone && formik.errors.phone ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.phone}</div> : null}
         <div className="ms-auto mt-3 text-end">
-          <button type="button" className="btn text-xs btn-outline-dark border-radius-xl me-1" onClick={cancelEdit}>Cancel</button>
+          <button type="button" className="btn text-xs btn-outline-primary border-radius-xl me-1" onClick={cancelEdit}>Cancel</button>
           <button type="submit" className="btn text-xs bg-gradient-primary border-radius-xl">Save</button>
         </div>
       </form>

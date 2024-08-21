@@ -50,7 +50,7 @@ const AddressInformation = ({ userDetails, setUserDetails }) => {
                 <span className="mb-2 text-xs text-dark">{userDetails?.addressDetails?.phone}, <span className='mx-2'>{userDetails?.addressDetails?.alternatePhone}</span></span>
               </div>
               <div className="ms-auto text-end">
-                <button className="btn text-xs p-1 px-4 me-1" data-bs-toggle="modal" data-bs-target="#addressModal"> Edit</button>
+                <button className="btn text-xs btn-outline-primary p-1 px-4 me-1" data-bs-toggle="modal" data-bs-target="#addressModal"> Edit</button>
                 <button className="btn text-xs bg-gradient-danger border-radius-xl p-1 px-3" onClick={() => handleDelete()}>Delete</button>
               </div>
             </li>

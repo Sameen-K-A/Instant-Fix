@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Base_URL } from '../../config/credentials';
-import backgroundImage from '/images/Login&RegisterBackground.jpg';
+import backgroundImage from '/images/HeaderBanner_3.jpg';
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -76,7 +76,7 @@ const AdminLogin = () => {
             <div className="col-md-6">
               <div className="oblique position-absolute top-0 h-100 d-md-block d-none me-n8">
                 <div className="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6" style={{ backgroundImage: `url(${backgroundImage})` }} >
-                  <span className="mask bg-gradient-primary opacity-8"></span>
+                  <span className="mask bg-gradient-primary opacity-4"></span>
                 </div>
               </div>
             </div>

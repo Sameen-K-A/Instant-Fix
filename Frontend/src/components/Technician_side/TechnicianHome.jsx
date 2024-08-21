@@ -9,8 +9,9 @@ const TechnicianHome = () => {
     <>
       <TechnicianNavbar />
 
-      <div className="page-header pt-3 pb-5 m-3 border-radius-lg" style={{ backgroundImage: `url(${backgroundImage})` }}>
-        <span className="mask bg-gradient-primary opacity-7"></span>
+      {/* <div className="page-header pt-3 pb-5 m-3 border-radius-lg" style={{ backgroundImage: `url(${backgroundImage})` }}> */}
+      <div className="page-header pt-3 pb-5 m-3 border-radius-lg">
+        <span className="mask bg-gradient-primary opacity-9"></span>
         <div className="container">
           <div className="col-lg-5 text-center mx-auto">
             <h2 className="font-weight-bolder text-light pb-3 mt-5">

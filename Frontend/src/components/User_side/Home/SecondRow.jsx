@@ -1,13 +1,13 @@
 import React from "react";
 import WaveShape from '../../shapes/Wave';
-import backgroundImage from "../../../../public/images/HeaderBanner_2.png";
+import backgroundImage from "../../../../public/images/dot_pattern_1.jpg";
 import { useNavigate } from "react-router-dom";
 
 const SecondRow = () => {
   const navigate = useNavigate();
   return (
     <div className="page-header position-relative" style={{ backgroundImage: `url(${backgroundImage})` }}>
-      <span className="mask bg-gradient-primary opacity-5"></span>
+      <span className="mask bg-primary opacity-1"></span>
       <WaveShape />
       <div className="container py-5 pt-7">
         <div className="container pt-6">

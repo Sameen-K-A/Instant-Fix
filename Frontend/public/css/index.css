@@ -1976,7 +1976,7 @@ h4 {
 }
 
 .bg-gradient-chatSender {
-  background-color: #E3F9E6;
+  background-color: #ffece1;
 }
 
 .bg-gradient-chatReciever {
@@ -2022,7 +2022,7 @@ h4 {
 /* ---------------------------------------------------------- background colors ----------------------------------------------- */
 
 .bg-primary {
-  background-color: rgba(184, 69, 255, 0.2) !important;
+  background-color: #341919 !important;
 }
 
 .bg-secondary {
@@ -3083,6 +3083,10 @@ h4 {
   opacity: 0.9 !important;
 }
 
+.opacity-95 {
+  opacity: 0.95 !important;
+}
+
 .opacity-10 {
   opacity: 1 !important;
 }
@@ -3884,14 +3888,14 @@ footer .copyright {
 }
 
 .btn-outline-primary {
-  color: #22C55E;
-  border-color: #22C55E;
+  color: #341919;
+  border-color: #341919;
 
 }
 
 .btn-outline-primary:hover {
-  background-color: #22C55E;
-  border-color: #22C55E;
+  background-color: #341919;
+  border-color: #341919;
 }
 
 .btn:hover:not(.btn-icon-only) {
@@ -3907,7 +3911,7 @@ footer .copyright {
   background-color: transparent;
   opacity: .75;
   box-shadow: none;
-  color: #22C55E;
+  color: #341919;
 }
 
 .btn-primary,

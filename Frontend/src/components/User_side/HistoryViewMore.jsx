@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import RatingStar from '../Common/StarRating';
 import UserNavbar from './NavbarPage';
 import { useLocation } from 'react-router-dom';
-import { Base_URL } from '../../config/credentials';
 import userAxiosInstance from "../../config/AxiosInstance/userInstance";
-import backgroundImage from "../../../public/images/Login&RegisterBackground.jpg";
+import backgroundImage from "../../../public/images/HeaderBanner_2.png";
 import confirmAlert from '../Common/SweetAlert/confirmAlert';
 import { toast } from "sonner";
 
@@ -59,13 +57,11 @@ const UserHistoryViewMore = () => {
     <>
       <UserNavbar />
       <nav className="bg-transparent shadow-none position-absolute ps-5 mt-5 w-100 z-index-2">
-        <h6 className="text-white font-weight-bolder mb-0 ms-2">Booking History</h6>
-        <p className="text-light text-sm text-white mt-0 ms-2">Profile/ Booking history/ View more details</p>
+        <h6 className="font-weight-bolder mb-0 ms-2">Booking History</h6>
+        <p className="text-sm mt-0 ms-2">Profile/ Booking history/ View more details</p>
       </nav>
       <div className="container-fluid pe-6">
-        <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }}>
-          <span className="mask bg-gradient-primary opacity-5"></span>
-        </div>
+        <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }} />
         <div className="card card-body blur shadow-blur mx-4 mb-5 mt-n6 overflow-hidden">
           <div className="col-xl-12 col-lg-12 col-md-12 d-flex flex-column">
             {bookingDetails?.booking_id ? (
@@ -125,23 +121,8 @@ const UserHistoryViewMore = () => {
                     </div>
                   </div>
                   <div className="col-lg-4 mb-5 px-5 mt-5 d-flex flex-column justify-content-center">
-                    {/* <div className="text-center mb-3" style={{ margin: "0 auto" }}>
-                      <img src={`${Base_URL}/${bookingDetails?.technicianDetails?.profileIMG}`} width="120" className="rounded-circle mb-3" alt="User Profile" />
-                      <p className='text-start text-sm mb-2'><span className='text-black-50'>Name : </span><b>{bookingDetails?.technicianDetails?.name}</b></p>
-                      <p className='text-start text-sm mb-2'><span className='text-black-50'>Email : </span><b>{bookingDetails?.technicianDetails?.email}</b></p>
-                      <p className='text-start text-sm mb-2'><span className='text-black-50'>Contact : </span><b>{bookingDetails?.technicianDetails?.phone}</b></p>
-                    </div>
-                    {bookingDetails?.booking_status === "Completed" && (
-                      <>
-                        <hr className='horizontal dark' />
-                        <div className='d-flex justify-content-around'>
-                          <p className='text-sm font-weight-bold text-dark'>Give your rating</p>
-                          <RatingStar />
-                        </div>
-                        <textarea placeholder='Enter you feedback' className='form-control' style={{ padding: "10px", maxHeight: "120px", minHeight: "50px" }} />
-                        <button className='btn bg-gradient-primary w-100 mt-3'>Submit</button>
-                      </>
-                    )} */}
+
+
                   </div>
                 </div>
               </div>
