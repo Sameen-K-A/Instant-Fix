@@ -1,11 +1,13 @@
 import React from "react";
 import WaveShape from '../../shapes/Wave';
-import backgroundImage from "../../../../public/images/Login&RegisterBackground.jpg";
+import backgroundImage from "../../../../public/images/HeaderBanner_2.png";
+import { useNavigate } from "react-router-dom";
 
 const SecondRow = () => {
+  const navigate = useNavigate();
   return (
     <div className="page-header position-relative" style={{ backgroundImage: `url(${backgroundImage})` }}>
-      <span className="mask bg-gradient-primary opacity-7"></span>
+      <span className="mask bg-gradient-primary opacity-5"></span>
       <WaveShape />
       <div className="container py-5 pt-7">
         <div className="container pt-6">
@@ -23,8 +25,9 @@ const SecondRow = () => {
                   <h2 className="font-weight-bolder text-light pb-3">Why Choose Instant-Fix?</h2>
                 </div>
                 <div className="left-text">
-                  <h5 className="font-weight-bolder pb-2" style={{ color: "black" }}>Reliable Services, Anytime, Anywhere</h5>
+                  <h5 className="text-light font-weight-bolder pb-2" style={{ color: "black" }}>Reliable Services, Anytime, Anywhere</h5>
                   <p className="text-light">Instant-Fix offers a seamless way to connect with skilled technicians for all your home service needs. Our trusted professionals ensure quality and reliability, giving you peace of mind.</p>
+                  <button className="btn bg-gradient-primary" onClick={() => navigate("/technician")}>Join as an Technician</button>
                 </div>
               </div>
             </div>

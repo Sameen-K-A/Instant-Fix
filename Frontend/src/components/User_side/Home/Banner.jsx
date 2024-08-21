@@ -17,8 +17,8 @@ const Banner = () => {
               <h2 className="font-weight-bolder text-info text-gradient pb-3">
                 Welcome to InstantFix <br /> Your One-Stop Solution
               </h2>
-              <h5 className="pb-2">Find and Book Technicians Easily</h5>
-              <p>
+              <h5 className="pb-2 text-black-65 ">Find and Book Technicians Easily</h5>
+              <p className="text-black-65">
                 Discover reliable and professional technicians to solve all your home service needs with just a few clicks. Our platform ensures quick, easy, and trustworthy solutions for your everyday issues.
               </p>
             </span>

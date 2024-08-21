@@ -14,7 +14,7 @@ const UserNavbar = () => {
         <div className="container-fluid">
           <p className="navbar-brand mb-0">Logo</p>
           <div className="d-flex align-items-center my-2">
-            <p className="font-weight-bold text-dark text-sm mb-0 me-3 cursor-pointer bg-gradient-primary px-3 py-1 rounded-3 text-white" onClick={() => { navigate("/allTechnicians") }}>Technicians</p>
+            <p className="font-weight-bold text-dark text-sm mb-0 me-3 cursor-pointer bg-gradient-primary px-3 py-1 rounded-3 text-white" onClick={() => { navigate("/allTechnicians") }}>Book Technicians</p>
             {!userData && (
               <p className="text-dark text-sm mb-0 me-3 cursor-pointer" onClick={() => { navigate("/login") }}>Login</p>
             )}

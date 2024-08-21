@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Base_URL } from '../../config/credentials';
 import axios from 'axios';
-import backgroundImage from "/images/Login&RegisterBackground.jpg";
+import backgroundImage from "/images/HeaderBanner_3.jpg";
 import { toast } from 'sonner';
 
 const UserRegister = () => {
@@ -59,7 +59,7 @@ const UserRegister = () => {
   return (
     <>
       <div className="page-header pt-3 pb-10 m-3 border-radius-lg" style={{ backgroundImage: `url(${backgroundImage})` }}>
-        <span className="mask bg-gradient-primary opacity-5"></span>
+        <span className="mask bg-gradient-primary opacity-2"></span>
         <div className="container">
           <div className="col-lg-5 text-center mx-auto">
             <h1 className="text-white mb-2 mt-5">Welcome</h1>
@@ -70,7 +70,7 @@ const UserRegister = () => {
       <div className="container mb-5">
         <div className="row mt-lg-n10 mt-md-n11 mt-n10">
           <div className="col-xl-4 col-lg-5 col-md-7 mx-auto">
-            <div className="card">
+            <div className="card blur shadow-blur">
               <div className="card-header text-center pt-5">
                 <h5>Register</h5>
               </div>

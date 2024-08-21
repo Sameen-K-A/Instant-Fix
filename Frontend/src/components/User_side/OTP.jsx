@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import backgroundImage from "/images/Login&RegisterBackground.jpg";
+import backgroundImage from "/images/HeaderBanner_3.jpg";
 import { toast } from 'sonner';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
@@ -96,7 +96,7 @@ const UserOTP = () => {
   return (
     <>
       <div className="page-header pt-3 pb-10 m-3 border-radius-lg" style={{ backgroundImage: `url(${backgroundImage})` }}>
-        <span className="mask bg-gradient-primary opacity-5"></span>
+        <span className="mask bg-gradient-primary opacity-2"></span>
         <div className="container">
           <div className="col-lg-5 text-center mx-auto">
             <h1 className="text-white mb-2 mt-5">Welcome</h1>
