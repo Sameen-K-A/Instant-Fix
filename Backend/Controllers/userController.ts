@@ -152,8 +152,8 @@ class UserController {
 
    async bookTechnician_controller(req: Request, res: Response) {
       try {
-         const { clientDetails, technicianDetails } = req.body;
-         const response = await userServices.bookTechnicianService(clientDetails, technicianDetails);
+         const { client_id, technicianDetails, serviceLocation } = req.body;
+         const response = await userServices.bookTechnicianService(client_id, technicianDetails, serviceLocation);
          res.status(200).json(response);
       } catch (error: any) {
          if (error.message === "Booking failed") {

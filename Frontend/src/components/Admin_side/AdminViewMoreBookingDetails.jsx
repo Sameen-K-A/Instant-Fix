@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import backgroundImage from "../../../public/images/Login&RegisterBackground.jpg";
+import backgroundImage from "../../../public/images/HeaderBanner_2.png";
 import AdminNavbar from './AdminNavbar';
 import { Base_URL } from '../../config/credentials';
 
@@ -16,12 +16,11 @@ const AdminViewMoreBookingDetails = () => {
     <>
       <AdminNavbar />
       <nav className="bg-transparent shadow-none position-absolute ps-5 mt-5 w-100 z-index-2">
-        <h6 className="text-white font-weight-bolder mb-0 ms-2">Booking details</h6>
-        <p className="text-light text-sm text-white mt-0 ms-2">Admin/ Bookings list/ Booking details</p>
+        <h6 className=" font-weight-bolder mb-0 ms-2">Booking details</h6>
+        <p className="text-sm mt-0 ms-2">Admin/ Bookings list/ Booking details</p>
       </nav>
-      <div className="container-fluid pe-6">
+      <div className="container-fluid">
         <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }}>
-          <span className="mask bg-gradient-primary opacity-5"></span>
         </div>
         <div className="card card-body blur shadow-blur mx-4 mb-5 mt-n6 overflow-hidden">
           <div className="col-xl-12 col-lg-12 col-md-12 d-flex flex-column">

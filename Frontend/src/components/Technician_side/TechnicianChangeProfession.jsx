@@ -67,7 +67,7 @@ const TechnicianChangeProfession = ({ profession, userDetails, setUserDetails })
                   <h6 className="text-sm">{profession}</h6>
                 </div>
                 <div className="ms-auto text-end mt-1">
-                  <button className="btn text-xs btn-outline-dark border-radius-xl mb-0 p-1 px-4" onClick={() => setIsEdit(true)}>Change</button>
+                  <button className="btn text-xs btn-outline-primary border-radius-xl mb-0 p-1 px-4" onClick={() => setIsEdit(true)}>Change</button>
                 </div>
               </>
             ) : (
@@ -75,7 +75,7 @@ const TechnicianChangeProfession = ({ profession, userDetails, setUserDetails })
                 <p className='text-start text-sm text-bold'>Choose your correct Profession</p>
                 <br />
                 {professions.map((prof, index) => (
-                  <p key={index} className='text-start text-sm border-radius-md mb-1 p-1 px-3 cursor-pointer' style={{ backgroundColor: index === selectedProfessionIndex ? "#D1F4D6" : "#f2f2f2" }}
+                  <p key={index} className='text-start text-sm border-radius-md mb-1 p-1 px-3 cursor-pointer' style={{ backgroundColor: index === selectedProfessionIndex ? "#FBECEC" : "#f2f2f2" }}
                     onClick={() => setSelectedProfessionIndex(index)}
                   >{prof}</p>
                 ))}

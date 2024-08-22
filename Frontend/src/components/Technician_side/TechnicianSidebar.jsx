@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Account, Booking, Chat, Home, Leave, PowerBtn, Settings, Wallet } from '../../../public/svgs/Icons';
+import { Account, Booking, Calendar, Chat, Home, Leave, PowerBtn, Settings, Wallet } from '../../../public/svgs/Icons';
 import confirmAlert from "../Common/SweetAlert/confirmAlert";
 import AlertRedDot from "../Common/AlertRedDot";
 import '../../../public/css/techniciansidebar.css';
@@ -27,12 +27,12 @@ const TechnicianSidebar = () => {
       <div className="techniciansidebar card p-2 mb-3 border-1 me-3">
         <ul className="nav-links">
           <li className="nav-link" onClick={() => setShowMore(!showMore)}>
-            <div className="icon d-flex"><Settings />{(userData?.addressDetails === null && userData?.isTechnician === true && showMore === false) && <AlertRedDot />}</div>
+            <div className="icon d-flex blur shadow-blur"><Settings />{(userData?.addressDetails === null && userData?.isTechnician === true && showMore === false) && <AlertRedDot />}</div>
             <div className="tooltip">More</div>
           </li>
 
           {showMore && (
-            <div className="more-options">
+            <div className="more-options  blur shadow-blur">
               <li className="nav-link" onClick={() => navigate("/technician")}>
                 <div className="icon"><Home /></div>
                 <div className="tooltip">Home</div>
@@ -44,6 +44,10 @@ const TechnicianSidebar = () => {
               <li className="nav-link" onClick={() => navigate("/technician/chat")}>
                 <div className="icon"><Chat /></div>
                 <div className="tooltip">Chats</div>
+              </li>
+              <li className="nav-link" onClick={() => navigate("/technician/slotAllocation")}>
+                <div className="icon"><Calendar /></div>
+                <div className="tooltip">Allocate slots</div>
               </li>
               <li className="nav-link" onClick={() => navigate("/technician/technicianBookingHistory")}>
                 <div className="icon"><Booking /></div>

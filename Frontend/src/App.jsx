@@ -24,6 +24,7 @@ import AdminDashboard from './components/Admin_side/AdminDashboard';
 import AdminUserList from './components/Admin_side/UserList';
 import AdminTechnicianList from './components/Admin_side/TechnicianList';
 import AdminBookingHistoryTable from './components/Admin_side/BookingList';
+import AdminViewMoreBookingDetails from './components/Admin_side/AdminViewMoreBookingDetails';
 
 // Technician side
 import TechnicianProtecter from './components/Services/TechnicianProtecter';
@@ -31,6 +32,7 @@ import TechnicianHome from './components/Technician_side/TechnicianHome';
 import TechnicianRole from './components/Technician_side/TechnicianRole';
 import TechnicianBookingHistoryTable from './components/Technician_side/TechnicianBookingHistory';
 import TechnicianViewMoreBooking from './components/Technician_side/TechnicianViewMoreBooking';
+import TechnicianSlotAllocation from './components/Technician_side/TechnicianSlotAllocation';
 
 // common side
 import NotFound from './components/Common/404page';
@@ -39,7 +41,6 @@ import NotFound from './components/Common/404page';
 import "../public/css/index.css";
 import "../public/css/user_home.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import AdminViewMoreBookingDetails from './components/Admin_side/AdminViewMoreBookingDetails';
 
 function App() {
   return (
@@ -74,6 +75,7 @@ function App() {
           <Route path='/technician/chat' element={<TechnicianProtecter><ChatPage /></TechnicianProtecter>} />;
           <Route path='/technician/technicianBookingHistory' element={<TechnicianProtecter><TechnicianBookingHistoryTable /></TechnicianProtecter>} />;
           <Route path='/technician/technicianBookingViewmore' element={<TechnicianProtecter><TechnicianViewMoreBooking /></TechnicianProtecter>} />;
+          <Route path='/technician/slotAllocation' element={<TechnicianProtecter><TechnicianSlotAllocation /></TechnicianProtecter>} />;
 
           {/* common */}
           <Route path='*' element={<NotFound />} />;

@@ -1976,7 +1976,7 @@ h4 {
 }
 
 .bg-gradient-chatSender {
-  background-color: #ffece1;
+  background-color: #FBECEC;
 }
 
 .bg-gradient-chatReciever {
@@ -3611,8 +3611,8 @@ footer .copyright {
 }
 
 .nav-link.active {
-  border-bottom: 2px solid #22C55E;
-  color: #22C55E;
+  border-bottom: 2px solid #341919;
+  color: #341919;
   font-weight: bold;
 }
 
@@ -3988,7 +3988,7 @@ a {
 }
 
 a:hover {
-  color: #22C55E;
+  color: #c2a89f;
   text-decoration: none;
 }
 
@@ -4154,6 +4154,19 @@ textarea {
 .btn .badge {
   position: relative;
   top: -1px;
+}
+
+.instruction-dot {
+  width: 10px !important;
+  height: 10px !important;
+  margin-right: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.386);
+}
+
+.instruction-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
 }
 
 .list-group-item {
@@ -4418,4 +4431,31 @@ hr.horizontal.dark {
   50% {
     transform: scale(1.5);
   }
+}
+
+.react-calendar {
+  border: none;
+  width: 100%;
+}
+
+.react-calendar__tile {
+  width: 60px;
+  height: 60px;
+  padding: 10px;
+  font-size: 14px;
+  color: black;
+  background-color: white;
+}
+
+.selected-date {
+  background-color: #A7F3B3 !important;
+}
+
+.react-calendar__tile--disabled {
+  color: rgba(0, 0, 0, 0.5);
+  cursor: not-allowed;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
 }

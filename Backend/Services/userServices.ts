@@ -195,17 +195,16 @@ class UserServices {
       }
    };
 
-   async bookTechnicianService(clientDetails: userType, technicianDetails: any) {
+   async bookTechnicianService(client_id: string, technicianDetails: any, serviceLocation: userAddressType) {
       try {
          const technicianInformation: any = await this.userRepository.fetchSingleTechnicianDetailsRepository(technicianDetails.user_id as string);
          if (technicianInformation[0].isBlocked === true || technicianInformation[0].technicianDetails.availability === false) {
             throw new Error("Technician not available now");
          };
          const date: Date = new Date();
-         console.log(technicianDetails)
          const newBookingDetails: newBookingType = {
             booking_id: uuid() as string,
-            client_id: clientDetails.user_id as string,
+            client_id: client_id as string,
             technicianUser_id: technicianDetails.user_id as string,
             bookingTime: date.toLocaleTimeString(),
             bookingDate: date.toLocaleDateString(),
@@ -214,14 +213,7 @@ class UserServices {
             serviceDate: "Pending",
             serviceCost: "Pending",
             Payment_Status: "Pending",
-            serviceLocation: {
-               address: clientDetails.addressDetails?.address as string,
-               district: clientDetails.addressDetails?.district as string,
-               state: clientDetails.addressDetails?.state as string,
-               phone: clientDetails.addressDetails?.phone as string,
-               alternatePhone: clientDetails.addressDetails?.alternatePhone as string,
-               pincode: clientDetails.addressDetails?.pincode as string,
-            }
+            serviceLocation: serviceLocation,
          };
          const repositoryResponse = await this.userRepository.bookTechnicianRepository(newBookingDetails);
          if (!repositoryResponse) {

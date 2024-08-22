@@ -2,22 +2,21 @@ import React from 'react';
 import Footer from '../Common/Footer';
 import TechnicianNavbar from './NavbarPage';
 import { Communication, OnlineBar, PyChart } from '../../../public/svgs/Icons';
-import backgroundImage from "../../../public/images/Login&RegisterBackground.jpg";
+import backgroundImage from "../../../public/images/HeaderBanner_3.jpg";
 
 const TechnicianHome = () => {
   return (
     <>
       <TechnicianNavbar />
 
-      {/* <div className="page-header pt-3 pb-5 m-3 border-radius-lg" style={{ backgroundImage: `url(${backgroundImage})` }}> */}
-      <div className="page-header pt-3 pb-5 m-3 border-radius-lg">
-        <span className="mask bg-gradient-primary opacity-9"></span>
+      <div className="page-header pt-3 pb-5 m-3 border-radius-lg" style={{ backgroundImage: `url(${backgroundImage})` }}>
+        <span className="mask bg-gradient-primary opacity-6"></span>
         <div className="container">
           <div className="col-lg-5 text-center mx-auto">
             <h2 className="font-weight-bolder text-light pb-3 mt-5">
               Welcome to Instant-Fix <br /> Your Professional Hub
             </h2>
-            <h5 className="pb-2 text-dark">Connect with Clients and Manage Jobs Effortlessly</h5>
+            <h5 className="pb-2 text-white">Connect with Clients and Manage Jobs Effortlessly</h5>
             <p className='text-light pb-8'>
               Instant-Fix is designed to help you find job opportunities, manage your schedule, and connect with clients
               seamlessly. Leverage our platform to build a successful career in the home services industry.
@@ -30,7 +29,7 @@ const TechnicianHome = () => {
         <div className="container">
           <div className="row">
             <div className="col-lg-4 col-md-6 col-sm-6 col-12">
-              <div className="features-small-item">
+              <div className="features-small-item blur-sm shadow-blur">
                 <div className="icon bg-gradient-primary mb-4">
                   <OnlineBar />
                 </div>
@@ -39,7 +38,7 @@ const TechnicianHome = () => {
               </div>
             </div>
             <div className="col-lg-4 col-md-6 col-sm-6 col-12">
-              <div className="features-small-item">
+              <div className="features-small-item blur-sm shadow-blur">
                 <div className="icon bg-gradient-primary mb-4">
                   <Communication />
                 </div>
@@ -48,7 +47,7 @@ const TechnicianHome = () => {
               </div>
             </div>
             <div className="col-lg-4 col-md-6 col-sm-6 col-12">
-              <div className="features-small-item">
+              <div className="features-small-item blur-sm shadow-blur">
                 <div className="icon bg-gradient-primary mb-4">
                   <PyChart />
                 </div>

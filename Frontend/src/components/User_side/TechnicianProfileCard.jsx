@@ -31,7 +31,7 @@ const TechnicianProfileCard = ({ technicianData }) => {
               )
             })}
           </div>
-          <button type="button" className="btn bg-gradient-primary" onClick={() => handleViewTechnician(technicianData)}>View more</button>
+          <button type="button" className="btn btn-outline-primary" onClick={() => handleViewTechnician(technicianData)}>View more</button>
         </div>
       </div>
     </div>

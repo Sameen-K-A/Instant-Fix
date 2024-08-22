@@ -29,8 +29,8 @@ const UserSideBar = ({ userData }) => {
     userData && (
       <>
         <div className="sidebar-container">
-          <div className={`sidebar ${isSidebarClosed && 'close'}`}>
-            <div className="expand-btn" onClick={toggleSidebar}>
+          <div className={`sidebar ${isSidebarClosed && 'close'} blur shadow-blur`}>
+            <div className="expand-btn blur" onClick={toggleSidebar}>
               {isSidebarClosed ? <OpenSideBarIcon /> : <CloseSideBarIcon />}
             </div>
             <div className="menu-bar">
