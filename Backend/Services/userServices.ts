@@ -226,13 +226,13 @@ class UserServices {
       };
    };
 
-   async fetchAnyPendingRequestAvailableService(clientID: string, technicianUserID: string) {
-      try {
-         return this.userRepository.fetchAnyPendingRequestAvailableRepository(clientID, technicianUserID);
-      } catch (error) {
-         throw error;
-      }
-   };
+   // async fetchAnyPendingRequestAvailableService(clientID: string, technicianUserID: string) {
+   //    try {
+   //       return this.userRepository.fetchAnyPendingRequestAvailableRepository(clientID, technicianUserID);
+   //    } catch (error) {
+   //       throw error;
+   //    }
+   // };
 
    async fetchUserBookingHistoryService(user_id: string) {
       try {

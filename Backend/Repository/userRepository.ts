@@ -164,18 +164,6 @@ class UserRepository {
     }
   };
 
-  async fetchAnyPendingRequestAvailableRepository(clientID: string, technicianUserID: string) {
-    try {
-      return await BookingModel.findOne({
-        client_id: clientID,
-        technicianUser_id: technicianUserID,
-        booking_status: { $in: ["Pending", "Requested"] }
-      });
-    } catch (error) {
-      throw error;
-    }
-  };
-
   async fetchUserBookingHistoryRepository(user_id: string) {
     try {
       return await BookingModel.aggregate([

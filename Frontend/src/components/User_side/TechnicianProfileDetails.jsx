@@ -4,40 +4,39 @@ import backgroundImage from "/images/HeaderBanner_2.png";
 import { Base_URL } from '../../config/credentials';
 import { CloseX_mark, FollowTechnician, MsgToTechnician, Star } from '../../../public/svgs/Icons';
 import { useLocation, useNavigate } from 'react-router-dom';
-// import { toast } from "sonner";
-// import userAxiosInstance from "../../config/AxiosInstance/userInstance";
 import image from "../../../public/images/profile_2.jpg";
 import BookingConfirmModalDetails from './BookingConfirmModal';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 const TechnicianProfileDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [technicianDetails, setTechnicianDetails] = useState(null);
-  // const [bookingInformation, setBookingInformation] = useState(null);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [selectedDates, setSelectedDates] = useState([]);
+  const [availableDates, setAvailableDates] = useState([])
 
   useEffect(() => {
-    (async () => {
-      const details = location.state.details;
-      setTechnicianDetails(details);
-      // try {
-      // const userInformation = JSON.parse(sessionStorage.getItem("userDetails"));
-      // const response = await userAxiosInstance.get("/fetchAnyPendingRequestAvailable", {
-      //   params: {
-      //     clientID: userInformation?.user_id,
-      //     technicianUserID: details?.user_id
-      //   }
-      // });
-      // setBookingInformation(response.data);
-      // } catch (error) {
-      //   if (error.response.status === 401) {
-      //     navigate("/login", { state: { message: "Authorization failed, please login" } });
-      //   } else {
-      //     toast.error("Can't fetch previous booking status");
-      //   }
-      // }
-    })();
+    const details = location.state.details;
+    setTechnicianDetails(details);
+    const availableDatesFromTechnicianSide = details?.technicianDetails?.availableSlots;
+    setAvailableDates(availableDatesFromTechnicianSide.map((slotInto) => slotInto.slotBooked === false && slotInto.slotDate));
   }, []);
+
+  const handleDateChange = (changedDate) => {
+    const date = changedDate.toLocaleDateString('en-CA');
+    setSelectedDates((prevSelectedDates) =>
+      prevSelectedDates.includes(date)
+        ? prevSelectedDates.filter((dates) => dates !== date)
+        : [...prevSelectedDates, date]
+    );
+  };
+
+  const isDateDisabled = (date) => {
+    const dateStr = date.toLocaleDateString('en-CA');
+    return !availableDates.includes(dateStr);
+  };
 
   const handleMessageOpen = () => {
     navigate("/chat", { state: { details: technicianDetails } });
@@ -62,11 +61,6 @@ const TechnicianProfileDetails = () => {
                 <button className='btn btn-outline-primary px-3 mx-1 mb-0'><FollowTechnician /></button>
                 <button className='btn btn-outline-primary px-3 mx-1 mb-0' onClick={handleMessageOpen}><MsgToTechnician /></button>
                 <button className='btn bg-gradient-primary mx-1 mb-0' onClick={() => setIsBookingOpen(true)}>Book Now</button>
-                {/* {bookingInformation ? (
-                  <button className='btn bg-gradient-primary mx-1 mb-0' onClick={() => navigate("/bookingHistory")}>View Booking history</button>
-                ) : (
-                  <button className='btn bg-gradient-primary mx-1 mb-0' onClick={() => setIsBookingOpen(true)}>Book Now</button>
-                )} */}
               </ul>
             </div>
           </div>
@@ -79,15 +73,41 @@ const TechnicianProfileDetails = () => {
             <div className="row d-flex justify-content-between mx-1">
 
               <div className="col-lg-7 col-sm-12 mb-6">
-                <div className="card card-body blur-sm mt-n5 ">
-                  <p>Available dates </p>
+                <div className="card card-body blur-sm mt-n5">
+                  <Calendar
+                    onChange={handleDateChange}
+                    tileDisabled={({ date }) => isDateDisabled(date)}
+                    tileClassName={({ date }) => {
+                      const dateStr = date.toLocaleDateString('en-CA');
+                      if (selectedDates.includes(dateStr)) {
+                        return 'selected-date';
+                      }
+                      return availableDates.includes(dateStr) ? 'available-date' : 'disabled-date';
+                    }}
+                  />
+                  <hr className="horizontal dark m-0 mt-2" />
+                  <p className='text-sm mt-3 mb-4 px-2'><strong>NOTE: </strong> Please select an available date if you want service from this technician. You can also choose multiple dates.</p>
+                  <div className="d-flex align-items-center ms-2">
+                    <div className="d-flex align-items-center me-3">
+                      <div className="instruction-dot" style={{ backgroundColor: "#A7F3B3" }}></div>
+                      <span className='text-xs ms-1 mb-0'>Selected</span>
+                    </div>
+                    <div className="d-flex align-items-center me-3">
+                      <div className="instruction-dot" style={{ backgroundColor: "#ffffff" }}></div>
+                      <span className='text-xs ms-1 mb-0'>Available</span>
+                    </div>
+                    <div className="d-flex align-items-center me-3">
+                      <div className="instruction-dot" style={{ backgroundColor: "#00000030" }}></div>
+                      <span className='text-xs ms-1 mb-0'>Not available</span>
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <div className="col-lg-5 col-sm-12 mb-7">
                 <div className="card card-body blur-sm mt-n5 py-2">
                   <h6 className="mb-0 mt-3 text-center">Feedbacks</h6>
-                  <div className="p-3" style={{ overflowY: 'auto', maxHeight: "450px" }}>
+                  <div className="p-3" style={{ overflowY: 'auto', maxHeight: "470px" }}>
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((val) => {
                       return (
                         <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center" key={val}>
@@ -117,7 +137,7 @@ const TechnicianProfileDetails = () => {
         <div className="d-flex justify-content-end">
           <p className='mx-1 cursor-pointer' onClick={() => setIsBookingOpen(false)}><CloseX_mark /></p>
         </div>
-        <BookingConfirmModalDetails setIsBookingOpen={setIsBookingOpen} technicianDetails={technicianDetails} />
+        <BookingConfirmModalDetails setIsBookingOpen={setIsBookingOpen} technicianDetails={technicianDetails} selectedDates={selectedDates} />
       </div>
     </>
   );

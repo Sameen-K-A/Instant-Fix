@@ -3,6 +3,7 @@ import { technicianType } from "../Model/technicianModel"
 import TechnicianRepository from "../Repository/technicianRepository";
 import UserRepository from "../Repository/userRepository";
 import { io } from "../Config/Socket_config";
+import { slotType } from "../Interfaces";
 
 class TechnicianService {
    private technicianRepository: TechnicianRepository;
@@ -92,7 +93,19 @@ class TechnicianService {
          throw error;
       };
    };
-   
+
+   async modifyAvailableSlotsService(technician_id: string, slots: slotType[]) {
+      try {
+         const result = await this.technicianRepository.modifyAvailableSlotsRepository(technician_id, slots);
+         if (result.modifiedCount === 0) {
+            throw new Error("Slot modification is failed.");
+         };
+         return true;
+      } catch (error) {
+         throw error;
+      };
+   };
+
 };
 
 export default TechnicianService;

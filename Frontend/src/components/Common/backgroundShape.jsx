@@ -1,4 +1,4 @@
-import backgroundImage from "/images/Login&RegisterBackground.jpg"
+import backgroundImage from "/images/HeaderBanner_3.jpg"
 
 const BackgroundShape = () => {
   return (

@@ -315,6 +315,36 @@ h4 {
   max-width: 800px !important;
 }
 
+/* --------------------------------------------------Min width in pixels -------------------------------------------------------------*/
+
+.min-width-100 {
+  min-width: 100px !important;
+}
+
+.min-width-150 {
+  min-width: 150px !important;
+}
+
+.min-width-200 {
+  min-width: 200px !important;
+}
+
+.min-width-300 {
+  min-width: 300px !important;
+}
+
+.min-width-400 {
+  min-width: 400px !important;
+}
+
+.min-width-500 {
+  min-width: 500px !important;
+}
+
+.min-width-800 {
+  min-width: 800px !important;
+}
+
 /* -------------------------------------------------- height in pixels -------------------------------------------------------------*/
 
 .height-100 {
@@ -4147,6 +4177,18 @@ textarea {
   border-radius: 0.45rem;
 }
 
+.success-badge {
+  padding: 0.55em 0.9em;
+  font-size: 0.75em;
+  font-weight: 700;
+  line-height: 1;
+  color: #00784c;
+  background-color: #d3ffd9;
+  border: 1px solid #3bff83;
+  text-align: center;
+  border-radius: 0.45rem;
+}
+
 .badge:empty {
   display: none;
 }
@@ -4436,6 +4478,7 @@ hr.horizontal.dark {
 .react-calendar {
   border: none;
   width: 100%;
+  background-color: transparent;
 }
 
 .react-calendar__tile {
@@ -4444,15 +4487,19 @@ hr.horizontal.dark {
   padding: 10px;
   font-size: 14px;
   color: black;
-  background-color: white;
+  background-color: transparent;
 }
 
 .selected-date {
   background-color: #A7F3B3 !important;
 }
 
+.booked-date {
+  background-color: #f3a7a7 !important;
+}
+
 .react-calendar__tile--disabled {
-  color: rgba(0, 0, 0, 0.5);
+  color: #00000080;
   cursor: not-allowed;
 }
 

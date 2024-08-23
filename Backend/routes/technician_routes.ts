@@ -13,4 +13,6 @@ router.get("/fetchTechnicianBookingHistory", verifyToken, technicianController.f
 router.get("/fetchingIndividualBookingDetails", verifyToken, technicianController.fetchingIndividualBookingDetailsController);
 router.patch("/acceptRejectCancelNewBooking", verifyToken, technicianController.acceptRejectCancelNewBookingController);
 
+router.patch("/modifyAvailableSlots", verifyToken, technicianController.modifyAvailableSlotsController);
+
 export default router;

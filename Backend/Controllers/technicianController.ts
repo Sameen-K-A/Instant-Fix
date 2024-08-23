@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import TechnicianService from "../Services/technicianService";
+import { slotType } from "../Interfaces";
 
 const technicianService = new TechnicianService();
 
@@ -74,6 +75,21 @@ class TechnicianController {
       } else {
         res.status(500).json(error);
       };
+    };
+  };
+
+  async modifyAvailableSlotsController(req: Request, res: Response) {
+    try {
+      const technician_id = req.body.technician_id as string;
+      const slots = req.body.slots as slotType[];
+      await technicianService.modifyAvailableSlotsService(technician_id, slots);
+      res.status(200).send("Slot modified completed successfully");
+    } catch (error: any) {
+      if (error.message === "Slot modification is failed.") {
+        res.status(301).send("Slot modification is failed.");
+      } else {
+        res.status(500).send("something worng please try again later.");
+      }
     };
   };
 

@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import {technicianType} from "../Interfaces";
+import { technicianType } from "../Interfaces";
 
 const technicianSchema = new Schema<technicianType>({
    user_id: {
@@ -18,7 +18,16 @@ const technicianSchema = new Schema<technicianType>({
    rating: {
       type: Number,
       default: 0
-   }
+   },
+   availableSlots: [{
+      slotDate: {
+         type: String
+      },
+      slotBooked: {
+         type: Boolean,
+      },
+      _id: false
+   }]
 }, {
    versionKey: false
 });

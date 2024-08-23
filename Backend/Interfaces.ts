@@ -11,12 +11,18 @@ export type userType = {
    alreadychattedtechnician?: string[];
 };
 
+export type slotType = {
+   slotDate: string;
+   slotBooked: boolean;
+}
+
 export type technicianType = {
    user_id: string;
    technician_id: string;
    profession: string;
    availability?: boolean;
    rating?: Number;
+   availableSlots?: slotType[];
 };
 
 export type userAddressType = {

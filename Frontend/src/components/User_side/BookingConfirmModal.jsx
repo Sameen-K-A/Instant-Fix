@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 import userAxiosInstance from "../../config/AxiosInstance/userInstance";
 import { useNavigate } from 'react-router-dom';
 
-const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails }) => {
+const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selectedDates }) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const districtArray = ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kollam", "Kottayam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"];
@@ -38,6 +38,10 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails }) => 
   };
 
   const bookTechnician = async () => {
+    if (selectedDates.length === 0) {
+      toast.error('Please select a date for your services');
+      return;
+    }
     if (!validateForm()) {
       return;
     }
@@ -80,6 +84,21 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails }) => 
           <br />
           Thank you for your patience.
         </p>
+        <hr className="horizontal dark mt-1" />
+        {selectedDates.length === 0 ? (
+          <p className='text-sm text-danger'>  Date is not selected for the service.<br />  Please select your desired service date from the calendar.</p>
+        ) : (
+          <>
+            <p className='text-sm'>Your selected dates are</p>
+            <div className='row d-flex justify-content-start gap-1 ms-1'>
+              {selectedDates.map((date) => {
+                return (
+                  <p className='success-badge max-width-100'>{date}</p>
+                )
+              })}
+            </div>
+          </>
+        )}
       </div>
 
       <div className="col-lg-7 col-md-12 col-sm-12 card card-body shadow-blur d-flex justify-content-center align-items-center">

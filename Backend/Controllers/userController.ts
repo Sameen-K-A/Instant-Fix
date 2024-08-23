@@ -167,16 +167,16 @@ class UserController {
       };
    };
 
-   async fetchAnyPendingRequestAvailable_controller(req: Request, res: Response) {
-      try {
-         const clientID = req.query.clientID as string;
-         const technicianUserID = req.query.technicianUserID as string;
-         const response = await userServices.fetchAnyPendingRequestAvailableService(clientID, technicianUserID);
-         res.status(200).send(response);
-      } catch (error) {
-         res.status(500).json(error);
-      }
-   };
+   // async fetchAnyPendingRequestAvailable_controller(req: Request, res: Response) {
+   //    try {
+   //       const clientID = req.query.clientID as string;
+   //       const technicianUserID = req.query.technicianUserID as string;
+   //       const response = await userServices.fetchAnyPendingRequestAvailableService(clientID, technicianUserID);
+   //       res.status(200).send(response);
+   //    } catch (error) {
+   //       res.status(500).json(error);
+   //    }
+   // };
 
    async fetchUserBookingHistory_controller(req: Request, res: Response) {
       try {
