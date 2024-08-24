@@ -140,6 +140,16 @@ class UserController {
       }
    };
 
+   async fetchTechnicianIndividualInformationController(req: Request, res: Response) {
+      try {
+         const technicianUser_id: string = req.query.technicianUser_id as string;
+         const responseFromService = await userServices.fetchTechnicianIndividualInformationService(technicianUser_id);
+         res.status(200).json(responseFromService);
+      } catch (error) {
+         res.status(500).send("Somthing wrong please try again later");
+      };
+   };
+
    async fetchAlreadyChattedTechnicians_controller(req: Request, res: Response) {
       try {
          const user_id = req.query.user_id as string;

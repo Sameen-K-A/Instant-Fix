@@ -4,13 +4,15 @@ import * as Yup from 'yup';
 import { toast } from 'sonner';
 import userAxiosInstance from '../../../config/AxiosInstance/userInstance';
 import { useNavigate } from 'react-router-dom';
+import { useUserDetails } from '../../../Contexts/UserDetailsContext';
 
-const AddressModal = ({ userDetails, setUserDetails }) => {
+const AddressModal = () => {
   const navigate = useNavigate();
   const districtArray = ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kollam", "Kottayam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"];
   const [openDistrictSession, setOpenDistrictSession] = useState(false);
   const [isLoading, setIsloading] = useState(false);
   const [defaultDistrict, setDefaultDistrict] = useState(districtArray[1]);
+  const { userDetails, setUserDetails } = useUserDetails();
 
   useEffect(() => {
     if (userDetails?.addressDetails?.district) {

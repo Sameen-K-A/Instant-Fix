@@ -5,8 +5,10 @@ import userAxiosInstance from '../../../config/AxiosInstance/userInstance';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import confirmAlert from '../../Common/SweetAlert/confirmAlert';
+import { useUserDetails } from '../../../Contexts/UserDetailsContext';
 
-const UserChangePassword = ({ userDetails }) => {
+const UserChangePassword = () => {
+  const { userDetails } = useUserDetails();
   const navigate = useNavigate();
 
   const formik = useFormik({

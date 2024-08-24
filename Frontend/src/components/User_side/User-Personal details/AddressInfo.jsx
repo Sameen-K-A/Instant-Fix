@@ -3,9 +3,11 @@ import confirmAlert from "../../Common/SweetAlert/confirmAlert";
 import { toast } from "sonner";
 import AlertRedDot from "../../Common/AlertRedDot";
 import AddressModal from "./AddressModal";
+import { useUserDetails } from "../../../Contexts/UserDetailsContext";
 
-const AddressInformation = ({ userDetails, setUserDetails }) => {
+const AddressInformation = () => {
 
+  const { userDetails, setUserDetails } = useUserDetails();
   const handleDelete = () => {
     confirmAlert("Do you want to delete this Address")
       .then(async (result) => {
@@ -62,7 +64,7 @@ const AddressInformation = ({ userDetails, setUserDetails }) => {
           )}
         </div>
       </div>
-      <AddressModal userDetails={userDetails} setUserDetails={setUserDetails} />
+      <AddressModal />
     </>
   );
 };

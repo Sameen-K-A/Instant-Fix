@@ -23,6 +23,7 @@ router.patch("/editprofile", verifyToken, upload.single('profile'), userControll
 
 //fetching technicians details
 router.get("/fetchTechnician", verifyToken, userController.fetchTechnician_controller);
+router.get("/fetchTechnicianIndividualInformation", verifyToken, userController.fetchTechnicianIndividualInformationController)
 
 // chatting area
 router.get("/fetchAlreadyChattedTechnicians", verifyToken, userController.fetchAlreadyChattedTechnicians_controller);

@@ -7,9 +7,10 @@ import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { Backbtn } from '../../../public/svgs/Icons';
 import userAxiosInstance from '../../config/AxiosInstance/userInstance';
+import { useUserDetails } from '../../Contexts/UserDetailsContext';
 
 const TechnicianRole = () => {
-  const [userDetails, setUserDetails] = useState({});
+  const { userDetails, setUserDetails } = useUserDetails();
   const professions = ["Painter", "Welder", "Electrician", "Plumber", "Automobile Mechanic", "AC Mechanic", "Other"];
   const [selectedProfessionIndex, setSelectedProfessionIndex] = useState(null);
   const [enteredOtherProfession, setEnteredOtherProfession] = useState("");

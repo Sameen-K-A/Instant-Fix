@@ -8,11 +8,13 @@ import profileDefault_3 from "../../../../public/images/profile_3.jpg";
 import profileDefault_4 from "../../../../public/images/profile_4.jpg";
 import userAxiosInstance from "../../../config/AxiosInstance/userInstance";
 import { toast } from "sonner";
+import { useUserDetails } from "../../../Contexts/UserDetailsContext";
 
-const EditUserInfo = ({ userDetails, setUserDetails, cancelEdit }) => {
+const EditUserInfo = ({ cancelEdit }) => {
   const [selectedDefaultimgIndex, setSelectedDefaultimgIndex] = useState(null);
   const [userSelectedImg, setUserSelectedImg] = useState(null);
   const fileInputRef = useRef(null);
+  const { userDetails, setUserDetails } = useUserDetails();
 
   const defaultImages = [profileDefault_1, profileDefault_2, profileDefault_3, profileDefault_4];
 

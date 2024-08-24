@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from 'sonner';
+import UserProvider from './Contexts/UserDetailsContext';
 
 // User side
 import UserLogin from './components/User_side/Login';
@@ -44,7 +45,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function App() {
   return (
-    <>
+    <UserProvider>
       <BrowserRouter>
         <Routes>
 
@@ -83,8 +84,8 @@ function App() {
         </Routes>
       </BrowserRouter>
       <Toaster richColors expand={false} position="bottom-right" closeButton="true" toastOptions={{ style: { padding: '18px', borderRadius: '8px' } }} />
-    </>
-  )
-}
+    </UserProvider>
+  );
+};
 
-export default App
+export default App;

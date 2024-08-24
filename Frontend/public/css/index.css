@@ -4496,6 +4496,7 @@ hr.horizontal.dark {
 
 .booked-date {
   background-color: #f3a7a7 !important;
+  color: black !important;
 }
 
 .react-calendar__tile--disabled {

@@ -7,10 +7,12 @@ import GoogleIcon from "../../../public/svgs/GoogleIcon";
 import { toast } from 'sonner';
 import axios from 'axios';
 import { Base_URL } from '../../config/credentials';
+import { useUserDetails } from "../../Contexts/UserDetailsContext";
 
 const UserLogin = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { setUserDetails } = useUserDetails()
 
   useEffect(() => {
     if (location.state?.message) {
@@ -18,8 +20,8 @@ const UserLogin = () => {
         toast.success("Registration process completed successfully, please login.");
       } else if (location.state.message === "Authorization failed, please login") {
         toast.error(location.state.message);
-      }
-    }
+      };
+    };
   }, [location.state]);
 
   const formik = useFormik({
@@ -42,6 +44,7 @@ const UserLogin = () => {
         const response = await axios.post(`${Base_URL}/login`, values);
         sessionStorage.setItem("userToken", response.data.userToken);
         sessionStorage.setItem("userDetails", JSON.stringify(response.data.userData));
+        setUserDetails(response.data.userData);
         navigate("/");
       } catch (error) {
         if (error.response && error.response.data.message === "email not found") {

@@ -6,6 +6,7 @@ import userAxiosInstance from "../../config/AxiosInstance/userInstance";
 import { toast } from "sonner";
 import ChatScreen from "../../components/Chat/ChatScreen";
 import TechnicianNavbar from "../../components/Technician_side/NavbarPage";
+import { useUserDetails } from "../../Contexts/UserDetailsContext";
 
 const ChatPage = () => {
 
@@ -13,11 +14,11 @@ const ChatPage = () => {
   const [instantChatTechnicianDetails, setInstantChatTechnicianDetails] = useState(null);
   const [previousChattedTechnicians, setPreviousChattedTechnicians] = useState([]);
   const [currentChatting, setCurrentChatting] = useState(null);
+  const { userDetails } = useUserDetails();
 
   useEffect(() => {
     setInstantChatTechnicianDetails(location.state?.details);
     setCurrentChatting(location.state?.details);
-    const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
     (async () => {
       try {
         const response = await userAxiosInstance.get(`/fetchAlreadyChattedTechnicians?user_id=${userDetails?.user_id}`);

@@ -108,6 +108,31 @@ class UserRepository {
     }
   };
 
+  async fetchTechnicianIndividualInformationRepository(technicianUser_id: string) {
+    try {
+      const result = await User.aggregate([
+        { $match: { user_id: technicianUser_id } },
+        { $lookup: { from: "technicians", localField: "user_id", foreignField: "user_id", as: "technicianDetails" } },
+        { $unwind: "$technicianDetails" },
+        {
+          $project: {
+            _id: 0,
+            password: 0,
+            isBlocked: 0,
+            isTechnician: 0,
+            addressDetails: 0,
+            alreadychattedtechnician: 0,
+            "technicianDetails._id": 0,
+            "technicianDetails.technician_id": 0,
+          }
+        }
+      ]);
+      return result[0];
+    } catch (error) {
+      throw error;
+    }
+  };
+
   async fetchSingleTechnicianDetailsRepository(technicianUserID: string): Promise<any[]> {
     try {
       return await User.aggregate([

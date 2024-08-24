@@ -6,6 +6,7 @@ import Footer from "../../components/Common/Footer";
 import userAxiosInstance from "../../config/AxiosInstance/userInstance";
 import { toast } from 'sonner';
 import NoResultFoundImage from "../../../public/images/NoResultFound.png";
+import { useUserDetails } from "../../Contexts/UserDetailsContext"
 
 const TechniciansListPage = () => {
   const [primaryTechniciansList, setPrimaryTechnicianList] = useState([]);
@@ -16,11 +17,11 @@ const TechniciansListPage = () => {
   const professions = ["Painter", "Welder", "Electrician", "Plumber", "Automobile Mechanic", "AC Mechanic", "Carpenter"];
   const district = ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kollam", "Kottayam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"];
   const navigate = useNavigate();
+  const { userDetails } = useUserDetails();
 
   useEffect(() => {
     (async () => {
       try {
-        const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
         if (!userDetails) {
           navigate("/login", { state: { message: "Authorization failed, please login" } });
           return;
@@ -48,7 +49,7 @@ const TechniciansListPage = () => {
       });
     };
 
-    if(selectedProfession.length !== 0) {
+    if (selectedProfession.length !== 0) {
       afterFiltering = afterFiltering.filter((data) => {
         return selectedProfession.includes(data?.technicianDetails?.profession);
       });

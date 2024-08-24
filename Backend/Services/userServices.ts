@@ -189,6 +189,14 @@ class UserServices {
       }
    };
 
+   async fetchTechnicianIndividualInformationService(technicianUser_id: string) {
+      try {
+         return await this.userRepository.fetchTechnicianIndividualInformationRepository(technicianUser_id);
+      } catch (error) {
+         throw error;
+      };
+   };
+
    async fetchAlreadyChattedTechniciansService(user_id: string) {
       try {
          return await this.userRepository.fetchAlreadyChattedTechniciansRepository(user_id);

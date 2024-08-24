@@ -5,12 +5,14 @@ import { toast } from "sonner";
 import { Base_URL } from "../../config/credentials";
 import { useNavigate } from "react-router-dom";
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
+import { useUserDetails } from "../../Contexts/UserDetailsContext";
 
 const UserBookingHistoryTable = () => {
 
   const [bookingDetailsArray, setBookingDetailsArray] = useState([]);
+  const { userDetails } = useUserDetails();
   const navigate = useNavigate();
-  const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
+
   useEffect(() => {
     (async () => {
       try {

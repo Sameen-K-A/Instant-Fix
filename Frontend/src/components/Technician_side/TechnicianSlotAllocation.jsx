@@ -5,12 +5,13 @@ import backgroundImage from "/images/HeaderBanner_2.png";
 import Calendar from 'react-calendar';
 import userAxiosInstance from '../../config/AxiosInstance/userInstance';
 import { toast } from 'sonner';
+import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import 'react-calendar/dist/Calendar.css';
 
 const TechnicianSlotAllocation = () => {
   const [selectedDates, setSelectedDates] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
-  const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
+  const { userDetails } = useUserDetails();
   const technicianDetails = userDetails?.technicianDetails[0];
 
   useEffect(() => {

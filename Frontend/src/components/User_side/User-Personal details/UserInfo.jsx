@@ -1,8 +1,10 @@
 import { useState } from "react";
 import EditUserInfo from "./EditInfo";
+import { useUserDetails } from "../../../Contexts/UserDetailsContext";
 
-const UserInformation = ({ userDetails, setUserDetails }) => {
+const UserInformation = () => {
   const [isEdit, setIsEdit] = useState(false);
+  const { userDetails } = useUserDetails();
 
   const cancelEdit = () => {
     setIsEdit(false);
@@ -17,7 +19,7 @@ const UserInformation = ({ userDetails, setUserDetails }) => {
         {userDetails && (
           <div className="mt-3">
             {isEdit ? (
-              <EditUserInfo userDetails={userDetails} setUserDetails={setUserDetails} cancelEdit={cancelEdit} />
+              <EditUserInfo cancelEdit={cancelEdit} />
             ) : (
               <li className="list-group-item border-0 d-flex p-4 mb-2 mt-3 bg-gray-100 border-radius-lg">
                 <div className="d-flex flex-column">

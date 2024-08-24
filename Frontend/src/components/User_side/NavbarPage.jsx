@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { Base_URL } from "../../config/credentials";
 import profile from "../../../public/images/userDefaultProfile.png";
 import UserSideBar from "./UserSidebar";
+import { useUserDetails } from "../../Contexts/UserDetailsContext";
 
 const UserNavbar = () => {
   const navigate = useNavigate();
-  const userData = JSON.parse(sessionStorage.getItem("userDetails"));
-  const userProfile = userData?.profileIMG;
+  const { userDetails } = useUserDetails();
+  const userProfile = userDetails?.profileIMG;
   return (
     <>
       <nav className="navbar navbar-light bg-light">
@@ -15,7 +16,7 @@ const UserNavbar = () => {
           <p className="navbar-brand mb-0">Logo</p>
           <div className="d-flex align-items-center my-2">
             <p className="font-weight-bold text-dark text-sm mb-0 me-3 cursor-pointer bg-gradient-primary px-3 py-1 rounded-3 text-white" onClick={() => { navigate("/allTechnicians") }}>Book Technicians</p>
-            {!userData && (
+            {!userDetails && (
               <p className="text-dark text-sm mb-0 me-3 cursor-pointer" onClick={() => { navigate("/login") }}>Login</p>
             )}
             <div className="circle">
@@ -24,7 +25,7 @@ const UserNavbar = () => {
           </div>
         </div>
       </nav>
-      <UserSideBar userData={userData} />
+      <UserSideBar />
     </>
   );
 }

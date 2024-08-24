@@ -2,10 +2,13 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import userAxiosInstance from "../../config/AxiosInstance/userInstance";
 import { useNavigate } from 'react-router-dom';
+import { useUserDetails } from "../../Contexts/UserDetailsContext"
 
 const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selectedDates, setSelectedDates }) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { userDetails } = useUserDetails();
+
   const districtArray = ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kollam", "Kottayam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"];
   const [openDistrictSession, setOpenDistrictSession] = useState(false);
   const [defaultDistrict, setDefaultDistrict] = useState(districtArray[1]);
@@ -55,10 +58,10 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selec
         alternatePhone: alternateNumber,
         pincode: pinCode
       };
-      const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
       await userAxiosInstance.post("/bookTechnician", { client_id: userDetails?.user_id, technicianDetails: technicianDetails, serviceLocation: serviceLocation, selectedDates: selectedDates });
       toast.success("Booking request sent successfully, please wait for the confirmation.");
-      setIsBookingOpen(false)
+      setIsBookingOpen(false);
+      setSelectedDates([]);
     } catch (error) {
       if (error.response.status === 401) {
         navigate("/login", { state: { message: "Authorization failed, please login" } });

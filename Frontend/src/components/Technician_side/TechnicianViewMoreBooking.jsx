@@ -5,11 +5,12 @@ import backgroundImage from "../../../public/images/HeaderBanner_2.png";
 import confirmAlert from '../Common/SweetAlert/confirmAlert';
 import { toast } from 'sonner';
 import userAxiosInstance from '../../config/AxiosInstance/userInstance';
+import { useUserDetails } from "../../Contexts/UserDetailsContext";
 
 const TechnicianViewMoreBooking = () => {
 
   const [bookingDetails, setBookingDetails] = useState(null);
-  const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
+  const { userDetails } = useUserDetails();
   const location = useLocation();
 
   useEffect(() => {
@@ -162,6 +163,10 @@ const TechnicianViewMoreBooking = () => {
                                   ))}
                                 </p>
                               </td>
+                            </tr>
+                            <tr>
+                              <td><p className="text-xs mb-0">Service completed date</p></td>
+                              <td><p className="text-xs font-weight-bold mb-0">{bookingDetails?.serviceCompletedDate}</p></td>
                             </tr>
                             <tr>
                               <td><p className="text-xs mb-0">Service Cost</p></td>

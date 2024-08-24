@@ -6,23 +6,19 @@ import io from "socket.io-client";
 import { toast } from "sonner";
 import NotificationCard from "../Common/Notification";
 import userAxiosInstance from "../../config/AxiosInstance/userInstance";
+import { useUserDetails } from "../../Contexts/UserDetailsContext";
 
 const socket = io(Base_URL);
 
 const TechnicianNavbar = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [bookingDetailsArray, setBookingDetailsArray] = useState([]);
-  const [userData, setUserData] = useState(null);
-  const userProfile = userData?.profileIMG;
-
-  useEffect(() => {
-    const storedUserData = JSON.parse(sessionStorage.getItem("userDetails"));
-    setUserData(storedUserData);
-  }, []);
+  const {userDetails, setUserDetails} = useUserDetails();
+  const userProfile = userDetails?.profileIMG;
 
   const fetchBookingDetails = async () => {
     try {
-      const response = await userAxiosInstance.get("/technician/fetchTechnicianBookingHistory", { params: { technicianUserID: userData?.user_id } });
+      const response = await userAxiosInstance.get("/technician/fetchTechnicianBookingHistory", { params: { technicianUserID: userDetails?.user_id } });
       sessionStorage.setItem("technicianBookings", JSON.stringify(response.data));
       setBookingDetailsArray(response.data);
     } catch (error) {
@@ -36,9 +32,9 @@ const TechnicianNavbar = () => {
 
   const fetchTechnicianInformation = async () => {
     try {
-      const response = await userAxiosInstance.get("/technician/fetchTechnicianInformation", { params: { technicianUserID: userData?.user_id } });
-      const afterFetching = { ...userData, technicianDetails: [{ ...response.data }] };
-      setUserData(afterFetching);
+      const response = await userAxiosInstance.get("/technician/fetchTechnicianInformation", { params: { technicianUserID: userDetails?.user_id } });
+      const afterFetching = { ...userDetails, technicianDetails: [{ ...response.data }] };
+      setUserDetails(afterFetching);
       sessionStorage.setItem("userDetails", JSON.stringify(afterFetching));
     } catch (error) {
       if (error.response.status === 401) {
@@ -56,11 +52,11 @@ const TechnicianNavbar = () => {
     } else {
       fetchBookingDetails();
     }
-  }, [userData?.user_id]);
+  }, [userDetails?.user_id]);
 
   useEffect(() => {
-    if (userData) {
-      socket.emit("joinTechnicianNoficationRoom", userData?.user_id);
+    if (userDetails) {
+      socket.emit("joinTechnicianNoficationRoom", userDetails?.user_id);
       socket.on("notification_to_technician", (data) => {
         toast(data.message);
         fetchBookingDetails();
@@ -70,7 +66,7 @@ const TechnicianNavbar = () => {
         socket.off("notification_to_technician");
       };
     }
-  }, [userData]);
+  }, [userDetails]);
 
   const handleBackdropClick = () => {
     setShowNotification(false);

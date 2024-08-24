@@ -54,7 +54,17 @@ const AdminViewMoreBookingDetails = () => {
                           </tr>
                           <tr>
                             <td><p className="text-xs mb-0">Service Date</p></td>
-                            <td><p className="text-xs font-weight-bold mb-0">{bookingDetails?.serviceDate}</p></td>
+                            <td>
+                              <p className="text-xs font-weight-bold mb-0">
+                                {bookingDetails?.serviceDate.map((date, index) => (
+                                  <React.Fragment key={index}>{date}<br /></React.Fragment>
+                                ))}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td><p className="text-xs mb-0">Service completed date</p></td>
+                            <td><p className="text-xs font-weight-bold mb-0">{bookingDetails?.serviceCompletedDate}</p></td>
                           </tr>
                           <tr>
                             <td><p className="text-xs mb-0">Service Location</p></td>

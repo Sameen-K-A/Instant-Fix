@@ -2,10 +2,12 @@ import { useState } from "react";
 import { toast } from "sonner";
 import confirmAlert from "../Common/SweetAlert/confirmAlert";
 import userAxiosInstance from "../../config/AxiosInstance/userInstance";
+import { useUserDetails } from "../../Contexts/UserDetailsContext";
 
-const TechnicianChangeProfession = ({ profession, userDetails, setUserDetails }) => {
+const TechnicianChangeProfession = ({ profession }) => {
 
   const [isEdit, setIsEdit] = useState(false);
+  const { userDetails, setUserDetails } = useUserDetails();
   const professions = ["Painter", "Welder", "Electrician", "Plumber", "Automobile Mechanic", "AC Mechanic", "Other"];
   const [selectedProfessionIndex, setSelectedProfessionIndex] = useState(null);
   const [enteredOtherProfession, setEnteredOtherProfession] = useState("");

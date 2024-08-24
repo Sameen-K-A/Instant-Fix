@@ -13,13 +13,13 @@ import { Base_URL } from '../../config/credentials';
 import { useLocation } from 'react-router-dom';
 import { AvailabilityDot, Star } from '../../../public/svgs/Icons';
 import { toast } from 'sonner';
+import { useUserDetails } from '../../Contexts/UserDetailsContext';
 
 const AccountDetails = () => {
-  const [userDetails, setUserDetails] = useState(null);
+  const { userDetails, setUserDetails } = useUserDetails();
   const [nowTechnician, setNowTechnician] = useState(false);
   const location = useLocation();
   useEffect(() => {
-    setUserDetails(JSON.parse(sessionStorage.getItem("userDetails")));
     if (location.pathname === "/technician/accountdetails") {
       setNowTechnician(true);
     }
@@ -96,14 +96,14 @@ const AccountDetails = () => {
         <div className="container-fluid py-4">
           <div className="row">
             <div className="col-12 col-xl-4 mb-4">
-              <UserInformation userDetails={userDetails} setUserDetails={setUserDetails} />
-              <UserChangePassword userDetails={userDetails} />
+              <UserInformation />
+              <UserChangePassword />
             </div>
             <div className="col-12 col-xl-4 mb-4">
               {nowTechnician && (
-                <TechnicianChangeProfession profession={userDetails.technicianDetails[0]?.profession} userDetails={userDetails} setUserDetails={setUserDetails} />
+                <TechnicianChangeProfession profession={userDetails.technicianDetails[0]?.profession} />
               )}
-              <AddressInformation userDetails={userDetails} setUserDetails={setUserDetails} />
+              <AddressInformation />
             </div>
             {nowTechnician ? <TechnicianFeedbacks /> : <FollowingInformation />}
           </div>

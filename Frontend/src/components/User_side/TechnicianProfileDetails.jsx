@@ -9,6 +9,7 @@ import BookingConfirmModalDetails from './BookingConfirmModal';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { toast } from 'sonner';
+import userAxiosInstance from '../../config/AxiosInstance/userInstance';
 
 const TechnicianProfileDetails = () => {
   const location = useLocation();
@@ -19,11 +20,22 @@ const TechnicianProfileDetails = () => {
   const [availableDates, setAvailableDates] = useState([])
 
   useEffect(() => {
-    const details = location.state.details;
-    setTechnicianDetails(details);
-    const availableDatesFromTechnicianSide = details?.technicianDetails?.availableSlots;
-    setAvailableDates(availableDatesFromTechnicianSide.map((slotInto) => slotInto.slotBooked === false && slotInto.slotDate));
-  }, []);
+    (async () => {
+      try {
+        const details = location.state.details;
+        const response = await userAxiosInstance.get("/fetchTechnicianIndividualInformation", { params: { technicianUser_id: details?.user_id } });
+        setTechnicianDetails(response.data);
+        const availableDatesFromTechnicianSide = response.data?.technicianDetails?.availableSlots;
+        setAvailableDates(availableDatesFromTechnicianSide.map((slotInto) => slotInto.slotBooked === false && slotInto.slotDate));
+      } catch (error) {
+        if (error.response.status === 401) {
+          navigate("/login", { state: { message: "Authorization failed, please login" } });
+        } else {
+          toast.error("Somthing wrong, can't find the technician information please try again later.");
+        };
+      };
+    })();
+  }, [selectedDates.length === 0]);
 
   const handleDateChange = (changedDate) => {
     const date = changedDate.toLocaleDateString('en-CA');
@@ -97,7 +109,7 @@ const TechnicianProfileDetails = () => {
                   <hr className="horizontal dark m-0 mt-2" />
                   <p className='text-sm mt-3 mb-4 px-2'><strong>NOTE: </strong> Please select an available date if you want service from this technician. You can also choose multiple dates.</p>
                   <div className="d-flex align-items-center ms-2">
-                    <div className="d-flex align-items-center me-3">mhvmv
+                    <div className="d-flex align-items-center me-3">
                       <div className="instruction-dot" style={{ backgroundColor: "#A7F3B3" }}></div>
                       <span className='text-xs ms-1 mb-0'>Selected</span>
                     </div>
