@@ -152,31 +152,20 @@ class UserController {
 
    async bookTechnician_controller(req: Request, res: Response) {
       try {
-         const { client_id, technicianDetails, serviceLocation } = req.body;
-         const response = await userServices.bookTechnicianService(client_id, technicianDetails, serviceLocation);
+         const { client_id, technicianDetails, serviceLocation, selectedDates } = req.body;
+         const response = await userServices.bookTechnicianService(client_id, technicianDetails, serviceLocation, selectedDates);
          res.status(200).json(response);
       } catch (error: any) {
          if (error.message === "Booking failed") {
             res.status(409).send("Booking failed")
-         } else if (error.message === "Technician not available now") {
-            res.status(404).send("Technician not available now")
+         } else if (error.message === "Technician not available") {
+            res.status(404).send("Technician not available")
          } else {
             console.log(error);
             res.status(500).json(error);
          };
       };
    };
-
-   // async fetchAnyPendingRequestAvailable_controller(req: Request, res: Response) {
-   //    try {
-   //       const clientID = req.query.clientID as string;
-   //       const technicianUserID = req.query.technicianUserID as string;
-   //       const response = await userServices.fetchAnyPendingRequestAvailableService(clientID, technicianUserID);
-   //       res.status(200).send(response);
-   //    } catch (error) {
-   //       res.status(500).json(error);
-   //    }
-   // };
 
    async fetchUserBookingHistory_controller(req: Request, res: Response) {
       try {

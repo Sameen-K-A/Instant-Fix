@@ -64,6 +64,14 @@ class TechnicianService {
       };
    };
 
+   async fetchTechnicianInformationService(technicianUser_id: string) {
+      try {
+         return await this.technicianRepository.fetchTechnicianInformationRepository(technicianUser_id);
+      } catch (error) {
+         throw error;
+      };
+   };
+
    async fetchTechnicianBookingHistoryService(technicianUserID: string) {
       try {
          return await this.technicianRepository.fetchTechnicianBookingHistoryRepository(technicianUserID);

@@ -52,6 +52,16 @@ class TechnicianController {
     }
   };
 
+  async fetchTechnicianInformationController(req: Request, res: Response) {
+    try {
+      const technicianUser_id: string = req.query.technicianUserID as string;
+      const serviceResponse = await technicianService.fetchTechnicianInformationService(technicianUser_id);
+      res.status(200).json(serviceResponse);
+    } catch (error) {
+      res.status(500).send("Something wrong please try again later.")
+    };
+  };
+
   async fetchingIndividualBookingDetailsController(req: Request, res: Response) {
     try {
       const booking_id: string = req.query.booking_id as string;

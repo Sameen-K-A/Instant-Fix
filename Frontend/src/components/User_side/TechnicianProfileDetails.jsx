@@ -8,6 +8,7 @@ import image from "../../../public/images/profile_2.jpg";
 import BookingConfirmModalDetails from './BookingConfirmModal';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { toast } from 'sonner';
 
 const TechnicianProfileDetails = () => {
   const location = useLocation();
@@ -26,11 +27,19 @@ const TechnicianProfileDetails = () => {
 
   const handleDateChange = (changedDate) => {
     const date = changedDate.toLocaleDateString('en-CA');
-    setSelectedDates((prevSelectedDates) =>
-      prevSelectedDates.includes(date)
-        ? prevSelectedDates.filter((dates) => dates !== date)
-        : [...prevSelectedDates, date]
-    );
+
+    setSelectedDates((prevSelectedDates) => {
+      if (prevSelectedDates.includes(date)) {
+        return prevSelectedDates.filter((dates) => dates !== date);
+      } else {
+        if (prevSelectedDates.length < 5) {
+          return [...prevSelectedDates, date];
+        } else {
+          toast.warning("You can only select a maximum of 5 days.");
+          return prevSelectedDates;
+        };
+      };
+    });
   };
 
   const isDateDisabled = (date) => {
@@ -88,7 +97,7 @@ const TechnicianProfileDetails = () => {
                   <hr className="horizontal dark m-0 mt-2" />
                   <p className='text-sm mt-3 mb-4 px-2'><strong>NOTE: </strong> Please select an available date if you want service from this technician. You can also choose multiple dates.</p>
                   <div className="d-flex align-items-center ms-2">
-                    <div className="d-flex align-items-center me-3">
+                    <div className="d-flex align-items-center me-3">mhvmv
                       <div className="instruction-dot" style={{ backgroundColor: "#A7F3B3" }}></div>
                       <span className='text-xs ms-1 mb-0'>Selected</span>
                     </div>
@@ -137,7 +146,7 @@ const TechnicianProfileDetails = () => {
         <div className="d-flex justify-content-end">
           <p className='mx-1 cursor-pointer' onClick={() => setIsBookingOpen(false)}><CloseX_mark /></p>
         </div>
-        <BookingConfirmModalDetails setIsBookingOpen={setIsBookingOpen} technicianDetails={technicianDetails} selectedDates={selectedDates} />
+        <BookingConfirmModalDetails setIsBookingOpen={setIsBookingOpen} technicianDetails={technicianDetails} selectedDates={selectedDates} setSelectedDates={setSelectedDates} />
       </div>
     </>
   );

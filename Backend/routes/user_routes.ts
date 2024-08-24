@@ -28,7 +28,6 @@ router.get("/fetchTechnician", verifyToken, userController.fetchTechnician_contr
 router.get("/fetchAlreadyChattedTechnicians", verifyToken, userController.fetchAlreadyChattedTechnicians_controller);
 
 // booking new technician area
-// router.get("/fetchAnyPendingRequestAvailable", verifyToken, userController.fetchAnyPendingRequestAvailable_controller);
 router.post("/bookTechnician", verifyToken, userController.bookTechnician_controller);
 
 // booking history and its related details

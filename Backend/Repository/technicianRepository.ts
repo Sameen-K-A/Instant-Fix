@@ -43,6 +43,14 @@ class TechnicianRepository {
     }
   };
 
+  async fetchTechnicianInformationRepository(technicianUser_id: string) {
+    try {
+      return await technicianModel.findOne({ user_id: technicianUser_id }, { _id: 0 });
+    } catch (error) {
+      throw error
+    }
+  }
+
   async fetchingIndividualBookingDetailsRepository(booking_id: string) {
     try {
       const response = await BookingModel.aggregate([

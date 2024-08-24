@@ -3,8 +3,9 @@ import bcrypt from 'bcrypt';
 import { v4 as uuid } from "uuid";
 import { userAddressType, userType } from "../Interfaces";
 import sendOTPmail from "../Config/Email_config";
+import TechnicianRepository from "../Repository/technicianRepository";
 import { createToken } from "../Config/jwt_config";
-import { newBookingType } from "../Interfaces";
+import { newBookingType, slotType } from "../Interfaces";
 import { io } from "../Config/Socket_config";
 import axios from "axios";
 
@@ -13,6 +14,7 @@ class UserServices {
    private OTP: string | null = null;
    private expiryOTP_time: Date | null = null;
    private userData: userType | null = null;
+   private technicianRepository = new TechnicianRepository();
 
    constructor(userRepository: UserRepository) {
       this.userRepository = userRepository;
@@ -195,11 +197,20 @@ class UserServices {
       }
    };
 
-   async bookTechnicianService(client_id: string, technicianDetails: any, serviceLocation: userAddressType) {
+   async bookTechnicianService(client_id: string, technicianDetails: any, serviceLocation: userAddressType, selectedDates: string[]) {
       try {
          const technicianInformation: any = await this.userRepository.fetchSingleTechnicianDetailsRepository(technicianDetails.user_id as string);
-         if (technicianInformation[0].isBlocked === true || technicianInformation[0].technicianDetails.availability === false) {
-            throw new Error("Technician not available now");
+         if (technicianInformation[0].isBlocked || !technicianInformation[0].technicianDetails.availability) {
+            throw new Error("Technician not available");
+         };
+         const TechnicianAllocatedAllSlots = technicianInformation[0]?.technicianDetails?.availableSlots;
+         const unavailableDates = selectedDates.filter(date => {
+            const slot = TechnicianAllocatedAllSlots.find((slot: any) => slot.slotDate === date);
+            return slot?.slotBooked;
+         });
+         if (unavailableDates.length > 0) {
+            console.log(`Technician not available on ${unavailableDates.join(', ')}`)
+            throw new Error(`Technician not available on ${unavailableDates.join(', ')}`);
          };
          const date: Date = new Date();
          const newBookingDetails: newBookingType = {
@@ -210,29 +221,27 @@ class UserServices {
             bookingDate: date.toLocaleDateString(),
             Booking_profession: technicianDetails?.technicianDetails.profession as string,
             booking_status: "Requested",
-            serviceDate: "Pending",
+            serviceDate: selectedDates,
+            serviceCompletedDate: "Pending",
             serviceCost: "Pending",
             Payment_Status: "Pending",
             serviceLocation: serviceLocation,
          };
-         const repositoryResponse = await this.userRepository.bookTechnicianRepository(newBookingDetails);
-         if (!repositoryResponse) {
+         const afterUpdateTechnicianSlot = TechnicianAllocatedAllSlots.map((slotInfo: slotType) => selectedDates.includes(slotInfo?.slotDate) ? { ...slotInfo, slotBooked: true } : slotInfo);
+         const [bookingResponse, technicianSlotUpdatedResponse] = await Promise.all([
+            this.userRepository.bookTechnicianRepository(newBookingDetails),
+            this.technicianRepository.modifyAvailableSlotsRepository(technicianDetails.user_id, afterUpdateTechnicianSlot)
+         ]);
+         if (bookingResponse && technicianSlotUpdatedResponse.modifiedCount === 1) {
+            io.to(`technicianNotificaionRoom${technicianDetails.user_id}`).emit("notification_to_technician", { message: "You have a new booking request" });
+            return bookingResponse;
+         } else {
             throw new Error("Booking failed");
          };
-         io.to(`technicianNotificaionRoom${technicianDetails.user_id}`).emit("notification_to_technician", { message: "You have a new booking request" });
-         return repositoryResponse;
       } catch (error) {
-         throw error
+         throw error;
       };
    };
-
-   // async fetchAnyPendingRequestAvailableService(clientID: string, technicianUserID: string) {
-   //    try {
-   //       return this.userRepository.fetchAnyPendingRequestAvailableRepository(clientID, technicianUserID);
-   //    } catch (error) {
-   //       throw error;
-   //    }
-   // };
 
    async fetchUserBookingHistoryService(user_id: string) {
       try {

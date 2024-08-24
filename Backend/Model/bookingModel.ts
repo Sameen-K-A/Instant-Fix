@@ -24,7 +24,10 @@ const bookingSchema = new Schema<newBookingType>({
       type: String
    },
    serviceDate: {
-      type: String
+      type: Array
+   },
+   serviceCompletedDate: {
+      type: String,
    },
    serviceCost: {
       type: String

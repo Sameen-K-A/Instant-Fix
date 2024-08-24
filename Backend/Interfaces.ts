@@ -54,7 +54,8 @@ export type newBookingType = {
    Booking_profession: string;
    bookingTime: string;
    bookingDate: string;
-   serviceDate?: String;
+   serviceDate?: string[];
+   serviceCompletedDate: "Pending" | "Completed";
    serviceLocation?: userAddressType;
    serviceCost?: String;
    booking_status: "Requested" | "Rejected" | "Pending" | "Completed" | "Cancelled";

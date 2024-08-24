@@ -4491,7 +4491,7 @@ hr.horizontal.dark {
 }
 
 .selected-date {
-  background-color: #A7F3B3 !important;
+  background-color: #A7F3B3 ;
 }
 
 .booked-date {
@@ -4499,7 +4499,7 @@ hr.horizontal.dark {
 }
 
 .react-calendar__tile--disabled {
-  color: #00000080;
+  color: #00000080 !important;
   cursor: not-allowed;
 }
 

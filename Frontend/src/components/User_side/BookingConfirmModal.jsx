@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 import userAxiosInstance from "../../config/AxiosInstance/userInstance";
 import { useNavigate } from 'react-router-dom';
 
-const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selectedDates }) => {
+const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selectedDates, setSelectedDates }) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const districtArray = ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kollam", "Kottayam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"];
@@ -32,7 +32,7 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selec
     };
     if (alternateNumber === phoneNumber) {
       newErrors.alternateNumber = "Alternate number cannot be the same as the primary number.";
-    }
+    };
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -41,10 +41,10 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selec
     if (selectedDates.length === 0) {
       toast.error('Please select a date for your services');
       return;
-    }
+    };
     if (!validateForm()) {
       return;
-    }
+    };
     setIsLoading(true);
     try {
       const serviceLocation = {
@@ -56,7 +56,7 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selec
         pincode: pinCode
       };
       const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
-      await userAxiosInstance.post("/bookTechnician", { client_id: userDetails?.user_id, technicianDetails: technicianDetails, serviceLocation: serviceLocation });
+      await userAxiosInstance.post("/bookTechnician", { client_id: userDetails?.user_id, technicianDetails: technicianDetails, serviceLocation: serviceLocation, selectedDates: selectedDates });
       toast.success("Booking request sent successfully, please wait for the confirmation.");
       setIsBookingOpen(false)
     } catch (error) {
@@ -65,13 +65,17 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selec
       } else if (error.response.status === 409) {
         toast.error("Booking failed. Please try again later.");
       } else if (error.response.status === 404) {
-        toast.error("Technician not available now, please connect with another technician.");
+        toast.error("Technician not available on your selected date please try again later, please connect with another technician.");
       } else {
         toast.error("An unexpected error occurred. Please try again.");
       }
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleRemoveSelectedDate = (date) => {
+    setSelectedDates(selectedDates.filter((prevSelectedDates) => prevSelectedDates !== date && prevSelectedDates));
   };
 
   return (
@@ -90,11 +94,14 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selec
         ) : (
           <>
             <p className='text-sm'>Your selected dates are</p>
-            <div className='row d-flex justify-content-start gap-1 ms-1'>
+            <div className='row d-flex justify-content-start gap-1 ms-1 mb-3'>
               {selectedDates.map((date) => {
                 return (
-                  <p className='success-badge max-width-100'>{date}</p>
-                )
+                  <div key={date} className='d-flex align-items-center success-badge max-width-100 m-0 position-relative'>
+                    <p className='m-0 text-xs text-bold'>{date}</p>
+                    <p className='p-0 text-danger position-absolute end-4 top-3 cursor-pointer' onClick={() => handleRemoveSelectedDate(date)}>&times;</p>
+                  </div>
+                );
               })}
             </div>
           </>
@@ -103,13 +110,10 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selec
 
       <div className="col-lg-7 col-md-12 col-sm-12 card card-body shadow-blur d-flex justify-content-center align-items-center">
         <form className='mt-5 w-100' onSubmit={(e) => { e.preventDefault(); bookTechnician(); }}>
-
           <textarea className="form-control mt-3" placeholder="House name, House/ Flat number" style={{ minHeight: "50px", maxHeight: "150px" }} value={houseName} onChange={(e) => setHouseName(e.target.value)} />
           {errors.houseName && <p className="text-danger text-xs text-bold mt-1 ms-1">{errors.houseName}</p>}
-
           <input type="text" className="form-control mt-3" placeholder="PIN Code" value={pinCode} onChange={(e) => setPinCode(e.target.value)} />
           {errors.pinCode && <p className="text-danger text-xs text-bold mt-1 ms-1">{errors.pinCode}</p>}
-
           <div className='d-flex justify-content-between'>
             <div className='w-100 me-1'>
               <input type="text" className="form-control mt-3" readOnly value={"Kerala"} />
