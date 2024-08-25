@@ -27,7 +27,11 @@ const technicianSchema = new Schema<technicianType>({
          type: Boolean,
       },
       _id: false
-   }]
+   }],
+   notifications: {
+      type: [String],
+      default: []
+   },
 }, {
    versionKey: false
 });

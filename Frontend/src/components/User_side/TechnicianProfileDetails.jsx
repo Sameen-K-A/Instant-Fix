@@ -17,12 +17,12 @@ const TechnicianProfileDetails = () => {
   const [technicianDetails, setTechnicianDetails] = useState(null);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [availableDates, setAvailableDates] = useState([])
+  const [availableDates, setAvailableDates] = useState([]);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
-        console.log("use effect is worked ")
         const details = location.state.details;
         const response = await userAxiosInstance.get("/fetchTechnicianIndividualInformation", { params: { technicianUser_id: details?.user_id } });
         setTechnicianDetails(response.data);
@@ -32,11 +32,11 @@ const TechnicianProfileDetails = () => {
         if (error.response.status === 401) {
           navigate("/login", { state: { message: "Authorization failed, please login" } });
         } else {
-          toast.error("Somthing wrong, can't find the technician information please try again later.");
+          toast.error("Something went wrong, can't find the technician information. Please try again later.");
         };
       };
     })();
-  }, []);
+  }, [bookingSuccess]);  
 
   const handleDateChange = (changedDate) => {
     const date = changedDate.toLocaleDateString('en-CA');
@@ -151,7 +151,7 @@ const TechnicianProfileDetails = () => {
         <div className="d-flex justify-content-end">
           <p className='mx-1 cursor-pointer' onClick={() => setIsBookingOpen(false)}><CloseX_mark /></p>
         </div>
-        <BookingConfirmModalDetails setIsBookingOpen={setIsBookingOpen} technicianDetails={technicianDetails} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+        <BookingConfirmModalDetails setIsBookingOpen={setIsBookingOpen} technicianDetails={technicianDetails} selectedDate={selectedDate} setSelectedDate={setSelectedDate} setBookingSuccess={setBookingSuccess} />
       </div>
     </>
   );

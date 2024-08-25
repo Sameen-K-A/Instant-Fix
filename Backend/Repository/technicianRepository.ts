@@ -49,7 +49,7 @@ class TechnicianRepository {
     } catch (error) {
       throw error
     }
-  }
+  };
 
   async fetchingIndividualBookingDetailsRepository(booking_id: string) {
     try {
@@ -75,7 +75,7 @@ class TechnicianRepository {
     } catch (error) {
       throw error;
     }
-  }
+  };
 
   async acceptRejectCancelNewBookingRepository(booking_id: string, status: string) {
     try {
@@ -97,12 +97,28 @@ class TechnicianRepository {
     };
   };
 
+  async clearNotificationRepository(technicianUser_id: string) {
+    try {
+      return await technicianModel.updateOne({ user_id: technicianUser_id }, { $set: { notifications: [] } });
+    } catch (error) {
+      throw error;
+    };
+  };
+
   async changeTechncianSlotAfterBookingRepository(technicianUser_id: string, selectedDate: string) {
     try {
       return await technicianModel.updateOne(
         { user_id: technicianUser_id, "availableSlots.slotDate": selectedDate },
         { $set: { "availableSlots.$.slotBooked": true } }
       );
+    } catch (error) {
+      throw error;
+    };
+  };
+
+  async addNewNotification(technicianUser_id: string, notification: string) {
+    try {
+      return await technicianModel.updateOne({ user_id: technicianUser_id }, { $push: { notifications: notification } })
     } catch (error) {
       throw error;
     };

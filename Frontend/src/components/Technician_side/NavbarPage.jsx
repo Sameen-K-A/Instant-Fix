@@ -4,16 +4,17 @@ import { Base_URL } from "../../config/credentials";
 import { Bell } from "../../../public/svgs/Icons";
 import io from "socket.io-client";
 import { toast } from "sonner";
-import NotificationCard from "../Common/Notification";
+import NotificationCard from "./Notification";
 import userAxiosInstance from "../../config/AxiosInstance/userInstance";
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
+import notificationAudio from "/public/Audio/notificationAudio.wav"
 
 const socket = io(Base_URL);
 
 const TechnicianNavbar = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [bookingDetailsArray, setBookingDetailsArray] = useState([]);
-  const {userDetails, setUserDetails} = useUserDetails();
+  const { userDetails, setUserDetails } = useUserDetails();
   const userProfile = userDetails?.profileIMG;
 
   const fetchBookingDetails = async () => {
@@ -58,6 +59,8 @@ const TechnicianNavbar = () => {
     if (userDetails) {
       socket.emit("joinTechnicianNoficationRoom", userDetails?.user_id);
       socket.on("notification_to_technician", (data) => {
+        const audio = new Audio(notificationAudio);
+        audio.play();
         toast(data.message);
         fetchBookingDetails();
         fetchTechnicianInformation();
@@ -78,7 +81,12 @@ const TechnicianNavbar = () => {
         <div className="container-fluid">
           <p className="navbar-brand mb-0">Logo</p>
           <div className="d-flex align-items-center my-2">
-            <p className="font-weight-bold text-dark text-sm mb-0 me-3 bell-icon cursor-pointer" onClick={() => setShowNotification(!showNotification)}><Bell /></p>
+            <div className="position-relative me-2">
+              <p className="font-weight-bold text-dark text-sm mb-0 me-3  cursor-pointer" onClick={() => setShowNotification(!showNotification)}>
+                <Bell />
+                <span className="notification-count">{userDetails?.technicianDetails[0]?.notifications.length}</span>
+              </p>
+            </div>
             <div className="circle">
               <img src={`${Base_URL}/${userProfile}`} width={"30px"} alt="img" />
             </div>

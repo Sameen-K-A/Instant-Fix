@@ -88,6 +88,18 @@ class TechnicianService {
       }
    };
 
+   async clearNotificationService(technicianUser_id: string) {
+      try {
+         const response = await this.technicianRepository.clearNotificationRepository(technicianUser_id);
+         if (response.modifiedCount === 0) {
+            throw new Error("Can't clear notifications.");
+         };
+         return;
+      } catch (error) {
+         throw error;
+      };
+   };
+
    async acceptRejectCancelNewBookingService(booking_id: string, newStatus: string, technician_id: string): Promise<boolean> {
       try {
          let status: string = newStatus === "Accept" ? "Pending" : (newStatus === "Reject" ? "Rejected" : "Cancelled");

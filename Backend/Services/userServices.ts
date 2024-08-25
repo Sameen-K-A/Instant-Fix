@@ -205,7 +205,7 @@ class UserServices {
       }
    };
 
-   async bookTechnicianService(client_id: string, technicianDetails: any, serviceLocation: userAddressType, selectedDate: string) {
+   async bookTechnicianService(client_id: string, client_name: string, technicianDetails: any, serviceLocation: userAddressType, selectedDate: string) {
       try {
          const technicianInformation: any = await this.userRepository.fetchSingleTechnicianDetailsRepository(technicianDetails.user_id as string);
          if (technicianInformation[0].isBlocked || !technicianInformation[0].technicianDetails.availability) {
@@ -231,9 +231,10 @@ class UserServices {
             Payment_Status: "Pending",
             serviceLocation: serviceLocation,
          };
-         const [bookingResponse, technicianSlotUpdatedResponse] = await Promise.all([
+         const [bookingResponse, technicianSlotUpdatedResponse, addNotificationToTechnician] = await Promise.all([
             this.userRepository.bookTechnicianRepository(newBookingDetails),
-            this.technicianRepository.changeTechncianSlotAfterBookingRepository(technicianDetails.user_id, selectedDate)
+            this.technicianRepository.changeTechncianSlotAfterBookingRepository(technicianDetails.user_id, selectedDate),
+            this.technicianRepository.addNewNotification(technicianDetails.user_id, `You have a booking request from ${client_name} on ${selectedDate}`)
          ]);
          if (bookingResponse && technicianSlotUpdatedResponse.modifiedCount === 1) {
             io.to(`technicianNotificaionRoom${technicianDetails.user_id}`).emit("notification_to_technician", { message: "You have a new booking request" });

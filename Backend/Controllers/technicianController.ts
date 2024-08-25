@@ -88,6 +88,16 @@ class TechnicianController {
     };
   };
 
+  async clearNotificationController(req: Request, res: Response) {
+    try {
+      const technicianUser_id: string = req.body.technicianUser_id as string;
+      await technicianService.clearNotificationService(technicianUser_id);
+      res.status(200).send("Notification cleared successfully");
+    } catch (error) {
+      res.status(500).send("Can't clear notifications.")
+    };
+  };
+
   async modifyAvailableSlotsController(req: Request, res: Response) {
     try {
       const technician_id = req.body.technician_id as string;

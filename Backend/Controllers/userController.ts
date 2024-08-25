@@ -162,12 +162,12 @@ class UserController {
 
    async bookTechnician_controller(req: Request, res: Response) {
       try {
-         const { client_id, technicianDetails, serviceLocation, selectedDate } = req.body;
-         const response = await userServices.bookTechnicianService(client_id, technicianDetails, serviceLocation, selectedDate);
+         const { client_id, client_name, technicianDetails, serviceLocation, selectedDate } = req.body;
+         const response = await userServices.bookTechnicianService(client_id, client_name, technicianDetails, serviceLocation, selectedDate);
          res.status(200).json(response);
       } catch (error: any) {
          if (error.message === "Technician is not available on selected date") {
-            res.status(401).send("Technician is not available on selected date");
+            res.status(402).send("Technician is not available on selected date");
          } else if (error.message === "Booking failed") {
             res.status(409).send("Booking failed")
          } else if (error.message === "Technician not available") {

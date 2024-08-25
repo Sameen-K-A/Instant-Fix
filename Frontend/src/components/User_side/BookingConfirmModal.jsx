@@ -4,7 +4,7 @@ import userAxiosInstance from "../../config/AxiosInstance/userInstance";
 import { useNavigate } from 'react-router-dom';
 import { useUserDetails } from "../../Contexts/UserDetailsContext"
 
-const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selectedDate, setSelectedDate }) => {
+const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selectedDate, setSelectedDate, setBookingSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { userDetails } = useUserDetails();
@@ -58,20 +58,23 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selec
         alternatePhone: alternateNumber,
         pincode: pinCode
       };
-      await userAxiosInstance.post("/bookTechnician", { client_id: userDetails?.user_id, technicianDetails: technicianDetails, serviceLocation: serviceLocation, selectedDate: selectedDate });
+      await userAxiosInstance.post("/bookTechnician", { client_id: userDetails?.user_id, client_name: userDetails.name, technicianDetails: technicianDetails, serviceLocation: serviceLocation, selectedDate: selectedDate });
       toast.success("Booking request sent successfully, please wait for the confirmation.");
       setIsBookingOpen(false);
       setSelectedDate(null);
+      setBookingSuccess(prev => !prev);
     } catch (error) {
       if (error.response.status === 401) {
         navigate("/login", { state: { message: "Authorization failed, please login" } });
       } else if (error.response.status === 409) {
         toast.error("Booking failed. Please try again later.");
       } else if (error.response.status === 404) {
-        toast.error("Technician not available on your selected date please try again later, please connect with another technician.");
+        toast.error("Technician not available. Please contact another technician.");
+      } else if (error.response.status === 402) {
+        toast.error(`Technician not available on ${selectedDate}.`);
       } else {
         toast.error("An unexpected error occurred. Please try again.");
-      }
+      };
     } finally {
       setIsLoading(false);
     }

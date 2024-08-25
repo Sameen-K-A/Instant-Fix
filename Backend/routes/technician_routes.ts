@@ -22,6 +22,9 @@ router.get("/fetchTechnicianBookingHistory", verifyToken, technicianController.f
 router.get("/fetchingIndividualBookingDetails", verifyToken, technicianController.fetchingIndividualBookingDetailsController);
 router.patch("/acceptRejectCancelNewBooking", verifyToken, technicianController.acceptRejectCancelNewBookingController);
 
+// notification area
+router.patch("/clearNotification", verifyToken, technicianController.clearNotificationController)
+
 // changing technician available slots
 router.patch("/modifyAvailableSlots", verifyToken, technicianController.modifyAvailableSlotsController);
 

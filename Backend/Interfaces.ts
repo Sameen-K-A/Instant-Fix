@@ -23,6 +23,7 @@ export type technicianType = {
    availability?: boolean;
    rating?: Number;
    availableSlots?: slotType[];
+   notifications?: string[];
 };
 
 export type userAddressType = {

@@ -4429,32 +4429,6 @@ hr.horizontal.dark {
   border-radius: 50px;
 }
 
-@keyframes shake {
-  0% {
-    transform: translateX(0);
-  }
-
-  25% {
-    transform: translateX(-3px);
-  }
-
-  50% {
-    transform: translateX(3px);
-  }
-
-  75% {
-    transform: translateX(-3px);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
-}
-
-.bell-icon:hover {
-  animation: shake 0.5s ease-in-out;
-}
-
 .alert-red-dot {
   width: 5px;
   height: 5px;
@@ -4491,7 +4465,7 @@ hr.horizontal.dark {
 }
 
 .selected-date {
-  background-color: #A7F3B3 ;
+  background-color: #A7F3B3;
 }
 
 .user-selected-date {
@@ -4510,4 +4484,19 @@ hr.horizontal.dark {
 
 .react-calendar__month-view__weekdays__weekday abbr {
   text-decoration: none;
+}
+
+.notification-count {
+  position: absolute;
+  top: -10px;
+  right: 2px;
+  color: rgb(255, 255, 255);
+  width: 17px !important;
+  height: 17px !important;
+  background-color: #341919;
+  border-radius: 50%;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
