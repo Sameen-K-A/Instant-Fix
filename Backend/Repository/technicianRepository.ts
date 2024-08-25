@@ -97,6 +97,17 @@ class TechnicianRepository {
     };
   };
 
-}
+  async changeTechncianSlotAfterBookingRepository(technicianUser_id: string, selectedDate: string) {
+    try {
+      return await technicianModel.updateOne(
+        { user_id: technicianUser_id, "availableSlots.slotDate": selectedDate },
+        { $set: { "availableSlots.$.slotBooked": true } }
+      );
+    } catch (error) {
+      throw error;
+    };
+  };
+
+};
 
 export default TechnicianRepository;

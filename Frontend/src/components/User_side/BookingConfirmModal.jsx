@@ -4,7 +4,7 @@ import userAxiosInstance from "../../config/AxiosInstance/userInstance";
 import { useNavigate } from 'react-router-dom';
 import { useUserDetails } from "../../Contexts/UserDetailsContext"
 
-const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selectedDates, setSelectedDates }) => {
+const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selectedDate, setSelectedDate }) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { userDetails } = useUserDetails();
@@ -41,7 +41,7 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selec
   };
 
   const bookTechnician = async () => {
-    if (selectedDates.length === 0) {
+    if (selectedDate === null) {
       toast.error('Please select a date for your services');
       return;
     };
@@ -58,10 +58,10 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selec
         alternatePhone: alternateNumber,
         pincode: pinCode
       };
-      await userAxiosInstance.post("/bookTechnician", { client_id: userDetails?.user_id, technicianDetails: technicianDetails, serviceLocation: serviceLocation, selectedDates: selectedDates });
+      await userAxiosInstance.post("/bookTechnician", { client_id: userDetails?.user_id, technicianDetails: technicianDetails, serviceLocation: serviceLocation, selectedDate: selectedDate });
       toast.success("Booking request sent successfully, please wait for the confirmation.");
       setIsBookingOpen(false);
-      setSelectedDates([]);
+      setSelectedDate(null);
     } catch (error) {
       if (error.response.status === 401) {
         navigate("/login", { state: { message: "Authorization failed, please login" } });
@@ -77,10 +77,6 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selec
     }
   };
 
-  const handleRemoveSelectedDate = (date) => {
-    setSelectedDates(selectedDates.filter((prevSelectedDates) => prevSelectedDates !== date && prevSelectedDates));
-  };
-
   return (
     <div className="row mx-4 h-100 d-flex align-items-center">
       <div className="col-lg-5 col-md-12 col-sm-12 card-plain d-flex flex-column justify-content-center px-5">
@@ -92,20 +88,16 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selec
           Thank you for your patience.
         </p>
         <hr className="horizontal dark mt-1" />
-        {selectedDates.length === 0 ? (
+        {selectedDate === null ? (
           <p className='text-sm text-danger'>  Date is not selected for the service.<br />  Please select your desired service date from the calendar.</p>
         ) : (
           <>
-            <p className='text-sm'>Your selected dates are</p>
+            <p className='text-sm'>Your selected date is</p>
             <div className='row d-flex justify-content-start gap-1 ms-1 mb-3'>
-              {selectedDates.map((date) => {
-                return (
-                  <div key={date} className='d-flex align-items-center success-badge max-width-100 m-0 position-relative'>
-                    <p className='m-0 text-xs text-bold'>{date}</p>
-                    <p className='p-0 text-danger position-absolute end-4 top-3 cursor-pointer' onClick={() => handleRemoveSelectedDate(date)}>&times;</p>
-                  </div>
-                );
-              })}
+              <div className='d-flex align-items-center success-badge max-width-100 m-0 position-relative'>
+                <p className='m-0 text-xs text-bold'>{selectedDate}</p>
+                <p className='p-0 text-danger position-absolute end-4 top-3 cursor-pointer' onClick={() => setSelectedDate(null)}>&times;</p>
+              </div>
             </div>
           </>
         )}

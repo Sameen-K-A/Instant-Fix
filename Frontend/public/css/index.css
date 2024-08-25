@@ -4494,6 +4494,10 @@ hr.horizontal.dark {
   background-color: #A7F3B3 ;
 }
 
+.user-selected-date {
+  background-color: #A7F3B3 !important;
+}
+
 .booked-date {
   background-color: #f3a7a7 !important;
   color: black !important;

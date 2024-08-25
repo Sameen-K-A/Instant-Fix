@@ -16,12 +16,13 @@ const TechnicianProfileDetails = () => {
   const navigate = useNavigate();
   const [technicianDetails, setTechnicianDetails] = useState(null);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
-  const [selectedDates, setSelectedDates] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [availableDates, setAvailableDates] = useState([])
 
   useEffect(() => {
     (async () => {
       try {
+        console.log("use effect is worked ")
         const details = location.state.details;
         const response = await userAxiosInstance.get("/fetchTechnicianIndividualInformation", { params: { technicianUser_id: details?.user_id } });
         setTechnicianDetails(response.data);
@@ -35,29 +36,21 @@ const TechnicianProfileDetails = () => {
         };
       };
     })();
-  }, [selectedDates.length === 0]);
+  }, []);
 
   const handleDateChange = (changedDate) => {
     const date = changedDate.toLocaleDateString('en-CA');
-
-    setSelectedDates((prevSelectedDates) => {
-      if (prevSelectedDates.includes(date)) {
-        return prevSelectedDates.filter((dates) => dates !== date);
-      } else {
-        if (prevSelectedDates.length < 5) {
-          return [...prevSelectedDates, date];
-        } else {
-          toast.warning("You can only select a maximum of 5 days.");
-          return prevSelectedDates;
-        };
-      };
-    });
+    setSelectedDate((prevSelectedDate) => prevSelectedDate === date ? null : date);
   };
 
   const isDateDisabled = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const dateStr = date.toLocaleDateString('en-CA');
-    return !availableDates.includes(dateStr);
+    const todayStringDate = today.toLocaleDateString('en-CA');
+    return todayStringDate > dateStr || !availableDates.includes(dateStr);
   };
+
 
   const handleMessageOpen = () => {
     navigate("/chat", { state: { details: technicianDetails } });
@@ -100,14 +93,14 @@ const TechnicianProfileDetails = () => {
                     tileDisabled={({ date }) => isDateDisabled(date)}
                     tileClassName={({ date }) => {
                       const dateStr = date.toLocaleDateString('en-CA');
-                      if (selectedDates.includes(dateStr)) {
-                        return 'selected-date';
+                      if (selectedDate === dateStr) {
+                        return 'user-selected-date';
                       }
                       return availableDates.includes(dateStr) ? 'available-date' : 'disabled-date';
                     }}
                   />
                   <hr className="horizontal dark m-0 mt-2" />
-                  <p className='text-sm mt-3 mb-4 px-2'><strong>NOTE: </strong> Please select an available date if you want service from this technician. You can also choose multiple dates.</p>
+                  <p className='text-sm mt-3 mb-4 px-2'><strong>NOTE: </strong> Please select an available date if you want service from this technician.</p>
                   <div className="d-flex align-items-center ms-2">
                     <div className="d-flex align-items-center me-3">
                       <div className="instruction-dot" style={{ backgroundColor: "#A7F3B3" }}></div>
@@ -158,7 +151,7 @@ const TechnicianProfileDetails = () => {
         <div className="d-flex justify-content-end">
           <p className='mx-1 cursor-pointer' onClick={() => setIsBookingOpen(false)}><CloseX_mark /></p>
         </div>
-        <BookingConfirmModalDetails setIsBookingOpen={setIsBookingOpen} technicianDetails={technicianDetails} selectedDates={selectedDates} setSelectedDates={setSelectedDates} />
+        <BookingConfirmModalDetails setIsBookingOpen={setIsBookingOpen} technicianDetails={technicianDetails} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
       </div>
     </>
   );

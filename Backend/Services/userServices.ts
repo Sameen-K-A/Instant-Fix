@@ -205,20 +205,16 @@ class UserServices {
       }
    };
 
-   async bookTechnicianService(client_id: string, technicianDetails: any, serviceLocation: userAddressType, selectedDates: string[]) {
+   async bookTechnicianService(client_id: string, technicianDetails: any, serviceLocation: userAddressType, selectedDate: string) {
       try {
          const technicianInformation: any = await this.userRepository.fetchSingleTechnicianDetailsRepository(technicianDetails.user_id as string);
          if (technicianInformation[0].isBlocked || !technicianInformation[0].technicianDetails.availability) {
             throw new Error("Technician not available");
          };
          const TechnicianAllocatedAllSlots = technicianInformation[0]?.technicianDetails?.availableSlots;
-         const unavailableDates = selectedDates.filter(date => {
-            const slot = TechnicianAllocatedAllSlots.find((slot: any) => slot.slotDate === date);
-            return slot?.slotBooked;
-         });
-         if (unavailableDates.length > 0) {
-            console.log(`Technician not available on ${unavailableDates.join(', ')}`)
-            throw new Error(`Technician not available on ${unavailableDates.join(', ')}`);
+         const checkAgainTechnicianIsAvailableOnSelectedDate = TechnicianAllocatedAllSlots.find((slot: any) => slot.slotDate === selectedDate);
+         if (!checkAgainTechnicianIsAvailableOnSelectedDate || checkAgainTechnicianIsAvailableOnSelectedDate?.slotBooked === true) {
+            throw new Error("Technician is not available on selected date");
          };
          const date: Date = new Date();
          const newBookingDetails: newBookingType = {
@@ -229,16 +225,15 @@ class UserServices {
             bookingDate: date.toLocaleDateString(),
             Booking_profession: technicianDetails?.technicianDetails.profession as string,
             booking_status: "Requested",
-            serviceDate: selectedDates,
+            serviceDate: selectedDate,
             serviceCompletedDate: "Pending",
             serviceCost: "Pending",
             Payment_Status: "Pending",
             serviceLocation: serviceLocation,
          };
-         const afterUpdateTechnicianSlot = TechnicianAllocatedAllSlots.map((slotInfo: slotType) => selectedDates.includes(slotInfo?.slotDate) ? { ...slotInfo, slotBooked: true } : slotInfo);
          const [bookingResponse, technicianSlotUpdatedResponse] = await Promise.all([
             this.userRepository.bookTechnicianRepository(newBookingDetails),
-            this.technicianRepository.modifyAvailableSlotsRepository(technicianDetails.user_id, afterUpdateTechnicianSlot)
+            this.technicianRepository.changeTechncianSlotAfterBookingRepository(technicianDetails.user_id, selectedDate)
          ]);
          if (bookingResponse && technicianSlotUpdatedResponse.modifiedCount === 1) {
             io.to(`technicianNotificaionRoom${technicianDetails.user_id}`).emit("notification_to_technician", { message: "You have a new booking request" });
