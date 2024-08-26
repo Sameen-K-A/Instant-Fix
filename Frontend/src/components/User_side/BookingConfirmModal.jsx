@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import userAxiosInstance from "../../config/AxiosInstance/userInstance";
 import { useNavigate } from 'react-router-dom';
-import { useUserDetails } from "../../Contexts/UserDetailsContext"
+import { useUserDetails } from "../../Contexts/UserDetailsContext";
+import triggerConfetti from '../../Utils/Confetti';
 
 const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selectedDate, setSelectedDate, setBookingSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -63,6 +64,7 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selec
       setIsBookingOpen(false);
       setSelectedDate(null);
       setBookingSuccess(prev => !prev);
+      triggerConfetti();
     } catch (error) {
       if (error.response.status === 401) {
         navigate("/login", { state: { message: "Authorization failed, please login" } });
