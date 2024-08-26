@@ -88,10 +88,14 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selec
         <h5 className="mb-4">Disclaimer about Booking</h5>
         <p className="text-sm">
           Please provide your exact location for the service. Once booked, please wait for the technician to accept your request.
-          You will receive a notification once the technician responds.
+          You can cancel your booking request until the technician accepts your booking.
+          <br />
+          Payment should only be made after the completion of work. For security reasons, payment is accepted only online.
           <br />
           Thank you for your patience.
         </p>
+
+
         <hr className="horizontal dark mt-1" />
         {selectedDate === null ? (
           <p className='text-sm text-danger'>  Date is not selected for the service.<br />  Please select your desired service date from the calendar.</p>

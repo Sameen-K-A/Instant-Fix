@@ -116,6 +116,17 @@ class TechnicianRepository {
     };
   };
 
+  async changeTechncianSlotAfterBookingCancelRepository(technicianUser_id: string, selectedDate: string) {
+    try {
+      return await technicianModel.updateOne(
+        { user_id: technicianUser_id, "availableSlots.slotDate": selectedDate },
+        { $set: { "availableSlots.$.slotBooked": false } }
+      );
+    } catch (error) {
+      throw error;
+    };
+  };
+
   async addNewNotification(technicianUser_id: string, notification: string) {
     try {
       return await technicianModel.updateOne({ user_id: technicianUser_id }, { $push: { notifications: notification } })

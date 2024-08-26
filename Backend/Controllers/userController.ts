@@ -201,10 +201,8 @@ class UserController {
 
    async cancelBooking_controller(req: Request, res: Response) {
       try {
-         const booking_id: string = req.body.booking_id as string;
-         const technician_id: string = req.body.technician_id as string;
-         const userName: string = req.body.userName as string;
-         await userServices.cancelBookingService(booking_id, technician_id, userName);
+         const { booking_id, technician_id, userName, serviceDate } = req.body;
+         await userServices.cancelBookingService(booking_id, technician_id, userName, serviceDate);
          res.status(200).send("Booking cancelled successfully.");
       } catch (error: any) {
          if (error.message === "Booking status is not changed") {

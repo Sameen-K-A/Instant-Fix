@@ -36,6 +36,18 @@ const TechnicianViewMoreBooking = () => {
   }, [location.state]);
 
   const accept_reject_cencel_booking = (input) => {
+    if (input === "Accept") {
+      if (input === "Accept") {
+        const currentDate = new Date();
+        const serviceDate = new Date(bookingDetails.serviceDate);
+        currentDate.setHours(0, 0, 0, 0);
+        serviceDate.setHours(0, 0, 0, 0);
+        if (currentDate > serviceDate) {
+          toast.error("Time is expired. Can't accept this booking request.");
+          return;
+        };
+      };
+    };
     const message = input === "Accept" ? "Accept new booking request?" : (input === "Reject" ? "Reject new booking request?" : "Cancel your booking request")
     confirmAlert(message)
       .then(async (result) => {
@@ -61,7 +73,6 @@ const TechnicianViewMoreBooking = () => {
         };
       });
   };
-
 
   return (
     <>

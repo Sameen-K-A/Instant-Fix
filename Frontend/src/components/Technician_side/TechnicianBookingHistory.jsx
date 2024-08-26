@@ -2,18 +2,48 @@ import { useEffect, useState } from "react";
 import TechnicianNavbar from "./NavbarPage";
 import { useNavigate } from "react-router-dom";
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
+import userAxiosInstance from "../../config/AxiosInstance/userInstance";
+import { useUserDetails } from "../../Contexts/UserDetailsContext";
+import { toast } from "sonner";
+import { io } from 'socket.io-client';
+import { Base_URL } from '../../config/credentials';
+
+const socket = io(Base_URL);
 
 const TechnicianBookingHistoryTable = () => {
 
   const [bookingDetailsArray, setBookingDetailsArray] = useState([]);
+  const { userDetails } = useUserDetails();
   const navigate = useNavigate();
 
+  const fetchBookingDetails = async () => {
+    try {
+      const response = await userAxiosInstance.get("/technician/fetchTechnicianBookingHistory", { params: { technicianUserID: userDetails?.user_id } });
+      setBookingDetailsArray(response.data);
+    } catch (error) {
+      if (error.response.status === 401) {
+        navigate("/login", { state: { message: "Authorization failed, please login" } });
+      } else {
+        toast.error("Can't fetch booking history, Please try again later");
+      }
+    }
+  };
+
   useEffect(() => {
-    const sessionStorageBookingDetails = sessionStorage.getItem("technicianBookings");
-    if (sessionStorageBookingDetails !== null) {
-      setBookingDetailsArray(JSON.parse(sessionStorageBookingDetails));
-    };
+    fetchBookingDetails();
   }, []);
+
+  useEffect(() => {
+    if (userDetails) {
+      socket.emit("joinTechnicianNoficationRoom", userDetails?.user_id);
+      socket.on("notification_to_technician", () => {
+        fetchBookingDetails();
+      });
+      return () => {
+        socket.off("notification_to_technician");
+      };
+    };
+  }, [userDetails]);
 
   const goToViewMore = (bookingDetails) => {
     navigate("/technician/technicianBookingViewmore", { state: { booking_id: bookingDetails.booking_id } });

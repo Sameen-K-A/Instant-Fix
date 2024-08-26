@@ -21,7 +21,6 @@ const UserSideBar = () => {
         if (result.isConfirmed) {
           sessionStorage.removeItem("userToken");
           sessionStorage.removeItem("userDetails");
-          sessionStorage.removeItem("technicianBookings");
           setUserDetails(null);
           navigate("/");
         }

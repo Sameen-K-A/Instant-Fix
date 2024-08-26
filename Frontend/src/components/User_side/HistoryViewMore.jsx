@@ -5,6 +5,7 @@ import userAxiosInstance from "../../config/AxiosInstance/userInstance";
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
 import confirmAlert from '../Common/SweetAlert/confirmAlert';
 import { toast } from "sonner";
+import AlertRedDot from '../Common/AlertRedDot';
 
 const UserHistoryViewMore = () => {
 
@@ -35,7 +36,7 @@ const UserHistoryViewMore = () => {
           try {
             const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
             await userAxiosInstance.patch("/cancelBooking", {
-              booking_id: bookingDetails.booking_id, technician_id: bookingDetails.technicianUser_id, userName: userDetails.name
+              booking_id: bookingDetails.booking_id, technician_id: bookingDetails.technicianUser_id, userName: userDetails.name, serviceDate: bookingDetails.serviceDate
             });
             const afterCancelling = { ...bookingDetails, booking_status: "Cancelled" };
             setBookingDetails(afterCancelling);
@@ -118,10 +119,12 @@ const UserHistoryViewMore = () => {
                           </tr>
                         </tbody>
                       </table>
-                      {(bookingDetails?.booking_status === "Requested" || bookingDetails?.booking_status === "Pending") && (
-                        <button className="btn bg-gradient-danger mt-3" onClick={() => handleCancelBooking()}>Cancel Booking</button>
+                      {bookingDetails?.booking_status === "Requested" && (
+                        <div className='ms-2 mt-3'>
+                          <span className='text-xs text-danger d-flex gap-2 align-items-center'><AlertRedDot />Booking cancellation is available until the technician accepts your booking request.</span>
+                          <button className="btn bg-gradient-danger mt-2" onClick={() => handleCancelBooking()}>Cancel Booking</button>
+                        </div>
                       )}
-
                     </div>
                   </div>
                   <div className="col-lg-4 mb-5 px-5 mt-5 d-flex flex-column justify-content-center">

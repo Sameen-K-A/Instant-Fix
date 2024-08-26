@@ -32,14 +32,15 @@ const TechnicianSlotAllocation = () => {
   };
 
   useEffect(() => {
+    fetchTechnicianDetails();
+  }, []);
+
+  useEffect(() => {
     const alreadyAllocatedDates = technicianDetails?.availableSlots.map((slotInfo) => ({
       slotDate: new Date(slotInfo?.slotDate).toLocaleDateString('en-CA'),
       slotBooked: slotInfo?.slotBooked
     }));
     setSelectedDates(alreadyAllocatedDates);
-  }, [userDetails]);
-
-  useEffect(() => {
     if (userDetails) {
       socket.emit("joinTechnicianNoficationRoom", userDetails?.user_id);
       socket.on("notification_to_technician", () => {
@@ -48,7 +49,7 @@ const TechnicianSlotAllocation = () => {
       return () => {
         socket.off("notification_to_technician");
       };
-    }
+    };
   }, [userDetails]);
 
   const handleDateChange = (changedDate) => {
@@ -95,6 +96,7 @@ const TechnicianSlotAllocation = () => {
         slots: selectedDates
       });
       const afterChanging = { ...userDetails, technicianDetails: [{ ...userDetails.technicianDetails[0], availableSlots: selectedDates }] };
+      setUserDetails(afterChanging);
       sessionStorage.setItem("userDetails", JSON.stringify(afterChanging));
       toast.success("Slot availability modified successfully.");
     } catch (error) {

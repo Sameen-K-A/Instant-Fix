@@ -263,11 +263,15 @@ class UserServices {
       }
    };
 
-   async cancelBookingService(booking_id: string, technician_id: string, userName: string) {
+   async cancelBookingService(booking_id: string, technician_id: string, userName: string, serviceDate: string) {
       try {
          const response = await this.userRepository.cancelBookingRepository(booking_id);
          if (response.modifiedCount === 1) {
-            io.to(`technicianNotificaionRoom${technician_id}`).emit("notification_to_technician", { message: `${userName} cancelled there booking` });
+            await Promise.all([
+               await this.technicianRepository.addNewNotification(technician_id, `${userName} canceled their ${serviceDate} booking request.`),
+               await this.technicianRepository.changeTechncianSlotAfterBookingCancelRepository(technician_id, serviceDate)
+            ]);
+            io.to(`technicianNotificaionRoom${technician_id}`).emit("notification_to_technician", { message: `${userName} canceled their ${serviceDate} booking request.` });
             return true;
          } else {
             throw new Error("Booking status is not changed");
