@@ -7,12 +7,29 @@ import userAxiosInstance from '../../config/AxiosInstance/userInstance';
 import { toast } from 'sonner';
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import 'react-calendar/dist/Calendar.css';
+import { io } from 'socket.io-client';
+import { Base_URL } from '../../config/credentials';
+
+const socket = io(Base_URL);
 
 const TechnicianSlotAllocation = () => {
   const [selectedDates, setSelectedDates] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
-  const { userDetails } = useUserDetails();
+  const { userDetails, setUserDetails } = useUserDetails();
+  const [newEditedSlots, setNewEditedSlots] = useState([]);
   const technicianDetails = userDetails?.technicianDetails[0];
+
+  const fetchTechnicianDetails = async () => {
+    try {
+      const response = await userAxiosInstance.get("/technician/fetchTechnicianInformation", { params: { technicianUserID: userDetails?.user_id } });
+      const afterFetching = { ...userDetails, technicianDetails: [{ ...response.data }] };
+      setUserDetails(afterFetching);
+      setSelectedDates(afterFetching.technicianDetails[0].availableSlots.map(slotInfo => ({ slotDate: new Date(slotInfo?.slotDate).toLocaleDateString('en-CA'), slotBooked: slotInfo?.slotBooked })));
+      sessionStorage.setItem("userDetails", JSON.stringify(afterFetching));
+    } catch (error) {
+      toast.error("Can't fetch technician details, please try again later.");
+    };
+  };
 
   useEffect(() => {
     const alreadyAllocatedDates = technicianDetails?.availableSlots.map((slotInfo) => ({
@@ -20,13 +37,30 @@ const TechnicianSlotAllocation = () => {
       slotBooked: slotInfo?.slotBooked
     }));
     setSelectedDates(alreadyAllocatedDates);
-  }, []);
+  }, [userDetails]);
+
+  useEffect(() => {
+    if (userDetails) {
+      socket.emit("joinTechnicianNoficationRoom", userDetails?.user_id);
+      socket.on("notification_to_technician", () => {
+        fetchTechnicianDetails();
+      });
+      return () => {
+        socket.off("notification_to_technician");
+      };
+    }
+  }, [userDetails]);
 
   const handleDateChange = (changedDate) => {
     if (!isEdit) return;
     const date = changedDate.toLocaleDateString('en-CA');
     const dateExists = selectedDates.find(slot => slot.slotDate === date);
     setSelectedDates(prevSelectedDates => dateExists ?
+      prevSelectedDates.filter(slot => slot.slotDate !== date) :
+      [...prevSelectedDates, { slotDate: date, slotBooked: false }]
+    );
+    const dateExistsInNewEditedSlots = newEditedSlots.find(slot => slot.slotDate === date);
+    setNewEditedSlots(prevSelectedDates => dateExistsInNewEditedSlots ?
       prevSelectedDates.filter(slot => slot.slotDate !== date) :
       [...prevSelectedDates, { slotDate: date, slotBooked: false }]
     );
@@ -46,21 +80,43 @@ const TechnicianSlotAllocation = () => {
 
   const saveSlotInformation = async () => {
     try {
-      await userAxiosInstance.patch("/technician/modifyAvailableSlots", { technician_id: technicianDetails?.user_id, slots: selectedDates });
+      const validAgainSelectedDatesAreAvailable = newEditedSlots.filter(slotInfo => {
+        const date = new Date(slotInfo.slotDate);
+        return !isDateDisabled(date);
+      });
+
+      if (validAgainSelectedDatesAreAvailable.length !== newEditedSlots.length) {
+        toast.error("Can't update already have booking slots.");
+        return;
+      }
+
+      await userAxiosInstance.patch("/technician/modifyAvailableSlots", {
+        technician_id: technicianDetails?.user_id,
+        slots: selectedDates
+      });
       const afterChanging = { ...userDetails, technicianDetails: [{ ...userDetails.technicianDetails[0], availableSlots: selectedDates }] };
       sessionStorage.setItem("userDetails", JSON.stringify(afterChanging));
       toast.success("Slot availability modified successfully.");
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        navigate("/login", { state: { message: "Authorization failed, please login" } });
-      } else if (error.response && error.response.status === 301) {
-        toast.error("No changes found.");
+      if (error.response && error.response.status === 301) {
+        toast.error("No changes founded.");
       } else {
         toast.error("Something went wrong, please try again later.");
-      };
+      }
     } finally {
       setIsEdit(false);
+      setNewEditedSlots([]);
     };
+  };
+
+  const cancelEditingSlot = () => {
+    setIsEdit(false);
+    const alreadyAllocatedDates = technicianDetails?.availableSlots.map((slotInfo) => ({
+      slotDate: new Date(slotInfo?.slotDate).toLocaleDateString('en-CA'),
+      slotBooked: slotInfo?.slotBooked
+    }));
+    setSelectedDates(alreadyAllocatedDates);
+    setNewEditedSlots([]);
   };
 
   return (
@@ -109,7 +165,10 @@ const TechnicianSlotAllocation = () => {
             {isEdit ? (
               <>
                 <p className='text-sm mt-3 mb-4'><strong>NOTE:</strong> Slots can only be selected for the next 60 days.<br /> Please select your available days to set slots for new job bookings. Users will only be able to view your profile if you are available, so ensure that you are marked as available on the selected slot days.</p>
-                <button className='btn bg-gradient-primary mb-0' onClick={() => saveSlotInformation()}>Save Slots</button>
+                <div className="d-flex gap-3 w-100">
+                  <button className="btn btn-outline-primary mb-0 w-50" onClick={cancelEditingSlot}>Cancel</button>
+                  <button className='btn bg-gradient-primary mb-0 w-50' onClick={saveSlotInformation}>Save Slots</button>
+                </div>
               </>
             ) : (
               <>
