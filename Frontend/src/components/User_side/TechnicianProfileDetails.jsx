@@ -94,7 +94,7 @@ const TechnicianProfileDetails = () => {
                     tileClassName={({ date }) => {
                       const dateStr = date.toLocaleDateString('en-CA');
                       if (selectedDate === dateStr) {
-                        return 'user-selected-date';
+                        return 'selected-date';
                       }
                       return availableDates.includes(dateStr) ? 'available-date' : 'disabled-date';
                     }}

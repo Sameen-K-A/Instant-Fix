@@ -172,6 +172,8 @@ class UserController {
             res.status(409).send("Booking failed")
          } else if (error.message === "Technician not available") {
             res.status(404).send("Technician not available")
+         } else if (error.message === "Unable to find location for the provided pincode.") {
+            res.status(403).send("Unable to find location for the provided pincode.")
          } else {
             console.log(error);
             res.status(500).json(error);

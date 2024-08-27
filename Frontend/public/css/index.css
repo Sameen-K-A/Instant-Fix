@@ -4465,10 +4465,6 @@ hr.horizontal.dark {
 }
 
 .selected-date {
-  background-color: #A7F3B3;
-}
-
-.user-selected-date {
   background-color: #A7F3B3 !important;
 }
 
@@ -4484,6 +4480,11 @@ hr.horizontal.dark {
 
 .react-calendar__month-view__weekdays__weekday abbr {
   text-decoration: none;
+}
+
+.react-calendar__tile--active:enabled:focus, 
+.react-calendar__tile--active:enabled:hover {
+  background-color: transparent;
 }
 
 .notification-count {

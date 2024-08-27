@@ -24,7 +24,8 @@ const TechnicianSlotAllocation = () => {
       const response = await userAxiosInstance.get("/technician/fetchTechnicianInformation", { params: { technicianUserID: userDetails?.user_id } });
       const afterFetching = { ...userDetails, technicianDetails: [{ ...response.data }] };
       setUserDetails(afterFetching);
-      setSelectedDates(afterFetching.technicianDetails[0].availableSlots.map(slotInfo => ({ slotDate: new Date(slotInfo?.slotDate).toLocaleDateString('en-CA'), slotBooked: slotInfo?.slotBooked })));
+      const today = new Date().setHours(0, 0, 0, 0);
+      setSelectedDates(afterFetching.technicianDetails[0].availableSlots.filter(slotInfo => new Date(slotInfo.slotDate).setHours(0, 0, 0, 0) >= today));
       sessionStorage.setItem("userDetails", JSON.stringify(afterFetching));
     } catch (error) {
       toast.error("Can't fetch technician details, please try again later.");
@@ -36,11 +37,9 @@ const TechnicianSlotAllocation = () => {
   }, []);
 
   useEffect(() => {
-    const alreadyAllocatedDates = technicianDetails?.availableSlots.map((slotInfo) => ({
-      slotDate: new Date(slotInfo?.slotDate).toLocaleDateString('en-CA'),
-      slotBooked: slotInfo?.slotBooked
-    }));
-    setSelectedDates(alreadyAllocatedDates);
+    const alreadyAllocatedDates = technicianDetails?.availableSlots;
+    const today = new Date().setHours(0, 0, 0, 0);
+    setSelectedDates(alreadyAllocatedDates.filter(slotInfo => new Date(slotInfo.slotDate).setHours(0, 0, 0, 0) >= today));
     if (userDetails) {
       socket.emit("joinTechnicianNoficationRoom", userDetails?.user_id);
       socket.on("notification_to_technician", () => {
@@ -100,11 +99,7 @@ const TechnicianSlotAllocation = () => {
       sessionStorage.setItem("userDetails", JSON.stringify(afterChanging));
       toast.success("Slot availability modified successfully.");
     } catch (error) {
-      if (error.response && error.response.status === 301) {
-        toast.error("No changes founded.");
-      } else {
-        toast.error("Something went wrong, please try again later.");
-      }
+      toast.error("Something went wrong, please try again later.");
     } finally {
       setIsEdit(false);
       setNewEditedSlots([]);

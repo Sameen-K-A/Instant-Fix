@@ -29,10 +29,12 @@ const chatSchema = new Schema<ChatType>({
     time: {
       type: Date,
       default: Date.now,
-    }
-  }]
+    },
+    _id: false
+  }],
 }, {
   versionKey: false,
+  _id: false
 });
 
 const Chat = model<ChatType>("Chat", chatSchema);

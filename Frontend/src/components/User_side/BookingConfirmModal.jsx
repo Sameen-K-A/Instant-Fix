@@ -74,6 +74,8 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selec
         toast.error("Technician not available. Please contact another technician.");
       } else if (error.response.status === 402) {
         toast.error(`Technician not available on ${selectedDate}.`);
+      } else if (error.response.status === 403) {
+        toast.error(`Unable to find location for the provided pincode.`);
       } else {
         toast.error("An unexpected error occurred. Please try again.");
       };

@@ -74,10 +74,8 @@ class TechnicianController {
 
   async acceptRejectCancelNewBookingController(req: Request, res: Response) {
     try {
-      const booking_id = req.body.booking_id as string;
-      const newStatus = req.body.newStatus as string;
-      const technician_id = req.body.technician_id as string;
-      await technicianService.acceptRejectCancelNewBookingService(booking_id, newStatus, technician_id);
+      const { booking_id, newStatus, technician_id, serviceDate } = req.body;
+      await technicianService.acceptRejectCancelNewBookingService(booking_id, newStatus, technician_id, serviceDate);
       res.status(200).json({ message: "Status changed successfully" });
     } catch (error: any) {
       if (error.message === "Status is not changed") {

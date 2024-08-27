@@ -1,54 +1,59 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import TechnicianNavbar from './NavbarPage';
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
 import confirmAlert from '../Common/SweetAlert/confirmAlert';
 import { toast } from 'sonner';
 import userAxiosInstance from '../../config/AxiosInstance/userInstance';
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
+import ServiceLocationMap from './MapPage';
 
 const TechnicianViewMoreBooking = () => {
-
   const [bookingDetails, setBookingDetails] = useState(null);
+  const [isMapOn, setIsMapOn] = useState(false);
+  const [currentLocationLatitude, setCurrentLocationLatitude] = useState(null);
+  const [currentLocationLongitude, setCurrentLocationLongitude] = useState(null);
+  const [destinationLatitude, setDestinationLatitude] = useState(null);
+  const [destinationLongitude, setDestinationLongitude] = useState(null);
+  const [mapLoading, setMapLoading] = useState(false);
   const { userDetails } = useUserDetails();
   const location = useLocation();
+  const navigate = useNavigate();
+  const mapContainerRef = useRef(null);
 
   useEffect(() => {
     const booking_id = location.state?.booking_id;
     if (booking_id) {
       (async () => {
         try {
-          const response = await userAxiosInstance.get("/technician/fetchingIndividualBookingDetails", {
-            params: {
-              booking_id: booking_id,
-            },
-          });
+          const response = await userAxiosInstance.get("/technician/fetchingIndividualBookingDetails", { params: { booking_id } });
           setBookingDetails(response.data);
+          setDestinationLongitude(response.data.serviceLocation.location.coordinates[0])
+          setDestinationLatitude(response.data.serviceLocation.location.coordinates[1])
         } catch (error) {
           if (error.response.status === 401) {
             navigate("/login", { state: { message: "Authorization failed, please login" } });
           } else {
             toast.error("Can't collect booking details. Please try again later.");
-          }
+          };
         };
       })();
-    };
+    }
   }, [location.state]);
 
-  const accept_reject_cencel_booking = (input) => {
+  const accept_reject_cancel_booking = (input) => {
     if (input === "Accept") {
-      if (input === "Accept") {
-        const currentDate = new Date();
-        const serviceDate = new Date(bookingDetails.serviceDate);
-        currentDate.setHours(0, 0, 0, 0);
-        serviceDate.setHours(0, 0, 0, 0);
-        if (currentDate > serviceDate) {
-          toast.error("Time is expired. Can't accept this booking request.");
-          return;
-        };
+      const currentDate = new Date();
+      const serviceDate = new Date(bookingDetails.serviceDate);
+      currentDate.setHours(0, 0, 0, 0);
+      serviceDate.setHours(0, 0, 0, 0);
+      if (currentDate > serviceDate) {
+        toast.error("Time is expired. Can't accept this booking request.");
+        return;
       };
     };
-    const message = input === "Accept" ? "Accept new booking request?" : (input === "Reject" ? "Reject new booking request?" : "Cancel your booking request")
+
+    const message = input === "Accept" ? "Accept new booking request?" : (input === "Reject" ? "Reject new booking request?" : "Cancel your booking request");
     confirmAlert(message)
       .then(async (result) => {
         if (result.isConfirmed) {
@@ -57,10 +62,11 @@ const TechnicianViewMoreBooking = () => {
               newStatus: input,
               booking_id: bookingDetails.booking_id,
               technician_id: userDetails?.technicianDetails[0]?.user_id,
+              serviceDate: bookingDetails.serviceDate,
             });
             const afterChange = { ...bookingDetails, booking_status: input === "Accept" ? "Pending" : (input === "Reject" ? "Rejected" : "Cancelled") };
             setBookingDetails(afterChange);
-            toast.success(`Booking updated sucessfully successfully.`);
+            toast.success(`Booking updated successfully.`);
           } catch (error) {
             if (error.response.status === 401) {
               navigate("/login", { state: { message: "Authorization failed, please login" } });
@@ -68,10 +74,36 @@ const TechnicianViewMoreBooking = () => {
               toast.error("Booking status is not changed.");
             } else {
               toast.error("Something went wrong, please try again later.");
-            };
-          };
-        };
+            }
+          }
+        }
       });
+  };
+
+  const handleFindDirection = () => {
+    setMapLoading(true)
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setCurrentLocationLatitude(latitude);
+          setCurrentLocationLongitude(longitude);
+          setIsMapOn(true);
+          setMapLoading(false);
+          setTimeout(() => {
+            mapContainerRef.current?.scrollIntoView({ behavior: 'smooth' });
+          }, 100);
+        },
+        (error) => {
+          setMapLoading(false);
+          toast.error("Oops! Direction is not available.");
+        },
+        { enableHighAccuracy: true }
+      );
+    } else {
+      setMapLoading(false);
+      toast.error("Oops! Direction is not available.");
+    };
   };
 
   return (
@@ -91,12 +123,19 @@ const TechnicianViewMoreBooking = () => {
                 <div className='d-flex justify-content-end gap-2 mt-3 me-3'>
                   {bookingDetails?.booking_status === "Requested" ? (
                     <>
-                      <button className='btn bg-gradient-danger' onClick={() => accept_reject_cencel_booking("Reject")}>Reject</button>
-                      <button className='btn bg-gradient-primary' onClick={() => accept_reject_cencel_booking("Accept")}>Accept</button>
+                      <button className='btn bg-gradient-danger' onClick={() => accept_reject_cancel_booking("Reject")}>Reject</button>
+                      <button className='btn bg-gradient-primary' onClick={() => accept_reject_cancel_booking("Accept")}>Accept</button>
                     </>
                   ) : (
                     bookingDetails?.booking_status === "Pending" && (
-                      <button className='btn bg-gradient-danger' onClick={() => accept_reject_cencel_booking("Cancel")}>Cancel Booking</button>
+                      <button className='btn bg-gradient-danger' onClick={() => accept_reject_cancel_booking("Cancel")}>Cancel Booking</button>
+                    )
+                  )}
+                  {(bookingDetails?.booking_status !== "Cancelled" || bookingDetails?.booking_status !== "Rejected") && (
+                    mapLoading ? (
+                      <button className='btn bg-gradient-success text-white'>Loading . . .</button>
+                    ) : (
+                      <button className='btn bg-gradient-success text-white' onClick={handleFindDirection}>Find Direction</button>
                     )
                   )}
                 </div>
@@ -186,13 +225,19 @@ const TechnicianViewMoreBooking = () => {
                       </div>
                     </div>
                   </div>
+                  {isMapOn && (currentLocationLatitude && currentLocationLongitude && destinationLatitude && destinationLongitude) && (
+                    console.log("ksjdnvkjsdbfvujsdhfbvjhdfsb"),
+                    <div ref={mapContainerRef} style={{ height: '500px', width: '100%', borderRadius: "20%" }} className='mb-10'>
+                      <ServiceLocationMap
+                        currentLocation={{ latitude: currentLocationLatitude, longitude: currentLocationLongitude }}
+                        destination={{ longitude: destinationLongitude, latitude: destinationLatitude }}
+                      />
+                    </div>
+                  )}
                 </div>
               </>
             ) : (
-              <>
-                <h6 className='mt-5'>No details found</h6>
-                <p className='text-sm'>Please check your booking history page</p>
-              </>
+              <p className="text-center">Loading booking details...</p>
             )}
           </div>
         </div>

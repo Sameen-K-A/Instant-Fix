@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 import AdminRepository from "../Repository/adminRepository";
 import { createToken } from "../Config/jwt_config";
-import TechnicianRepository from "../Repository/technicianRepository";
 dotenv.config();
 
 class AdminServices {

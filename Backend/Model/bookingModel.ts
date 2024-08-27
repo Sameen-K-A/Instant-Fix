@@ -42,7 +42,11 @@ const bookingSchema = new Schema<newBookingType>({
       phone: { type: String },
       alternatePhone: { type: String },
       pincode: { type: String },
-   }
+      location: {
+         type: { type: String, enum: ["Point"], default: "Point" },
+         coordinates: { type: [Number], default: [0, 0] },
+      },
+   },
 }, {
    versionKey: false
 });

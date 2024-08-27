@@ -5,9 +5,11 @@ import { userAddressType, userType } from "../Interfaces";
 import sendOTPmail from "../Config/Email_config";
 import TechnicianRepository from "../Repository/technicianRepository";
 import { createToken } from "../Config/jwt_config";
-import { newBookingType, slotType } from "../Interfaces";
+import { newBookingType } from "../Interfaces";
 import { io } from "../Config/Socket_config";
 import axios from "axios";
+import dotenv from "dotenv";
+dotenv.config();
 
 class UserServices {
    private userRepository: UserRepository;
@@ -216,6 +218,28 @@ class UserServices {
          if (!checkAgainTechnicianIsAvailableOnSelectedDate || checkAgainTechnicianIsAvailableOnSelectedDate?.slotBooked === true) {
             throw new Error("Technician is not available on selected date");
          };
+
+         //// for fetching client service location coordinates (latitude and logitude)
+         let serviceLocationLatitude: number = 0;
+         let serviceLocationLongitude: number = 0
+
+         try {
+            const url = process.env.MapboxGeocodeUrl as string;
+            const Map_Box_Access_Token = process.env.Map_Box_Access_Token as string;
+            const response = await axios.get(`${url}/${serviceLocation.pincode}.json?access_token=${Map_Box_Access_Token}`);
+            const coordinates = response.data.features[0]?.geometry?.coordinates;
+            if (coordinates) {
+               serviceLocationLongitude = coordinates[0];
+               serviceLocationLatitude = coordinates[1];
+            } else {
+               console.log("Unable to find location for the provided pincode. 1")
+               throw new Error("Unable to find location for the provided pincode.");
+            };
+         } catch (error) {
+            console.log("Unable to find location for the provided pincode. 2 ")
+            throw new Error("Unable to find location for the provided pincode.");
+         };
+
          const date: Date = new Date();
          const newBookingDetails: newBookingType = {
             booking_id: uuid() as string,
@@ -229,7 +253,18 @@ class UserServices {
             serviceCompletedDate: "Pending",
             serviceCost: "Pending",
             Payment_Status: "Pending",
-            serviceLocation: serviceLocation,
+            serviceLocation: {
+               address: serviceLocation.address,
+               district: serviceLocation.district,
+               state: serviceLocation.state,
+               phone: serviceLocation.phone,
+               alternatePhone: serviceLocation.alternatePhone,
+               pincode: serviceLocation.pincode,
+               location: {
+                  type: "Point",
+                  coordinates: [serviceLocationLongitude, serviceLocationLatitude]
+               }
+            }
          };
          const [bookingResponse, technicianSlotUpdatedResponse, addNotificationToTechnician] = await Promise.all([
             this.userRepository.bookTechnicianRepository(newBookingDetails),
