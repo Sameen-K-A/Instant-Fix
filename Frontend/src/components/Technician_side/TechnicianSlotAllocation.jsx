@@ -108,10 +108,7 @@ const TechnicianSlotAllocation = () => {
 
   const cancelEditingSlot = () => {
     setIsEdit(false);
-    const alreadyAllocatedDates = technicianDetails?.availableSlots.map((slotInfo) => ({
-      slotDate: new Date(slotInfo?.slotDate).toLocaleDateString('en-CA'),
-      slotBooked: slotInfo?.slotBooked
-    }));
+    const alreadyAllocatedDates = technicianDetails?.availableSlots.filter(slotInfo => new Date(slotInfo.slotDate).setHours(0, 0, 0, 0) >= today);
     setSelectedDates(alreadyAllocatedDates);
     setNewEditedSlots([]);
   };

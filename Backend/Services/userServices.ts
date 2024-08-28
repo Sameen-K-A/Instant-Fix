@@ -199,6 +199,14 @@ class UserServices {
       };
    };
 
+   async fetchSavedTechnicianDetailsService(user_id: string) {
+      try {
+         return await this.userRepository.fetchSavedTechnicianDetailsRepository(user_id);
+      } catch (error) {
+         throw error;
+      };
+   };
+
    async fetchAlreadyChattedTechniciansService(user_id: string) {
       try {
          return await this.userRepository.fetchAlreadyChattedTechniciansRepository(user_id);

@@ -9,6 +9,7 @@ export type userType = {
    isTechnician?: boolean;
    addressDetails?: null | userAddressType;
    alreadychattedtechnician?: string[];
+   savedTechnicians?: string[];
 };
 
 export type slotType = {

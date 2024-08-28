@@ -83,6 +83,31 @@ class UserRepository {
     }
   };
 
+  async fetchSavedTechnicianDetailsRepository(user_id: string) {
+    try {
+      const response = await User.aggregate([
+        { $match: { user_id: user_id } },
+        { $unwind: "$savedTechnicians" },
+        { $lookup: { from: "users", localField: "savedTechnicians", foreignField: "user_id", as: "SavedTechnicianPersonalInformation" } },
+        { $unwind: "$SavedTechnicianPersonalInformation" },
+        { $lookup: { from: "technicians", localField: "savedTechnicians", foreignField: "user_id", as: "SavedTechnicianProfessionInformation" } },
+        { $unwind: "$SavedTechnicianProfessionInformation" },
+        {
+          $project: {
+            _id: 0,
+            "SavedTechnicianPersonalInformation.user_id": 1,
+            "SavedTechnicianPersonalInformation.name": 1,
+            "SavedTechnicianPersonalInformation.profileIMG": 1,
+            "SavedTechnicianProfessionInformation.profession": 1
+          },
+        },
+      ]);
+      return response;
+    } catch (error) {
+      throw error;
+    };
+  };
+
   async fetchTechnicianRepository(user_id: string, skipCount: number = 0, limitCount: number = 10) {
     try {
       return await User.aggregate([

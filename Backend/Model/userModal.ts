@@ -29,6 +29,9 @@ const userSchema = new Schema<userType>({
       type: Boolean,
       default: false
    },
+   savedTechnicians: {
+      type: [String]
+   },
    addressDetails: {
       type: {
          name: { type: String },
