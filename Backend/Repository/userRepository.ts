@@ -83,6 +83,22 @@ class UserRepository {
     }
   };
 
+  async saveTechnicianRepository(user_id: string, technicianUser_id: string) {
+    try {
+      return await User.updateOne({ user_id: user_id }, { $addToSet: { savedTechnicians: technicianUser_id } });
+    } catch (error) {
+      throw error;
+    };
+  };
+
+  async unSaveTechnicianRepository(user_id: string, technicianUser_id: string) {
+    try {
+      return await User.updateOne({ user_id: user_id }, { $pull: { savedTechnicians: technicianUser_id } });
+    } catch (error) {
+      throw error;
+    };
+  };
+
   async fetchSavedTechnicianDetailsRepository(user_id: string) {
     try {
       const response = await User.aggregate([

@@ -10,10 +10,14 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { toast } from 'sonner';
 import userAxiosInstance from '../../config/AxiosInstance/userInstance';
+import { RiUserFollowFill } from "react-icons/ri";
+import { useUserDetails } from '../../Contexts/UserDetailsContext';
 
 const TechnicianProfileDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { userDetails, setUserDetails } = useUserDetails();
+  const userSavedTechnicians = userDetails.savedTechnicians;
   const [technicianDetails, setTechnicianDetails] = useState(null);
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -36,7 +40,7 @@ const TechnicianProfileDetails = () => {
         };
       };
     })();
-  }, [bookingSuccess]);  
+  }, [bookingSuccess]);
 
   const handleDateChange = (changedDate) => {
     const date = changedDate.toLocaleDateString('en-CA');
@@ -51,9 +55,32 @@ const TechnicianProfileDetails = () => {
     return todayStringDate > dateStr || !availableDates.includes(dateStr);
   };
 
-
   const handleMessageOpen = () => {
     navigate("/chat", { state: { details: technicianDetails } });
+  };
+
+  const saveTechnician = async () => {
+    try {
+      await userAxiosInstance.patch("/saveTechnician", { technicianId: technicianDetails.user_id, user_id: userDetails.user_id });
+      const updatedSavedTechnicians = [...userDetails.savedTechnicians, technicianDetails.user_id];
+      const afterFollowedComplete = { ...userDetails, savedTechnicians: updatedSavedTechnicians };
+      sessionStorage.setItem("userDetails", JSON.stringify(afterFollowedComplete));
+      setUserDetails(afterFollowedComplete);
+    } catch (error) {
+      toast.error("Can't save technician. Please try again later");
+    };
+  };
+
+  const unSaveTechnician = async () => {
+    try {
+      await userAxiosInstance.patch("/unSaveTechnician", { technicianId: technicianDetails.user_id, user_id: userDetails.user_id });
+      const updatedUnSavedTechnicians = userSavedTechnicians.filter((technician_id) => technician_id !== technicianDetails.user_id);
+      const afterUnSaveComplete = { ...userDetails, savedTechnicians: updatedUnSavedTechnicians };
+      sessionStorage.setItem("userDetails", JSON.stringify(afterUnSaveComplete));
+      setUserDetails(afterUnSaveComplete);
+    } catch (error) {
+      toast.error("Can't unsave technician. Please try again later");
+    };
   };
 
   return (
@@ -71,11 +98,17 @@ const TechnicianProfileDetails = () => {
                   <strong key={value} className='me-1'>{value <= technicianDetails?.technicianDetails?.rating ? <Star color={"#ffbb00"} /> : <Star />}</strong>
                 ))}
               </div>
-              <ul className="nav nav-fill bg-transparent d-flex m-3">
-                <button className='btn btn-outline-primary px-3 mx-1 mb-0'><FollowTechnician /></button>
-                <button className='btn btn-outline-primary px-3 mx-1 mb-0' onClick={handleMessageOpen}><MsgToTechnician /></button>
-                <button className='btn bg-gradient-primary mx-1 mb-0' onClick={() => setIsBookingOpen(true)}>Book Now</button>
-              </ul>
+              {technicianDetails !== null && (
+                <ul className="nav nav-fill bg-transparent d-flex m-3">
+                  {userSavedTechnicians.includes(technicianDetails.user_id) ? (
+                    <button className='btn btn-outline-primary px-3 mx-1 mb-0' onClick={unSaveTechnician}><RiUserFollowFill size={"16px"} /></button>
+                  ) : (
+                    <button className='btn btn-outline-primary px-3 mx-1 mb-0' onClick={saveTechnician}><FollowTechnician /></button>
+                  )}
+                  <button className='btn btn-outline-primary px-3 mx-1 mb-0' onClick={handleMessageOpen}><MsgToTechnician /></button>
+                  <button className='btn bg-gradient-primary mx-1 mb-0' onClick={() => setIsBookingOpen(true)}>Book Now</button>
+                </ul>
+              )}
             </div>
           </div>
           <div className="col-lg-9 col-md-7 col-12">

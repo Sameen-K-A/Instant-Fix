@@ -130,6 +130,26 @@ class UserController {
       }
    };
 
+   async saveTechnicianController(req: Request, res: Response) {
+      try {
+         const { user_id, technicianId } = req.body;
+         await userServices.saveTechnicianService(user_id as string, technicianId as string);
+         res.status(200).send("Save technician completed successfully");
+      } catch (error) {
+         res.status(500).send("Can't save technician");
+      };
+   };
+
+   async unSaveTechnicianController(req: Request, res: Response) {
+      try {
+         const { user_id, technicianId } = req.body;
+         await userServices.unSaveTechnicianService(user_id as string, technicianId as string);
+         res.status(200).send("Unsave technician completed successfully");
+      } catch (error) {
+         res.status(500).send("Can't unsave technician");
+      };
+   };
+
    async fetchSavedTechnicianDetailsController(req: Request, res: Response) {
       try {
          const user_id: string = req.query.user_id as string;

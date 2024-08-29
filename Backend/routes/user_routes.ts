@@ -22,6 +22,8 @@ router.patch("/changepassword", verifyToken, userController.changePassword_contr
 router.patch("/editprofile", verifyToken, upload.single('profile'), userController.editprofile_controller);
 
 // fetching saved technician information 
+router.patch("/saveTechnician", verifyToken, userController.saveTechnicianController);
+router.patch("/unSaveTechnician", verifyToken, userController.unSaveTechnicianController);
 router.get("/fetchSavedTechnicianDetails", verifyToken, userController.fetchSavedTechnicianDetailsController);
 
 //fetching technicians details

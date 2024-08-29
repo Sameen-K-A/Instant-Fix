@@ -199,6 +199,30 @@ class UserServices {
       };
    };
 
+   async saveTechnicianService(user_id: string, technicianUser_id: string) {
+      try {
+         const response = await this.userRepository.saveTechnicianRepository(user_id, technicianUser_id);
+         if (response.modifiedCount !== 1) {
+            throw new Error("Can't save technician");
+         };
+         return;
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   async unSaveTechnicianService(user_id: string, technicianUser_id: string) {
+      try {
+         const response = await this.userRepository.unSaveTechnicianRepository(user_id, technicianUser_id);
+         if (response.modifiedCount !== 1) {
+            throw new Error("Can't unsave technician");
+         };
+         return;
+      } catch (error) {
+         throw error;
+      };
+   };
+
    async fetchSavedTechnicianDetailsService(user_id: string) {
       try {
          return await this.userRepository.fetchSavedTechnicianDetailsRepository(user_id);
