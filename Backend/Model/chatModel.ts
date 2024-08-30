@@ -34,7 +34,6 @@ const chatSchema = new Schema<ChatType>({
   }],
 }, {
   versionKey: false,
-  _id: false
 });
 
 const Chat = model<ChatType>("Chat", chatSchema);

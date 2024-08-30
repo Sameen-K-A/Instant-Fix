@@ -6,13 +6,16 @@ import io from "socket.io-client";
 import { toast } from "sonner";
 import NotificationCard from "./Notification";
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
-import notificationAudio from "/public/Audio/notificationAudio.wav"
+import notificationAudio from "/public/Audio/notificationAudio.wav";
+import { GiQuickSlash } from "react-icons/gi";
+import { useNavigate } from "react-router-dom";
 
 const socket = io(Base_URL);
 
 const TechnicianNavbar = () => {
   const [showNotification, setShowNotification] = useState(false);
   const { userDetails } = useUserDetails();
+  const navigate = useNavigate();
   const userProfile = userDetails?.profileIMG;
 
   useEffect(() => {
@@ -33,7 +36,7 @@ const TechnicianNavbar = () => {
     <>
       <nav className="navbar navbar-light bg-light" style={{ zIndex: "9999" }}>
         <div className="container-fluid">
-          <p className="navbar-brand mb-0">Logo</p>
+        <p className="navbar-brand mb-0 cursor-pointer" onClick={() => navigate("/technician")}><GiQuickSlash style={{ transform: 'rotate(-180deg)' }} className="text-primary" size={30} /><span className=" text-bold text-primary" style={{marginLeft:"-15px"}}>Instant Fix</span></p>
           <div className="d-flex align-items-center my-2">
             <div className="position-relative me-2">
               <p className="font-weight-bold text-dark text-sm mb-0 me-3  cursor-pointer" onClick={() => setShowNotification(true)}>

@@ -2,6 +2,7 @@ import React from 'react';
 import { PowerBtn } from "../../../public/svgs/Icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import confirmAlert from '../Common/SweetAlert/confirmAlert';
+import { GiQuickSlash } from "react-icons/gi";
 
 const AdminNavbar = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const AdminNavbar = () => {
     <div className='p-4'>
       <nav className="navbar navbar-expand-md card py-2">
         <div className="container-fluid">
-          <a className="navbar-brand">Logo</a>
+        <p className="navbar-brand mb-0 cursor-pointer" onClick={() => navigate("/admin/dashboard")}><GiQuickSlash style={{ transform: 'rotate(-180deg)' }} className="text-primary" size={30} /><span className=" text-bold text-primary" style={{marginLeft:"-15px"}}>Instant Fix</span></p>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav ms-auto gap-3 d-flex align-items-center justify-content-center">
               <li className="nav-item d-flex align-items-center">

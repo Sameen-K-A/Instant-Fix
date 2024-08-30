@@ -86,6 +86,22 @@ class TechnicianController {
     };
   };
 
+  async completeBookingController(req: Request, res: Response) {
+    try {
+      const { booking_id, client_id, laborCharge } = req.body;
+      await technicianService.completeBookingService(booking_id, client_id, laborCharge);
+      res.status(200).send("Booking completed");
+    } catch (error: any) {
+      if (error.message === "Booking details is not changed") {
+        res.status(301).send("Booking details is not changed");
+      } else if (error.message === "Can't find the client details") {
+        res.status(404).send("Can't find the client details");
+      } else {
+        res.status(500).send("Something wrong please try again later.");
+      };
+    };
+  };
+
   async clearNotificationController(req: Request, res: Response) {
     try {
       const technicianUser_id: string = req.body.technicianUser_id as string;

@@ -97,6 +97,14 @@ class TechnicianRepository {
     };
   };
 
+  async completeBookingRepository(booking_id: string, laborCharge: string, completeDate: string) {
+    try {
+      return await BookingModel.updateOne({ booking_id: booking_id }, { booking_status: "Completed", serviceCost: laborCharge, serviceCompletedDate: completeDate, Payment_Status: "Requested" })
+    } catch (error) {
+      throw error;
+    };
+  };
+
   async clearNotificationRepository(technicianUser_id: string) {
     try {
       return await technicianModel.updateOne({ user_id: technicianUser_id }, { $set: { notifications: [] } });

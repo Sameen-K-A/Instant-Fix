@@ -3,6 +3,7 @@ import { technicianType } from "../Model/technicianModel"
 import TechnicianRepository from "../Repository/technicianRepository";
 import UserRepository from "../Repository/userRepository";
 import { slotType } from "../Interfaces";
+import sendConfirmBookingmail from "../Config/BookingConfirmEmail";
 
 class TechnicianService {
    private technicianRepository: TechnicianRepository;
@@ -110,6 +111,25 @@ class TechnicianService {
             await this.technicianRepository.changeTechncianSlotAfterBookingCancelRepository(technician_id, serviceDate);
          };
          return true;
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   async completeBookingService(booking_id: string, client_id: string, laborCharge: string) {
+      try {
+         const clientDetails = await this.userRepository.findUserByUser_id(client_id);
+         if (clientDetails) {
+            const completedDate = new Date().toLocaleDateString('en-CA');
+            const [sendEmail, changeBookingDetails] = await Promise.all([
+               sendConfirmBookingmail(clientDetails.email, laborCharge, booking_id),
+               this.technicianRepository.completeBookingRepository(booking_id, laborCharge, completedDate),
+            ]);
+            if (!sendEmail) throw new Error("Email not sended");
+            if (changeBookingDetails.modifiedCount !== 1) throw new Error("Booking details is not changed");
+         } else {
+            throw new Error("Can't find the client details");
+         };
       } catch (error) {
          throw error;
       };

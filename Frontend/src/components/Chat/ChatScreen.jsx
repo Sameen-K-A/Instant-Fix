@@ -7,26 +7,22 @@ import { toast } from 'sonner';
 import userAxiosInstance from "../../config/AxiosInstance/userInstance";
 import io from "socket.io-client";
 const socket = io(Base_URL);
+import { useUserDetails } from "../../Contexts/UserDetailsContext";
+import { useNavigate } from "react-router-dom";
 
 const ChatScreen = ({ currentChatting }) => {
   const [chatHistory, setChatHistory] = useState(null);
-  const [userDetails, setUserDetails] = useState(null);
+  const { userDetails } = useUserDetails();
   const [newMsg, setNewMsg] = useState("");
   const messagesEndRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
       try {
-        const userInfo = JSON.parse(sessionStorage.getItem("userDetails"));
-        const response = await userAxiosInstance.get(`/chat/fetchTwoMembersChat`, {
-          params: {
-            senderID: userInfo?.user_id,
-            receiverID: currentChatting?.user_id
-          }
-        });
-        setUserDetails(userInfo);
+        const response = await userAxiosInstance.get(`/chat/fetchTwoMembersChat`, { params: { senderID: userDetails?.user_id, receiverID: currentChatting?.user_id } });
         setChatHistory(response.data);
-        socket.emit("joinChatRoom", { senderID: userInfo?.user_id, receiverID: currentChatting?.user_id });
+        socket.emit("joinChatRoom", { senderID: userDetails?.user_id, receiverID: currentChatting?.user_id });
       } catch (error) {
         if (error.response.status === 401) {
           navigate("/login", { state: { message: "Authorization failed, please login" } });

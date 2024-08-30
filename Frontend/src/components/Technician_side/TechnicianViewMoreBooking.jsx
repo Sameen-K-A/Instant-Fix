@@ -7,6 +7,9 @@ import { toast } from 'sonner';
 import userAxiosInstance from '../../config/AxiosInstance/userInstance';
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import ServiceLocationMap from './MapPage';
+import { CloseX_mark } from '../../../public/svgs/Icons';
+import WorkCompletedModal from './WorkCompletedModal';
+import AlertRedDot from '../Common/AlertRedDot';
 
 const TechnicianViewMoreBooking = () => {
   const [bookingDetails, setBookingDetails] = useState(null);
@@ -15,6 +18,7 @@ const TechnicianViewMoreBooking = () => {
   const [currentLocationLongitude, setCurrentLocationLongitude] = useState(null);
   const [destinationLatitude, setDestinationLatitude] = useState(null);
   const [destinationLongitude, setDestinationLongitude] = useState(null);
+  const [workCompleted, setWorkCompleted] = useState(false);
   const [mapLoading, setMapLoading] = useState(false);
   const { userDetails } = useUserDetails();
   const location = useLocation();
@@ -109,6 +113,7 @@ const TechnicianViewMoreBooking = () => {
   return (
     <>
       <TechnicianNavbar />
+      {workCompleted && <div className="modal-backdrop" onClick={() => setWorkCompleted(false)} />}
       <nav className="bg-transparent shadow-none position-absolute ps-5 mt-5 w-100 z-index-2">
         <h6 className="font-weight-bolder mb-0 ms-2">Booking History</h6>
         <p className="text-sm mt-0 ms-2">Technician/ Profile/ Booking history/ View more details</p>
@@ -128,7 +133,10 @@ const TechnicianViewMoreBooking = () => {
                     </>
                   ) : (
                     bookingDetails?.booking_status === "Pending" && (
-                      <button className='btn bg-gradient-danger' onClick={() => accept_reject_cancel_booking("Cancel")}>Cancel Booking</button>
+                      <>
+                        <button className='btn bg-gradient-danger' onClick={() => accept_reject_cancel_booking("Cancel")}>Cancel Booking</button>
+                        <button className='btn bg-gradient-primary' onClick={() => setWorkCompleted(true)}>Complete</button>
+                      </>
                     )
                   )}
                   {(bookingDetails?.booking_status !== "Cancelled" || bookingDetails?.booking_status !== "Rejected") && (
@@ -218,7 +226,7 @@ const TechnicianViewMoreBooking = () => {
                             </tr>
                             <tr>
                               <td><p className="text-xs mb-0">Payment Status</p></td>
-                              <td><p className="text-xs font-weight-bold mb-0">{bookingDetails?.Payment_Status}</p></td>
+                              <td><p className="text-xs font-weight-bold mb-0 d-flex">{bookingDetails?.Payment_Status}<span className='ms-1'>{bookingDetails?.Payment_Status === "Requested" && <AlertRedDot />}</span></p></td>
                             </tr>
                           </tbody>
                         </table>
@@ -242,6 +250,14 @@ const TechnicianViewMoreBooking = () => {
           </div>
         </div>
       </div>
+      {bookingDetails !== null && (
+        <div className='booking-div position-fixed start-0 card card-body blur col-12' style={{ bottom: workCompleted ? 0 : '-25%', height: workCompleted ? '25%' : '0px', zIndex: 9999, transition: 'bottom 0.3s ease, height 0.3s ease', boxShadow: '0 -5px 15px rgba(0, 0, 0, 0.3)', overflowY: 'auto' }}>
+          <div className="d-flex justify-content-end">
+            <p className='mx-1 cursor-pointer' onClick={() => setWorkCompleted(false)}><CloseX_mark /></p>
+          </div>
+          <WorkCompletedModal setWorkCompleted={setWorkCompleted} bookingDetails={bookingDetails} setBookingDetails={setBookingDetails} />
+        </div>
+      )}
     </>
   );
 };

@@ -21,6 +21,7 @@ router.patch("/changeAvailabilityStatus", verifyToken, technicianController.chan
 router.get("/fetchTechnicianBookingHistory", verifyToken, technicianController.fetchTechnicianBookingHistoryController);
 router.get("/fetchingIndividualBookingDetails", verifyToken, technicianController.fetchingIndividualBookingDetailsController);
 router.patch("/acceptRejectCancelNewBooking", verifyToken, technicianController.acceptRejectCancelNewBookingController);
+router.post("/confirmBooking", verifyToken, technicianController.completeBookingController);
 
 // notification area
 router.patch("/clearNotification", verifyToken, technicianController.clearNotificationController)
