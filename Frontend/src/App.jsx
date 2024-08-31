@@ -34,6 +34,7 @@ import TechnicianRole from './components/Technician_side/TechnicianRole';
 import TechnicianBookingHistoryTable from './components/Technician_side/TechnicianBookingHistory';
 import TechnicianViewMoreBooking from './components/Technician_side/TechnicianViewMoreBooking';
 import TechnicianSlotAllocation from './components/Technician_side/TechnicianSlotAllocation';
+import TechnicianWalletPage from './components/Technician_side/TechnicianWallet';
 
 // common side
 import NotFound from './components/Common/404page';
@@ -77,6 +78,7 @@ function App() {
           <Route path='/technician/technicianBookingHistory' element={<TechnicianProtecter><TechnicianBookingHistoryTable /></TechnicianProtecter>} />;
           <Route path='/technician/technicianBookingViewmore' element={<TechnicianProtecter><TechnicianViewMoreBooking /></TechnicianProtecter>} />;
           <Route path='/technician/slotAllocation' element={<TechnicianProtecter><TechnicianSlotAllocation /></TechnicianProtecter>} />;
+          <Route path='/technician/wallet' element={<TechnicianProtecter><TechnicianWalletPage /></TechnicianProtecter>} />;
 
           {/* common */}
           <Route path='*' element={<NotFound />} />;

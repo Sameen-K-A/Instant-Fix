@@ -41,4 +41,8 @@ router.get("/fetchUserBookingHistory", verifyToken, userController.fetchUserBook
 router.get("/fetchIndividualBookingInformation", verifyToken, userController.fetchIndividualBookingInformation_controller);
 router.patch("/cancelBooking", verifyToken, userController.cancelBooking_controller);
 
+// payment side
+router.post("/proceedToPayment", verifyToken, userController.proceedToPaymentController);
+router.post("/verifyPayment", verifyToken, userController.verifyPaymentController);
+
 export default router;

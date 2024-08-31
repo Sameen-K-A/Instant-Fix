@@ -2,16 +2,19 @@ import { v4 as uuid } from "uuid";
 import { technicianType } from "../Model/technicianModel"
 import TechnicianRepository from "../Repository/technicianRepository";
 import UserRepository from "../Repository/userRepository";
-import { slotType } from "../Interfaces";
+import { slotType, WalletType } from "../Interfaces";
 import sendConfirmBookingmail from "../Config/BookingConfirmEmail";
+import WalletRepository from "../Repository/WalletRepository";
 
 class TechnicianService {
    private technicianRepository: TechnicianRepository;
    private userRepository: UserRepository;
+   private walletRepository: WalletRepository;
 
    constructor() {
       this.technicianRepository = new TechnicianRepository();
       this.userRepository = new UserRepository();
+      this.walletRepository = new WalletRepository();
    };
 
    async joinNewTechnicianService(user_id: string, profession: string) {
@@ -23,15 +26,23 @@ class TechnicianService {
          };
          const userRepository_Response = await this.userRepository.accessIsTechnician(user_id);
          if (userRepository_Response.modifiedCount === 1) {
-            const technicianRepository_Response = await this.technicianRepository.joinNewTechnicianRepository(technicianData);
-            if (technicianRepository_Response) {
+            const technicianWallet: WalletType = {
+               user_id: user_id,
+               balanceAmount: 0,
+               transactions: [],
+            };
+            const [technicianRepository_Response, createWallet] = await Promise.all([
+               this.technicianRepository.joinNewTechnicianRepository(technicianData),
+               this.walletRepository.addNewWalletForTechnicianRepository(technicianWallet)
+            ]);
+            if (technicianRepository_Response && createWallet) {
                return technicianRepository_Response;
             } else {
                throw new Error('Failed to create technician');
             }
          } else {
             throw new Error('Failed to update user to technician');
-         }
+         };
       } catch (error) {
          console.log("error form service : ", error);
          throw error;
@@ -142,6 +153,14 @@ class TechnicianService {
             throw new Error("Slot modification is failed.");
          };
          return true;
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   async fetchWalletInformationService(user_id: string) {
+      try {
+         return this.walletRepository.fetchWalletDetails(user_id);
       } catch (error) {
          throw error;
       };

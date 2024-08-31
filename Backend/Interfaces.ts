@@ -62,4 +62,16 @@ export type newBookingType = {
    serviceCost?: String;
    booking_status: "Requested" | "Rejected" | "Pending" | "Completed" | "Cancelled";
    Payment_Status: "Pending" | "Completed" | "Requested";
-}
+};
+
+export type WalletType = {
+   user_id: string;
+   balanceAmount: number;
+   transactions: TransactionType[];
+};
+
+export type TransactionType = {
+   amount: number;
+   dateTime: string;
+   transactionStatus: "Debit" | "Credit";
+};

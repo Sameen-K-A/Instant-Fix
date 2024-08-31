@@ -1,7 +1,7 @@
 import UserRepository from "../Repository/userRepository";
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from "uuid";
-import { userAddressType, userType } from "../Interfaces";
+import { TransactionType, userAddressType, userType } from "../Interfaces";
 import sendOTPmail from "../Config/Email_config";
 import TechnicianRepository from "../Repository/technicianRepository";
 import { createToken } from "../Config/jwt_config";
@@ -9,7 +9,11 @@ import { newBookingType } from "../Interfaces";
 import { io } from "../Config/Socket_config";
 import axios from "axios";
 import dotenv from "dotenv";
+import Razorpay from "razorpay";
+import crypto from "crypto";
+import WalletRepository from "../Repository/WalletRepository";
 dotenv.config();
+const walletRepository = new WalletRepository();
 
 class UserServices {
    private userRepository: UserRepository;
@@ -342,6 +346,57 @@ class UserServices {
             return true;
          } else {
             throw new Error("Booking status is not changed");
+         };
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   async proceedToPaymentService(booking_id: string, laborCost: string) {
+      try {
+         const amount = parseInt(laborCost, 10);
+         const { razorpayKeyID, razorpayKeySecret } = process.env;
+         const razorpayInstance = new Razorpay({
+            key_id: razorpayKeyID as string,
+            key_secret: razorpayKeySecret as string,
+         });
+         const razorpayOptions = {
+            amount: amount * 100,
+            currency: "INR",
+            receipt: booking_id,
+         };
+         const response = await razorpayInstance.orders.create(razorpayOptions);
+         return response;
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   async verifyPaymentService(payment_id: string, order_id: string, signature: string, booking_id: string, amount: string, technicianUser_id: string) {
+      try {
+         const body = `${order_id}|${payment_id}`;
+         const razorpayKeySecret = process.env.razorpayKeySecret as string;
+         const expectedSignature = crypto
+            .createHmac("sha256", razorpayKeySecret)
+            .update(body)
+            .digest("hex");
+         if (expectedSignature === signature) {
+            const laborCharge = parseInt(amount) / 100;
+            const newTransactionDetails: TransactionType = {
+               amount: laborCharge,
+               dateTime: new Date().toLocaleDateString(),
+               transactionStatus: "Credit"
+            };
+            const [updateTechnicianWallet, updateBookingPaymentStatus] = await Promise.all([
+               walletRepository.addNewTransactionAndUpdateTotalAmount(technicianUser_id, newTransactionDetails, laborCharge),
+               this.userRepository.updateBookingPaymentStatus(booking_id, "Completed"),
+            ]);
+            if (updateTechnicianWallet.modifiedCount !== 1 && updateBookingPaymentStatus.modifiedCount !== 1) {
+               throw Error("Payment failed");
+            };
+            return true;
+         } else {
+            throw new Error("Invalid payment verification");
          };
       } catch (error) {
          throw error;

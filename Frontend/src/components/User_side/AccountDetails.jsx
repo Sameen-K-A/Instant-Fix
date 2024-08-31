@@ -48,8 +48,7 @@ const AccountDetails = () => {
         <p className="text-sm mt-0 ms-2">{nowTechnician ? "Profile/ Technician details" : "Profile/ Account Details"}</p>
       </nav>
       <div className={`container-fluid ${!nowTechnician && " pe-6"}`}>
-        <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }}>
-        </div>
+        <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }} />
         <div className="card card-body blur shadow-blur mx-4 mt-n6 overflow-hidden">
           <div className="row gx-4">
             <div className="col-auto">

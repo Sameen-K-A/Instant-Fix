@@ -6,6 +6,7 @@ import { Base_URL } from "../../config/credentials";
 import { useNavigate } from "react-router-dom";
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
+import AlertRedDot from "../Common/AlertRedDot";
 
 const UserBookingHistoryTable = () => {
 
@@ -79,7 +80,7 @@ const UserBookingHistoryTable = () => {
                                   >{data?.booking_status}
                                   </span>
                                 </td>
-                                <td><button className="btn bg-gradient-primary mb-0 text-center" onClick={() => handleViewmore(data)}>View more</button></td>
+                                <td className="d-flex justify-content-center"><button className="btn bg-gradient-primary mb-0 text-center" onClick={() => handleViewmore(data)}>View more</button>{data.Payment_Status === "Requested" && <AlertRedDot />}</td>
                               </tr>
                             );
                           })}

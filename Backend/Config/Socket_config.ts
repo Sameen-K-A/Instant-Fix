@@ -33,7 +33,7 @@ const configSocketIO = (server: HttpServer) => {
             const chatRoom = [messageDetails.senderID, messageDetails.receiverID].sort().join("-");
             io.to(chatRoom).emit("receiveMessage", savedMessage);
          } catch (error) {
-
+            console.log(error)
          }
       })
 

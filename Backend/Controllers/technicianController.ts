@@ -127,6 +127,16 @@ class TechnicianController {
     };
   };
 
+  async fetchWalletInformationController(req: Request, res: Response) {
+    try {
+      const user_id: string = req.query.user_id as string;
+      const serviceResponse = await technicianService.fetchWalletInformationService(user_id);
+      res.status(200).json(serviceResponse);
+    } catch (error) {
+      res.status(200).send("Something wrong, Please try again later.")
+    };
+  };
+
 };
 
 export default TechnicianController;

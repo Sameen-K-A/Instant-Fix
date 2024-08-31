@@ -29,4 +29,7 @@ router.patch("/clearNotification", verifyToken, technicianController.clearNotifi
 // changing technician available slots
 router.patch("/modifyAvailableSlots", verifyToken, technicianController.modifyAvailableSlotsController);
 
+// wallet information
+router.get("/wallet", verifyToken, technicianController.fetchWalletInformationController);
+
 export default router;

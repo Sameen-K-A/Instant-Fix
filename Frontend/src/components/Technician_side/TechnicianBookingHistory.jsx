@@ -109,16 +109,14 @@ const TechnicianBookingHistoryTable = () => {
                 </>
               ) : (
                 <>
-                  <>
-                    <h5 className="mt-7 text-dark">No details found</h5>
-                    <p>Please stay available to receive new bookings from clients.</p>
-                    <p className="text-sm text-black-50 mb-2">To change your availability, follow these steps:</p>
-                    <ol className="text-sm text-black-50 mb-7">
-                      <li>Tap on your profile in the top right corner.</li>
-                      <li>Click on "Account Details."</li>
-                      <li>Change your availability.</li>
-                    </ol>
-                  </>
+                  <h5 className="mt-7 text-dark">No details found</h5>
+                  <p>Please stay available to receive new bookings from clients.</p>
+                  <p className="text-sm text-black-50 mb-2">To change your availability, follow these steps:</p>
+                  <ol className="text-sm text-black-50 mb-7">
+                    <li>Tap on your profile in the top right corner.</li>
+                    <li>Click on "Account Details."</li>
+                    <li>Change your availability.</li>
+                  </ol>
                 </>
               )}
             </div>

@@ -291,6 +291,14 @@ class UserRepository {
     };
   };
 
+  async updateBookingPaymentStatus(booking_id: string, Payment_Status: string) {
+    try {
+      return await BookingModel.updateOne({ booking_id: booking_id }, { Payment_Status: Payment_Status });
+    } catch (error) {
+      throw error;
+    };
+  };
+
 };
 
 export default UserRepository;

@@ -245,6 +245,36 @@ class UserController {
       };
    };
 
+   async proceedToPaymentController(req: Request, res: Response) {
+      try {
+         const { booking_id, laborCost } = req.body;
+         const response = await userServices.proceedToPaymentService(booking_id, laborCost);
+         res.status(200).json({
+            order_id: response.id,
+            currency: response.currency,
+            amount: response.amount,
+         });
+      } catch (error) {
+         res.status(500).send("Something wrong please try again later.");
+      };
+   };
+
+   async verifyPaymentController(req: Request, res: Response) {
+      try {
+         const { payment_id, order_id, signature, booking_id, amount, technicianUser_id } = req.body;
+         await userServices.verifyPaymentService(payment_id, order_id, signature, booking_id, amount, technicianUser_id);
+         res.status(200).send("Payment verified successfully");
+      } catch (error: any) {
+         if (error.message === "Invalid payment verification") {
+            res.status(400).send("Invalid payment verification");
+         } else if(error.message === "Payment failed") {
+            res.status(304).send("Payment failed");
+         } else {
+            res.status(500).send("Something wrong please try again later.");
+         };
+      };
+   };
+
 };
 
 export default UserController;
