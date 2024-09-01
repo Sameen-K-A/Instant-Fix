@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { loadRazorpayScript, proceedToPayment } from '../../utils/RazorPay';
 import AlertRedDot from '../Common/AlertRedDot';
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
+import { razorpayURL } from '../../config/credentials';
 
 const UserHistoryViewMore = () => {
   const [bookingDetails, setBookingDetails] = useState({});

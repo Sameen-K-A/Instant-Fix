@@ -15,7 +15,6 @@ const TechnicianWalletPage = () => {
       try {
         const walletInformation = await userAxiosInstance.get("/technician/wallet", { params: { user_id: userDetails.user_id } });
         setWalletDetails(walletInformation.data);
-        console.log(walletInformation.data)
       } catch (error) {
         toast.error("Can't collect wallet information");
       };
@@ -53,35 +52,31 @@ const TechnicianWalletPage = () => {
                 </div>
               </div>
               <div className="col-12 col-xl-8 mb-4">
-                <div className="card col-12 mt-3 min-height-200">
+                <div className="card col-12 mt-3">
                   <div className="card-body p-3">
                     <div className="card-header pb-0 p-3">
                       <h6>transaction history</h6>
                     </div>
                     {walletDetails?.transactions.length === 0 ? (
-                      <p className="text-center text-xs mb-5 mt-5">
-                        <strong className='text-sm'>Transactions is not found</strong>
+                      <p className="text-center text-xs mb-6 mt-5">
+                        <strong className='text-sm text-black-65'>Transactions is not found</strong>
                       </p>
                     ) : (
-                      <div style={{ overflowY: "auto" }} className="pe-3 max-height-300">
-                        <li className="list-group-item border-0 p-4 mb-0 mt-1 bg-gray-100 border-radius-lg"></li>
-                        <li className="list-group-item border-0 p-4 mb-0 mt-1 bg-gray-100 border-radius-lg"></li>
-                        <li className="list-group-item border-0 p-4 mb-0 mt-1 bg-gray-100 border-radius-lg"></li>
-                        <li className="list-group-item border-0 p-4 mb-0 mt-1 bg-gray-100 border-radius-lg"></li>
-                        <li className="list-group-item border-0 p-4 mb-0 mt-1 bg-gray-100 border-radius-lg"></li>
-                        <li className="list-group-item border-0 p-4 mb-0 mt-1 bg-gray-100 border-radius-lg"></li>
-                        <li className="list-group-item border-0 p-4 mb-0 mt-1 bg-gray-100 border-radius-lg"></li>
-                        <li className="list-group-item border-0 p-4 mb-0 mt-1 bg-gray-100 border-radius-lg"></li>
-                        <li className="list-group-item border-0 p-4 mb-0 mt-1 bg-gray-100 border-radius-lg"></li>
-                        <li className="list-group-item border-0 p-4 mb-0 mt-1 bg-gray-100 border-radius-lg"></li>
-                        <li className="list-group-item border-0 p-4 mb-0 mt-1 bg-gray-100 border-radius-lg"></li>
-                        <li className="list-group-item border-0 p-4 mb-0 mt-1 bg-gray-100 border-radius-lg"></li>
-                        <li className="list-group-item border-0 p-4 mb-0 mt-1 bg-gray-100 border-radius-lg"></li>
-                        <li className="list-group-item border-0 p-4 mb-0 mt-1 bg-gray-100 border-radius-lg"></li>
-                        <li className="list-group-item border-0 p-4 mb-0 mt-1 bg-gray-100 border-radius-lg"></li>
-                        <li className="list-group-item border-0 p-4 mb-0 mt-1 bg-gray-100 border-radius-lg"></li>
-                        <li className="list-group-item border-0 p-4 mb-0 mt-1 bg-gray-100 border-radius-lg"></li>
-                        <li className="list-group-item border-0 p-4 mb-0 mt-1 bg-gray-100 border-radius-lg"></li>
+                      <div style={{ overflowY: "auto" }} className="mt-3 max-height-300">
+                        <div className="card-body">
+                          {walletDetails.transactions.map((transaction, index) => {
+                            return (
+                              <li key={index} className="list-group-item border-1 d-flex justify-content-between mb-2 border-radius-lg">
+                                <div className="d-flex flex-column">
+                                  <h6 className="mb-1 text-dark text-sm">Service cost</h6>
+                                  <span className="text-xs">{transaction?.dateTime}</span>
+                                </div>
+                                <div className="d-flex align-items-center text-sm font-weight-bold">+₹ {transaction?.amount}.00</div>
+                                <div className="d-flex align-items-center text-success text-sm font-weight-bold">{transaction?.transactionStatus}</div>
+                              </li>
+                            );
+                          })}
+                        </div>
                       </div>
                     )}
                   </div>
