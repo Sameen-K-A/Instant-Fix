@@ -45,4 +45,7 @@ router.patch("/cancelBooking", verifyToken, userController.cancelBooking_control
 router.post("/proceedToPayment", verifyToken, userController.proceedToPaymentController);
 router.post("/verifyPayment", verifyToken, userController.verifyPaymentController);
 
+//  technician feedback side
+router.post("/submitReview", verifyToken, userController.submitReviewController);
+
 export default router;

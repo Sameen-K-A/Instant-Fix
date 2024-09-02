@@ -7,13 +7,18 @@ import { toast } from "sonner";
 import { loadRazorpayScript, proceedToPayment } from '../../utils/RazorPay';
 import AlertRedDot from '../Common/AlertRedDot';
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
-import { razorpayURL } from '../../config/credentials';
+import { Base_URL, razorpayURL } from '../../config/credentials';
 import Reveal from '../../../public/Animation/Animated';
+import RatingStar from "../Common/StarRating";
+import { useUserDetails } from '../../Contexts/UserDetailsContext';
 
 const UserHistoryViewMore = () => {
   const [bookingDetails, setBookingDetails] = useState({});
+  const { userDetails } = useUserDetails();
   const location = useLocation();
   const navigate = useNavigate();
+  const [rating, setRating] = useState(3);
+  const [enteredFeedback, setEnteredFeedback] = useState("");
 
   useEffect(() => {
     const fetchBookingDetails = async (booking_id) => {
@@ -67,9 +72,35 @@ const UserHistoryViewMore = () => {
     }
   };
 
+  const submitSendReview = async () => {
+    if (enteredFeedback.trim() !== "") {
+      try {
+        await userAxiosInstance.post("/submitReview", {
+          user_id: userDetails.user_id,
+          technicianUser_id: bookingDetails.technicianDetails.user_id,
+          enteredRating: rating,
+          enteredFeedback: enteredFeedback,
+          booking_id: bookingDetails.booking_id
+        });
+        const afterFeedback = { ...bookingDetails, reviewAdded: true };
+        setBookingDetails(afterFeedback);
+        toast.success("Thank you for your feedback. Have a good day.");
+      } catch (error) {
+        if (error.response.status === 401) {
+          navigate("/login", { state: { message: "Authorization failed please login" } });
+        } else {
+          toast.error("Something wrong. Please try again later");
+        };
+      };
+    } else {
+      toast.error("Enter your feedback");
+    };
+  };
+
   return (
     <>
       <UserNavbar />
+      {console.log(bookingDetails)}
       <nav className="bg-transparent shadow-none position-absolute ps-5 mt-5 w-100 z-index-2">
         <h6 className="font-weight-bolder mb-0 ms-2">Booking History</h6>
         <p className="text-sm mt-0 ms-2">Profile/ Booking history/ View more details</p>
@@ -139,7 +170,45 @@ const UserHistoryViewMore = () => {
                       </div>
                     </div>
                     <div className="col-lg-4 mb-5 px-5 mt-5 d-flex flex-column justify-content-center">
-
+                      {(bookingDetails?.booking_status === "Completed" && bookingDetails.reviewAdded === false) ? (
+                        <>
+                          <div className="row mt-5">
+                            <div className="col-auto">
+                              <div className="avatar avatar-xl position-relative">
+                                <img src={`${Base_URL}/${bookingDetails.technicianDetails.profileIMG}`} alt="profile_image" className="w-100 h-100 border-radius-lg shadow-sm" />
+                              </div>
+                            </div>
+                            <div className="col-auto my-auto">
+                              <div className="h-100">
+                                <h5 className="mb-1 text-dark">{bookingDetails.technicianDetails.name}</h5>
+                                <p className="mb-0 text-sm">{bookingDetails.technicianDetails.email}</p>
+                              </div>
+                            </div>
+                          </div>
+                          <hr className='horizontal dark' />
+                          <div>
+                            <p className="text-bold text-sm text-black-65 m-0">Your rating</p>
+                            <RatingStar rating={rating} setRating={setRating} />
+                            <textarea className='form-control min-height-100 max-height-100' placeholder='Enter your feedback about the technician' onChange={(e) => setEnteredFeedback(e.target.value)}></textarea>
+                            <button className='btn bg-gradient-primary mt-3 w-100' onClick={() => submitSendReview()}>Submit</button>
+                          </div>
+                        </>
+                      ) : (
+                        <div className="row">
+                          <div className="col-auto">
+                            <div className="avatar avatar-xxl position-relative">
+                              <img src={`${Base_URL}/${bookingDetails.technicianDetails.profileIMG}`} alt="profile_image" className="w-100 h-100 border-radius-lg shadow-sm" />
+                            </div>
+                          </div>
+                          <div className="col-auto my-auto">
+                            <div className="h-100">
+                              <h5 className="mb-1 text-primary">{bookingDetails.technicianDetails.name}</h5>
+                              <p className="mb-0 text-sm">{bookingDetails.technicianDetails.email}</p>
+                              <button className='btn btn-outline-primary mt-3' onClick={() => navigate("/techniciandetails", {state: {details: bookingDetails.technicianDetails}})}>Check Profile</button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

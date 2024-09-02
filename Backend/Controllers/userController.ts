@@ -267,11 +267,21 @@ class UserController {
       } catch (error: any) {
          if (error.message === "Invalid payment verification") {
             res.status(400).send("Invalid payment verification");
-         } else if(error.message === "Payment failed") {
+         } else if (error.message === "Payment failed") {
             res.status(304).send("Payment failed");
          } else {
             res.status(500).send("Something wrong please try again later.");
          };
+      };
+   };
+
+   async submitReviewController(req: Request, res: Response) {
+      try {
+         const { user_id, technicianUser_id, enteredRating, enteredFeedback, booking_id } = req.body;
+         await userServices.submitReviewService(user_id, technicianUser_id, enteredRating, enteredFeedback, booking_id);
+         res.status(200).send("Feedback submitted successfully");
+      } catch (error) {
+         res.status(500).send("Something wrong please try again later");
       };
    };
 

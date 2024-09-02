@@ -137,6 +137,16 @@ class TechnicianController {
     };
   };
 
+  async fetchningRatingWithReviewerDetailsController(req: Request, res: Response) {
+    try {
+      const technicianUser_id = req.query.technicianUser_id as string;
+      const serviceResponse = await technicianService.fetchningRatingWithReviewerDetailsService(technicianUser_id);
+      res.status(200).json(serviceResponse);
+    } catch (error) {
+      res.status(500).send("Something wrong please try again later.")
+    };
+  };
+
 };
 
 export default TechnicianController;

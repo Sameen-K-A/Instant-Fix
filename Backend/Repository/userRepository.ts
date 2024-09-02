@@ -1,7 +1,8 @@
 import User from "../Model/userModal";
-import { userAddressType, userType } from "../Interfaces";
+import { SingleRatingType, userAddressType, userType } from "../Interfaces";
 import BookingModel from "../Model/bookingModel"
 import { newBookingType } from "../Interfaces";
+import Rating from "../Model/ReviewModal";
 
 class UserRepository {
 
@@ -155,6 +156,9 @@ class UserRepository {
         { $match: { user_id: technicianUser_id } },
         { $lookup: { from: "technicians", localField: "user_id", foreignField: "user_id", as: "technicianDetails" } },
         { $unwind: "$technicianDetails" },
+        { $lookup: { from: "ratings", localField: "user_id", foreignField: "user_id", as: "ratingInformation" } },
+        { $unwind: "$ratingInformation" },
+        { $lookup: { from: "users", localField: "ratingInformation.reviews.rated_user_id", foreignField: "user_id", as: "reviewerDetails" } },
         {
           $project: {
             _id: 0,
@@ -165,9 +169,21 @@ class UserRepository {
             alreadychattedtechnician: 0,
             "technicianDetails._id": 0,
             "technicianDetails.technician_id": 0,
-          }
-        }
+            "ratingInformation._id": 0,
+            "ratingInformation.user_id": 0,
+            "reviewerDetails._id": 0,
+            "reviewerDetails.email": 0,
+            "reviewerDetails.phone": 0,
+            "reviewerDetails.isBlocked": 0,
+            "reviewerDetails.isTechnician": 0,
+            "reviewerDetails.savedTechnicians": 0,
+            "reviewerDetails.addressDetails": 0,
+            "reviewerDetails.alreadychattedtechnician": 0,
+            "reviewerDetails.password": 0,
+          },
+        },
       ]);
+
       return result[0];
     } catch (error) {
       throw error;
@@ -268,12 +284,12 @@ class UserRepository {
           $project: {
             _id: 0,
             "technicianDetails._id": 0,
-            "technicianDetails.user_id": 0,
             "technicianDetails.password": 0,
             "technicianDetails.isBlocked": 0,
             "technicianDetails.isTechnician": 0,
             "technicianDetails.addressDetails": 0,
             "technicianDetails.alreadychattedtechnician": 0,
+            "technicianDetails.savedTechnicians": 0,
           }
         }
       ]);
@@ -294,6 +310,22 @@ class UserRepository {
   async updateBookingPaymentStatus(booking_id: string, Payment_Status: string) {
     try {
       return await BookingModel.updateOne({ booking_id: booking_id }, { Payment_Status: Payment_Status });
+    } catch (error) {
+      throw error;
+    };
+  };
+
+  async updateBookingReviewAdded(booking_id: string, reviewAdded: boolean) {
+    try {
+      return await BookingModel.updateOne({ booking_id: booking_id }, { reviewAdded: reviewAdded });
+    } catch (error) {
+      throw error;
+    };
+  };
+
+  async addNewFeedbackToTechnician(technician_id: string, feedbackInformation: SingleRatingType) {
+    try {
+      return await Rating.updateOne({ user_id: technician_id }, { $push: { reviews: feedbackInformation } });
     } catch (error) {
       throw error;
     };

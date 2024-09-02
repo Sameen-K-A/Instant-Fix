@@ -32,4 +32,6 @@ router.patch("/modifyAvailableSlots", verifyToken, technicianController.modifyAv
 // wallet information
 router.get("/wallet", verifyToken, technicianController.fetchWalletInformationController);
 
+// rating information
+router.get("/fetchningRatingWithReviewerDetails", verifyToken, technicianController.fetchningRatingWithReviewerDetailsController);
 export default router;

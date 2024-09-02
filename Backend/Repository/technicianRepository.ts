@@ -1,6 +1,7 @@
 import { technicianModel, technicianType } from "../Model/technicianModel";
 import BookingModel from "../Model/bookingModel";
-import { slotType } from "../Interfaces";
+import Rating from "../Model/ReviewModal";
+import { slotType, RatingReviewType } from "../Interfaces";
 
 class TechnicianRepository {
 
@@ -138,6 +139,58 @@ class TechnicianRepository {
   async addNewNotification(technicianUser_id: string, notification: string) {
     try {
       return await technicianModel.updateOne({ user_id: technicianUser_id }, { $push: { notifications: notification } })
+    } catch (error) {
+      throw error;
+    };
+  };
+
+  async createRatingDetails(ratingDetails: RatingReviewType) {
+    try {
+      return await Rating.create(ratingDetails);
+    } catch (error) {
+      throw error;
+    };
+  };
+
+  async fetchAllFeedbacks(technician_id: string) {
+    try {
+      return await Rating.findOne({ user_id: technician_id });
+    } catch (error) {
+      throw error;
+    };
+  };
+
+  async updateNewAvgRatingToTechnician(technician_id: string, newRating: number) {
+    try {
+      return await technicianModel.updateOne({ user_id: technician_id }, { rating: newRating });
+    } catch (error) {
+      throw error;
+    };
+  };
+
+  async fetchningRatingWithReviewerDetailsRepository(technicianUser_id: string) {
+    try {
+      const res = await Rating.aggregate([
+        { $match: { user_id: technicianUser_id } },
+        { $lookup: { from: "users", localField: "reviews.rated_user_id", foreignField: "user_id", as: "reviewerDetails" } },
+        { $lookup: { from: "technicians", localField: "user_id", foreignField: "user_id", as: "technicianRating" } },
+        { $unwind: "$technicianRating" },
+        {
+          $project:
+          {
+            _id: 0,
+            user_id: 0,
+            "technicianRating._id": 0,
+            "technicianRating.user_id": 0,
+            "technicianRating.technician_id": 0,
+            "technicianRating.profession": 0,
+            "technicianRating.availability": 0,
+            "technicianRating.notifications": 0,
+            "technicianRating.availableSlots": 0,
+          },
+        },
+      ]);
+      return res[0];
     } catch (error) {
       throw error;
     };

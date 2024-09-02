@@ -2,10 +2,9 @@ import { v4 as uuid } from "uuid";
 import { technicianType } from "../Model/technicianModel"
 import TechnicianRepository from "../Repository/technicianRepository";
 import UserRepository from "../Repository/userRepository";
-import { slotType, WalletType } from "../Interfaces";
+import { RatingReviewType, slotType, WalletType } from "../Interfaces";
 import sendConfirmBookingmail from "../Config/BookingConfirmEmail";
 import WalletRepository from "../Repository/WalletRepository";
-
 class TechnicianService {
    private technicianRepository: TechnicianRepository;
    private userRepository: UserRepository;
@@ -21,6 +20,7 @@ class TechnicianService {
       try {
          const technicianData: technicianType = {
             user_id: user_id,
+            rating: 0,
             technician_id: uuid(),
             profession: profession,
          };
@@ -31,9 +31,14 @@ class TechnicianService {
                balanceAmount: 0,
                transactions: [],
             };
+            const ratingDetails: RatingReviewType = {
+               user_id: user_id,
+               reviews: []
+            };
             const [technicianRepository_Response, createWallet] = await Promise.all([
                this.technicianRepository.joinNewTechnicianRepository(technicianData),
-               this.walletRepository.addNewWalletForTechnicianRepository(technicianWallet)
+               this.walletRepository.addNewWalletForTechnicianRepository(technicianWallet),
+               this.technicianRepository.createRatingDetails(ratingDetails)
             ]);
             if (technicianRepository_Response && createWallet) {
                return technicianRepository_Response;
@@ -161,6 +166,22 @@ class TechnicianService {
    async fetchWalletInformationService(user_id: string) {
       try {
          return this.walletRepository.fetchWalletDetails(user_id);
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   async fetchningRatingWithReviewerDetailsService(technicianUser_id: string) {
+      try {
+         const result = await this.technicianRepository.fetchningRatingWithReviewerDetailsRepository(technicianUser_id);
+
+         result.reviews = result.reviews.map((review: any) => {
+            const reviewer = result.reviewerDetails.find((reviewer: any) => reviewer.user_id === review.rated_user_id);
+            return { ...review, reviewerName: reviewer?.name, reviewerProfileIMG: reviewer?.profileIMG, };
+         });
+         delete result.reviewerDetails;
+         
+         return result;
       } catch (error) {
          throw error;
       };

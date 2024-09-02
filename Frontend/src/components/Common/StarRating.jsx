@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Star } from '../../../public/svgs/Icons';
 
-const RatingStar = () => {
-
-  const [rating, setRating] = useState(1);
+const RatingStar = ({ rating, setRating }) => {
   const ratedArray = [1, 2, 3, 4, 5];
 
   return (

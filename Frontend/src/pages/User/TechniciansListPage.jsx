@@ -125,12 +125,12 @@ const TechniciansListPage = () => {
         </div>
 
         <div className="col-lg-9 col-12 pe-5">
-          <Reveal>
-            <div className="container p-0 mt-5 col-12 d-flex justify-content-end">
-              <div className="col-lg-3 col-12">
-                <input type="text" className='form-control' placeholder='Search Technician or Category' value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
-              </div>
+          <div className="container p-0 mt-5 col-12 d-flex justify-content-end">
+            <div className="col-lg-3 col-12">
+              <input type="text" className='form-control' placeholder='Search Technician or Category' value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
             </div>
+          </div>
+          <Reveal>
             <div className="col-12">
               {techniciansArray.length === 0 ? (
                 <div className='d-flex flex-column justify-content-center align-items-center mt-8'>

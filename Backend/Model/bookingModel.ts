@@ -47,6 +47,10 @@ const bookingSchema = new Schema<newBookingType>({
          coordinates: { type: [Number], default: [0, 0] },
       },
    },
+   reviewAdded: {
+      type: Boolean,
+      default: false
+   },
 }, {
    versionKey: false
 });

@@ -4,7 +4,6 @@ import backgroundImage from "/images/HeaderBanner_2.png";
 import { Base_URL } from '../../config/credentials';
 import { CloseX_mark, FollowTechnician, MsgToTechnician, Star } from '../../../public/svgs/Icons';
 import { useLocation, useNavigate } from 'react-router-dom';
-import image from "../../../public/images/profile_2.jpg";
 import BookingConfirmModalDetails from './BookingConfirmModal';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -119,7 +118,6 @@ const TechnicianProfileDetails = () => {
             </nav>
             <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }} />
             <div className="row d-flex justify-content-between mx-1">
-
               <div className="col-lg-7 col-sm-12 mb-6">
                 <div className="card card-body blur-sm mt-n5">
                   <Reveal>
@@ -153,38 +151,44 @@ const TechnicianProfileDetails = () => {
                   </div>
                 </div>
               </div>
-
               <div className="col-lg-5 col-sm-12 mb-7">
                 <div className="card card-body blur-sm mt-n5 py-2">
                   <Reveal>
                     <h6 className="mb-0 mt-3 text-center">Feedbacks</h6>
-                    <div className="p-3" style={{ overflowY: 'auto', maxHeight: "470px" }}>
-                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((val) => {
-                        return (
-                          <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center" key={val}>
-                            <a className="avatar rounded-circle me-3">
-                              <img alt="Image placeholder" src={image} />
-                            </a>
-                            <div className="flex-grow-1 d-flex justify-content-between align-items-center">
-                              <div>
-                                <p className="text-bold text-sm m-0">User name</p>
-                                <p className="text-xs mt-1 m-0">User feedback</p>
+                    {technicianDetails?.ratingInformation?.reviews.length === 0 ? (
+                      <div className="card-body p-5">
+                        <p className="text-center text-xs mb-6 mt-6"><strong className='text-sm'>No Feedbacks founded </strong></p>
+                      </div>
+                    ) : (
+                      <div className="p-1" style={{ overflowY: 'auto', maxHeight: "470px" }}>
+                        {technicianDetails?.ratingInformation?.reviews.map((feedback, index) => {
+                          return (
+                            <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center" key={index + 1}>
+                              <a className="avatar rounded-circle me-3">
+                                <img alt="Image placeholder" src={`${Base_URL}/${feedback?.reviewerProfileIMG}`} />
+                              </a>
+                              <div className="flex-grow-1 d-flex justify-content-between align-items-center">
+                                <div>
+                                  <p className="text-bold text-sm m-0">{feedback.reviewerName}</p>
+                                  <p className="text-xs mt-1 m-0">{feedback.review}</p>
+                                  <p className="text-xs mt-1 m-0">{[1, 2, 3, 4, 5].map((value) => (
+                                    <strong key={value} className='me-1'>{value <= feedback?.starCount ? <Star color={"#ffbb00"} size={"10"} /> : <Star size={"10"} />}</strong>
+                                  ))}</p>
+                                </div>
+                                <p className="text-xs m-0 text-black-50">{feedback.date}</p>
                               </div>
-                              <p className="text-xs m-0 text-black-50">Date</p>
-                            </div>
-                          </li>
-                        )
-                      })}
-                    </div>
+                            </li>
+                          )
+                        })}
+                      </div>
+                    )}
                   </Reveal>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       </div >
-
       <div className='booking-div position-fixed start-0 card card-body blur' style={{ bottom: isBookingOpen ? 0 : '-85%', height: isBookingOpen ? '85%' : '0px', zIndex: 9999, transition: 'bottom 0.3s ease, height 0.3s ease', boxShadow: '0 -5px 15px rgba(0, 0, 0, 0.3)', overflowY: 'auto' }}>
         <div className="d-flex justify-content-end">
           <p className='mx-1 cursor-pointer' onClick={() => setIsBookingOpen(false)}><CloseX_mark /></p>

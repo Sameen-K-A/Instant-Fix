@@ -1,7 +1,7 @@
 import UserRepository from "../Repository/userRepository";
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from "uuid";
-import { TransactionType, userAddressType, userType } from "../Interfaces";
+import { RatingReviewType, SingleRatingType, TransactionType, userAddressType, userType } from "../Interfaces";
 import sendOTPmail from "../Config/Email_config";
 import TechnicianRepository from "../Repository/technicianRepository";
 import { createToken } from "../Config/jwt_config";
@@ -197,7 +197,15 @@ class UserServices {
 
    async fetchTechnicianIndividualInformationService(technicianUser_id: string) {
       try {
-         return await this.userRepository.fetchTechnicianIndividualInformationRepository(technicianUser_id);
+         const result = await this.userRepository.fetchTechnicianIndividualInformationRepository(technicianUser_id);
+
+         result.ratingInformation.reviews = result.ratingInformation.reviews.map((review: any) => {
+            const reviewer = result.reviewerDetails.find((reviewer: any) => reviewer.user_id === review.rated_user_id);
+            return { ...review, reviewerName: reviewer?.name, reviewerProfileIMG: reviewer?.profileIMG, };
+         });
+         delete result.reviewerDetails;
+         
+         return result;
       } catch (error) {
          throw error;
       };
@@ -397,6 +405,43 @@ class UserServices {
             return true;
          } else {
             throw new Error("Invalid payment verification");
+         };
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   async submitReviewService(user_id: string, technicianUser_id: string, enteredRating: number, enteredFeedback: string, booking_id: string) {
+      try {
+         const previousFeedbacks: RatingReviewType | null = await this.technicianRepository.fetchAllFeedbacks(technicianUser_id);
+
+         let totalRating = enteredRating;
+         if (previousFeedbacks && previousFeedbacks.reviews.length > 0) {
+            previousFeedbacks.reviews.forEach((singleRating: SingleRatingType) => {
+               totalRating += singleRating.starCount;
+            });
+         };
+
+         const totalFeedbacks: number = (previousFeedbacks?.reviews.length || 0) + 1;
+
+         const avgRating: number = Math.round(totalRating / totalFeedbacks);
+         const ratingDetails: SingleRatingType = {
+            rated_user_id: user_id,
+            starCount: enteredRating,
+            review: enteredFeedback,
+            date: new Date().toLocaleDateString('en-CA').toString(),
+         };
+
+         const [updateBookingFeedbackAdded, addNewFeedbackToTechnician, updateNewAvgRatingToTechnician] = await Promise.all([
+            this.userRepository.updateBookingReviewAdded(booking_id, true),
+            this.userRepository.addNewFeedbackToTechnician(technicianUser_id, ratingDetails),
+            this.technicianRepository.updateNewAvgRatingToTechnician(technicianUser_id, avgRating)
+         ]);
+
+         if (updateBookingFeedbackAdded.modifiedCount === 1 && addNewFeedbackToTechnician.modifiedCount === 1 && updateNewAvgRatingToTechnician.modifiedCount === 1) {
+            return true;
+         } else {
+            throw new Error("Something wrong please try again later");
          };
       } catch (error) {
          throw error;
