@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import userAxiosInstance from '../../config/AxiosInstance/userInstance';
 import { RiUserFollowFill } from "react-icons/ri";
 import { useUserDetails } from '../../Contexts/UserDetailsContext';
+import Reveal from '../../../public/Animation/Animated';
 
 const TechnicianProfileDetails = () => {
   const location = useLocation();
@@ -121,17 +122,19 @@ const TechnicianProfileDetails = () => {
 
               <div className="col-lg-7 col-sm-12 mb-6">
                 <div className="card card-body blur-sm mt-n5">
-                  <Calendar
-                    onChange={handleDateChange}
-                    tileDisabled={({ date }) => isDateDisabled(date)}
-                    tileClassName={({ date }) => {
-                      const dateStr = date.toLocaleDateString('en-CA');
-                      if (selectedDate === dateStr) {
-                        return 'selected-date';
-                      }
-                      return availableDates.includes(dateStr) ? 'available-date' : 'disabled-date';
-                    }}
-                  />
+                  <Reveal>
+                    <Calendar
+                      onChange={handleDateChange}
+                      tileDisabled={({ date }) => isDateDisabled(date)}
+                      tileClassName={({ date }) => {
+                        const dateStr = date.toLocaleDateString('en-CA');
+                        if (selectedDate === dateStr) {
+                          return 'selected-date';
+                        }
+                        return availableDates.includes(dateStr) ? 'available-date' : 'disabled-date';
+                      }}
+                    />
+                  </Reveal>
                   <hr className="horizontal dark m-0 mt-2" />
                   <p className='text-sm mt-3 mb-4 px-2'><strong>NOTE: </strong> Please select an available date if you want service from this technician.</p>
                   <div className="d-flex align-items-center ms-2">
@@ -153,32 +156,34 @@ const TechnicianProfileDetails = () => {
 
               <div className="col-lg-5 col-sm-12 mb-7">
                 <div className="card card-body blur-sm mt-n5 py-2">
-                  <h6 className="mb-0 mt-3 text-center">Feedbacks</h6>
-                  <div className="p-3" style={{ overflowY: 'auto', maxHeight: "470px" }}>
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((val) => {
-                      return (
-                        <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center" key={val}>
-                          <a className="avatar rounded-circle me-3">
-                            <img alt="Image placeholder" src={image} />
-                          </a>
-                          <div className="flex-grow-1 d-flex justify-content-between align-items-center">
-                            <div>
-                              <p className="text-bold text-sm m-0">User name</p>
-                              <p className="text-xs mt-1 m-0">User feedback</p>
+                  <Reveal>
+                    <h6 className="mb-0 mt-3 text-center">Feedbacks</h6>
+                    <div className="p-3" style={{ overflowY: 'auto', maxHeight: "470px" }}>
+                      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((val) => {
+                        return (
+                          <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center" key={val}>
+                            <a className="avatar rounded-circle me-3">
+                              <img alt="Image placeholder" src={image} />
+                            </a>
+                            <div className="flex-grow-1 d-flex justify-content-between align-items-center">
+                              <div>
+                                <p className="text-bold text-sm m-0">User name</p>
+                                <p className="text-xs mt-1 m-0">User feedback</p>
+                              </div>
+                              <p className="text-xs m-0 text-black-50">Date</p>
                             </div>
-                            <p className="text-xs m-0 text-black-50">Date</p>
-                          </div>
-                        </li>
-                      )
-                    })}
-                  </div>
+                          </li>
+                        )
+                      })}
+                    </div>
+                  </Reveal>
                 </div>
               </div>
 
             </div>
           </div>
         </div>
-      </div>
+      </div >
 
       <div className='booking-div position-fixed start-0 card card-body blur' style={{ bottom: isBookingOpen ? 0 : '-85%', height: isBookingOpen ? '85%' : '0px', zIndex: 9999, transition: 'bottom 0.3s ease, height 0.3s ease', boxShadow: '0 -5px 15px rgba(0, 0, 0, 0.3)', overflowY: 'auto' }}>
         <div className="d-flex justify-content-end">

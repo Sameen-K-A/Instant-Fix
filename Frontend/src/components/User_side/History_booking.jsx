@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import AlertRedDot from "../Common/AlertRedDot";
+import Reveal from "../../../public/Animation/Animated";
 
 const UserBookingHistoryTable = () => {
 
@@ -46,7 +47,7 @@ const UserBookingHistoryTable = () => {
           <div className="col-xl-12 col-lg-12 col-md-12 d-flex flex-column" style={{ zIndex: "1" }}>
             <div className="container-fluid">
               {bookingDetailsArray.length !== 0 ? (
-                <>
+                <Reveal>
                   <div className="card-header pb-0 mb-3 mt-3">
                     <h5 className="text-center mb-3">Booking History</h5>
                   </div>
@@ -88,7 +89,7 @@ const UserBookingHistoryTable = () => {
                       </table>
                     </div>
                   </div>
-                </>
+                </Reveal>
               ) : (
                 <>
                   <h5 className="mt-7 text-dark">No details recorded</h5>

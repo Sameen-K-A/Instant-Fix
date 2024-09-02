@@ -9,6 +9,7 @@ import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import 'react-calendar/dist/Calendar.css';
 import { io } from 'socket.io-client';
 import { Base_URL } from '../../config/credentials';
+import Reveal from '../../../public/Animation/Animated';
 
 const socket = io(Base_URL);
 
@@ -120,52 +121,58 @@ const TechnicianSlotAllocation = () => {
         <h6 className="font-weight-bolder mb-0 ms-2">Slot Allocation</h6>
         <p className="text-sm mt-0 ms-2">Technician/ Slot allocation</p>
       </nav>
+
       <div className="container-fluid">
         <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }} />
         <div className="row mt-3 mx-4">
           <div className="col-lg-7 col-md-12 col-sm-12 min-height-400 card card-body shadow-blur">
-            <Calendar
-              onChange={handleDateChange}
-              tileDisabled={({ date }) => isDateDisabled(date)}
-              tileClassName={({ date }) => {
-                const dateStr = date.toLocaleDateString('en-CA');
-                const slot = selectedDates.find(slot => slot.slotDate === dateStr);
-                if (slot) {
-                  return slot.slotBooked === true ? 'booked-date' : 'selected-date';
-                }
-                return 'available-date';
-              }}
-            />
+            <Reveal>
+              <Calendar
+                onChange={handleDateChange}
+                tileDisabled={({ date }) => isDateDisabled(date)}
+                tileClassName={({ date }) => {
+                  const dateStr = date.toLocaleDateString('en-CA');
+                  const slot = selectedDates.find(slot => slot.slotDate === dateStr);
+                  if (slot) {
+                    return slot.slotBooked === true ? 'booked-date' : 'selected-date';
+                  }
+                  return 'available-date';
+                }}
+              />
+            </Reveal>
           </div>
           <div className="col-lg-5 col-md-12 col-sm-12 card-plain min-height-400 d-flex flex-column justify-content-end px-5">
-            <div className="instruction pt-5">
-              <div className="instruction-item">
-                <div className="instruction-dot" style={{ backgroundColor: "#A7F3B3" }}></div>
-                <span className='text-xs m-0 mb-1'>Selected</span>
+            <Reveal>
+              <div className="instruction pt-5">
+                <div className="instruction-item">
+                  <div className="instruction-dot" style={{ backgroundColor: "#A7F3B3" }}></div>
+                  <span className='text-xs m-0 mb-1'>Selected</span>
+                </div>
+                <div className="instruction-item">
+                  <div className="instruction-dot" style={{ backgroundColor: "#ffffff" }}></div>
+                  <span className='text-xs m-0 mb-1'>Available</span>
+                </div>
+                <div className="instruction-item">
+                  <div className="instruction-dot" style={{ backgroundColor: "#FDBDBE" }}></div>
+                  <span className='text-xs m-0 mb-1'>Already have booking</span>
+                </div>
+                <div className="instruction-item">
+                  <div className="instruction-dot" style={{ backgroundColor: "#E7E8EC" }}></div>
+                  <span className='text-xs m-0 mb-1'>Un-available</span>
+                </div>
               </div>
-              <div className="instruction-item">
-                <div className="instruction-dot" style={{ backgroundColor: "#ffffff" }}></div>
-                <span className='text-xs m-0 mb-1'>Available</span>
-              </div>
-              <div className="instruction-item">
-                <div className="instruction-dot" style={{ backgroundColor: "#FDBDBE" }}></div>
-                <span className='text-xs m-0 mb-1'>Already have booking</span>
-              </div>
-              <div className="instruction-item">
-                <div className="instruction-dot" style={{ backgroundColor: "#E7E8EC" }}></div>
-                <span className='text-xs m-0 mb-1'>Un-available</span>
-              </div>
-            </div>
+            </Reveal>
+
             {isEdit ? (
-              <>
+              <Reveal>
                 <p className='text-sm mt-3 mb-4'><strong>NOTE:</strong> Slots can only be selected for the next 60 days.<br /> Please select your available days to set slots for new job bookings. Users will only be able to view your profile if you are available, so ensure that you are marked as available on the selected slot days.</p>
                 <div className="d-flex gap-3 w-100">
                   <button className="btn btn-outline-primary mb-0 w-50" onClick={cancelEditingSlot}>Cancel</button>
                   <button className='btn bg-gradient-primary mb-0 w-50' onClick={saveSlotInformation}>Save Slots</button>
                 </div>
-              </>
+              </Reveal>
             ) : (
-              <>
+              <Reveal>
                 <p className="text-sm mt-3 mb-1">
                   Set your slots as available if you are free on that date. <br />
                   Please note that clients can only book your available slots. <br />
@@ -175,12 +182,14 @@ const TechnicianSlotAllocation = () => {
                   2. Click on 'Account Details.' <br />
                   3. On the right side, set your status to 'Available.'
                 </span>
-                <button className="btn btn-outline-primary mb-0" onClick={() => setIsEdit(true)}>Edit your slots</button>
-              </>
+                <br />
+                <button className="btn btn-outline-primary mb-0 mt-3" onClick={() => setIsEdit(true)}>Edit your slots</button>
+              </Reveal>
             )}
           </div>
         </div>
       </div>
+
       <Footer />
     </>
   );

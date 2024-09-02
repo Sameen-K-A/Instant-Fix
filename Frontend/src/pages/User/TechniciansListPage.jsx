@@ -7,6 +7,7 @@ import userAxiosInstance from "../../config/AxiosInstance/userInstance";
 import { toast } from 'sonner';
 import NoResultFoundImage from "../../../public/images/NoResultFound.png";
 import { useUserDetails } from "../../Contexts/UserDetailsContext"
+import Reveal from '../../../public/Animation/Animated';
 
 const TechniciansListPage = () => {
   const [primaryTechniciansList, setPrimaryTechnicianList] = useState([]);
@@ -124,29 +125,31 @@ const TechniciansListPage = () => {
         </div>
 
         <div className="col-lg-9 col-12 pe-5">
-          <div className="container p-0 mt-5 col-12 d-flex justify-content-end">
-            <div className="col-lg-3 col-12">
-              <input type="text" className='form-control' placeholder='Search Technician or Category' value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
+          <Reveal>
+            <div className="container p-0 mt-5 col-12 d-flex justify-content-end">
+              <div className="col-lg-3 col-12">
+                <input type="text" className='form-control' placeholder='Search Technician or Category' value={searchInput} onChange={(e) => setSearchInput(e.target.value)} />
+              </div>
             </div>
-          </div>
-          <div className="col-12">
-            {techniciansArray.length === 0 ? (
-              <div className='d-flex flex-column justify-content-center align-items-center mt-8'>
-                <img src={NoResultFoundImage} alt="No result found" className='mb-0' width={"400px"} />
-                <p className='text-center text-bold'>Sorry, no results found!</p>
-              </div>
-            ) : (
-              <div className="row d-flex justify-content-start">
-                {techniciansArray.map((technician) => {
-                  return (
-                    technician.technicianDetails?.availability && (
-                      <TechnicianProfileCard key={technician.user_id} technicianData={technician} />
-                    )
-                  );
-                })}
-              </div>
-            )}
-          </div>
+            <div className="col-12">
+              {techniciansArray.length === 0 ? (
+                <div className='d-flex flex-column justify-content-center align-items-center mt-8'>
+                  <img src={NoResultFoundImage} alt="No result found" className='mb-0' width={"400px"} />
+                  <p className='text-center text-bold'>Sorry, no results found!</p>
+                </div>
+              ) : (
+                <div className="row d-flex justify-content-start">
+                  {techniciansArray.map((technician) => {
+                    return (
+                      technician.technicianDetails?.availability && (
+                        <TechnicianProfileCard key={technician.user_id} technicianData={technician} />
+                      )
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </Reveal>
         </div>
       </div>
       <Footer />

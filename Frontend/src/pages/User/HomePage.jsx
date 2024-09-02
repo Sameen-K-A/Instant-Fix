@@ -3,7 +3,7 @@ import Banner from "../../components/User_side/Home/Banner";
 import SecondRow from "../../components/User_side/Home/SecondRow";
 import UserNavbar from '../../components/User_side/NavbarPage';
 import Footer from '../../components/Common/Footer';
-import FourthRaw from '../../components/User_side/Home/FourthRow';
+import LastRaw from '../../components/User_side/Home/LastRow';
 
 const UserHomePage = () => {
   return (
@@ -11,7 +11,7 @@ const UserHomePage = () => {
       <UserNavbar />
       <Banner />
       <SecondRow />
-      <FourthRaw />
+      <LastRaw />
       <Footer />
     </>
   )

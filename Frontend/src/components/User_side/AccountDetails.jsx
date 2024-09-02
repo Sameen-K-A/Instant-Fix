@@ -14,6 +14,7 @@ import { useLocation } from 'react-router-dom';
 import { AvailabilityDot, Star } from '../../../public/svgs/Icons';
 import { toast } from 'sonner';
 import { useUserDetails } from '../../Contexts/UserDetailsContext';
+import Reveal from "../../../public/Animation/Animated";
 
 const AccountDetails = () => {
   const { userDetails, setUserDetails } = useUserDetails();
@@ -49,6 +50,7 @@ const AccountDetails = () => {
       </nav>
       <div className={`container-fluid ${!nowTechnician && " pe-6"}`}>
         <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }} />
+
         <div className="card card-body blur shadow-blur mx-4 mt-n6 overflow-hidden">
           <div className="row gx-4">
             <div className="col-auto">
@@ -92,21 +94,24 @@ const AccountDetails = () => {
             )}
           </div>
         </div>
-        <div className="container-fluid py-4">
-          <div className="row">
-            <div className="col-12 col-xl-4 mb-4">
-              <UserInformation />
-              <UserChangePassword />
+        <Reveal>
+          <div className="container-fluid py-4">
+            <div className="row">
+              <div className="col-12 col-xl-4 mb-4">
+
+                <UserInformation />
+                <UserChangePassword />
+              </div>
+              <div className="col-12 col-xl-4 mb-4">
+                {nowTechnician && (
+                  <TechnicianChangeProfession profession={userDetails.technicianDetails[0]?.profession} />
+                )}
+                <AddressInformation />
+              </div>
+              {nowTechnician ? <TechnicianFeedbacks /> : <FollowingInformation />}
             </div>
-            <div className="col-12 col-xl-4 mb-4">
-              {nowTechnician && (
-                <TechnicianChangeProfession profession={userDetails.technicianDetails[0]?.profession} />
-              )}
-              <AddressInformation />
-            </div>
-            {nowTechnician ? <TechnicianFeedbacks /> : <FollowingInformation />}
           </div>
-        </div>
+        </Reveal>
       </div>
     </>
   );

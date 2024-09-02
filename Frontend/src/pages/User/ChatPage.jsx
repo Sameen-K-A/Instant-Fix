@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import ChatScreen from "../../components/Chat/ChatScreen";
 import TechnicianNavbar from "../../components/Technician_side/NavbarPage";
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
+import Reveal from "../../../public/Animation/Animated";
 
 const ChatPage = () => {
 
@@ -36,24 +37,26 @@ const ChatPage = () => {
   return (
     <>
       {location.pathname === "/technician/chat" ? <TechnicianNavbar /> : <UserNavbar />}
-      <div className="row m-3" style={{ overflow: 'hidden', minHeight: '88vh' }}>
-        <ChatFriends instantChatTechnicianDetails={instantChatTechnicianDetails} previousChattedTechnicians={previousChattedTechnicians} setCurrentChatting={setCurrentChatting} />
-        <section className={`chat col-lg-9 ${location.pathname === "/chat" && "pe-6"}`}>
-          {currentChatting ? (
-            <ChatScreen currentChatting={currentChatting} />
-          ) : (
-            <div className="d-flex justify-content-center align-items-center flex-column text-center" style={{ height: '100%' }}>
-              <h6 className="text-black-50">Welcome to Instant-Fix Chat</h6>
-              <p className="text-xs mt-2 mb-1 text-black-50">
-                Connect and collaborate! Whether you're a technician offering your expertise or a user seeking a quick solution, our secure messaging platform bridges the gap.
-              </p>
-              <p className="text-xs text-black-50">
-                Select a conversation to start your journey toward resolving issues and sharing knowledge. Together, we make fixes happen, instantly.
-              </p>
-            </div>
-          )}
-        </section>
-      </div>
+      <Reveal>
+        <div className="row m-3" style={{ overflow: 'hidden', minHeight: '88vh' }}>
+          <ChatFriends instantChatTechnicianDetails={instantChatTechnicianDetails} previousChattedTechnicians={previousChattedTechnicians} setCurrentChatting={setCurrentChatting} />
+          <section className={`chat col-lg-9 ${location.pathname === "/chat" && "pe-6"}`}>
+            {currentChatting ? (
+              <ChatScreen currentChatting={currentChatting} />
+            ) : (
+              <div className="d-flex justify-content-center align-items-center flex-column text-center" style={{ height: '100%' }}>
+                <h6 className="text-black-50">Welcome to Instant-Fix Chat</h6>
+                <p className="text-xs mt-2 mb-1 text-black-50">
+                  Connect and collaborate! Whether you're a technician offering your expertise or a user seeking a quick solution, our secure messaging platform bridges the gap.
+                </p>
+                <p className="text-xs text-black-50">
+                  Select a conversation to start your journey toward resolving issues and sharing knowledge. Together, we make fixes happen, instantly.
+                </p>
+              </div>
+            )}
+          </section>
+        </div>
+      </Reveal>
     </>
   );
 };
