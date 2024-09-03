@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
+import HTTP_statusCode from '../Enums/httpStatusCode';
 
 dotenv.config();
 const secret_key = process.env.JWT_SECRET as string;
@@ -10,22 +11,27 @@ const createToken = (user_id: string): string => {
    return newToken;
 };
 
+const createRefreshToken = (user_id: string): string => {
+   const newRefershToken = jwt.sign({ user_id }, secret_key, { expiresIn: '7d' });
+   return newRefershToken;
+};
+
 const verifyToken = (req: Request, res: Response, next: NextFunction) => {
    const authHeader = req.headers['authorization'];
    if (!authHeader) {
-      return res.status(401).json({ message: 'Access denied. access token not valid' });
+      return res.status(HTTP_statusCode.Unauthorized).json({ message: 'Access denied. access token not valid' });
    }
    const accessToken = authHeader.split(' ')[1];
    if (!accessToken) {
-      return res.status(401).json({ message: 'Access denied. access token not valid' });
+      return res.status(HTTP_statusCode.Unauthorized).json({ message: 'Access denied. access token not valid' });
    }
    jwt.verify(accessToken, secret_key, (err) => {
       if (err) {
-         return res.status(401).json({ message: 'Access denied. access token not valid' });
+         return res.status(HTTP_statusCode.Unauthorized).json({ message: 'Access denied. access token not valid' });
       } else {
          next();
       }
    });
 };
 
-export { createToken, verifyToken };
+export { createToken, verifyToken, createRefreshToken };

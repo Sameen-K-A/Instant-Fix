@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import UserNavbar from './NavbarPage';
-import backgroundImage from "/images/HeaderBanner_2.png";
+import UserNavbar from './NavbarPage'; 
+import backgroundImage from "../../../public/Images/HeaderBanner_2.png";
 import { Base_URL } from '../../config/credentials';
 import { CloseX_mark, FollowTechnician, MsgToTechnician, Star } from '../../../public/svgs/Icons';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -8,9 +8,9 @@ import BookingConfirmModalDetails from './BookingConfirmModal';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { toast } from 'sonner';
-import userAxiosInstance from '../../config/AxiosInstance/userInstance';
+import userAxiosInstance from '../../config/axiosInstance/userInstance';
 import { RiUserFollowFill } from "react-icons/ri";
-import { useUserDetails } from '../../Contexts/UserDetailsContext';
+import { useUserDetails } from '../../Contexts/UserDetailsContext'; 
 import Reveal from '../../../public/Animation/Animated';
 
 const TechnicianProfileDetails = () => {

@@ -2,7 +2,7 @@ import { v4 as uuid } from "uuid";
 import { technicianType } from "../Model/technicianModel"
 import TechnicianRepository from "../Repository/technicianRepository";
 import UserRepository from "../Repository/userRepository";
-import { RatingReviewType, slotType, WalletType } from "../Interfaces";
+import { RatingReviewType, slotType, WalletType } from "../interfaces";
 import sendConfirmBookingmail from "../Config/BookingConfirmEmail";
 import WalletRepository from "../Repository/WalletRepository";
 class TechnicianService {

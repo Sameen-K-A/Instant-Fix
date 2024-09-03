@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import TechnicianProfileCard from '../../components/User_side/TechnicianProfileCard';
+import TechnicianProfileCard from '../../Components/User_side/TechnicianProfileCard';
 import UserNavbar from '../../components/User_side/NavbarPage';
-import Footer from "../../components/Common/Footer";
-import userAxiosInstance from "../../config/AxiosInstance/userInstance";
+import Footer from '../../Components/common/Footer'; 
+import userAxiosInstance from '../../config/axiosInstance/userInstance'; 
 import { toast } from 'sonner';
 import NoResultFoundImage from "../../../public/images/NoResultFound.png";
 import { useUserDetails } from "../../Contexts/UserDetailsContext"

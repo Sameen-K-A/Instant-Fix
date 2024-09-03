@@ -6,8 +6,8 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { Backbtn } from '../../../public/svgs/Icons';
-import userAxiosInstance from '../../config/AxiosInstance/userInstance';
-import { useUserDetails } from '../../Contexts/UserDetailsContext';
+import userAxiosInstance from '../../config/axiosInstance/userInstance';
+import { useUserDetails } from '../../Contexts/UserDetailsContext'; 
 
 const TechnicianRole = () => {
   const { userDetails, setUserDetails } = useUserDetails();

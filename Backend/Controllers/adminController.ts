@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import AdminServices from "../Services/adminServices";
+import HTTP_statusCode from "../Enums/httpStatusCode";
 const adminServices = new AdminServices();
 
 class AdminController {
@@ -8,14 +9,14 @@ class AdminController {
       try {
          const { email, password } = req.body;
          const serviceResponse = await adminServices.loginService(email, password);
-         res.status(200).send(serviceResponse);
+         res.status(HTTP_statusCode.OK).send(serviceResponse);
       } catch (error: any) {
          if (error.message === "Wrong email") {
-            res.status(404).json({ message: "Email not found" })
+            res.status(HTTP_statusCode.NotFound).json({ message: "Email not found" })
          } else if (error.message === "Wrong password") {
-            res.status(401).json({ message: "Password is wrong" });
+            res.status(HTTP_statusCode.Unauthorized).json({ message: "Password is wrong" });
          } else {
-            res.status(500).json(error);
+            res.status(HTTP_statusCode.InternalServerError).json(error);
          }
       }
    };
@@ -23,9 +24,9 @@ class AdminController {
    async fetchUserController(req: Request, res: Response) {
       try {
          const serviceResponse = await adminServices.fetchUserService();
-         res.status(200).json(serviceResponse);
+         res.status(HTTP_statusCode.OK).json(serviceResponse);
       } catch (error) {
-         res.status(500).json("Something wrong please try again later");
+         res.status(HTTP_statusCode.InternalServerError).json("Something wrong please try again later");
       }
    };
 
@@ -33,9 +34,9 @@ class AdminController {
       try {
          const user_id = req.query.user_id as string;
          const serviceResponse = await adminServices.unblockUserService(user_id);
-         res.status(200).json(serviceResponse);
+         res.status(HTTP_statusCode.OK).json(serviceResponse);
       } catch (error: any) {
-         res.status(500).json("Something went wrong, please try again later");
+         res.status(HTTP_statusCode.InternalServerError).json("Something went wrong, please try again later");
       }
    };
 
@@ -43,27 +44,27 @@ class AdminController {
       try {
          const user_id = req.query.user_id as string;
          const serviceResponse = await adminServices.blockUserService(user_id);
-         res.status(200).json(serviceResponse);
+         res.status(HTTP_statusCode.OK).json(serviceResponse);
       } catch (error: any) {
-         res.status(500).json("Something went wrong, please try again later");
+         res.status(HTTP_statusCode.InternalServerError).json("Something went wrong, please try again later");
       }
    };
 
-   async fetchTechnicians(req: Request, res: Response) {
+   async fetchTechniciansController(req: Request, res: Response) {
       try {
          const controllResponse = await adminServices.fetchTechnicianService();
-         res.status(200).json(controllResponse);
+         res.status(HTTP_statusCode.OK).json(controllResponse);
       } catch (error) {
-         res.status(500).send("Something wrong please try again later");
+         res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later");
       }
    };
 
    async fetchBookingsController(req: Request, res: Response) {
       try {
          const response = await adminServices.fetchBookingsService();
-         res.status(200).json(response);
+         res.status(HTTP_statusCode.OK).json(response);
       } catch (error) {
-         res.status(500).send("Something wrong please try again later");
+         res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later");
       }
    };
 

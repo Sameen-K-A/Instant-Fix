@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Base_URL } from "../../config/credentials";
+import { Base_URL } from "../../config/credentials"; 
 
 const ChatFriends = ({ instantChatTechnicianDetails, previousChattedTechnicians, setCurrentChatting }) => {
 

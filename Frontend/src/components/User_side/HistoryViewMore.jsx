@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import UserNavbar from './NavbarPage';
-import userAxiosInstance from "../../config/AxiosInstance/userInstance";
+import userAxiosInstance from '../../config/axiosInstance/userInstance'; 
 import confirmAlert from '../Common/SweetAlert/confirmAlert';
 import { toast } from "sonner";
-import { loadRazorpayScript, proceedToPayment } from '../../utils/RazorPay';
+import { loadRazorpayScript, proceedToPayment } from '../../Utils/razorPay';
 import AlertRedDot from '../Common/AlertRedDot';
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
-import { Base_URL, razorpayURL } from '../../config/credentials';
+import { Base_URL, razorpayURL } from "../../config/credentials";
 import Reveal from '../../../public/Animation/Animated';
 import RatingStar from "../Common/StarRating";
 import { useUserDetails } from '../../Contexts/UserDetailsContext';
@@ -100,7 +100,6 @@ const UserHistoryViewMore = () => {
   return (
     <>
       <UserNavbar />
-      {console.log(bookingDetails)}
       <nav className="bg-transparent shadow-none position-absolute ps-5 mt-5 w-100 z-index-2">
         <h6 className="font-weight-bolder mb-0 ms-2">Booking History</h6>
         <p className="text-sm mt-0 ms-2">Profile/ Booking history/ View more details</p>

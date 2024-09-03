@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import userAxiosInstance from "../../config/AxiosInstance/userInstance";
-import triggerConfetti from "../../Utils/Confetti";
+import userAxiosInstance from "../../config/axiosInstance/userInstance";
+import triggerConfetti from "../../Utils/confetti";
 
 const WorkCompletedModal = ({ setWorkCompleted, bookingDetails, setBookingDetails }) => {
   const [isYes, setIsYes] = useState(false);

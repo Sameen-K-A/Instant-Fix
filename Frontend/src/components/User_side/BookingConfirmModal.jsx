@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
-import userAxiosInstance from "../../config/AxiosInstance/userInstance";
+import userAxiosInstance from "../../config/axiosInstance/userInstance";
 import { useNavigate } from 'react-router-dom';
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
-import triggerConfetti from '../../Utils/Confetti';
+import triggerConfetti from '../../Utils/confetti';
 
 const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selectedDate, setSelectedDate, setBookingSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -72,7 +72,7 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selec
         toast.error("Booking failed. Please try again later.");
       } else if (error.response.status === 404) {
         toast.error("Technician not available. Please contact another technician.");
-      } else if (error.response.status === 402) {
+      } else if (error.response.status === 503) {
         toast.error(`Technician not available on ${selectedDate}.`);
       } else if (error.response.status === 403) {
         toast.error(`Unable to find location for the provided pincode.`);

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
 import AdminNavbar from './AdminNavbar';
-import { Base_URL } from '../../config/credentials';
+import { Base_URL } from '../../config/credentials'; 
 
 const AdminViewMoreBookingDetails = () => {
 

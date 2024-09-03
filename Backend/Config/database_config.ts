@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import mongoose from "mongoose";
 dotenv.config();
 
-const DB_Connection = async (): Promise<void> => {
+const database_connection = async (): Promise<void> => {
    try {
       await mongoose.connect(process.env.MONGO_URL as string);
       console.log("Database connected");
@@ -11,4 +11,4 @@ const DB_Connection = async (): Promise<void> => {
    }
 }
 
-export default DB_Connection;
+export default database_connection;

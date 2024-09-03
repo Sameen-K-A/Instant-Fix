@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { technicianType } from "../Interfaces";
+import { technicianType } from "../interfaces";
 
 const technicianSchema = new Schema<technicianType>({
    user_id: {

@@ -1,4 +1,4 @@
-import userAxiosInstance from "../../../config/AxiosInstance/userInstance";
+import userAxiosInstance from "../../../config/axiosInstance/userInstance";
 import confirmAlert from "../../Common/SweetAlert/confirmAlert";
 import { toast } from "sonner";
 import AlertRedDot from "../../Common/AlertRedDot";

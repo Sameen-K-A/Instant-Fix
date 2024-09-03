@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import UserServices from "../Services/userServices";
 import UserRepository from "../Repository/userRepository";
-import { userType } from "../Interfaces";
+import { userType } from "../interfaces";
+import HTTP_statusCode from "../Enums/httpStatusCode";
 
 const userRepository = new UserRepository();
 const userServices = new UserServices(userRepository);
@@ -12,16 +13,16 @@ class UserController {
       try {
          const { email, password } = req.body;
          const serviceResponse = await userServices.loginUserService(email, password);
-         return res.status(200).json(serviceResponse);
+         return res.status(HTTP_statusCode.OK).json(serviceResponse);
       } catch (error: any) {
          if (error.message === "email not found") {
-            res.status(404).json({ message: "email not found" });
+            res.status(HTTP_statusCode.NotFound).json({ message: "email not found" });
          } else if (error.message === "Wrong password") {
-            res.status(401).json({ message: "Wrong password" });
+            res.status(HTTP_statusCode.Unauthorized).json({ message: "Wrong password" });
          } else if (error.message === "User is blocked") {
-            res.status(403).json({ message: "User is blocked" });
+            res.status(HTTP_statusCode.NoAccess).json({ message: "User is blocked" });
          } else {
-            res.status(500).json({ message: "Something wrong please try again later" });
+            res.status(HTTP_statusCode.InternalServerError).json({ message: "Something wrong please try again later" });
          }
       }
    };
@@ -30,14 +31,14 @@ class UserController {
       try {
          const userData: userType = req.body;
          await userServices.registerUserService(userData);
-         res.status(200).send("OTP sended to mail");
+         res.status(HTTP_statusCode.OK).send("OTP sended to mail");
       } catch (error: any) {
          if (error.message === "Email already exists") {
-            res.status(409).json({ message: "Email already exists" });
+            res.status(HTTP_statusCode.Conflict).json({ message: "Email already exists" });
          } else if (error.message === "Email not send") {
-            res.status(500).json({ message: "Email not send" });
+            res.status(HTTP_statusCode.InternalServerError).json({ message: "Email not send" });
          } else {
-            res.status(500).json({ message: "Something wrong please try again later" });
+            res.status(HTTP_statusCode.InternalServerError).json({ message: "Something wrong please try again later" });
          }
       }
    };
@@ -46,14 +47,14 @@ class UserController {
       try {
          const enteredOTP: string = req.body.enteredOTP;
          const serviceResponse = await userServices.otpVerifiedService(enteredOTP);
-         res.status(200).json(serviceResponse);
+         res.status(HTTP_statusCode.OK).json(serviceResponse);
       } catch (error: any) {
          if (error.message === "Incorrect OTP") {
-            res.status(401).json({ message: "Incorrect OTP" })
+            res.status(HTTP_statusCode.Unauthorized).json({ message: "Incorrect OTP" })
          } else if (error.message === "OTP is expired") {
-            res.status(410).json({ message: "OTP has expired" });
+            res.status(HTTP_statusCode.Expired).json({ message: "OTP has expired" });
          } else {
-            res.status(500).json({ message: "Something went wrong. Please try again later." });
+            res.status(HTTP_statusCode.InternalServerError).json({ message: "Something went wrong. Please try again later." });
          }
       }
    };
@@ -61,12 +62,12 @@ class UserController {
    async resendOTP_controller(req: Request, res: Response) {
       try {
          await userServices.resendOTPService();
-         res.status(200).send("OTP sended");
+         res.status(HTTP_statusCode.OK).send("OTP sended");
       } catch (error: any) {
          if (error.message === "Email not send") {
-            res.status(500).json({ message: "Email not send" });
+            res.status(HTTP_statusCode.InternalServerError).json({ message: "Email not send" });
          } else {
-            res.status(500).json({ message: "Something wrong please try again later" });
+            res.status(HTTP_statusCode.InternalServerError).json({ message: "Something wrong please try again later" });
          }
       }
    };
@@ -75,10 +76,10 @@ class UserController {
       try {
          const { addAndEditAddressDetails, user_id } = req.body;
          await userServices.add_EditAddressService(addAndEditAddressDetails, user_id);
-         res.status(200).json({ message: "Address modified successfully" });
+         res.status(HTTP_statusCode.OK).json({ message: "Address modified successfully" });
       } catch (error) {
          console.log("Add user address controller error : ", error);
-         res.status(500).json(error)
+         res.status(HTTP_statusCode.InternalServerError).json(error)
       }
    };
 
@@ -86,10 +87,10 @@ class UserController {
       try {
          const user_id: string = req.query.user_id as string;
          const serviceResponse = await userServices.deleteAddressService(user_id);
-         res.status(200).send(serviceResponse);
+         res.status(HTTP_statusCode.OK).send(serviceResponse);
       } catch (error) {
          console.log("delete address controller error : ", error);
-         res.status(500).json(error);
+         res.status(HTTP_statusCode.InternalServerError).json(error);
       }
    };
 
@@ -97,14 +98,14 @@ class UserController {
       try {
          const { user_id, currentPass, newPass } = req.body;
          await userServices.changePasswordService(user_id, currentPass, newPass);
-         res.status(200).send("Password changed successfully");
+         res.status(HTTP_statusCode.OK).send("Password changed successfully");
       } catch (error: any) {
          if (error.message === "Current password is wrong") {
-            res.status(401).json({ message: "Current password is wrong" });
+            res.status(HTTP_statusCode.Unauthorized).json({ message: "Current password is wrong" });
          } else if (error.message === "User not found") {
-            res.status(404).json({ message: "User not found" });
+            res.status(HTTP_statusCode.NotFound).json({ message: "User not found" });
          } else {
-            res.status(500).json({ message: "Internal server error" });
+            res.status(HTTP_statusCode.InternalServerError).json({ message: "Internal server error" });
          }
       }
    };
@@ -120,12 +121,12 @@ class UserController {
             profileIMG = defaultProfileImage.split("/").pop();
          }
          await userServices.editProfileService(user_id, name, phone, profileIMG);
-         res.status(200).send("Changes completed successfully");
+         res.status(HTTP_statusCode.OK).send("Changes completed successfully");
       } catch (error: any) {
          if (error.message === "No changes founded") {
-            res.status(304).json({ message: "No changes founded" });
+            res.status(HTTP_statusCode.NoChange).json({ message: "No changes founded" });
          } else {
-            res.status(500).json({ message: 'Internal Server Error' });
+            res.status(HTTP_statusCode.InternalServerError).json({ message: 'Internal Server Error' });
          }
       }
    };
@@ -134,9 +135,9 @@ class UserController {
       try {
          const { user_id, technicianId } = req.body;
          await userServices.saveTechnicianService(user_id as string, technicianId as string);
-         res.status(200).send("Save technician completed successfully");
+         res.status(HTTP_statusCode.OK).send("Save technician completed successfully");
       } catch (error) {
-         res.status(500).send("Can't save technician");
+         res.status(HTTP_statusCode.InternalServerError).send("Can't save technician");
       };
    };
 
@@ -144,9 +145,9 @@ class UserController {
       try {
          const { user_id, technicianId } = req.body;
          await userServices.unSaveTechnicianService(user_id as string, technicianId as string);
-         res.status(200).send("Unsave technician completed successfully");
+         res.status(HTTP_statusCode.OK).send("Unsave technician completed successfully");
       } catch (error) {
-         res.status(500).send("Can't unsave technician");
+         res.status(HTTP_statusCode.InternalServerError).send("Can't unsave technician");
       };
    };
 
@@ -154,9 +155,9 @@ class UserController {
       try {
          const user_id: string = req.query.user_id as string;
          const responseFromService = await userServices.fetchSavedTechnicianDetailsService(user_id);
-         res.status(200).json(responseFromService);
+         res.status(HTTP_statusCode.OK).json(responseFromService);
       } catch (error) {
-         res.status(500).send("Something wrong, please try again later.");
+         res.status(HTTP_statusCode.InternalServerError).send("Something wrong, please try again later.");
       };
    };
 
@@ -164,19 +165,19 @@ class UserController {
       try {
          const user_id = req.query.user_id as string;
          const serviceResponse = await userServices.fetchTechnicianService(user_id);
-         res.status(200).json(serviceResponse);
+         res.status(HTTP_statusCode.OK).json(serviceResponse);
       } catch (error) {
-         res.status(500).json(error)
-      }
+         res.status(HTTP_statusCode.InternalServerError).json(error)
+      };
    };
 
    async fetchTechnicianIndividualInformationController(req: Request, res: Response) {
       try {
          const technicianUser_id: string = req.query.technicianUser_id as string;
          const responseFromService = await userServices.fetchTechnicianIndividualInformationService(technicianUser_id);
-         res.status(200).json(responseFromService);
+         res.status(HTTP_statusCode.OK).json(responseFromService);
       } catch (error) {
-         res.status(500).send("Somthing wrong please try again later");
+         res.status(HTTP_statusCode.InternalServerError).send("Somthing wrong please try again later");
       };
    };
 
@@ -184,9 +185,9 @@ class UserController {
       try {
          const user_id = req.query.user_id as string;
          const techniciansList = await userServices.fetchAlreadyChattedTechniciansService(user_id);
-         res.status(200).json(techniciansList);
+         res.status(HTTP_statusCode.OK).json(techniciansList);
       } catch (error) {
-         res.status(500).json(error);
+         res.status(HTTP_statusCode.InternalServerError).json(error);
       };
    };
 
@@ -194,19 +195,19 @@ class UserController {
       try {
          const { client_id, client_name, technicianDetails, serviceLocation, selectedDate } = req.body;
          const response = await userServices.bookTechnicianService(client_id, client_name, technicianDetails, serviceLocation, selectedDate);
-         res.status(200).json(response);
+         res.status(HTTP_statusCode.OK).json(response);
       } catch (error: any) {
          if (error.message === "Technician is not available on selected date") {
-            res.status(402).send("Technician is not available on selected date");
+            res.status(HTTP_statusCode.ServiceUnavailable).send("Technician is not available on selected date");
          } else if (error.message === "Booking failed") {
-            res.status(409).send("Booking failed")
+            res.status(HTTP_statusCode.Conflict).send("Booking failed")
          } else if (error.message === "Technician not available") {
-            res.status(404).send("Technician not available")
+            res.status(HTTP_statusCode.NotFound).send("Technician not available")
          } else if (error.message === "Unable to find location for the provided pincode.") {
-            res.status(403).send("Unable to find location for the provided pincode.")
+            res.status(HTTP_statusCode.NoAccess).send("Unable to find location for the provided pincode.")
          } else {
             console.log(error);
-            res.status(500).json(error);
+            res.status(HTTP_statusCode.InternalServerError).json(error);
          };
       };
    };
@@ -215,9 +216,9 @@ class UserController {
       try {
          const user_id = req.query.user_id as string;
          const response = await userServices.fetchUserBookingHistoryService(user_id);
-         res.status(200).json(response);
+         res.status(HTTP_statusCode.OK).json(response);
       } catch (error) {
-         res.status(500).json(error);
+         res.status(HTTP_statusCode.InternalServerError).json(error);
       };
    };
 
@@ -225,9 +226,9 @@ class UserController {
       try {
          const booking_id: string = req.query.booking_id as string;
          const response = await userServices.fetchIndividualBookingInformationService(booking_id);
-         res.status(200).json(response);
+         res.status(HTTP_statusCode.OK).json(response);
       } catch (error) {
-         res.status(500).send("Something wrong please try again later.");
+         res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later.");
       }
    };
 
@@ -235,12 +236,12 @@ class UserController {
       try {
          const { booking_id, technician_id, userName, serviceDate } = req.body;
          await userServices.cancelBookingService(booking_id, technician_id, userName, serviceDate);
-         res.status(200).send("Booking cancelled successfully.");
+         res.status(HTTP_statusCode.OK).send("Booking cancelled successfully.");
       } catch (error: any) {
          if (error.message === "Booking status is not changed") {
-            res.status(304).json("Booking status is not changed");
+            res.status(HTTP_statusCode.NoChange).json("Booking status is not changed");
          } else {
-            res.status(500).send("Something wrong please try again later.");
+            res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later.");
          };
       };
    };
@@ -249,13 +250,9 @@ class UserController {
       try {
          const { booking_id, laborCost } = req.body;
          const response = await userServices.proceedToPaymentService(booking_id, laborCost);
-         res.status(200).json({
-            order_id: response.id,
-            currency: response.currency,
-            amount: response.amount,
-         });
+         res.status(HTTP_statusCode.OK).json({ order_id: response.id, currency: response.currency, amount: response.amount, });
       } catch (error) {
-         res.status(500).send("Something wrong please try again later.");
+         res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later.");
       };
    };
 
@@ -263,14 +260,14 @@ class UserController {
       try {
          const { payment_id, order_id, signature, booking_id, amount, technicianUser_id } = req.body;
          await userServices.verifyPaymentService(payment_id, order_id, signature, booking_id, amount, technicianUser_id);
-         res.status(200).send("Payment verified successfully");
+         res.status(HTTP_statusCode.OK).send("Payment verified successfully");
       } catch (error: any) {
          if (error.message === "Invalid payment verification") {
-            res.status(400).send("Invalid payment verification");
+            res.status(HTTP_statusCode.BadRequest).send("Invalid payment verification");
          } else if (error.message === "Payment failed") {
-            res.status(304).send("Payment failed");
+            res.status(HTTP_statusCode.TaskFailed).send("Payment failed");
          } else {
-            res.status(500).send("Something wrong please try again later.");
+            res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later.");
          };
       };
    };
@@ -279,9 +276,9 @@ class UserController {
       try {
          const { user_id, technicianUser_id, enteredRating, enteredFeedback, booking_id } = req.body;
          await userServices.submitReviewService(user_id, technicianUser_id, enteredRating, enteredFeedback, booking_id);
-         res.status(200).send("Feedback submitted successfully");
+         res.status(HTTP_statusCode.OK).send("Feedback submitted successfully");
       } catch (error) {
-         res.status(500).send("Something wrong please try again later");
+         res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later");
       };
    };
 

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import UserNavbar from "./NavbarPage";
-import userAxiosInstance from "../../config/AxiosInstance/userInstance";
+import userAxiosInstance from "../../config/axiosInstance/userInstance";
 import { toast } from "sonner";
 import { Base_URL } from "../../config/credentials";
 import { useNavigate } from "react-router-dom";
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
-import AlertRedDot from "../Common/AlertRedDot";
+import AlertRedDot from "../Common/AlertRedDot"; 
 import Reveal from "../../../public/Animation/Animated";
 
 const UserBookingHistoryTable = () => {

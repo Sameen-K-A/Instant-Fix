@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'sonner';
-import userAxiosInstance from '../../../config/AxiosInstance/userInstance';
+import userAxiosInstance from '../../../config/axiosInstance/userInstance';
 import { useNavigate } from 'react-router-dom';
-import { useUserDetails } from '../../../Contexts/UserDetailsContext';
+import { useUserDetails } from '../../../Contexts/UserDetailsContext'; 
 
 const AddressModal = () => {
   const navigate = useNavigate();

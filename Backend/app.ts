@@ -1,13 +1,14 @@
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import user_routes from './routes/user_routes';
-import admin_routes from './routes/admin_routes';
-import technician_routes from './routes/technician_routes';
-import chat_routes from "./routes/chat_routes";
-import DB_Connection from './Config/DB_config';
-import { configSocketIO } from './Config/Socket_config';
+import user_routes from './Routes/user_routes';
+import admin_routes from './Routes/admin_routes';
+import technician_routes from './Routes/technician_routes';
+import chat_routes from "./Routes/chat_routes";
+import DB_Connection from "./Config/database_config";
+import { configSocketIO } from './Config/socket_config';
 import { createServer } from "http";
+import morgan from "morgan";
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ configSocketIO(server);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use(morgan('dev'));
 app.use(cors());
 app.use('/admin', admin_routes);
 app.use('/technician', technician_routes);

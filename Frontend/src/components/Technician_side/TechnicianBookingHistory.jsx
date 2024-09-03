@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import TechnicianNavbar from "./NavbarPage";
 import { useNavigate } from "react-router-dom";
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
-import userAxiosInstance from "../../config/AxiosInstance/userInstance";
-import { useUserDetails } from "../../Contexts/UserDetailsContext";
+import userAxiosInstance from "../../config/axiosInstance/userInstance";
+import { useUserDetails } from "../../Contexts/UserDetailsContext"; 
 import { toast } from "sonner";
 import { io } from 'socket.io-client';
-import { Base_URL } from '../../config/credentials';
+import { Base_URL } from "../../config/credentials"; 
 
 const socket = io(Base_URL);
 

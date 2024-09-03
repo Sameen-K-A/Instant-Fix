@@ -1,6 +1,6 @@
 import { useState } from "react";
 import EditUserInfo from "./EditInfo";
-import { useUserDetails } from "../../../Contexts/UserDetailsContext";
+import { useUserDetails } from "../../../Contexts/UserDetailsContext"; 
 
 const UserInformation = () => {
   const [isEdit, setIsEdit] = useState(false);

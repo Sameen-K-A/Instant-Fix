@@ -4,8 +4,8 @@ import TechnicianNavbar from './NavbarPage';
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
 import confirmAlert from '../Common/SweetAlert/confirmAlert';
 import { toast } from 'sonner';
-import userAxiosInstance from '../../config/AxiosInstance/userInstance';
-import { useUserDetails } from "../../Contexts/UserDetailsContext";
+import userAxiosInstance from '../../config/axiosInstance/userInstance';
+import { useUserDetails } from '../../Contexts/UserDetailsContext'; 
 import ServiceLocationMap from './MapPage';
 import { CloseX_mark } from '../../../public/svgs/Icons';
 import WorkCompletedModal from './WorkCompletedModal';
@@ -74,7 +74,7 @@ const TechnicianViewMoreBooking = () => {
           } catch (error) {
             if (error.response.status === 401) {
               navigate("/login", { state: { message: "Authorization failed, please login" } });
-            } else if (error.response && error.response.status === 304) {
+            } else if (error.response && error.response.status === 301) {
               toast.error("Booking status is not changed.");
             } else {
               toast.error("Something went wrong, please try again later.");

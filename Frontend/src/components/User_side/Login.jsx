@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import backgroundImage from "/images/HeaderBanner_3.jpg";
+import backgroundImage from "../../../public/Images/HeaderBanner_3.jpg";
 import GoogleIcon from "../../../public/svgs/GoogleIcon";
 import { toast } from 'sonner';
 import axios from 'axios';
 import { Base_URL } from '../../config/credentials';
-import { useUserDetails } from "../../Contexts/UserDetailsContext";
+import { useUserDetails } from '../../Contexts/UserDetailsContext'; 
 
 const UserLogin = () => {
   const navigate = useNavigate();
@@ -42,7 +42,9 @@ const UserLogin = () => {
     onSubmit: async (values) => {
       try {
         const response = await axios.post(`${Base_URL}/login`, values);
+        console.log(response.data)
         sessionStorage.setItem("userToken", response.data.userToken);
+        localStorage.setItem("userRefreshToken", response.data.userRefreshToken);
         sessionStorage.setItem("userDetails", JSON.stringify(response.data.userData));
         setUserDetails(response.data.userData);
         navigate("/");

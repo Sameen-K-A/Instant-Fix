@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Base_URL } from '../../config/credentials';
 import axios from 'axios';
-import backgroundImage from "/images/HeaderBanner_3.jpg";
+import backgroundImage from "../../../public/Images/HeaderBanner_3.jpg";
 import { toast } from 'sonner';
 
 const UserRegister = () => {

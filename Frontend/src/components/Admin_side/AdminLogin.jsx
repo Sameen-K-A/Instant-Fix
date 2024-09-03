@@ -4,8 +4,8 @@ import * as Yup from 'yup';
 import { toast } from 'sonner';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Base_URL } from '../../config/credentials';
-import backgroundImage from '/images/HeaderBanner_3.jpg';
+import { Base_URL } from '../../config/credentials'; 
+import backgroundImage from '../../../public/Images/HeaderBanner_3.jpg';
 
 const AdminLogin = () => {
   const navigate = useNavigate();

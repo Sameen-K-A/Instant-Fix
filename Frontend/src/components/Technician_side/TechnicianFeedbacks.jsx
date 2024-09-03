@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import Reveal from "../../../public/Animation/Animated";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import userAxiosInstance from "../../config/AxiosInstance/userInstance";
-import { useUserDetails } from "../../Contexts/UserDetailsContext";
-import { Base_URL } from "../../config/credentials";
+import userAxiosInstance from "../../config/axiosInstance/userInstance";
+import { useUserDetails } from "../../Contexts/UserDetailsContext"; 
+import { Base_URL } from "../../config/credentials"; 
 import { Star } from "../../../public/svgs/Icons";
 
 const TechnicianFeedbacks = () => {

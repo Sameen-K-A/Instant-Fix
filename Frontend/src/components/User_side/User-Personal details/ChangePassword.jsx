@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import userAxiosInstance from '../../../config/AxiosInstance/userInstance';
+import userAxiosInstance from '../../../config/axiosInstance/userInstance';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import confirmAlert from '../../Common/SweetAlert/confirmAlert';

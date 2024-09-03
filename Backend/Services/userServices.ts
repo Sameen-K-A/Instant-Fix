@@ -1,12 +1,12 @@
 import UserRepository from "../Repository/userRepository";
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from "uuid";
-import { RatingReviewType, SingleRatingType, TransactionType, userAddressType, userType } from "../Interfaces";
-import sendOTPmail from "../Config/Email_config";
+import { RatingReviewType, SingleRatingType, TransactionType, userAddressType, userType } from "../interfaces";
+import sendOTPmail from "../Config/email_config";
 import TechnicianRepository from "../Repository/technicianRepository";
-import { createToken } from "../Config/jwt_config";
-import { newBookingType } from "../Interfaces";
-import { io } from "../Config/Socket_config";
+import { createToken, createRefreshToken } from "../Config/jwt_config";
+import { newBookingType } from "../interfaces";
+import { io } from "../Config/socket_config";
 import axios from "axios";
 import dotenv from "dotenv";
 import Razorpay from "razorpay";
@@ -40,8 +40,9 @@ class UserServices {
             throw new Error("User is blocked");
          }
          const userToken = createToken(userData.user_id as string);
+         const userRefreshToken = createRefreshToken(userData.user_id as string);
          userData = { ...userData, password: null };
-         return { userToken, userData };
+         return { userToken, userData, userRefreshToken };
       } catch (error) {
          throw error;
       }
@@ -204,7 +205,7 @@ class UserServices {
             return { ...review, reviewerName: reviewer?.name, reviewerProfileIMG: reviewer?.profileIMG, };
          });
          delete result.reviewerDetails;
-         
+
          return result;
       } catch (error) {
          throw error;

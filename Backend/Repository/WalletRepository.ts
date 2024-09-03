@@ -1,5 +1,5 @@
-import { TransactionType, WalletType } from "../Interfaces";
-import Wallet from "../Model/WalletModal";
+import { TransactionType, WalletType } from "../interfaces";
+import Wallet from "../Model/walletModal";
 
 class WalletRepository {
 

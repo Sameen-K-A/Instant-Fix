@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Account, Booking, Calendar, Chat, Home, Leave, PowerBtn, Settings, Wallet } from '../../../public/svgs/Icons';
 import confirmAlert from "../Common/SweetAlert/confirmAlert";
 import AlertRedDot from "../Common/AlertRedDot";
-import { useUserDetails } from "../../Contexts/UserDetailsContext";
+import { useUserDetails } from '../../Contexts/UserDetailsContext'; 
 import '../../../public/css/techniciansidebar.css';
 
 const TechnicianSidebar = () => {
@@ -17,6 +17,7 @@ const TechnicianSidebar = () => {
         if (result.isConfirmed) {
           sessionStorage.removeItem("userToken");
           sessionStorage.removeItem("userDetails");
+          localStorage.removeItem("userRefreshToken");
           setUserDetails(null);
           navigate("/");
         }

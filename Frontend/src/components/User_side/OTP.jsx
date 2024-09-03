@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import backgroundImage from "/images/HeaderBanner_3.jpg";
+import backgroundImage from "../../../public/Images/HeaderBanner_3.jpg";
 import { toast } from 'sonner';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';

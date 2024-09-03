@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useUserDetails } from "../../Contexts/UserDetailsContext";
+import { useUserDetails } from "../../Contexts/UserDetailsContext"; 
 import { toast } from "sonner";
-import userAxiosInstance from "../../config/AxiosInstance/userInstance";
+import userAxiosInstance from "../../config/axiosInstance/userInstance"; 
 
 const NotificationCard = () => {
   const { userDetails, setUserDetails } = useUserDetails();

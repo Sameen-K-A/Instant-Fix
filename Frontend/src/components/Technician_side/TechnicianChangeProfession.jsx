@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import confirmAlert from "../Common/SweetAlert/confirmAlert";
-import userAxiosInstance from "../../config/AxiosInstance/userInstance";
-import { useUserDetails } from "../../Contexts/UserDetailsContext";
+import userAxiosInstance from "../../config/axiosInstance/userInstance";
+import { useUserDetails } from "../../Contexts/UserDetailsContext"; 
 
 const TechnicianChangeProfession = ({ profession }) => {
 
@@ -43,7 +43,7 @@ const TechnicianChangeProfession = ({ profession }) => {
           } catch (error) {
             if (error.response.status === 401) {
               navigate("/login", { state: { message: "Authorization failed please login" } });
-            } else if (error.response.status === 304) {
+            } else if (error.response.status === 301) {
               toast.warning("No changes found");
               setIsEdit(false);
             } else {

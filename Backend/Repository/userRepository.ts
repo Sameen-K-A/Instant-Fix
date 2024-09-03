@@ -1,8 +1,8 @@
 import User from "../Model/userModal";
-import { SingleRatingType, userAddressType, userType } from "../Interfaces";
+import { SingleRatingType, userAddressType, userType } from "../interfaces";
 import BookingModel from "../Model/bookingModel"
-import { newBookingType } from "../Interfaces";
-import Rating from "../Model/ReviewModal";
+import { newBookingType } from "../interfaces";
+import Rating from "../Model/reviewModal";
 
 class UserRepository {
 

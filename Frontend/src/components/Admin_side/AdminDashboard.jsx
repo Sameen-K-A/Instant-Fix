@@ -1,5 +1,5 @@
 import React from 'react';
-import Boxes from './DashboardBoxes';
+import Boxes from './AdminDashboardBoxes';
 import AdminNavbar from './AdminNavbar';
 
 const AdminDashboard = () => {

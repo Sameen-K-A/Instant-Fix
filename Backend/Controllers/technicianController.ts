@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import TechnicianService from "../Services/technicianService";
-import { slotType } from "../Interfaces";
+import { slotType } from "../interfaces";
+import HTTP_statusCode from "../Enums/httpStatusCode";
 
 const technicianService = new TechnicianService();
 
@@ -11,10 +12,10 @@ class TechnicianController {
       const user_id: string = req.query.user_id as string;
       const profession: string = req.query.profession as string;
       const serviceResult = await technicianService.joinNewTechnicianService(user_id, profession);
-      res.status(200).json(serviceResult);
+      res.status(HTTP_statusCode.OK).json(serviceResult);
     } catch (error) {
       console.log("error from controll ", error);
-      res.status(500).json({ message: 'Internal Server Error' });
+      res.status(HTTP_statusCode.InternalServerError).json({ message: 'Internal Server Error' });
     }
   };
 
@@ -22,12 +23,12 @@ class TechnicianController {
     try {
       const { user_id, profession } = req.body;
       await technicianService.changeProfessionService(user_id, profession);
-      res.status(200).send("Changes commit successfully");
+      res.status(HTTP_statusCode.OK).send("Changes commit successfully");
     } catch (error: any) {
       if (error.message === "No changes found") {
-        res.status(304).json({ message: "No changes found" });
+        res.status(HTTP_statusCode.NoChange).json({ message: "No changes found" });
       } else {
-        res.status(500).json(error);
+        res.status(HTTP_statusCode.InternalServerError).json(error);
       }
     }
   };
@@ -36,9 +37,9 @@ class TechnicianController {
     try {
       const { user_id, newStatus } = req.body;
       await technicianService.changeAvailabilityStatusService(user_id, newStatus);
-      res.status(200).send("Changes completed successfully");
+      res.status(HTTP_statusCode.OK).send("Changes completed successfully");
     } catch (error) {
-      res.status(500).json(error);
+      res.status(HTTP_statusCode.InternalServerError).json(error);
     }
   };
 
@@ -46,9 +47,9 @@ class TechnicianController {
     try {
       const technicianUserID = req.query.technicianUserID as string
       const result = await technicianService.fetchTechnicianBookingHistoryService(technicianUserID);
-      res.status(200).json(result);
+      res.status(HTTP_statusCode.OK).json(result);
     } catch (error) {
-      res.status(500).json({ message: "Something wrong please try again later" });
+      res.status(HTTP_statusCode.InternalServerError).json({ message: "Something wrong please try again later" });
     }
   };
 
@@ -56,9 +57,9 @@ class TechnicianController {
     try {
       const technicianUser_id: string = req.query.technicianUserID as string;
       const serviceResponse = await technicianService.fetchTechnicianInformationService(technicianUser_id);
-      res.status(200).json(serviceResponse);
+      res.status(HTTP_statusCode.OK).json(serviceResponse);
     } catch (error) {
-      res.status(500).send("Something wrong please try again later.")
+      res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later.")
     };
   };
 
@@ -66,9 +67,9 @@ class TechnicianController {
     try {
       const booking_id: string = req.query.booking_id as string;
       const response = await technicianService.fetchingIndividualBookingDetailsService(booking_id);
-      res.status(200).json(response);
+      res.status(HTTP_statusCode.OK).json(response);
     } catch (error) {
-      res.status(500).send("Can't collect booking details");
+      res.status(HTTP_statusCode.InternalServerError).send("Can't collect booking details");
     }
   };
 
@@ -76,12 +77,12 @@ class TechnicianController {
     try {
       const { booking_id, newStatus, technician_id, serviceDate } = req.body;
       await technicianService.acceptRejectCancelNewBookingService(booking_id, newStatus, technician_id, serviceDate);
-      res.status(200).json({ message: "Status changed successfully" });
+      res.status(HTTP_statusCode.OK).json({ message: "Status changed successfully" });
     } catch (error: any) {
       if (error.message === "Status is not changed") {
-        res.status(304).send("Status is not changed");
+        res.status(HTTP_statusCode.NoChange).send("Status is not changed");
       } else {
-        res.status(500).json(error);
+        res.status(HTTP_statusCode.InternalServerError).json(error);
       };
     };
   };
@@ -90,14 +91,14 @@ class TechnicianController {
     try {
       const { booking_id, client_id, laborCharge } = req.body;
       await technicianService.completeBookingService(booking_id, client_id, laborCharge);
-      res.status(200).send("Booking completed");
+      res.status(HTTP_statusCode.OK).send("Booking completed");
     } catch (error: any) {
       if (error.message === "Booking details is not changed") {
-        res.status(301).send("Booking details is not changed");
+        res.status(HTTP_statusCode.NoChange).send("Booking details is not changed");
       } else if (error.message === "Can't find the client details") {
-        res.status(404).send("Can't find the client details");
+        res.status(HTTP_statusCode.NotFound).send("Can't find the client details");
       } else {
-        res.status(500).send("Something wrong please try again later.");
+        res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later.");
       };
     };
   };
@@ -106,9 +107,9 @@ class TechnicianController {
     try {
       const technicianUser_id: string = req.body.technicianUser_id as string;
       await technicianService.clearNotificationService(technicianUser_id);
-      res.status(200).send("Notification cleared successfully");
+      res.status(HTTP_statusCode.OK).send("Notification cleared successfully");
     } catch (error) {
-      res.status(500).send("Can't clear notifications.")
+      res.status(HTTP_statusCode.InternalServerError).send("Can't clear notifications.")
     };
   };
 
@@ -117,12 +118,12 @@ class TechnicianController {
       const technician_id = req.body.technician_id as string;
       const slots = req.body.slots as slotType[];
       await technicianService.modifyAvailableSlotsService(technician_id, slots);
-      res.status(200).send("Slot modified completed successfully");
+      res.status(HTTP_statusCode.OK).send("Slot modified completed successfully");
     } catch (error: any) {
       if (error.message === "Slot modification is failed.") {
-        res.status(301).send("Slot modification is failed.");
+        res.status(HTTP_statusCode.NoChange).send("Slot modification is failed.");
       } else {
-        res.status(500).send("something worng please try again later.");
+        res.status(HTTP_statusCode.InternalServerError).send("something worng please try again later.");
       }
     };
   };
@@ -131,9 +132,9 @@ class TechnicianController {
     try {
       const user_id: string = req.query.user_id as string;
       const serviceResponse = await technicianService.fetchWalletInformationService(user_id);
-      res.status(200).json(serviceResponse);
+      res.status(HTTP_statusCode.OK).json(serviceResponse);
     } catch (error) {
-      res.status(200).send("Something wrong, Please try again later.")
+      res.status(HTTP_statusCode.InternalServerError).send("Something wrong, Please try again later.")
     };
   };
 
@@ -141,9 +142,9 @@ class TechnicianController {
     try {
       const technicianUser_id = req.query.technicianUser_id as string;
       const serviceResponse = await technicianService.fetchningRatingWithReviewerDetailsService(technicianUser_id);
-      res.status(200).json(serviceResponse);
+      res.status(HTTP_statusCode.OK).json(serviceResponse);
     } catch (error) {
-      res.status(500).send("Something wrong please try again later.")
+      res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later.")
     };
   };
 

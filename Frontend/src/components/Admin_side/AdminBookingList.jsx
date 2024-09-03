@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import AdminNavbar from "./AdminNavbar";
-import adminAxiosInstance from "../../config/AxiosInstance/adminInstance";
+import adminAxiosInstance from "../../config/axiosInstance/adminInstance";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import Footer from '../Common/Footer';
+import Footer from '../common/Footer'; 
 import TechnicianNavbar from './NavbarPage';
-import backgroundImage from "/images/HeaderBanner_2.png";
+import backgroundImage from "../../../public/Images/HeaderBanner_2.png";
 import Calendar from 'react-calendar';
-import userAxiosInstance from '../../config/AxiosInstance/userInstance';
+import userAxiosInstance from '../../config/axiosInstance/userInstance';
 import { toast } from 'sonner';
-import { useUserDetails } from "../../Contexts/UserDetailsContext";
+import { useUserDetails } from '../../Contexts/UserDetailsContext'; 
 import 'react-calendar/dist/Calendar.css';
 import { io } from 'socket.io-client';
-import { Base_URL } from '../../config/credentials';
+import { Base_URL } from '../../config/credentials'; 
 import Reveal from '../../../public/Animation/Animated';
 
 const socket = io(Base_URL);
@@ -109,6 +109,7 @@ const TechnicianSlotAllocation = () => {
 
   const cancelEditingSlot = () => {
     setIsEdit(false);
+    const today = new Date().setHours(0, 0, 0, 0);
     const alreadyAllocatedDates = technicianDetails?.availableSlots.filter(slotInfo => new Date(slotInfo.slotDate).setHours(0, 0, 0, 0) >= today);
     setSelectedDates(alreadyAllocatedDates);
     setNewEditedSlots([]);

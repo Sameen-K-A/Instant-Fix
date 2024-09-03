@@ -4,44 +4,44 @@ import { Toaster } from 'sonner';
 import UserProvider from './Contexts/UserDetailsContext';
 
 // User side
-import UserLogin from './components/User_side/Login';
-import UserRegister from './components/User_side/Register';
-import UserOTP from './components/User_side/OTP';
-import GuestProtector from './components/Services/GuestUser';
-import UserProtecter from './components/Services/UserProtecter';
-import UserBookingHistoryTable from './components/User_side/History_booking';
+import UserLogin from './components/User_side/Login'; 
+import UserRegister from './Components/User_side/Register';
+import UserOTP from './Components/User_side/OTP';
+import GuestProtector from './Components/Services/GuestUser';
+import UserProtecter from './components/services/UserProtecter';
+import UserBookingHistoryTable from './Components/User_side/History_booking';
 import UserHistoryViewMore from './components/User_side/HistoryViewMore';
 import TechniciansListPage from './pages/User/TechniciansListPage';
-import UserHomePage from './pages/User/HomePage';
-import AccountDetails from './components/User_side/AccountDetails';
+import UserHomePage from './Pages/User/HomePage';
+import AccountDetails from './components/User_side/AccountDetails'; 
 import ChatPage from './pages/User/ChatPage';
-import TechnicianProfileDetails from './components/User_side/TechnicianProfileDetails';
+import TechnicianProfileDetails from './Components/User_side/TechnicianProfileDetails';
 
 // Admin side
-import AdminProtecter from './components/Services/AdminProtecter';
-import NotAdminProtector from './components/Services/NotAdmin';
-import AdminLogin from './components/Admin_side/AdminLogin';
-import AdminDashboard from './components/Admin_side/AdminDashboard';
-import AdminUserList from './components/Admin_side/UserList';
-import AdminTechnicianList from './components/Admin_side/TechnicianList';
-import AdminBookingHistoryTable from './components/Admin_side/BookingList';
-import AdminViewMoreBookingDetails from './components/Admin_side/AdminViewMoreBookingDetails';
+import AdminProtecter from './Components/Services/AdminProtecter';
+import NotAdminProtector from './Components/Services/NotAdmin';
+import AdminLogin from './Components/Admin_side/AdminLogin';
+import AdminDashboard from './Components/Admin_side/AdminDashboard';
+import AdminUserList from "./Components/Admin_side/AdminUserList";
+import AdminTechnicianList from './Components/Admin_side/AdminTechnicianList';
+import AdminBookingHistoryTable from './Components/Admin_side/AdminBookingList';
+import AdminViewMoreBookingDetails from './Components/Admin_side/AdminViewMoreBookingDetails';
 
 // Technician side
-import TechnicianProtecter from './components/Services/TechnicianProtecter';
-import TechnicianHome from './components/Technician_side/TechnicianHome';
+import TechnicianProtecter from './Components/Services/TechnicianProtecter';
+import TechnicianHome from './Components/Technician_side/TechnicianHome';
 import TechnicianRole from './components/Technician_side/TechnicianRole';
-import TechnicianBookingHistoryTable from './components/Technician_side/TechnicianBookingHistory';
-import TechnicianViewMoreBooking from './components/Technician_side/TechnicianViewMoreBooking';
-import TechnicianSlotAllocation from './components/Technician_side/TechnicianSlotAllocation';
-import TechnicianWalletPage from './components/Technician_side/TechnicianWallet';
+import TechnicianBookingHistoryTable from './components/Technician_side/TechnicianBookingHistory'; 
+import TechnicianViewMoreBooking from './components/Technician_side/TechnicianViewMoreBooking'; 
+import TechnicianSlotAllocation from './components/Technician_side/TechnicianSlotAllocation'; 
+import TechnicianWalletPage from './components/Technician_side/TechnicianWallet'; 
 
 // common side
-import NotFound from './components/Common/404page';
+import NotFound from './Components/Common/Page404';
 
 // Style css and others
-import "../public/css/index.css";
-import "../public/css/user_home.css";
+import "../public/Css/index.css";
+import "../public/Css/user_home.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function App() {

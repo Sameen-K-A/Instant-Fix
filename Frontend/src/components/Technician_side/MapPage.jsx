@@ -1,9 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl, { Marker, Map } from 'mapbox-gl';
 import axios from 'axios';
-import { Map_Box_Access_Token } from "../../config/credentials";
+import { Map_Box_Access_Token } from '../../config/credentials'; 
 import { LocationSymbolForMap } from '../../../public/svgs/Icons';
-import { MapDirectionURL } from '../../config/credentials';
+import { MapDirectionURL } from '../../config/credentials'; 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 mapboxgl.accessToken = Map_Box_Access_Token;
@@ -19,7 +19,7 @@ const ServiceLocationMap = ({ currentLocation, destination }) => {
 
       map.current = new Map({
          container: mapContainer.current,
-         style: 'mapbox://styles/mapbox/streets-v12',
+         style: 'mapbox://styles/mapbox/satellite-streets-v12',
          center: [currentLocation.longitude, currentLocation.latitude],
          zoom: zoom,
       });
@@ -61,7 +61,7 @@ const ServiceLocationMap = ({ currentLocation, destination }) => {
                   'line-cap': 'round'
                },
                'paint': {
-                  'line-color': '#696969',
+                  'line-color': '#0000FF',
                   'line-width': 4
                }
             });

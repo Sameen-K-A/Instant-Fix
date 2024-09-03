@@ -1,5 +1,5 @@
 import { toast } from "sonner";
-import userAxiosInstance from "../config/AxiosInstance/userInstance";
+import userAxiosInstance from "../config/axiosInstance/userInstance";
 import { razorpayKeyID, razorpayURL } from "../config/credentials";
 
 export const loadRazorpayScript = async () => {

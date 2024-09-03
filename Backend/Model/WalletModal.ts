@@ -1,4 +1,4 @@
-import { WalletType } from "../Interfaces";
+import { WalletType } from "../interfaces";
 import { Schema, model } from "mongoose";
 
 const walletSchema = new Schema<WalletType>({

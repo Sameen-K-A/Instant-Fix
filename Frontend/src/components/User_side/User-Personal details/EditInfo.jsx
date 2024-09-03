@@ -1,12 +1,12 @@
 import { useState, useRef } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Base_URL } from "../../../config/credentials";
+import { Base_URL } from "../../../config/credentials"; 
 import profileDefault_1 from "../../../../public/images/profile_1.jpg";
 import profileDefault_2 from "../../../../public/images/profile_2.jpg";
 import profileDefault_3 from "../../../../public/images/profile_3.jpg";
 import profileDefault_4 from "../../../../public/images/profile_4.jpg";
-import userAxiosInstance from "../../../config/AxiosInstance/userInstance";
+import userAxiosInstance from "../../../config/axiosInstance/userInstance";
 import { toast } from "sonner";
 import { useUserDetails } from "../../../Contexts/UserDetailsContext";
 
@@ -58,7 +58,7 @@ const EditUserInfo = ({ cancelEdit }) => {
         toast.success("Profile updated successfully");
         sessionStorage.setItem("userDetails", JSON.stringify(updatedDetails));
       } catch (error) {
-        if (error.response?.status === 304) {
+        if (error.response?.status === 301) {
           toast.warning("No changes found.");
         } else if (error.response?.status === 401) {
           navigate("/login", { state: { message: "Authorization failed, please login." } });

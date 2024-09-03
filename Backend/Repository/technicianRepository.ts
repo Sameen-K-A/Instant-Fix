@@ -1,7 +1,7 @@
 import { technicianModel, technicianType } from "../Model/technicianModel";
 import BookingModel from "../Model/bookingModel";
-import Rating from "../Model/ReviewModal";
-import { slotType, RatingReviewType } from "../Interfaces";
+import Rating from "../Model/reviewModal";
+import { slotType, RatingReviewType } from "../interfaces";
 
 class TechnicianRepository {
 

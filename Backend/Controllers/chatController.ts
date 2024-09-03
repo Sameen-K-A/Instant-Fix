@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import ChatServices from "../Services/chatServices";
+import HTTP_statusCode from "../Enums/httpStatusCode";
 
 const chatService = new ChatServices();
 
@@ -10,9 +11,9 @@ class ChatController {
       const senderID = req.query.senderID as string;
       const receiverID = req.query.receiverID as string;
       const chatHistory = await chatService.fetchTwoMembersChatService(senderID, receiverID);
-      res.status(200).json(chatHistory);
+      res.status(HTTP_statusCode.OK).json(chatHistory);
     } catch (error) {
-      res.status(500).json(error);
+      res.status(HTTP_statusCode.InternalServerError).json(error);
     };
   };
 

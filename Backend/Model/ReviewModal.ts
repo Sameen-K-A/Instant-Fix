@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { RatingReviewType } from "../Interfaces";
+import { RatingReviewType } from "../interfaces";
 
 const ratingSchema = new Schema<RatingReviewType>({
    user_id: {

@@ -1,13 +1,13 @@
 import { Fragment, useEffect, useRef, useState } from "react";
-import { Base_URL } from "../../config/credentials";
+import { Base_URL } from "../../config/credentials"; 
 import RecieverMsg from "./RecieverMsg";
 import SenderMsg from "./SenderMsg";
 import { Send } from '../../../public/svgs/Icons';
 import { toast } from 'sonner';
-import userAxiosInstance from "../../config/AxiosInstance/userInstance";
+import userAxiosInstance from "../../config/axiosInstance/userInstance";
 import io from "socket.io-client";
 const socket = io(Base_URL);
-import { useUserDetails } from "../../Contexts/UserDetailsContext";
+import { useUserDetails } from "../../Contexts/UserDetailsContext"; 
 import { useNavigate } from "react-router-dom";
 
 const ChatScreen = ({ currentChatting }) => {

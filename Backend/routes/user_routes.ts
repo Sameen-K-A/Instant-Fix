@@ -1,6 +1,6 @@
 import { Router } from "express";
 import UserController from "../Controllers/userController";
-import { verifyToken } from "../Config/jwt_config";
+import { verifyToken } from "../Config/jwt_config"; 
 import upload from "../Config/Multer_config"
 
 const router = Router();
