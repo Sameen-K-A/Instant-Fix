@@ -1,11 +1,11 @@
 import { useLocation } from "react-router-dom";
 import ChatFriends from "../../components/Chat/ChatFriends";
-import UserNavbar from "../../components/User_side/NavbarPage"; 
+import UserNavbar from "../../Components/User_side/NavbarPage"; 
 import { useEffect, useState } from "react";
 import userAxiosInstance from "../../config/axiosInstance/userInstance";  
 import { toast } from "sonner";
 import ChatScreen from "../../components/Chat/ChatScreen"; 
-import TechnicianNavbar from "../../components/Technician_side/NavbarPage";
+import TechnicianNavbar from "../../Components/Technician_side/NavbarPage";
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import Reveal from "../../../public/Animation/Animated";
 

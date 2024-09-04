@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AboutUS, Account, Booking, Chat, CloseSideBarIcon, Contact, Home, OpenSideBarIcon, PowerBtn, Worker } from '../../../public/svgs/Icons';
-import confirmAlert from "../Common/SweetAlert/confirmAlert";
-import AlertRedDot from "../Common/AlertRedDot";
+import confirmAlert from '../Common/SweetAlert/confirmAlert'; 
+import AlertRedDot from '../Common/AlertRedDot'; 
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import '../../../public/css/sidebar.css';
 

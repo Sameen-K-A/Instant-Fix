@@ -1,8 +1,7 @@
 import { v4 as uuid } from "uuid";
-import { technicianType } from "../Model/technicianModel"
 import TechnicianRepository from "../Repository/technicianRepository";
 import UserRepository from "../Repository/userRepository";
-import { RatingReviewType, slotType, WalletType } from "../interfaces";
+import { RatingReviewType, slotType, WalletType, technicianType } from "../interfaces";
 import sendConfirmBookingmail from "../Config/BookingConfirmEmail";
 import WalletRepository from "../Repository/WalletRepository";
 class TechnicianService {
@@ -36,9 +35,9 @@ class TechnicianService {
                reviews: []
             };
             const [technicianRepository_Response, createWallet] = await Promise.all([
-               this.technicianRepository.joinNewTechnicianRepository(technicianData),
+               this.technicianRepository.createTechnicianRepository(technicianData),
                this.walletRepository.addNewWalletForTechnicianRepository(technicianWallet),
-               this.technicianRepository.createRatingDetails(ratingDetails)
+               this.technicianRepository.createRatingDetailsRepository(ratingDetails)
             ]);
             if (technicianRepository_Response && createWallet) {
                return technicianRepository_Response;

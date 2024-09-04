@@ -31,7 +31,7 @@ import AdminViewMoreBookingDetails from './Components/Admin_side/AdminViewMoreBo
 import TechnicianProtecter from './Components/Services/TechnicianProtecter';
 import TechnicianHome from './Components/Technician_side/TechnicianHome';
 import TechnicianRole from './components/Technician_side/TechnicianRole';
-import TechnicianBookingHistoryTable from './components/Technician_side/TechnicianBookingHistory'; 
+import TechnicianBookingHistoryTable from './Components/Technician_side/TechnicianBookingHistory'; 
 import TechnicianViewMoreBooking from './components/Technician_side/TechnicianViewMoreBooking'; 
 import TechnicianSlotAllocation from './components/Technician_side/TechnicianSlotAllocation'; 
 import TechnicianWalletPage from './components/Technician_side/TechnicianWallet'; 
