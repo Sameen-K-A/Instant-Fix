@@ -1,37 +1,30 @@
 import { Router } from "express";
+import { verifyToken } from "../Config/jwt_config";
 import TechnicianController from "../Controllers/technicianController";
-import { verifyToken } from "../Config/jwt_config"
+import TechnicianService from "../Services/technicianService";
+import TechnicianRepository from "../Repository/technicianRepository";
+import Technician from "../Model/technicianModel";
+import Rating from "../Model/reviewModal";
+import Booking from "../Model/bookingModel";
 
-const technicianController = new TechnicianController();
+
+const technicianRepository = new TechnicianRepository(Technician, Rating, Booking);
+const technicianService = new TechnicianService(technicianRepository);
+const technicianController = new TechnicianController(technicianService);
+
 const router = Router();
 
-// fetching technician information from db
-router.get("/fetchTechnicianInformation", verifyToken, technicianController.fetchTechnicianInformationController)
+router.get("/fetchTechnicianInformation", verifyToken, technicianController.fetchTechnicianInformationController.bind(technicianController));
+router.patch("/joinTechnician", verifyToken, technicianController.joinNewTechnicianController.bind(technicianController));
+router.patch("/changeprofession", verifyToken, technicianController.changeProfessionController.bind(technicianController));
+router.patch("/changeAvailabilityStatus", verifyToken, technicianController.changeAvailabilityStatusController.bind(technicianController));
+router.get("/fetchTechnicianBookingHistory", verifyToken, technicianController.fetchTechnicianBookingHistoryController.bind(technicianController));
+router.get("/fetchingIndividualBookingDetails", verifyToken, technicianController.fetchingIndividualBookingDetailsController.bind(technicianController));
+router.patch("/acceptRejectCancelNewBooking", verifyToken, technicianController.acceptRejectCancelNewBookingController.bind(technicianController));
+router.post("/confirmBooking", verifyToken, technicianController.completeBookingController.bind(technicianController));
+router.patch("/clearNotification", verifyToken, technicianController.clearNotificationController.bind(technicianController));
+router.patch("/modifyAvailableSlots", verifyToken, technicianController.modifyAvailableSlotsController.bind(technicianController));
+router.get("/wallet", verifyToken, technicianController.fetchWalletInformationController.bind(technicianController));
+router.get("/fetchningRatingWithReviewerDetails", verifyToken, technicianController.fetchningRatingWithReviewerDetailsController.bind(technicianController));
 
-// rout for user can join as a technician;
-router.patch("/joinTechnician", verifyToken, technicianController.joinNewTechnicianController);
-
-// technician profession changing
-router.patch("/changeprofession", verifyToken, technicianController.changeProfessionController);
-
-// changing available status is true or false
-router.patch("/changeAvailabilityStatus", verifyToken, technicianController.changeAvailabilityStatusController);
-
-// Booking side (Fetching all, individual, accept, reject)
-router.get("/fetchTechnicianBookingHistory", verifyToken, technicianController.fetchTechnicianBookingHistoryController);
-router.get("/fetchingIndividualBookingDetails", verifyToken, technicianController.fetchingIndividualBookingDetailsController);
-router.patch("/acceptRejectCancelNewBooking", verifyToken, technicianController.acceptRejectCancelNewBookingController);
-router.post("/confirmBooking", verifyToken, technicianController.completeBookingController);
-
-// notification area
-router.patch("/clearNotification", verifyToken, technicianController.clearNotificationController)
-
-// changing technician available slots
-router.patch("/modifyAvailableSlots", verifyToken, technicianController.modifyAvailableSlotsController);
-
-// wallet information
-router.get("/wallet", verifyToken, technicianController.fetchWalletInformationController);
-
-// rating information
-router.get("/fetchningRatingWithReviewerDetails", verifyToken, technicianController.fetchningRatingWithReviewerDetailsController);
 export default router;

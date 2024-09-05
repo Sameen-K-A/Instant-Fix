@@ -1,129 +1,113 @@
 import { v4 as uuid } from "uuid";
-import TechnicianRepository from "../Repository/technicianRepository";
 import UserRepository from "../Repository/userRepository";
-import { RatingReviewType, slotType, WalletType, technicianType } from "../interfaces";
-import sendConfirmBookingmail from "../Config/BookingConfirmEmail";
 import WalletRepository from "../Repository/WalletRepository";
-class TechnicianService {
-   private technicianRepository: TechnicianRepository;
+import sendConfirmBookingmail from "../Config/BookingConfirmEmail";
+import { ISlotType, ITechnicianDetails, ITechnicianService, IRatingReviewType, IFeedbackRepository, IBookingHistory, IBookingDetails, ITechnicianRepository } from "../Interfaces/techinicianInterfaces";
+import { WalletType } from "../interfaces";
+
+class TechnicianService implements ITechnicianService {
+   
+   private technicianRepository: ITechnicianRepository;
    private userRepository: UserRepository;
    private walletRepository: WalletRepository;
 
-   constructor() {
-      this.technicianRepository = new TechnicianRepository();
+   constructor(technicianRepository: ITechnicianRepository) {
+      this.technicianRepository = technicianRepository;
       this.userRepository = new UserRepository();
       this.walletRepository = new WalletRepository();
-   };
+   }
 
-   async joinNewTechnicianService(user_id: string, profession: string) {
+   async createTechnician(user_id: string, profession: string): Promise<ITechnicianDetails> {
       try {
-         const technicianData: technicianType = {
+         const technicianData: ITechnicianDetails = {
             user_id: user_id,
             rating: 0,
             technician_id: uuid(),
             profession: profession,
          };
-         const userRepository_Response = await this.userRepository.accessIsTechnician(user_id);
-         if (userRepository_Response.modifiedCount === 1) {
-            const technicianWallet: WalletType = {
-               user_id: user_id,
-               balanceAmount: 0,
-               transactions: [],
-            };
-            const ratingDetails: RatingReviewType = {
-               user_id: user_id,
-               reviews: []
-            };
-            const [technicianRepository_Response, createWallet] = await Promise.all([
-               this.technicianRepository.createTechnicianRepository(technicianData),
-               this.walletRepository.addNewWalletForTechnicianRepository(technicianWallet),
-               this.technicianRepository.createRatingDetailsRepository(ratingDetails)
-            ]);
-            if (technicianRepository_Response && createWallet) {
-               return technicianRepository_Response;
-            } else {
-               throw new Error('Failed to create technician');
-            }
-         } else {
-            throw new Error('Failed to update user to technician');
+         const { modifiedCount } = await this.userRepository.accessIsTechnician(user_id);
+         if (modifiedCount !== 1) {
+            throw new Error("Failed to update user to technician");
          };
-      } catch (error) {
-         console.log("error form service : ", error);
-         throw error;
-      }
-   };
-
-   async changeProfessionService(user_id: string, profession: string): Promise<boolean> {
-      try {
-         const response = await this.technicianRepository.changeProfessionRepository(user_id, profession);
-         if (response.modifiedCount === 1) {
-            return true;
-         } else {
-            throw new Error("No changes found");
-         }
-      } catch (error) {
-         throw error;
-      };
-   };
-
-   async changeAvailabilityStatusService(user_id: string, newStatus: string | boolean) {
-      try {
-         if (newStatus === "Active") {
-            newStatus = true;
-         } else {
-            newStatus = false;
+         const technicianWallet: WalletType = {
+            user_id: user_id,
+            balanceAmount: 0,
+            transactions: [],
          };
-         return await this.technicianRepository.changeAvailabilityStatusRepository(user_id, newStatus);
-      } catch (error) {
-         throw error;
-      };
-   };
-
-   async fetchTechnicianInformationService(technicianUser_id: string) {
-      try {
-         return await this.technicianRepository.fetchTechnicianInformationRepository(technicianUser_id);
-      } catch (error) {
-         throw error;
-      };
-   };
-
-   async fetchTechnicianBookingHistoryService(technicianUserID: string) {
-      try {
-         return await this.technicianRepository.fetchTechnicianBookingHistoryRepository(technicianUserID);
-      } catch (error) {
-         throw error;
-      };
-   };
-
-   async fetchingIndividualBookingDetailsService(booking_id: string) {
-      try {
-         return await this.technicianRepository.fetchingIndividualBookingDetailsRepository(booking_id);
-      } catch (error) {
-         throw error;
-      }
-   };
-
-   async clearNotificationService(technicianUser_id: string) {
-      try {
-         const response = await this.technicianRepository.clearNotificationRepository(technicianUser_id);
-         if (response.modifiedCount === 0) {
-            throw new Error("Can't clear notifications.");
+         const ratingDetails: IRatingReviewType = {
+            user_id: user_id,
+            reviews: [],
          };
-         return;
+         const [technicianResponse, walletResponse] = await Promise.all([
+            this.technicianRepository.createTechnician(technicianData),
+            this.walletRepository.addNewWalletForTechnicianRepository(technicianWallet),
+            this.technicianRepository.createRating(ratingDetails),
+         ]);
+         if (!technicianResponse || !walletResponse) {
+            throw new Error("Failed to create technician.");
+         };
+         return technicianResponse;
       } catch (error) {
          throw error;
       };
    };
 
-   async acceptRejectCancelNewBookingService(booking_id: string, newStatus: string, technician_id: string, serviceDate: string): Promise<boolean> {
+   async updateTechnicianProfession(user_id: string, profession: string): Promise<boolean> {
       try {
-         let status: string = newStatus === "Accept" ? "Pending" : (newStatus === "Reject" ? "Rejected" : "Cancelled");
-         const response = await this.technicianRepository.acceptRejectCancelNewBookingRepository(booking_id, status);
-         if (response.modifiedCount === 0) {
-            throw new Error("Status is not changed");
-         };
+         return await this.technicianRepository.updateTechnicianProfession(user_id, profession);
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   async updateTechnicianAvailability(user_id: string, newStatus: string | boolean): Promise<boolean> {
+      try {
+         newStatus = newStatus === "Active" ? true : false;
+         return await this.technicianRepository.updateTechnicianAvailability(user_id, newStatus);
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   async getTechnicianInfo(userId: string): Promise<ITechnicianDetails | null> {
+      try {
+         return await this.technicianRepository.getTechnicianInfo(userId);
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   async getTechnicianBookingHistory(technicianUserID: string): Promise<IBookingHistory[]> {
+      try {
+         console.log("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+         return await this.technicianRepository.getTechnicianBookingHistory(technicianUserID);
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   async getBookingDetails(bookingId: string): Promise<IBookingDetails> {
+      try {
+         return await this.technicianRepository.getBookingDetails(bookingId);
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   async clearTechnicianNotifications(userId: string): Promise<boolean> {
+      try {
+         return await this.technicianRepository.clearTechnicianNotifications(userId);
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   async updateBookingStatus(bookingId: string, newStatus: string, technicianId: string, serviceDate: string): Promise<boolean> {
+      try {
+         const status = newStatus === "Accept" ? "Pending" : (newStatus === "Reject" ? "Rejected" : "Cancelled");
+         await this.technicianRepository.updateBookingStatus(bookingId, status);
          if (status === "Rejected" || status === "Cancelled") {
-            await this.technicianRepository.changeTechncianSlotAfterBookingCancelRepository(technician_id, serviceDate);
+            await this.technicianRepository.cancelBookingSlot(technicianId, serviceDate);
          };
          return true;
       } catch (error) {
@@ -131,30 +115,19 @@ class TechnicianService {
       };
    };
 
-   async completeBookingService(booking_id: string, client_id: string, laborCharge: string) {
+   async completeBooking(bookingId: string, clientId: string, laborCharge: string): Promise<boolean> {
       try {
-         const clientDetails = await this.userRepository.findUserByUser_id(client_id);
-         if (clientDetails) {
-            const completedDate = new Date().toLocaleDateString('en-CA');
-            const [sendEmail, changeBookingDetails] = await Promise.all([
-               sendConfirmBookingmail(clientDetails.email, laborCharge, booking_id),
-               this.technicianRepository.completeBookingRepository(booking_id, laborCharge, completedDate),
-            ]);
-            if (!sendEmail) throw new Error("Email not sended");
-            if (changeBookingDetails.modifiedCount !== 1) throw new Error("Booking details is not changed");
-         } else {
-            throw new Error("Can't find the client details");
+         const clientDetails = await this.userRepository.findUserByUser_id(clientId);
+         if (!clientDetails) {
+            throw new Error("Client details not found.");
          };
-      } catch (error) {
-         throw error;
-      };
-   };
-
-   async modifyAvailableSlotsService(technician_id: string, slots: slotType[]) {
-      try {
-         const result = await this.technicianRepository.modifyAvailableSlotsRepository(technician_id, slots);
-         if (result.modifiedCount === 0) {
-            throw new Error("Slot modification is failed.");
+         const completedDate = new Date().toLocaleDateString('en-CA');
+         const [emailResponse] = await Promise.all([
+            sendConfirmBookingmail(clientDetails.email, laborCharge, bookingId),
+            this.technicianRepository.completeBooking(bookingId, laborCharge, completedDate),
+         ]);
+         if (!emailResponse) {
+            throw new Error("Failed to complete booking.");
          };
          return true;
       } catch (error) {
@@ -162,7 +135,15 @@ class TechnicianService {
       };
    };
 
-   async fetchWalletInformationService(user_id: string) {
+   async updateAvailableSlots(technicianId: string, slots: ISlotType[]): Promise<boolean> {
+      try {
+         return await this.technicianRepository.updateAvailableSlots(technicianId, slots);
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   async fetchWalletInformationService(user_id: string): Promise<any> {
       try {
          return this.walletRepository.fetchWalletDetails(user_id);
       } catch (error) {
@@ -170,20 +151,18 @@ class TechnicianService {
       };
    };
 
-   async fetchningRatingWithReviewerDetailsService(technicianUser_id: string) {
+   async getRatingWithReviewerDetails(userId: string): Promise<IFeedbackRepository> {
       try {
-         const result = await this.technicianRepository.fetchningRatingWithReviewerDetailsRepository(technicianUser_id);
-
-         result.reviews = result.reviews.map((review: any) => {
-            const reviewer = result.reviewerDetails.find((reviewer: any) => reviewer.user_id === review.rated_user_id);
+         const result = await this.technicianRepository.getRatingWithReviewerDetails(userId);
+         result.reviews = result.reviews.map(review => {
+            const reviewer = result.reviewerDetails?.find(reviewer => reviewer.user_id === review.rated_user_id);
             return { ...review, reviewerName: reviewer?.name, reviewerProfileIMG: reviewer?.profileIMG, };
          });
          delete result.reviewerDetails;
-         
          return result;
       } catch (error) {
          throw error;
-      };
+      }
    };
 
 };

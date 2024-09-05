@@ -1,44 +1,58 @@
-import User from "../Model/userModal";
-import BookingModel from "../Model/bookingModel";
 import { IAdminRepository, IBookings, IUsers, ITechnicians } from "../Interfaces/adminInterfaces";
-import { UpdateWriteOpResult } from "mongoose";
+import { IBookingDetails } from "../Interfaces/techinicianInterfaces";
+import { IUser } from "../Interfaces/userInterface";
+import { Model } from "mongoose";
 
 class AdminRepository implements IAdminRepository {
+   private userModel: Model<IUser>;
+   private bookingModel: Model<IBookingDetails>;
 
-   async fetchUserRepository(): Promise<IUsers[]> {
+   constructor(userModel: Model<IUser>, bookingModel: Model<IBookingDetails>) {
+      this.userModel = userModel;
+      this.bookingModel = bookingModel;
+   };
+
+   async findUser(): Promise<IUsers[]> {
       try {
-         return await User.aggregate([
+         return await this.userModel.aggregate([
             { $match: {} },
             { $sort: { _id: -1 } },
             { $project: { _id: 0, password: 0, profileIMG: 0, isTechnician: 0, addressDetails: 0, alreadychattedtechnician: 0, savedTechnicians: 0 } },
          ]);
       } catch (error) {
-         console.log("Error from database : ", error);
          throw error;
       };
    };
 
-   async unblockUserRepository(user_id: string): Promise<UpdateWriteOpResult> {
+   async unBlock(user_id: string): Promise<boolean> {
       try {
-         return await User.updateOne({ user_id }, { isBlocked: false });
+         const updateResult = await this.userModel.updateOne({ user_id }, { isBlocked: false });
+         if (updateResult.modifiedCount === 1) {
+            return true;
+         } else {
+            throw new Error("Failed to block unblock user");
+         };
       } catch (error) {
-         console.log("Error from database:", error);
          throw error;
       };
    };
 
-   async blockUserRepository(user_id: string): Promise<UpdateWriteOpResult> {
+   async block(user_id: string): Promise<boolean> {
       try {
-         return await User.updateOne({ user_id }, { isBlocked: true });
+         const updateResult = await this.userModel.updateOne({ user_id }, { isBlocked: true });
+         if (updateResult.modifiedCount === 1) {
+            return true;
+         } else {
+            throw new Error("Failed to block block user");
+         };
       } catch (error) {
-         console.log("Error from database:", error);
          throw error;
       };
    };
 
-   async fetchTechnicianRepository(): Promise<ITechnicians[]> {
+   async findTechnician(): Promise<ITechnicians[]> {
       try {
-         return await User.aggregate([
+         return await this.userModel.aggregate([
             { $match: { isTechnician: true } },
             { $lookup: { from: "technicians", localField: "user_id", foreignField: "user_id", as: "technicianDetails" } },
             { $unwind: "$technicianDetails" },
@@ -63,14 +77,13 @@ class AdminRepository implements IAdminRepository {
             },
          ]);
       } catch (error) {
-         console.log("Fetch technician repository error : ", error);
          throw error;
       };
    };
 
-   async fetchBookingsRepository(): Promise<IBookings[]> {
+   async findBooking(): Promise<IBookings[]> {
       try {
-         return await BookingModel.aggregate([
+         return await this.bookingModel.aggregate([
             { $match: {} },
             { $sort: { _id: -1 } },
             { $lookup: { from: "users", localField: "technicianUser_id", foreignField: "user_id", as: "technicianDetails" } },

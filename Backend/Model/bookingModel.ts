@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
-import { newBookingType } from "../interfaces";
+import { IBookingDetails } from "../Interfaces/techinicianInterfaces";
 
-const bookingSchema = new Schema<newBookingType>({
+const bookingSchema: Schema = new Schema<IBookingDetails>({
    booking_id: {
       type: String
    },
@@ -14,7 +14,7 @@ const bookingSchema = new Schema<newBookingType>({
    booking_status: {
       type: String
    },
-   Booking_profession: {
+   booking_profession: {
       type: String
    },
    bookingTime: {
@@ -32,7 +32,7 @@ const bookingSchema = new Schema<newBookingType>({
    serviceCost: {
       type: String
    },
-   Payment_Status: {
+   payment_status: {
       type: String
    },
    serviceLocation: {
@@ -55,5 +55,5 @@ const bookingSchema = new Schema<newBookingType>({
    versionKey: false
 });
 
-const BookingModel = model<newBookingType>("Bookings", bookingSchema);
-export default BookingModel;
+const Booking = model<IBookingDetails>("Bookings", bookingSchema);
+export default Booking;

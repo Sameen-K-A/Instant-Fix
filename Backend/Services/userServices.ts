@@ -1,7 +1,7 @@
 import UserRepository from "../Repository/userRepository";
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from "uuid";
-import { RatingReviewType, SingleRatingType, TransactionType, userAddressType, userType } from "../interfaces";
+import { SingleRatingType, TransactionType, userAddressType, userType } from "../interfaces";
 import sendOTPmail from "../Config/email_config";
 import TechnicianRepository from "../Repository/technicianRepository";
 import { createToken, createRefreshToken } from "../Config/jwt_config";
@@ -12,6 +12,10 @@ import dotenv from "dotenv";
 import Razorpay from "razorpay";
 import crypto from "crypto";
 import WalletRepository from "../Repository/WalletRepository";
+import { IFeedbackRepository } from "../Interfaces/techinicianInterfaces";
+import Technician from "../Model/technicianModel";
+import Booking from "../Model/bookingModel";
+import Rating from "../Model/reviewModal";
 dotenv.config();
 const walletRepository = new WalletRepository();
 
@@ -20,7 +24,7 @@ class UserServices {
    private OTP: string | null = null;
    private expiryOTP_time: Date | null = null;
    private userData: userType | null = null;
-   private technicianRepository = new TechnicianRepository();
+   private technicianRepository = new TechnicianRepository(Technician, Rating, Booking);
 
    constructor(userRepository: UserRepository) {
       this.userRepository = userRepository;
@@ -311,12 +315,12 @@ class UserServices {
                }
             }
          };
-         const [bookingResponse, technicianSlotUpdatedResponse, addNotificationToTechnician] = await Promise.all([
+         const [bookingResponse] = await Promise.all([
             this.userRepository.bookTechnicianRepository(newBookingDetails),
-            this.technicianRepository.changeTechncianSlotAfterBookingRepository(technicianDetails.user_id, selectedDate),
-            this.technicianRepository.addNewNotification(technicianDetails.user_id, `You have a booking request from ${client_name} on ${selectedDate}`)
+            this.technicianRepository.bookSlot(technicianDetails.user_id, selectedDate),
+            this.technicianRepository.addNotification(technicianDetails.user_id, `You have a booking request from ${client_name} on ${selectedDate}`)
          ]);
-         if (bookingResponse && technicianSlotUpdatedResponse.modifiedCount === 1) {
+         if (bookingResponse) {
             io.to(`technicianNotificaionRoom${technicianDetails.user_id}`).emit("notification_to_technician", { message: "You have a new booking request" });
             return bookingResponse;
          } else {
@@ -348,8 +352,8 @@ class UserServices {
          const response = await this.userRepository.cancelBookingRepository(booking_id);
          if (response.modifiedCount === 1) {
             await Promise.all([
-               await this.technicianRepository.addNewNotification(technician_id, `${userName} canceled their ${serviceDate} booking request.`),
-               await this.technicianRepository.changeTechncianSlotAfterBookingCancelRepository(technician_id, serviceDate)
+               await this.technicianRepository.addNotification(technician_id, `${userName} canceled their ${serviceDate} booking request.`),
+               await this.technicianRepository.cancelBookingSlot(technician_id, serviceDate)
             ]);
             io.to(`technicianNotificaionRoom${technician_id}`).emit("notification_to_technician", { message: `${userName} canceled their ${serviceDate} booking request.` });
             return true;
@@ -414,7 +418,7 @@ class UserServices {
 
    async submitReviewService(user_id: string, technicianUser_id: string, enteredRating: number, enteredFeedback: string, booking_id: string) {
       try {
-         const previousFeedbacks: RatingReviewType | null = await this.technicianRepository.fetchAllFeedbacks(technicianUser_id);
+         const previousFeedbacks: IFeedbackRepository | null = await this.technicianRepository.getTechnicianFeedbacks(technicianUser_id);
 
          let totalRating = enteredRating;
          if (previousFeedbacks && previousFeedbacks.reviews.length > 0) {
@@ -433,13 +437,13 @@ class UserServices {
             date: new Date().toLocaleDateString('en-CA').toString(),
          };
 
-         const [updateBookingFeedbackAdded, addNewFeedbackToTechnician, updateNewAvgRatingToTechnician] = await Promise.all([
+         const [updateBookingFeedbackAdded, addNewFeedbackToTechnician] = await Promise.all([
             this.userRepository.updateBookingReviewAdded(booking_id, true),
             this.userRepository.addNewFeedbackToTechnician(technicianUser_id, ratingDetails),
-            this.technicianRepository.updateNewAvgRatingToTechnician(technicianUser_id, avgRating)
+            this.technicianRepository.updateTechnicianRating(technicianUser_id, avgRating)
          ]);
 
-         if (updateBookingFeedbackAdded.modifiedCount === 1 && addNewFeedbackToTechnician.modifiedCount === 1 && updateNewAvgRatingToTechnician.modifiedCount === 1) {
+         if (updateBookingFeedbackAdded.modifiedCount === 1 && addNewFeedbackToTechnician.modifiedCount === 1) {
             return true;
          } else {
             throw new Error("Something wrong please try again later");

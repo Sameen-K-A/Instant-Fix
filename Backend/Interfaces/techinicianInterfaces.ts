@@ -1,5 +1,3 @@
-import { Document, UpdateWriteOpResult } from "mongoose";
-
 export interface ISlotType {
    slotDate: string;
    slotBooked: boolean;
@@ -18,11 +16,12 @@ export type IRatingReviewType = {
 }
 
 export interface IBookingDetails {
+   _id?: string;
    booking_id: string;
    client_id: string;
    technicianUser_id: string;
    booking_status: "Requested" | "Rejected" | "Pending" | "Completed" | "Cancelled";
-   Booking_profession: string;
+   booking_profession: string;
    bookingTime: string;
    bookingDate: string;
    serviceDate: string;
@@ -57,19 +56,19 @@ export interface IBookingHistory extends Pick<IBookingDetails, "booking_id" | "b
    userDetails: Pick<IUserDetails, "name">;
 }
 
-export interface ITechnicianDetails extends Document {
+export interface ITechnicianDetails  {
    _id?: string;
    user_id: string;
    technician_id: string;
    profession: string;
-   availability: boolean;
-   rating: number;
-   notifications: string[];
-   availableSlots: ISlotType[];
+   availability?: boolean;
+   rating?: number;
+   notifications?: string[];
+   availableSlots?: ISlotType[];
 }
 
 export interface IFeedbackRepository {
-   reviewerDetails: IReviewerDetail[];
+   reviewerDetails?: IReviewerDetail[];
    reviews: IReview[];
    technicianRating: {
       rating: number;
@@ -90,21 +89,36 @@ export interface IReviewerDetail {
 }
 
 export interface ITechnicianRepository {
-   createTechnicianRepository(technicianData: ITechnicianDetails): Promise<ITechnicianDetails>;
-   changeProfessionRepository(user_id: string, profession: string): Promise<UpdateWriteOpResult>;
-   changeAvailabilityStatusRepository(user_id: string, newStatus: boolean): Promise<UpdateWriteOpResult>;
-   fetchTechnicianBookingHistoryRepository(technicianUserID: string): Promise<IBookingHistory[]>;
-   fetchTechnicianInformationRepository(technicianUser_id: string): Promise<ITechnicianDetails | null>;
-   fetchingIndividualBookingDetailsRepository(booking_id: string): Promise<IBookingDetails>;
-   acceptRejectCancelNewBookingRepository(booking_id: string, status: string): Promise<UpdateWriteOpResult>;
-   modifyAvailableSlotsRepository(technician_id: string, availableSlots: ISlotType[]): Promise<UpdateWriteOpResult>;
-   completeBookingRepository(booking_id: string, laborCharge: string, completeDate: string): Promise<UpdateWriteOpResult>;
-   clearNotificationRepository(technicianUser_id: string): Promise<UpdateWriteOpResult>;
-   changeTechncianSlotAfterBookingRepository(technicianUser_id: string, selectedDate: string): Promise<UpdateWriteOpResult>;
-   changeTechncianSlotAfterBookingCancelRepository(technicianUser_id: string, selectedDate: string): Promise<UpdateWriteOpResult>;
-   addNewNotificationRepository(technicianUser_id: string, notification: string): Promise<UpdateWriteOpResult>;
-   createRatingDetailsRepository(ratingDetails: IRatingReviewType): Promise<IRatingReviewType>;
-   fetchAllFeedbacksRepository(technician_id: string): Promise<IFeedbackRepository | null>;
-   updateNewAvgRatingToTechnicianRepository(technician_id: string, newRating: number): Promise<UpdateWriteOpResult>;
-   fetchningRatingWithReviewerDetailsRepository(technicianUser_id: string): Promise<IFeedbackRepository>;
-}
+   createTechnician(technicianData: ITechnicianDetails): Promise<ITechnicianDetails>;
+   updateTechnicianProfession(userId: string, profession: string): Promise<boolean>;
+   updateTechnicianAvailability(userId: string, isAvailable: boolean): Promise<boolean>;
+   getTechnicianBookingHistory(userId: string): Promise<IBookingHistory[]>;
+   getTechnicianInfo(userId: string): Promise<ITechnicianDetails | null>;
+   getBookingDetails(bookingId: string): Promise<IBookingDetails>;
+   updateBookingStatus(bookingId: string, status: string): Promise<boolean>;
+   updateAvailableSlots(technicianId: string, slots: ISlotType[]): Promise<boolean>;
+   completeBooking(bookingId: string, laborCharge: string, completionDate: string): Promise<boolean>;
+   clearTechnicianNotifications(userId: string): Promise<boolean>;
+   bookSlot(userId: string, date: string): Promise<boolean>;
+   cancelBookingSlot(userId: string, date: string): Promise<boolean>;
+   addNotification(userId: string, notification: string): Promise<boolean>;
+   createRating(ratingDetails: IRatingReviewType): Promise<IRatingReviewType>;
+   getTechnicianFeedbacks(technicianId: string): Promise<IFeedbackRepository | null>;
+   updateTechnicianRating(technicianId: string, newRating: number): Promise<boolean>;
+   getRatingWithReviewerDetails(userId: string): Promise<IFeedbackRepository>;
+};
+
+export interface ITechnicianService {
+   createTechnician(user_id: string, profession: string): Promise<ITechnicianDetails>;
+   updateTechnicianProfession(user_id: string, profession: string): Promise<boolean>;
+   updateTechnicianAvailability(user_id: string, newStatus: string | boolean): Promise<boolean>;
+   getTechnicianBookingHistory(technicianUserID: string): Promise<IBookingHistory[]>;
+   getBookingDetails(bookingId: string): Promise<IBookingDetails>;
+   getTechnicianInfo(userId: string): Promise<ITechnicianDetails | null>;
+   clearTechnicianNotifications(userId: string): Promise<boolean>;
+   updateBookingStatus(booking_id: string, newStatus: string, technician_id: string, serviceDate: string): Promise<boolean>;
+   completeBooking(booking_id: string, client_id: string, laborCharge: string): Promise<boolean>;
+   updateAvailableSlots(technicianId: string, slots: ISlotType[]): Promise<boolean>;
+   getRatingWithReviewerDetails(userId: string): Promise<IFeedbackRepository>;
+   fetchWalletInformationService(user_id: string): Promise<any>;
+};

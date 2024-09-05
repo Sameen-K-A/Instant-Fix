@@ -1,5 +1,3 @@
-import { UpdateWriteOpResult } from "mongoose";
-
 export interface IUsers {
    user_id: string;
    name: string;
@@ -45,18 +43,18 @@ export interface IServiceLocation {
 };
 
 export interface IAdminRepository {
-   fetchUserRepository(): Promise<IUsers[]>;
-   unblockUserRepository(user_id: string): Promise<UpdateWriteOpResult>;
-   blockUserRepository(user_id: string): Promise<UpdateWriteOpResult>;
-   fetchTechnicianRepository(): Promise<ITechnicians[]>;
-   fetchBookingsRepository(): Promise<IBookings[]>;
+   findUser(): Promise<IUsers[]>;
+   unBlock(user_id: string): Promise<boolean>;
+   block(user_id: string): Promise<boolean>;
+   findTechnician(): Promise<ITechnicians[]>;
+   findBooking(): Promise<IBookings[]>;
 };
 
 export interface IAdminServices {
-   loginService(email: string, password: string): Promise<string>;
-   fetchUserService(): Promise<IUsers[]>;
-   unblockUserService(user_id: string): Promise<string>;
-   blockUserService(user_id: string): Promise<string>;
-   fetchTechnicianService(): Promise<ITechnicians[]>;
-   fetchBookingsService(): Promise<IBookings[]>;
+   login(email: string, password: string): Promise<string>;
+   findUser(): Promise<IUsers[]>;
+   unBlock(user_id: string): Promise<boolean>;
+   block(user_id: string): Promise<boolean>;
+   findTechnician(): Promise<ITechnicians[]>;
+   findBooking(): Promise<IBookings[]>;
 };

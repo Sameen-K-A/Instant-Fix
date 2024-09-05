@@ -1,12 +1,16 @@
 import dotenv from "dotenv";
-import AdminRepository from "../Repository/adminRepository";
+import { IAdminServices, IUsers, ITechnicians, IBookings, IAdminRepository } from "../Interfaces/adminInterfaces";
 import { createToken } from "../Config/jwt_config";
-import { IAdminServices, IUsers, ITechnicians, IBookings } from "../Interfaces/adminInterfaces";
 dotenv.config();
-const adminRepository = new AdminRepository();
-class AdminServices implements IAdminServices {
 
-   async loginService(email: string, password: string): Promise<string> {
+class AdminServices implements IAdminServices {
+   private adminRepository: IAdminRepository;
+
+   constructor(adminRepository: IAdminRepository) {
+      this.adminRepository = adminRepository;
+   };
+
+   async login(email: string, password: string): Promise<string> {
       try {
          const orginalEmail = process.env.Admin_email as string;
          const orginalPassword = process.env.Admin_password as string;
@@ -19,61 +23,50 @@ class AdminServices implements IAdminServices {
             };
          } else throw new Error("Wrong email");
       } catch (error) {
-         console.log("Login service error : ", error);
          throw error;
       };
    };
 
-   async fetchUserService(): Promise<IUsers[]> {
+   async findUser(): Promise<IUsers[]> {
       try {
-         return await adminRepository.fetchUserRepository();
+         return await this.adminRepository.findUser();
       } catch (error) {
          throw error;
       };
    };
 
-   async unblockUserService(user_id: string): Promise<string> {
+   async unBlock(user_id: string): Promise<boolean> {
       try {
-         const response = await adminRepository.unblockUserRepository(user_id);
-         if (response.modifiedCount === 1) {
-            return "User unblocked successfully";
-         } else {
-            throw new Error("Can't unblock user");
-         };
+         return await this.adminRepository.unBlock(user_id);
       } catch (error) {
          throw error;
       };
    };
 
-   async blockUserService(user_id: string): Promise<string> {
+   async block(user_id: string): Promise<boolean> {
       try {
-         const response = await adminRepository.blockUserRepository(user_id);
-         if (response.modifiedCount === 1) {
-            return "User blocked successfully";
-         } else {
-            throw new Error("Can't block user");
-         };
+         return await this.adminRepository.block(user_id);
       } catch (error) {
          throw error;
       };
    };
 
-   async fetchTechnicianService(): Promise<ITechnicians[]> {
+   async findTechnician(): Promise<ITechnicians[]> {
       try {
-         return await adminRepository.fetchTechnicianRepository();
+         return await this.adminRepository.findTechnician();
       } catch (error) {
          throw error;
       };
    };
 
-   async fetchBookingsService(): Promise<IBookings[]> {
+   async findBooking(): Promise<IBookings[]> {
       try {
-         return await adminRepository.fetchBookingsRepository();
+         return await this.adminRepository.findBooking();
       } catch (error) {
          throw error;
       };
    };
-   
+
 };
 
 export default AdminServices;

@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import { RatingReviewType } from "../interfaces";
 
-const ratingSchema = new Schema<RatingReviewType>({
+const ratingSchema: Schema = new Schema<RatingReviewType>({
    user_id: {
       type: String,
    },

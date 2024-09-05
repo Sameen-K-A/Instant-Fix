@@ -1,46 +1,58 @@
-import BookingModel from "../Model/bookingModel";
-import Rating from "../Model/reviewModal";
-import { slotType, RatingReviewType, technicianType } from "../interfaces";
-import { IBookingDetails, IBookingHistory, IFeedbackRepository, ITechnicianDetails, ITechnicianRepository } from "../Interfaces/techinicianInterfaces";
-import { Model, UpdateWriteOpResult } from "mongoose";
+import { technicianType } from "../interfaces";
+import { IBookingDetails, IBookingHistory, IFeedbackRepository, ISlotType, ITechnicianDetails, ITechnicianRepository, IRatingReviewType } from "../Interfaces/techinicianInterfaces";
+import { Model } from "mongoose";
 
 export class TechnicianRepository implements ITechnicianRepository {
   private technicianModel: Model<ITechnicianDetails>;
+  private ratingModel: Model<IRatingReviewType>;
+  private bookingModel: Model<IBookingDetails>
 
-  constructor(technicianModel: Model<ITechnicianDetails>) {
+  constructor(technicianModel: Model<ITechnicianDetails>, ratingModel: Model<IRatingReviewType>, bookingModel: Model<IBookingDetails>) {
     this.technicianModel = technicianModel;
-  }
+    this.ratingModel = ratingModel;
+    this.bookingModel = bookingModel;
+  };
 
-  async createTechnicianRepository(technicianData: technicianType): Promise<ITechnicianDetails> {
+  async createTechnician(technicianData: technicianType): Promise<ITechnicianDetails> {
     try {
       return await this.technicianModel.create(technicianData);
     } catch (error) {
       console.error('Error creating technician:', error);
       throw error;
-    }
+    };
   };
 
-  async changeProfessionRepository(user_id: string, profession: string): Promise<UpdateWriteOpResult> {
+  async updateTechnicianProfession(user_id: string, profession: string): Promise<boolean> {
     try {
-      return await this.technicianModel.updateOne({ user_id: user_id }, { $set: { profession: profession } });
+      const updateResult = await this.technicianModel.updateOne({ user_id: user_id }, { $set: { profession: profession } });
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("No changes found");
+      };
     } catch (error) {
       console.error('Error changing profession:', error);
       throw error;
-    }
+    };
   };
 
-  async changeAvailabilityStatusRepository(user_id: string, newStatus: boolean): Promise<UpdateWriteOpResult> {
+  async updateTechnicianAvailability(user_id: string, newStatus: boolean): Promise<boolean> {
     try {
-      return await this.technicianModel.updateOne({ user_id: user_id }, { $set: { availability: newStatus } });
+      const updateResult = await this.technicianModel.updateOne({ user_id: user_id }, { $set: { availability: newStatus } });
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Failed to change status");
+      };
     } catch (error) {
       console.error('Error changing availability status:', error);
       throw error;
-    }
+    };
   };
 
-  async fetchTechnicianBookingHistoryRepository(technicianUserID: string): Promise<IBookingHistory[]> {
+  async getTechnicianBookingHistory(technicianUserID: string): Promise<IBookingHistory[]> {
     try {
-      return await BookingModel.aggregate([
+      return await this.bookingModel.aggregate([
         { $match: { technicianUser_id: technicianUserID } },
         { $sort: { _id: -1 } },
         { $lookup: { from: "users", localField: "client_id", foreignField: "user_id", as: "userDetails" } },
@@ -68,27 +80,27 @@ export class TechnicianRepository implements ITechnicianRepository {
             "userDetails.addressDetails": 0,
             "userDetails.alreadychattedtechnician": 0,
             "userDetails.savedTechnicians": 0,
-          }
-        }
+          },
+        },
       ]);
     } catch (error) {
       console.error('Error fetching technician booking history:', error);
       throw error;
-    }
+    };
   };
 
-  async fetchTechnicianInformationRepository(technicianUser_id: string): Promise<ITechnicianDetails | null> {
+  async getTechnicianInfo(technicianUser_id: string): Promise<ITechnicianDetails | null> {
     try {
       return await this.technicianModel.findOne({ user_id: technicianUser_id }, { _id: 0 });
     } catch (error) {
       console.error('Error fetching technician information:', error);
       throw error;
-    }
+    };
   };
 
-  async fetchingIndividualBookingDetailsRepository(booking_id: string): Promise<IBookingDetails> {
+  async getBookingDetails(booking_id: string): Promise<IBookingDetails> {
     try {
-      const response = await BookingModel.aggregate([
+      const response = await this.bookingModel.aggregate([
         { $match: { booking_id: booking_id } },
         { $lookup: { from: "users", localField: "client_id", foreignField: "user_id", as: "userDetails" } },
         { $unwind: "$userDetails" },
@@ -111,33 +123,43 @@ export class TechnicianRepository implements ITechnicianRepository {
     } catch (error) {
       console.error('Error fetching individual booking details:', error);
       throw error;
-    }
+    };
   };
 
-  async acceptRejectCancelNewBookingRepository(booking_id: string, status: string): Promise<UpdateWriteOpResult> {
+  async updateBookingStatus(booking_id: string, status: string): Promise<boolean> {
     try {
-      return await BookingModel.updateOne({ booking_id: booking_id }, { $set: { booking_status: status } });
+      const updateResult = await this.bookingModel.updateOne({ booking_id: booking_id }, { $set: { booking_status: status } });
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Failed to change booking status.");
+      }
     } catch (error) {
       console.error('Error updating booking status:', error);
       throw error;
-    }
+    };
   };
 
-  async modifyAvailableSlotsRepository(technician_id: string, availableSlots: slotType[]): Promise<UpdateWriteOpResult> {
+  async updateAvailableSlots(technician_id: string, availableSlots: ISlotType[]): Promise<boolean> {
     try {
-      return await this.technicianModel.updateOne(
+      const updateResult = await this.technicianModel.updateOne(
         { user_id: technician_id },
         { $set: { availableSlots: availableSlots } },
       );
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Failed to update available slots.");
+      }
     } catch (error) {
       console.error('Error modifying available slots:', error);
       throw error;
-    }
+    };
   };
 
-  async completeBookingRepository(booking_id: string, laborCharge: string, completeDate: string): Promise<UpdateWriteOpResult> {
+  async completeBooking(booking_id: string, laborCharge: string, completeDate: string): Promise<boolean> {
     try {
-      return await BookingModel.updateOne({ booking_id: booking_id }, {
+      const updateResult = await this.bookingModel.updateOne({ booking_id: booking_id }, {
         $set: {
           booking_status: "Completed",
           serviceCost: laborCharge,
@@ -145,84 +167,114 @@ export class TechnicianRepository implements ITechnicianRepository {
           Payment_Status: "Requested"
         }
       });
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Failed to complete booking.");
+      };
     } catch (error) {
       console.error('Error completing booking:', error);
       throw error;
-    }
+    };
   };
 
-  async clearNotificationRepository(technicianUser_id: string): Promise<UpdateWriteOpResult> {
+  async clearTechnicianNotifications(technicianUser_id: string): Promise<boolean> {
     try {
-      return await this.technicianModel.updateOne({ user_id: technicianUser_id }, { $set: { notifications: [] } });
+      const updateResult = await this.technicianModel.updateOne({ user_id: technicianUser_id }, { $set: { notifications: [] } });
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Failed to clear notifications");
+      };
     } catch (error) {
       console.error('Error clearing notifications:', error);
       throw error;
-    }
+    };
   };
 
-  async changeTechncianSlotAfterBookingRepository(technicianUser_id: string, selectedDate: string): Promise<UpdateWriteOpResult> {
+  async bookSlot(technicianUser_id: string, selectedDate: string): Promise<boolean> {
     try {
-      return await this.technicianModel.updateOne(
+      const updateResult = await this.technicianModel.updateOne(
         { user_id: technicianUser_id, "availableSlots.slotDate": selectedDate },
         { $set: { "availableSlots.$.slotBooked": true } }
       );
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Booking failed");
+      };
     } catch (error) {
       console.error('Error changing technician slot after booking:', error);
       throw error;
-    }
+    };
   };
 
-  async changeTechncianSlotAfterBookingCancelRepository(technicianUser_id: string, selectedDate: string): Promise<UpdateWriteOpResult> {
+  async cancelBookingSlot(technicianUser_id: string, selectedDate: string): Promise<boolean> {
     try {
-      return await this.technicianModel.updateOne(
+      const updateResult = await this.technicianModel.updateOne(
         { user_id: technicianUser_id, "availableSlots.slotDate": selectedDate },
         { $set: { "availableSlots.$.slotBooked": false } }
       );
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Failed to cancel booking slot");
+      };
     } catch (error) {
       console.error('Error changing technician slot after booking cancellation:', error);
       throw error;
-    }
+    };
   };
 
-  async addNewNotificationRepository(technicianUser_id: string, notification: string): Promise<UpdateWriteOpResult> {
+  async addNotification(technicianUser_id: string, notification: string): Promise<boolean> {
     try {
-      return await this.technicianModel.updateOne({ user_id: technicianUser_id }, { $push: { notifications: notification } });
+      const updateResult = await this.technicianModel.updateOne({ user_id: technicianUser_id }, { $push: { notifications: notification } });
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("failed to send notification");
+      };
     } catch (error) {
       console.error('Error adding new notification:', error);
       throw error;
-    }
+    };
   };
 
-  async createRatingDetailsRepository(ratingDetails: RatingReviewType): Promise<RatingReviewType> {
+  async createRating(ratingDetails: IRatingReviewType): Promise<IRatingReviewType> {
     try {
-      return await Rating.create(ratingDetails);
+      return await this.ratingModel.create(ratingDetails);
     } catch (error) {
       console.error('Error creating rating details:', error);
       throw error;
     }
   };
 
-  async fetchAllFeedbacksRepository(technician_id: string): Promise<IFeedbackRepository | null> {
+  async getTechnicianFeedbacks(technician_id: string): Promise<IFeedbackRepository | null> {
     try {
-      return await Rating.findOne({ user_id: technician_id }, { _id: 0 });
+      return await this.ratingModel.findOne({ user_id: technician_id }, { _id: 0 });
     } catch (error) {
       console.error('Error fetching all feedbacks:', error);
       throw error;
     }
   };
 
-  async updateNewAvgRatingToTechnicianRepository(technician_id: string, newRating: number): Promise<UpdateWriteOpResult> {
+  async updateTechnicianRating(technician_id: string, newRating: number): Promise<boolean> {
     try {
-      return await this.technicianModel.updateOne({ user_id: technician_id }, { rating: newRating });
+      const updateResult = await this.technicianModel.updateOne({ user_id: technician_id }, { rating: newRating });
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Something wrong please try again later");
+      };
     } catch (error) {
       console.error('Error updating new average rating to technician:', error);
       throw error;
-    }
+    };
   };
 
-  async fetchningRatingWithReviewerDetailsRepository(technicianUser_id: string): Promise<IFeedbackRepository> {
+  async getRatingWithReviewerDetails(technicianUser_id: string): Promise<IFeedbackRepository> {
     try {
-      const res = await Rating.aggregate([
+      const res = await this.ratingModel.aggregate([
         { $match: { user_id: technicianUser_id } },
         { $lookup: { from: "users", localField: "reviews.rated_user_id", foreignField: "user_id", as: "reviewerDetails" } },
         { $lookup: { from: "technicians", localField: "user_id", foreignField: "user_id", as: "technicianRating" } },
@@ -230,31 +282,33 @@ export class TechnicianRepository implements ITechnicianRepository {
         {
           $project: {
             _id: 0,
-            "reviews._id": 0,
-            "reviews.rated_user_id": 0,
-            "reviews.user_id": 0,
-            "reviews.createdAt": 0,
-            "reviews.updatedAt": 0,
+            user_id: 0,
+            "reviewerDetails._id": 0,
+            "reviewerDetails.isTechnician": 0,
+            "reviewerDetails.email": 0,
+            "reviewerDetails.phone": 0,
+            "reviewerDetails.addressDetails": 0,
+            "reviewerDetails.savedTechnicians": 0,
+            "reviewerDetails.alreadychattedtechnician": 0,
+            "reviewerDetails.password": 0,
+            "reviewerDetails.isBlocked": 0,
             "technicianRating._id": 0,
             "technicianRating.user_id": 0,
-            "technicianRating.__v": 0,
-            "technicianRating.isTechnician": 0,
-            "technicianRating.email": 0,
-            "technicianRating.phone": 0,
-            "technicianRating.addressDetails": 0,
-            "technicianRating.savedTechnicians": 0,
-            "technicianRating.alreadychattedtechnician": 0,
-            "technicianRating.profileIMG": 0,
-          }
+            "technicianRating.technician_id": 0,
+            "technicianRating.profession": 0,
+            "technicianRating.availability": 0,
+            "technicianRating.notifications": 0,
+            "technicianRating.availableSlots": 0,
+          },
         },
-        { $unwind: "$reviewerDetails" }
       ]);
       return res[0];
     } catch (error) {
       console.error('Error fetching rating with reviewer details:', error);
       throw error;
-    }
+    };
   };
-}
+
+};
 
 export default TechnicianRepository;
