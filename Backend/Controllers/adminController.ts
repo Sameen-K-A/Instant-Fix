@@ -9,7 +9,7 @@ class AdminController {
       this.adminService = adminService;
    }
 
-   async login(req: Request, res: Response) {
+   login = async (req: Request, res: Response) => {
       try {
          const { email, password } = req.body;
          const serviceResponse = await this.adminService.login(email, password);
@@ -25,7 +25,7 @@ class AdminController {
       };
    };
 
-   async findUser(req: Request, res: Response) {
+   findUser = async (req: Request, res: Response) => {
       try {
          const serviceResponse = await this.adminService.findUser();
          res.status(HTTP_statusCode.OK).json(serviceResponse);
@@ -34,7 +34,7 @@ class AdminController {
       };
    };
 
-   async unBlock(req: Request, res: Response) {
+   unBlock = async (req: Request, res: Response) => {
       try {
          const user_id = req.query.user_id as string;
          const serviceResponse = await this.adminService.unBlock(user_id);
@@ -44,7 +44,7 @@ class AdminController {
       };
    };
 
-   async block(req: Request, res: Response) {
+   block = async (req: Request, res: Response) => {
       try {
          const user_id = req.query.user_id as string;
          const serviceResponse = await this.adminService.block(user_id);
@@ -54,7 +54,7 @@ class AdminController {
       };
    };
 
-   async findTechnician(req: Request, res: Response) {
+   findTechnician = async (req: Request, res: Response) => {
       try {
          const controllResponse = await this.adminService.findTechnician();
          res.status(HTTP_statusCode.OK).json(controllResponse);
@@ -63,7 +63,7 @@ class AdminController {
       };
    };
 
-   async findBooking(req: Request, res: Response) {
+   findBooking = async (req: Request, res: Response) => {
       try {
          const response = await this.adminService.findBooking();
          res.status(HTTP_statusCode.OK).json(response);

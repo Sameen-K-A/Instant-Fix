@@ -51,7 +51,7 @@ export interface IAdminRepository {
 };
 
 export interface IAdminServices {
-   login(email: string, password: string): Promise<string>;
+   login(email: string, password: string): string;
    findUser(): Promise<IUsers[]>;
    unBlock(user_id: string): Promise<boolean>;
    block(user_id: string): Promise<boolean>;

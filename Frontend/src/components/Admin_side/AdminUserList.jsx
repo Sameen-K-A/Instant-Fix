@@ -5,8 +5,11 @@ import adminAxiosInstance from "../../config/axiosInstance/adminInstance";
 import { useNavigate } from "react-router-dom";
 import AdminNavbar from "./AdminNavbar";
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
+import NoResultFoundImage from "../../../public/images/NoResultFound.png";
+import Reveal from "../../../public/Animation/Animated";
 
 const AdminUserList = () => {
+  const [orginalArray, setOrginalArray] = useState([]);
   const [usersArray, setUsersArray] = useState([]);
   const navigate = useNavigate();
 
@@ -14,6 +17,7 @@ const AdminUserList = () => {
     (async () => {
       try {
         const response = await adminAxiosInstance.get(`/fetchUser`);
+        setOrginalArray(response.data);
         setUsersArray(response.data);
       } catch (error) {
         if (error.response.status === 401) {
@@ -36,6 +40,10 @@ const AdminUserList = () => {
               user.user_id === user_id ? { ...user, isBlocked: false } : user
             );
             setUsersArray(afterUnblocking);
+            const afterUnblockingOrginal = orginalArray.map((user) =>
+              user.user_id === user_id ? { ...user, isBlocked: false } : user
+            );
+            setOrginalArray(afterUnblockingOrginal);
           } catch (error) {
             if (error.response.status === 401) {
               navigate("/admin", { state: { message: "Authorization failed please login" } });
@@ -48,6 +56,18 @@ const AdminUserList = () => {
       })
   };
 
+  const searchUser = (e) => {
+    const searchInput = e.target.value;
+    if (searchInput.trim().length) {
+      const afterSearch = orginalArray.filter((user) =>
+        user.name.toLowerCase().includes(searchInput.toLowerCase())
+      );
+      setUsersArray(afterSearch);
+    } else {
+      setUsersArray(orginalArray);
+    }
+  };
+
   const blockUser = async (user_id) => {
     confirmAlert("Do you want to block this user")
       .then(async (response) => {
@@ -58,6 +78,10 @@ const AdminUserList = () => {
               user.user_id === user_id ? { ...user, isBlocked: true } : user
             );
             setUsersArray(afterblocking);
+            const afterblockingOrginal = orginalArray.map((user) =>
+              user.user_id === user_id ? { ...user, isBlocked: true } : user
+            );
+            setOrginalArray(afterblockingOrginal);
           } catch (error) {
             if (error.response.status === 401) {
               navigate("/admin", { state: { message: "Authorization failed please login" } });
@@ -80,16 +104,16 @@ const AdminUserList = () => {
       <div className="container-fluid">
         <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }}>
         </div>
-        <div className="card card-body blur shadow-blur mx-4 mb-5 mt-n6 overflow-hidden">
+        <div className="card card-body blur-sm shadow-blur mx-4 mb-2 mt-n6 overflow-hidden">
           <div className="col-xl-12 col-lg-12 col-md-12 d-flex flex-column">
             <div className="container-fluid">
+              <div className="card-header pb-0 mb-5 mt-3 col-lg-5 col-12 ms-auto">
+                <input type="text" className="form-control ms-3" placeholder="Search user . . ." onChange={(e) => searchUser(e)} />
+              </div>
               {usersArray.length !== 0 ? (
-                <>
-                  <div className="card-header pb-0 mb-3 mt-3">
-                    <h5 className="text-center mb-4">All users</h5>
-                  </div>
+                <Reveal>
                   <div className="card-body px-0 pt-0 pb-2">
-                    <div className="table-responsive p-0 pb-3"  style={{maxHeight:"300px"}}>
+                    <div className="table-responsive p-0 pb-3" style={{ maxHeight: "300px" }}>
                       <table className="table align-items-center mb-0">
                         <thead>
                           <tr>
@@ -126,9 +150,12 @@ const AdminUserList = () => {
                       </table>
                     </div>
                   </div>
-                </>
+                </Reveal>
               ) : (
-                <h5 className="mt-7 text-dark">No users found.</h5>
+                <div className='d-flex flex-column justify-content-center align-items-center mt-5'>
+                  <img src={NoResultFoundImage} alt="No result found" className='mb-0' width={"300px"} />
+                  <p className='text-center text-bold'>Sorry, no results found!</p>
+                </div>
               )}
             </div>
           </div>

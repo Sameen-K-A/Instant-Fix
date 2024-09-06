@@ -12,7 +12,7 @@ class AdminRepository implements IAdminRepository {
       this.bookingModel = bookingModel;
    };
 
-   async findUser(): Promise<IUsers[]> {
+   findUser = async (): Promise<IUsers[]> => {
       try {
          return await this.userModel.aggregate([
             { $match: {} },
@@ -24,7 +24,7 @@ class AdminRepository implements IAdminRepository {
       };
    };
 
-   async unBlock(user_id: string): Promise<boolean> {
+   unBlock = async (user_id: string): Promise<boolean> => {
       try {
          const updateResult = await this.userModel.updateOne({ user_id }, { isBlocked: false });
          if (updateResult.modifiedCount === 1) {
@@ -37,7 +37,7 @@ class AdminRepository implements IAdminRepository {
       };
    };
 
-   async block(user_id: string): Promise<boolean> {
+   block = async (user_id: string): Promise<boolean> => {
       try {
          const updateResult = await this.userModel.updateOne({ user_id }, { isBlocked: true });
          if (updateResult.modifiedCount === 1) {
@@ -50,7 +50,7 @@ class AdminRepository implements IAdminRepository {
       };
    };
 
-   async findTechnician(): Promise<ITechnicians[]> {
+   findTechnician = async (): Promise<ITechnicians[]> => {
       try {
          return await this.userModel.aggregate([
             { $match: { isTechnician: true } },
@@ -81,7 +81,7 @@ class AdminRepository implements IAdminRepository {
       };
    };
 
-   async findBooking(): Promise<IBookings[]> {
+   findBooking = async (): Promise<IBookings[]> => {
       try {
          return await this.bookingModel.aggregate([
             { $match: {} },

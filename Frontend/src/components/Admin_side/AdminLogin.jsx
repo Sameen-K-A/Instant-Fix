@@ -4,8 +4,9 @@ import * as Yup from 'yup';
 import { toast } from 'sonner';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Base_URL } from '../../config/credentials'; 
+import { Base_URL } from '../../config/credentials';
 import backgroundImage from '../../../public/Images/HeaderBanner_3.jpg';
+import Reveal from "../../../public/Animation/Animated";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -55,23 +56,25 @@ const AdminLogin = () => {
         <div className="container">
           <div className="row">
             <div className="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mx-auto">
-              <div className="card card-plain mt-8">
-                <div className="card-header pb-0 text-left bg-transparent">
-                  <h3 className="font-weight-bolder text-info text-gradient">Hello Admin</h3>
-                  <p className="mb-0">Enter your email and password to sign in.</p>
+              <Reveal>
+                <div className="card card-plain mt-8">
+                  <div className="card-header pb-0 text-left bg-transparent">
+                    <h3 className="font-weight-bolder text-info text-gradient">Hello Admin</h3>
+                    <p className="mb-0">Enter your email and password to sign in.</p>
+                  </div>
+                  <div className="card-body">
+                    <form onSubmit={formik.handleSubmit}>
+                      <label className='text-xs text-black-50'>Email</label>
+                      <input type="text" className="form-control" placeholder="Email" {...formik.getFieldProps('email')} />
+                      {formik.touched.email && formik.errors.email ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.email}</div> : null}
+                      <label className='text-xs text-black-50 mt-3'>Password</label>
+                      <input type="password" className="form-control" placeholder="Password" {...formik.getFieldProps('password')} />
+                      {formik.touched.password && formik.errors.password ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.password}</div> : null}
+                      <button type="submit" className="btn bg-gradient-primary w-100 mt-4 mb-0 text-center" disabled={formik.isSubmitting} >{formik.isSubmitting ? 'Signing in...' : 'Sign in'}</button>
+                    </form>
+                  </div>
                 </div>
-                <div className="card-body">
-                  <form onSubmit={formik.handleSubmit}>
-                    <label className='text-xs text-black-50'>Email</label>
-                    <input type="text" className="form-control" placeholder="Email" {...formik.getFieldProps('email')} />
-                    {formik.touched.email && formik.errors.email ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.email}</div> : null}
-                    <label className='text-xs text-black-50 mt-3'>Password</label>
-                    <input type="password" className="form-control" placeholder="Password" {...formik.getFieldProps('password')} />
-                    {formik.touched.password && formik.errors.password ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.password}</div> : null}
-                    <button type="submit" className="btn bg-gradient-primary w-100 mt-4 mb-0 text-center" disabled={formik.isSubmitting} >{formik.isSubmitting ? 'Signing in...' : 'Sign in'}</button>
-                  </form>
-                </div>
-              </div>
+              </Reveal>
             </div>
             <div className="col-md-6">
               <div className="oblique position-absolute top-0 h-100 d-md-block d-none me-n8">

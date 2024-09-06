@@ -4,6 +4,8 @@ import adminAxiosInstance from "../../config/axiosInstance/adminInstance";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
+import Reveal from "../../../public/Animation/Animated";
+import NoResultFoundImage from "../../../public/images/NoResultFound.png";
 
 const AdminBookingHistoryTable = () => {
 
@@ -39,13 +41,13 @@ const AdminBookingHistoryTable = () => {
       <div className="container-fluid">
         <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }}>
         </div>
-        <div className="card card-body blur shadow-blur mx-4 mb-5 mt-n6 overflow-hidden">
+        <div className="card card-body blur-sm shadow-blur mx-4 mb-2 mt-n6 overflow-hidden">
           <div className="col-xl-12 col-lg-12 col-md-12 d-flex flex-column">
             <div className="container-fluid">
               {bookingDetailsArray.length !== 0 ? (
-                <>
-                  <div className="card-header pb-0 mb-3 mt-3">
-                    <h5 className="text-center mb-3">Booking History</h5>
+                <Reveal>
+                  <div className="card-header pb-0 mb-5 mt-3">
+                    <h5 className="text-center">Booking History</h5>
                   </div>
                   <div className="card-body px-0 pt-0 pb-2">
                     <div className="table-responsive p-0 pb-3" style={{ maxHeight: "300px" }}>
@@ -85,9 +87,12 @@ const AdminBookingHistoryTable = () => {
                       </table>
                     </div>
                   </div>
-                </>
+                </Reveal>
               ) : (
-                <h5 className="mt-7 mb-6 text-dark">No details recorded</h5>
+                <div className='d-flex flex-column justify-content-center align-items-center mt-5'>
+                  <img src={NoResultFoundImage} alt="No result found" className='mb-0' width={"300px"} />
+                  <p className='text-center text-bold'>Sorry, no results found!</p>
+                </div>
               )}
             </div>
           </div>

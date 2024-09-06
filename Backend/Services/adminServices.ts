@@ -10,7 +10,7 @@ class AdminServices implements IAdminServices {
       this.adminRepository = adminRepository;
    };
 
-   async login(email: string, password: string): Promise<string> {
+   login = (email: string, password: string): string => {
       try {
          const orginalEmail = process.env.Admin_email as string;
          const orginalPassword = process.env.Admin_password as string;
@@ -27,7 +27,7 @@ class AdminServices implements IAdminServices {
       };
    };
 
-   async findUser(): Promise<IUsers[]> {
+   findUser = async (): Promise<IUsers[]> => {
       try {
          return await this.adminRepository.findUser();
       } catch (error) {
@@ -35,7 +35,7 @@ class AdminServices implements IAdminServices {
       };
    };
 
-   async unBlock(user_id: string): Promise<boolean> {
+   unBlock = async (user_id: string): Promise<boolean> => {
       try {
          return await this.adminRepository.unBlock(user_id);
       } catch (error) {
@@ -43,7 +43,7 @@ class AdminServices implements IAdminServices {
       };
    };
 
-   async block(user_id: string): Promise<boolean> {
+   block = async (user_id: string): Promise<boolean> => {
       try {
          return await this.adminRepository.block(user_id);
       } catch (error) {
@@ -51,7 +51,7 @@ class AdminServices implements IAdminServices {
       };
    };
 
-   async findTechnician(): Promise<ITechnicians[]> {
+   findTechnician = async (): Promise<ITechnicians[]> => {
       try {
          return await this.adminRepository.findTechnician();
       } catch (error) {
@@ -59,7 +59,7 @@ class AdminServices implements IAdminServices {
       };
    };
 
-   async findBooking(): Promise<IBookings[]> {
+   findBooking = async (): Promise<IBookings[]> => {
       try {
          return await this.adminRepository.findBooking();
       } catch (error) {

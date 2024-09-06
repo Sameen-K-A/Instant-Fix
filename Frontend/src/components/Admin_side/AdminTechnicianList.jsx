@@ -5,8 +5,11 @@ import adminAxiosInstance from "../../config/axiosInstance/adminInstance"
 import { useNavigate } from "react-router-dom";
 import AdminNavbar from "./AdminNavbar";
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
+import NoResultFoundImage from "../../../public/images/NoResultFound.png";
+import Reveal from "../../../public/Animation/Animated";
 
 const AdminTechnicianList = () => {
+  const [orginalArray, setOrginalArray] = useState([]);
   const [techniciansArray, setTechniciansArray] = useState([]);
   const navigate = useNavigate();
 
@@ -14,6 +17,7 @@ const AdminTechnicianList = () => {
     (async () => {
       try {
         const response = await adminAxiosInstance.get(`/fetchTechnicians`);
+        setOrginalArray(response.data);
         setTechniciansArray(response.data);
       } catch (error) {
         if (error.response.status === 401) {
@@ -36,6 +40,10 @@ const AdminTechnicianList = () => {
               user.user_id === user_id ? { ...user, isBlocked: false } : user
             );
             setTechniciansArray(afterUnblocking);
+            const afterUnblockingOrginal = orginalArray.map((user) =>
+              user.user_id === user_id ? { ...user, isBlocked: false } : user
+            );
+            setOrginalArray(afterUnblockingOrginal);
           } catch (error) {
             console.log(error);
             if (error.response.status === 401) {
@@ -58,6 +66,10 @@ const AdminTechnicianList = () => {
               user.user_id === user_id ? { ...user, isBlocked: true } : user
             );
             setTechniciansArray(afterblocking);
+            const afterblockingOrginal = orginalArray.map((user) =>
+              user.user_id === user_id ? { ...user, isBlocked: true } : user
+            );
+            setOrginalArray(afterblockingOrginal);
           } catch (error) {
             if (error.response.status === 401) {
               navigate("/admin", { state: { message: "Authorization failed please login" } });
@@ -68,7 +80,19 @@ const AdminTechnicianList = () => {
           }
         }
       })
-  }
+  };
+
+  const searchTechnician = (e) => {
+    const searchInput = e.target.value;
+    if (searchInput.trim().length) {
+      const afterSearch = orginalArray.filter((technician) =>
+        technician.name.toLowerCase().includes(searchInput.toLowerCase())
+      );
+      setTechniciansArray(afterSearch);
+    } else {
+      setTechniciansArray(orginalArray);
+    }
+  };
 
   return (
     <>
@@ -80,14 +104,14 @@ const AdminTechnicianList = () => {
       <div className="container-fluid">
         <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }}>
         </div>
-        <div className="card card-body blur shadow-blur mx-4 mb-5 mt-n6 overflow-hidden">
+        <div className="card card-body blur-sm shadow-blur mx-4 mb-2 mt-n6 overflow-hidden">
           <div className="col-xl-12 col-lg-12 col-md-12 d-flex flex-column">
             <div className="container-fluid">
+              <div className="card-header pb-0 mt-3 mb-5 col-lg-5 col-12 ms-auto">
+                <input type="text" className="form-control ms-3" placeholder="Search technician . . ." onChange={(e) => searchTechnician(e)} />
+              </div>
               {techniciansArray.length !== 0 ? (
-                <>
-                  <div className="card-header pb-0 mb-3 mt-3">
-                    <h5 className="text-center mb-4">All Technicians</h5>
-                  </div>
+                <Reveal>
                   <div className="card-body px-0 pt-0 pb-2">
                     <div className="table-responsive p-0 pb-3" style={{ maxHeight: "300px" }}>
                       <table className="table align-items-center mb-0">
@@ -128,9 +152,12 @@ const AdminTechnicianList = () => {
                       </table>
                     </div>
                   </div>
-                </>
+                </Reveal>
               ) : (
-                <h5 className="mt-7 text-dark">No Technicians found.</h5>
+                <div className='d-flex flex-column justify-content-center align-items-center mt-5'>
+                  <img src={NoResultFoundImage} alt="No result found" className='mb-0' width={"300px"} />
+                  <p className='text-center text-bold'>Sorry, no results found!</p>
+                </div>
               )}
             </div>
           </div>

@@ -12,11 +12,11 @@ const adminRepository = new AdminRepository(User, Booking);
 const adminService = new AdminServices(adminRepository);
 const adminController = new AdminController(adminService);
 
-router.post("/login", adminController.login.bind(adminController));
-router.get("/fetchUser", verifyToken, adminController.findUser.bind(adminController));
-router.patch("/unblockUser", verifyToken, adminController.unBlock.bind(adminController));
-router.patch("/blockUser", verifyToken, adminController.block.bind(adminController));
-router.get("/fetchTechnicians", verifyToken, adminController.findTechnician.bind(adminController));
-router.get("/fetchBookings", verifyToken, adminController.findBooking.bind(adminController));
+router.post("/login", adminController.login);
+router.get("/fetchUser", verifyToken, adminController.findUser);
+router.patch("/unblockUser", verifyToken, adminController.unBlock);
+router.patch("/blockUser", verifyToken, adminController.block);
+router.get("/fetchTechnicians", verifyToken, adminController.findTechnician);
+router.get("/fetchBookings", verifyToken, adminController.findBooking);
 
 export default router;
