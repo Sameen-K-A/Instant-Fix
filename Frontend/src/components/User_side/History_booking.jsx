@@ -43,7 +43,7 @@ const UserBookingHistoryTable = () => {
       </nav>
       <div className="container-fluid pe-6">
         <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }} />
-        <div className="card card-body blur shadow-blur mx-4 mt-n6 overflow-hidden">
+        <div className="card card-body blur-sm shadow-blur mx-4 mt-n6 overflow-hidden">
           <div className="col-xl-12 col-lg-12 col-md-12 d-flex flex-column" style={{ zIndex: "1" }}>
             <div className="container-fluid">
               {bookingDetailsArray.length !== 0 ? (
@@ -81,7 +81,7 @@ const UserBookingHistoryTable = () => {
                                   >{data?.booking_status}
                                   </span>
                                 </td>
-                                <td className="d-flex justify-content-center"><button className="btn bg-gradient-primary mb-0 text-center" onClick={() => handleViewmore(data)}>View more</button>{data.Payment_Status === "Requested" && <AlertRedDot />}</td>
+                                <td className="d-flex justify-content-center"><button className="btn bg-gradient-primary mb-0 text-center" onClick={() => handleViewmore(data)}>View more</button>{data.payment_status === "Requested" && <AlertRedDot />}</td>
                               </tr>
                             );
                           })}

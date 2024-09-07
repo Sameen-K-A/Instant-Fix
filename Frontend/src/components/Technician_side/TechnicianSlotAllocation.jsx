@@ -125,8 +125,8 @@ const TechnicianSlotAllocation = () => {
 
       <div className="container-fluid">
         <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }} />
-        <div className="row mt-3 mx-4">
-          <div className="col-lg-7 col-md-12 col-sm-12 min-height-400 card card-body shadow-blur">
+        <div className="row mt-3 mx-4  mt-n6 ">
+          <div className="col-lg-7 col-md-12 col-sm-12 min-height-400 card card-body shadow-blur blur-sm">
             <Reveal>
               <Calendar
                 onChange={handleDateChange}

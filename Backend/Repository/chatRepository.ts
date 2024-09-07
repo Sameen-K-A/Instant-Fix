@@ -1,14 +1,20 @@
-import { Chat, ChatType } from "../Model/chatModel";
-import { newMesssageType } from "../Services/chatServices";
+import { Model } from "mongoose";
+import { IChatRepository } from "../Interfaces/chat.repository.interface";
+import { IChat, IChatMessage } from "../Interfaces/common.interface";
 
-class ChatRepository {
+class ChatRepository implements IChatRepository {
+  private chatModel: Model<IChat>;
 
-  async fetchTwoMembersChatRepository(senderID: string, receiverID: string) {
+  constructor(chatModel: Model<IChat>) {
+    this.chatModel = chatModel;
+  }
+
+  getChat = async (senderID: string, receiverID: string): Promise<IChat[]> => {
     try {
-      const chatResult = await Chat.aggregate([
+      const chatResult = await this.chatModel.aggregate([
         { $match: { chatMembers: { $all: [senderID, receiverID] } } },
         { $unwind: "$details" },
-        { $project: { _id: 0, details: 1 } }
+        { $project: { _id: 0, details: 1 } },
       ]);
       return chatResult;
     } catch (error) {
@@ -16,26 +22,30 @@ class ChatRepository {
     }
   };
 
-  async createConnectionAndSaveMessageRepository(newChatDocument: ChatType) {
+  createChat = async (newChatDocument: IChat): Promise<IChat> => {
     try {
-      return await Chat.create(newChatDocument);
+      return await this.chatModel.create(newChatDocument);
     } catch (error) {
       throw error;
     }
   };
 
-  async saveNewChatRepository(newMessageDetails: newMesssageType) {
+  saveChat = async (newMessageDetails: IChatMessage): Promise<boolean> => {
     try {
-      return Chat.updateOne(
+      const updateResult = await this.chatModel.updateOne(
         { chatMembers: { $all: [newMessageDetails.senderID, newMessageDetails.receiverID] } },
         { $push: { details: newMessageDetails } }
       );
+
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Failed to save message");
+      };
     } catch (error) {
-      console.error("Error during save new chat operation:", error);
       throw error;
     }
   };
-
-};
+}
 
 export default ChatRepository;

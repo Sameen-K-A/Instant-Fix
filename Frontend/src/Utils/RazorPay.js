@@ -68,7 +68,7 @@ const handleSuccessPayment = async (response, booking_id, amount, technicianUser
       });
 
       if (paymentResponse.status === 200) {
-         setBookingDetails((prevDetails) => ({ ...prevDetails, Payment_Status: "Completed" }));
+         setBookingDetails((prevDetails) => ({ ...prevDetails, payment_status: "Completed" }));
          toast.success("Payment completed successfully!");
       } else {
          toast.error("Failed to verify payment. Please contact support.");

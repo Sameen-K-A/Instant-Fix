@@ -31,7 +31,7 @@ const WorkCompletedModal = ({ setWorkCompleted, bookingDetails, setBookingDetail
     try {
       setIsLoading(true);
       await userAxiosInstance.post("/technician/confirmBooking", { booking_id: bookingDetails.booking_id, client_id: bookingDetails.client_id, laborCharge: laborCharge, });
-      const afterComplete = { ...bookingDetails, serviceCost: laborCharge, Payment_Status: "Requested", booking_status: "Completed", serviceCompletedDate: new Date().toLocaleDateString('en-CA') };
+      const afterComplete = { ...bookingDetails, serviceCost: laborCharge, payment_status: "Requested", booking_status: "Completed", serviceCompletedDate: new Date().toLocaleDateString('en-CA') };
       setBookingDetails(afterComplete);
       setWorkCompleted(false);
       toast.success("Request for payement.");

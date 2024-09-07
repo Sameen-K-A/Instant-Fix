@@ -1,6 +1,8 @@
-import dotenv from "dotenv";
-import { IAdminServices, IUsers, ITechnicians, IBookings, IAdminRepository } from "../Interfaces/adminInterfaces";
 import { createToken } from "../Config/jwt_config";
+import { IAdminServices } from "../Interfaces/admin.service.interface";
+import { IAdminRepository } from "../Interfaces/admin.repository.interface";
+import { IBookingHistory, ITechnicians, IUser } from "../Interfaces/common.interface";
+import dotenv from "dotenv";
 dotenv.config();
 
 class AdminServices implements IAdminServices {
@@ -27,7 +29,7 @@ class AdminServices implements IAdminServices {
       };
    };
 
-   findUser = async (): Promise<IUsers[]> => {
+   findUser = async (): Promise<IUser[]> => {
       try {
          return await this.adminRepository.findUser();
       } catch (error) {
@@ -59,7 +61,7 @@ class AdminServices implements IAdminServices {
       };
    };
 
-   findBooking = async (): Promise<IBookings[]> => {
+   findBooking = async (): Promise<IBookingHistory[]> => {
       try {
          return await this.adminRepository.findBooking();
       } catch (error) {

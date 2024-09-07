@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { IAdminServices } from "../Interfaces/adminInterfaces";
+import { IAdminServices } from "../Interfaces/admin.service.interface";
 import HTTP_statusCode from "../Enums/httpStatusCode";
 
 class AdminController {

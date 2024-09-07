@@ -1,18 +1,20 @@
 import { Request, Response } from "express";
-import UserServices from "../Services/userServices";
-import UserRepository from "../Repository/userRepository";
-import { userType } from "../interfaces";
 import HTTP_statusCode from "../Enums/httpStatusCode";
-
-const userRepository = new UserRepository();
-const userServices = new UserServices(userRepository);
+import { IUserService } from "../Interfaces/user.service.interface";
+import { IUser } from "../Interfaces/common.interface";
 
 class UserController {
 
-   async loginController(req: Request, res: Response) {
+   private userService: IUserService;
+
+   constructor(userService: IUserService) {
+      this.userService = userService;
+   };
+
+   login = async (req: Request, res: Response) => {
       try {
          const { email, password } = req.body;
-         const serviceResponse = await userServices.loginUserService(email, password);
+         const serviceResponse = await this.userService.login(email, password);
          return res.status(HTTP_statusCode.OK).json(serviceResponse);
       } catch (error: any) {
          if (error.message === "email not found") {
@@ -23,14 +25,14 @@ class UserController {
             res.status(HTTP_statusCode.NoAccess).json({ message: "User is blocked" });
          } else {
             res.status(HTTP_statusCode.InternalServerError).json({ message: "Something wrong please try again later" });
-         }
-      }
+         };
+      };
    };
 
-   async register_controller(req: Request, res: Response): Promise<void> {
+   register = async (req: Request, res: Response) => {
       try {
-         const userData: userType = req.body;
-         await userServices.registerUserService(userData);
+         const userData: IUser = req.body;
+         await this.userService.register(userData);
          res.status(HTTP_statusCode.OK).send("OTP sended to mail");
       } catch (error: any) {
          if (error.message === "Email already exists") {
@@ -39,65 +41,71 @@ class UserController {
             res.status(HTTP_statusCode.InternalServerError).json({ message: "Email not send" });
          } else {
             res.status(HTTP_statusCode.InternalServerError).json({ message: "Something wrong please try again later" });
-         }
-      }
+         };
+      };
    };
 
-   async verifyOTP_controller(req: Request, res: Response): Promise<void> {
+   otpVerification = async (req: Request, res: Response) => {
       try {
          const enteredOTP: string = req.body.enteredOTP;
-         const serviceResponse = await userServices.otpVerifiedService(enteredOTP);
+         const serviceResponse = await this.userService.otpVerification(enteredOTP);
          res.status(HTTP_statusCode.OK).json(serviceResponse);
       } catch (error: any) {
          if (error.message === "Incorrect OTP") {
             res.status(HTTP_statusCode.Unauthorized).json({ message: "Incorrect OTP" })
          } else if (error.message === "OTP is expired") {
-            res.status(HTTP_statusCode.Expired).json({ message: "OTP has expired" });
+            res.status(HTTP_statusCode.Expired).json({ message: "OTP is expired" });
          } else {
             res.status(HTTP_statusCode.InternalServerError).json({ message: "Something went wrong. Please try again later." });
-         }
-      }
+         };
+      };
    };
 
-   async resendOTP_controller(req: Request, res: Response) {
+   resendOTP = async (req: Request, res: Response) => {
       try {
-         await userServices.resendOTPService();
+         await this.userService.resendOTP();
          res.status(HTTP_statusCode.OK).send("OTP sended");
       } catch (error: any) {
          if (error.message === "Email not send") {
             res.status(HTTP_statusCode.InternalServerError).json({ message: "Email not send" });
          } else {
             res.status(HTTP_statusCode.InternalServerError).json({ message: "Something wrong please try again later" });
-         }
-      }
+         };
+      };
    };
 
-   async add_EditAddress_controller(req: Request, res: Response): Promise<void> {
+   createUpdateAddress = async (req: Request, res: Response) => {
       try {
          const { addAndEditAddressDetails, user_id } = req.body;
-         await userServices.add_EditAddressService(addAndEditAddressDetails, user_id);
+         await this.userService.createUpdateAddress(addAndEditAddressDetails, user_id);
          res.status(HTTP_statusCode.OK).json({ message: "Address modified successfully" });
-      } catch (error) {
-         console.log("Add user address controller error : ", error);
-         res.status(HTTP_statusCode.InternalServerError).json(error)
-      }
+      } catch (error: any) {
+         if (error.message === "Failed to update address") {
+            res.status(HTTP_statusCode.NoChange).send("Failed to update address");
+         } else {
+            res.status(HTTP_statusCode.InternalServerError).json(error)
+         };
+      };
    };
 
-   async deleteAddress_controller(req: Request, res: Response): Promise<void> {
+   deleteAddress = async (req: Request, res: Response) => {
       try {
          const user_id: string = req.query.user_id as string;
-         const serviceResponse = await userServices.deleteAddressService(user_id);
+         const serviceResponse = await this.userService.deleteAddress(user_id);
          res.status(HTTP_statusCode.OK).send(serviceResponse);
-      } catch (error) {
-         console.log("delete address controller error : ", error);
-         res.status(HTTP_statusCode.InternalServerError).json(error);
-      }
+      } catch (error: any) {
+         if (error.message === "Failed to delete address") {
+            res.status(HTTP_statusCode.NoChange).send("Failed to update address");
+         } else {
+            res.status(HTTP_statusCode.InternalServerError).json(error)
+         };
+      };
    };
 
-   async changePassword_controller(req: Request, res: Response): Promise<void> {
+   updatePassword = async (req: Request, res: Response) => {
       try {
          const { user_id, currentPass, newPass } = req.body;
-         await userServices.changePasswordService(user_id, currentPass, newPass);
+         await this.userService.updatePassword(user_id, currentPass, newPass);
          res.status(HTTP_statusCode.OK).send("Password changed successfully");
       } catch (error: any) {
          if (error.message === "Current password is wrong") {
@@ -106,11 +114,11 @@ class UserController {
             res.status(HTTP_statusCode.NotFound).json({ message: "User not found" });
          } else {
             res.status(HTTP_statusCode.InternalServerError).json({ message: "Internal server error" });
-         }
-      }
+         };
+      };
    };
 
-   async editprofile_controller(req: Request, res: Response) {
+   updateProfile = async (req: Request, res: Response) => {
       try {
          const { user_id, name, phone, defaultProfileImage } = req.body;
          const selectedProfileImage = req.file;
@@ -119,82 +127,90 @@ class UserController {
             profileIMG = selectedProfileImage.filename;
          } else if (defaultProfileImage) {
             profileIMG = defaultProfileImage.split("/").pop();
-         }
-         await userServices.editProfileService(user_id, name, phone, profileIMG);
+         };
+         await this.userService.updateProfile(user_id, name, phone, profileIMG);
          res.status(HTTP_statusCode.OK).send("Changes completed successfully");
       } catch (error: any) {
-         if (error.message === "No changes founded") {
-            res.status(HTTP_statusCode.NoChange).json({ message: "No changes founded" });
+         if (error.message === "Failed to update profile") {
+            res.status(HTTP_statusCode.NoChange).send("Failed to update profile")
          } else {
             res.status(HTTP_statusCode.InternalServerError).json({ message: 'Internal Server Error' });
-         }
-      }
+         };
+      };
    };
 
-   async saveTechnicianController(req: Request, res: Response) {
+   followTechnician = async (req: Request, res: Response) => {
       try {
          const { user_id, technicianId } = req.body;
-         await userServices.saveTechnicianService(user_id as string, technicianId as string);
+         await this.userService.followTechnician(user_id as string, technicianId as string);
          res.status(HTTP_statusCode.OK).send("Save technician completed successfully");
-      } catch (error) {
-         res.status(HTTP_statusCode.InternalServerError).send("Can't save technician");
+      } catch (error: any) {
+         if (error.message === "Failed to follow technician") {
+            res.status(HTTP_statusCode.NoChange).send("Failed to follow technician");
+         } else {
+            res.status(HTTP_statusCode.InternalServerError).json(error)
+         };
       };
    };
 
-   async unSaveTechnicianController(req: Request, res: Response) {
+   unfollowTechnician = async (req: Request, res: Response) => {
       try {
          const { user_id, technicianId } = req.body;
-         await userServices.unSaveTechnicianService(user_id as string, technicianId as string);
+         await this.userService.unfollowTechnician(user_id as string, technicianId as string);
          res.status(HTTP_statusCode.OK).send("Unsave technician completed successfully");
-      } catch (error) {
-         res.status(HTTP_statusCode.InternalServerError).send("Can't unsave technician");
+      } catch (error: any) {
+         if (error.message === "Failed to unfollow technician") {
+            res.status(HTTP_statusCode.NoChange).send("Failed to unfollow technician");
+         } else {
+            res.status(HTTP_statusCode.InternalServerError).json(error)
+         };
       };
    };
 
-   async fetchSavedTechnicianDetailsController(req: Request, res: Response) {
+   getFollowedTechnicians = async (req: Request, res: Response) => {
       try {
          const user_id: string = req.query.user_id as string;
-         const responseFromService = await userServices.fetchSavedTechnicianDetailsService(user_id);
+         const responseFromService = await this.userService.getFollowedTechnicians(user_id);
          res.status(HTTP_statusCode.OK).json(responseFromService);
       } catch (error) {
          res.status(HTTP_statusCode.InternalServerError).send("Something wrong, please try again later.");
       };
    };
 
-   async fetchTechnician_controller(req: Request, res: Response) {
+   getTechnicians = async (req: Request, res: Response) => {
       try {
          const user_id = req.query.user_id as string;
-         const serviceResponse = await userServices.fetchTechnicianService(user_id);
+         const serviceResponse = await this.userService.getTechnicians(user_id);
          res.status(HTTP_statusCode.OK).json(serviceResponse);
       } catch (error) {
          res.status(HTTP_statusCode.InternalServerError).json(error)
       };
    };
 
-   async fetchTechnicianIndividualInformationController(req: Request, res: Response) {
+   getTechnicianWithPersonalDetails = async (req: Request, res: Response) => {
       try {
          const technicianUser_id: string = req.query.technicianUser_id as string;
-         const responseFromService = await userServices.fetchTechnicianIndividualInformationService(technicianUser_id);
+         const responseFromService = await this.userService.getTechnicianWithPersonalDetails(technicianUser_id);
          res.status(HTTP_statusCode.OK).json(responseFromService);
       } catch (error) {
          res.status(HTTP_statusCode.InternalServerError).send("Somthing wrong please try again later");
       };
    };
 
-   async fetchAlreadyChattedTechnicians_controller(req: Request, res: Response) {
+   getChatFriends = async (req: Request, res: Response) => {
       try {
          const user_id = req.query.user_id as string;
-         const techniciansList = await userServices.fetchAlreadyChattedTechniciansService(user_id);
+         const techniciansList = await this.userService.getChatFriends(user_id);
          res.status(HTTP_statusCode.OK).json(techniciansList);
       } catch (error) {
          res.status(HTTP_statusCode.InternalServerError).json(error);
       };
    };
 
-   async bookTechnician_controller(req: Request, res: Response) {
+   bookTechnician = async (req: Request, res: Response) => {
       try {
          const { client_id, client_name, technicianDetails, serviceLocation, selectedDate } = req.body;
-         const response = await userServices.bookTechnicianService(client_id, client_name, technicianDetails, serviceLocation, selectedDate);
+         const response = await this.userService.bookTechnician(client_id, client_name, technicianDetails, serviceLocation, selectedDate);
          res.status(HTTP_statusCode.OK).json(response);
       } catch (error: any) {
          if (error.message === "Technician is not available on selected date") {
@@ -212,54 +228,54 @@ class UserController {
       };
    };
 
-   async fetchUserBookingHistory_controller(req: Request, res: Response) {
+   getBookingsHistory = async (req: Request, res: Response) => {
       try {
          const user_id = req.query.user_id as string;
-         const response = await userServices.fetchUserBookingHistoryService(user_id);
+         const response = await this.userService.getBookingsHistory(user_id);
          res.status(HTTP_statusCode.OK).json(response);
       } catch (error) {
          res.status(HTTP_statusCode.InternalServerError).json(error);
       };
    };
 
-   async fetchIndividualBookingInformation_controller(req: Request, res: Response) {
+   getBookingDetails = async (req: Request, res: Response) => {
       try {
          const booking_id: string = req.query.booking_id as string;
-         const response = await userServices.fetchIndividualBookingInformationService(booking_id);
+         const response = await this.userService.getBookingDetails(booking_id);
          res.status(HTTP_statusCode.OK).json(response);
       } catch (error) {
          res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later.");
       }
    };
 
-   async cancelBooking_controller(req: Request, res: Response) {
+   cancelBooking = async (req: Request, res: Response) => {
       try {
          const { booking_id, technician_id, userName, serviceDate } = req.body;
-         await userServices.cancelBookingService(booking_id, technician_id, userName, serviceDate);
+         await this.userService.cancelBooking(booking_id, technician_id, userName, serviceDate);
          res.status(HTTP_statusCode.OK).send("Booking cancelled successfully.");
       } catch (error: any) {
-         if (error.message === "Booking status is not changed") {
-            res.status(HTTP_statusCode.NoChange).json("Booking status is not changed");
+         if (error.message === "Failed to cancel booking") {
+            res.status(HTTP_statusCode.NoChange).json("Failed to cancel booking");
          } else {
             res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later.");
          };
       };
    };
 
-   async proceedToPaymentController(req: Request, res: Response) {
+   proceedToPayment = async (req: Request, res: Response) => {
       try {
          const { booking_id, laborCost } = req.body;
-         const response = await userServices.proceedToPaymentService(booking_id, laborCost);
+         const response = await this.userService.proceedToPayment(booking_id, laborCost);
          res.status(HTTP_statusCode.OK).json({ order_id: response.id, currency: response.currency, amount: response.amount, });
       } catch (error) {
          res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later.");
       };
    };
 
-   async verifyPaymentController(req: Request, res: Response) {
+   verifyPayment = async (req: Request, res: Response) => {
       try {
          const { payment_id, order_id, signature, booking_id, amount, technicianUser_id } = req.body;
-         await userServices.verifyPaymentService(payment_id, order_id, signature, booking_id, amount, technicianUser_id);
+         await this.userService.verifyPayment(payment_id, order_id, signature, booking_id, amount, technicianUser_id);
          res.status(HTTP_statusCode.OK).send("Payment verified successfully");
       } catch (error: any) {
          if (error.message === "Invalid payment verification") {
@@ -272,10 +288,10 @@ class UserController {
       };
    };
 
-   async submitReviewController(req: Request, res: Response) {
+   submitReview = async (req: Request, res: Response) => {
       try {
          const { user_id, technicianUser_id, enteredRating, enteredFeedback, booking_id } = req.body;
-         await userServices.submitReviewService(user_id, technicianUser_id, enteredRating, enteredFeedback, booking_id);
+         await this.userService.submitReview(user_id, technicianUser_id, enteredRating, enteredFeedback, booking_id);
          res.status(HTTP_statusCode.OK).send("Feedback submitted successfully");
       } catch (error) {
          res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later");

@@ -21,7 +21,7 @@ const sendOTPmail = async (email: string, otp: string): Promise<boolean> => {
         <div style="margin: 50px auto; width: 70%; padding: 20px 0">
           <p style="font-size: 1.1em">Hi,</p>
           <p>This message is from Instant-Fix. Use the following OTP to complete your registration procedures. OTP is valid for two minutes.</p>
-          <h2 style="background: linear-gradient(331deg, rgba(78, 0, 126, 1) 0%, rgba(184, 69, 255, 1) 46%, rgb(217, 110, 255) 76%, rgba(166, 23, 255, 1) 100%); margin: 0 auto; width: max-content; padding: 0 10px; color: #fff; border-radius: 4px;">${otp}</h2>
+          <h2 style="background: linear-gradient(90deg, rgba(87, 67, 66, 1) 14%, rgba(31, 20, 20, 1) 68%, rgba(57, 36, 36, 1) 100%); margin: 0 auto; width: max-content; padding: 0 10px; color: #fff; border-radius: 4px;">${otp}</h2>
           <p style="font-size: 0.9em;">Regards,<br />Instant-Fix</p>
           <hr style="border: none; border-top: 1px solid #eee" />
         </div>

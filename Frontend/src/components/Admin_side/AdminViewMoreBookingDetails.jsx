@@ -40,7 +40,7 @@ const AdminViewMoreBookingDetails = () => {
                             </tr>
                             <tr>
                               <td><p className="text-xs mb-0">Service type</p></td>
-                              <td><p className="text-xs font-weight-bold mb-0">{bookingDetails?.Booking_profession}</p></td>
+                              <td><p className="text-xs font-weight-bold mb-0">{bookingDetails?.booking_profession}</p></td>
                             </tr>
                             <tr>
                               <td><p className="text-xs mb-0">Booking Date</p></td>
@@ -76,7 +76,7 @@ const AdminViewMoreBookingDetails = () => {
                             </tr>
                             <tr>
                               <td><p className="text-xs mb-0">Payment Status</p></td>
-                              <td><p className="text-xs font-weight-bold mb-0">{bookingDetails?.Payment_Status}</p></td>
+                              <td><p className="text-xs font-weight-bold mb-0">{bookingDetails?.payment_status}</p></td>
                             </tr>
                           </tbody>
                         </table>

@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { ITechnicianDetails } from "../Interfaces/techinicianInterfaces";
+import { ITechnicianDetails } from "../Interfaces/common.interface"; 
 
 const TechnicianSchema: Schema = new Schema<ITechnicianDetails>({
    user_id: {

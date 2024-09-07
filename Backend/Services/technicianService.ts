@@ -1,23 +1,24 @@
 import { v4 as uuid } from "uuid";
-import UserRepository from "../Repository/userRepository";
-import WalletRepository from "../Repository/WalletRepository";
 import sendConfirmBookingmail from "../Config/BookingConfirmEmail";
-import { ISlotType, ITechnicianDetails, ITechnicianService, IRatingReviewType, IFeedbackRepository, IBookingHistory, IBookingDetails, ITechnicianRepository } from "../Interfaces/techinicianInterfaces";
-import { WalletType } from "../interfaces";
+import { ITechnicianService } from "../Interfaces/technician.service.interface";
+import { ITechnicianRepository } from "../Interfaces/technician.repository.interface";
+import { IUserRepository } from "../Interfaces/user.repository.interface";
+import { IWalletRepository } from "../Interfaces/wallet.repository.interface";
+import { IBookingDetails, IBookingHistory, IFeedbackRepository, IRatingReview, ISlot, ITechnicianDetails, IWallet } from "../Interfaces/common.interface";
 
 class TechnicianService implements ITechnicianService {
-   
-   private technicianRepository: ITechnicianRepository;
-   private userRepository: UserRepository;
-   private walletRepository: WalletRepository;
 
-   constructor(technicianRepository: ITechnicianRepository) {
+   private technicianRepository: ITechnicianRepository;
+   private userRepository: IUserRepository;
+   private walletRepository: IWalletRepository;
+
+   constructor(technicianRepository: ITechnicianRepository, walletRepository: IWalletRepository, userRepository: IUserRepository) {
       this.technicianRepository = technicianRepository;
-      this.userRepository = new UserRepository();
-      this.walletRepository = new WalletRepository();
+      this.walletRepository = walletRepository;
+      this.userRepository = userRepository;
    }
 
-   async createTechnician(user_id: string, profession: string): Promise<ITechnicianDetails> {
+   createTechnician = async (user_id: string, profession: string): Promise<ITechnicianDetails> => {
       try {
          const technicianData: ITechnicianDetails = {
             user_id: user_id,
@@ -25,22 +26,22 @@ class TechnicianService implements ITechnicianService {
             technician_id: uuid(),
             profession: profession,
          };
-         const { modifiedCount } = await this.userRepository.accessIsTechnician(user_id);
-         if (modifiedCount !== 1) {
+         const response = await this.userRepository.accessIsTechnician(user_id);
+         if (!response) {
             throw new Error("Failed to update user to technician");
          };
-         const technicianWallet: WalletType = {
+         const technicianWallet: IWallet = {
             user_id: user_id,
             balanceAmount: 0,
             transactions: [],
          };
-         const ratingDetails: IRatingReviewType = {
+         const ratingDetails: IRatingReview = {
             user_id: user_id,
             reviews: [],
          };
          const [technicianResponse, walletResponse] = await Promise.all([
             this.technicianRepository.createTechnician(technicianData),
-            this.walletRepository.addNewWalletForTechnicianRepository(technicianWallet),
+            this.walletRepository.createWallet(technicianWallet),
             this.technicianRepository.createRating(ratingDetails),
          ]);
          if (!technicianResponse || !walletResponse) {
@@ -52,24 +53,24 @@ class TechnicianService implements ITechnicianService {
       };
    };
 
-   async updateTechnicianProfession(user_id: string, profession: string): Promise<boolean> {
+   updateProfession = async (user_id: string, profession: string): Promise<boolean> => {
       try {
-         return await this.technicianRepository.updateTechnicianProfession(user_id, profession);
+         return await this.technicianRepository.updateProfession(user_id, profession);
       } catch (error) {
          throw error;
       };
    };
 
-   async updateTechnicianAvailability(user_id: string, newStatus: string | boolean): Promise<boolean> {
+   updateAvailableStatus = async (user_id: string, newStatus: string | boolean): Promise<boolean> => {
       try {
          newStatus = newStatus === "Active" ? true : false;
-         return await this.technicianRepository.updateTechnicianAvailability(user_id, newStatus);
+         return await this.technicianRepository.updateAvailableStatus(user_id, newStatus);
       } catch (error) {
          throw error;
       };
    };
 
-   async getTechnicianInfo(userId: string): Promise<ITechnicianDetails | null> {
+   getTechnicianInfo = async (userId: string): Promise<ITechnicianDetails | null> => {
       try {
          return await this.technicianRepository.getTechnicianInfo(userId);
       } catch (error) {
@@ -77,16 +78,15 @@ class TechnicianService implements ITechnicianService {
       };
    };
 
-   async getTechnicianBookingHistory(technicianUserID: string): Promise<IBookingHistory[]> {
+   getBookings = async (technicianUserID: string): Promise<IBookingHistory[]> => {
       try {
-         console.log("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
-         return await this.technicianRepository.getTechnicianBookingHistory(technicianUserID);
+         return await this.technicianRepository.getBookings(technicianUserID);
       } catch (error) {
          throw error;
       };
    };
 
-   async getBookingDetails(bookingId: string): Promise<IBookingDetails> {
+   getBookingDetails = async (bookingId: string): Promise<IBookingDetails> => {
       try {
          return await this.technicianRepository.getBookingDetails(bookingId);
       } catch (error) {
@@ -94,15 +94,15 @@ class TechnicianService implements ITechnicianService {
       };
    };
 
-   async clearTechnicianNotifications(userId: string): Promise<boolean> {
+   deleteNotification = async (userId: string): Promise<boolean> => {
       try {
-         return await this.technicianRepository.clearTechnicianNotifications(userId);
+         return await this.technicianRepository.deleteNotification(userId);
       } catch (error) {
          throw error;
       };
    };
 
-   async updateBookingStatus(bookingId: string, newStatus: string, technicianId: string, serviceDate: string): Promise<boolean> {
+   updateBookingStatus = async (bookingId: string, newStatus: string, technicianId: string, serviceDate: string): Promise<boolean> => {
       try {
          const status = newStatus === "Accept" ? "Pending" : (newStatus === "Reject" ? "Rejected" : "Cancelled");
          await this.technicianRepository.updateBookingStatus(bookingId, status);
@@ -115,9 +115,9 @@ class TechnicianService implements ITechnicianService {
       };
    };
 
-   async completeBooking(bookingId: string, clientId: string, laborCharge: string): Promise<boolean> {
+   completeBooking = async (bookingId: string, clientId: string, laborCharge: string): Promise<boolean> => {
       try {
-         const clientDetails = await this.userRepository.findUserByUser_id(clientId);
+         const clientDetails = await this.userRepository.findByUser_id(clientId);
          if (!clientDetails) {
             throw new Error("Client details not found.");
          };
@@ -135,7 +135,7 @@ class TechnicianService implements ITechnicianService {
       };
    };
 
-   async updateAvailableSlots(technicianId: string, slots: ISlotType[]): Promise<boolean> {
+   updateAvailableSlots = async (technicianId: string, slots: ISlot[]): Promise<boolean> => {
       try {
          return await this.technicianRepository.updateAvailableSlots(technicianId, slots);
       } catch (error) {
@@ -143,15 +143,15 @@ class TechnicianService implements ITechnicianService {
       };
    };
 
-   async fetchWalletInformationService(user_id: string): Promise<any> {
+   getWallet = async (user_id: string): Promise<IWallet | null> => {
       try {
-         return this.walletRepository.fetchWalletDetails(user_id);
+         return this.walletRepository.getWallet(user_id);
       } catch (error) {
          throw error;
       };
    };
 
-   async getRatingWithReviewerDetails(userId: string): Promise<IFeedbackRepository> {
+   getRatingWithReviewerDetails = async (userId: string): Promise<IFeedbackRepository> => {
       try {
          const result = await this.technicianRepository.getRatingWithReviewerDetails(userId);
          result.reviews = result.reviews.map(review => {

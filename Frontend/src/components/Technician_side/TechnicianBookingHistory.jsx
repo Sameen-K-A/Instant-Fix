@@ -7,6 +7,7 @@ import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import { toast } from "sonner";
 import { io } from 'socket.io-client';
 import { Base_URL } from "../../config/credentials"; 
+import Reveal from "../../../public/Animation/Animated";
 
 const socket = io(Base_URL);
 
@@ -59,11 +60,11 @@ const TechnicianBookingHistoryTable = () => {
       <div className="container-fluid">
         <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }}>
         </div>
-        <div className="card card-body blur shadow-blur mx-4 mt-n6 overflow-hidden">
+        <div className="card card-body blur-sm shadow-blur mx-4 mt-n6 overflow-hidden">
           <div className="col-xl-12 col-lg-12 col-md-12 d-flex flex-column" style={{ zIndex: "1" }}>
             <div className="container-fluid">
               {bookingDetailsArray.length !== 0 ? (
-                <>
+                <Reveal>
                   <div className="card-header pb-0 mb-3 mt-3">
                     <h5 className="text-center mb-3">Booking History</h5>
                   </div>
@@ -106,7 +107,7 @@ const TechnicianBookingHistoryTable = () => {
                       </table>
                     </div>
                   </div>
-                </>
+                </Reveal>
               ) : (
                 <>
                   <h5 className="mt-7 text-dark">No details found</h5>

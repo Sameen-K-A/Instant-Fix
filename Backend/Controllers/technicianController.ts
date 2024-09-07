@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import HTTP_statusCode from "../Enums/httpStatusCode";
-import { ISlotType, ITechnicianService } from "../Interfaces/techinicianInterfaces";
+import { ITechnicianService } from "../Interfaces/technician.service.interface";
+import { ISlot } from "../Interfaces/common.interface";
 
 class TechnicianController {
   private technicianService: ITechnicianService;
@@ -9,7 +10,7 @@ class TechnicianController {
     this.technicianService = technicianService;
   };
 
-  async joinNewTechnicianController(req: Request, res: Response): Promise<void> {
+  createTechnician = async (req: Request, res: Response) => {
     try {
       const { user_id, profession } = req.query;
       const serviceResult = await this.technicianService.createTechnician(user_id as string, profession as string);
@@ -19,10 +20,10 @@ class TechnicianController {
     };
   };
 
-  async changeProfessionController(req: Request, res: Response): Promise<void> {
+  updateProfession = async (req: Request, res: Response) => {
     try {
       const { user_id, profession } = req.body;
-      await this.technicianService.updateTechnicianProfession(user_id, profession);
+      await this.technicianService.updateProfession(user_id, profession);
       res.status(HTTP_statusCode.OK).send("Changes commit successfully");
     } catch (error: any) {
       if (error.message === "No changes found") {
@@ -33,27 +34,27 @@ class TechnicianController {
     };
   };
 
-  async changeAvailabilityStatusController(req: Request, res: Response) {
+  updateAvailableStatus = async (req: Request, res: Response) => {
     try {
       const { user_id, newStatus } = req.body;
-      await this.technicianService.updateTechnicianAvailability(user_id, newStatus);
+      await this.technicianService.updateAvailableStatus(user_id, newStatus);
       res.status(HTTP_statusCode.OK).send("Changes completed successfully");
     } catch (error) {
       res.status(HTTP_statusCode.InternalServerError).json(error);
     };
   };
 
-  async fetchTechnicianBookingHistoryController(req: Request, res: Response) {
+  getBookings = async (req: Request, res: Response) => {
     try {
       const technicianUserID = req.query.technicianUserID as string
-      const result = await this.technicianService.getTechnicianBookingHistory(technicianUserID);
+      const result = await this.technicianService.getBookings(technicianUserID);
       res.status(HTTP_statusCode.OK).json(result);
     } catch (error) {
       res.status(HTTP_statusCode.InternalServerError).json({ message: "Something wrong please try again later" });
     };
   };
 
-  async fetchTechnicianInformationController(req: Request, res: Response) {
+  getTechnicianInfo = async (req: Request, res: Response) => {
     try {
       const technicianUser_id: string = req.query.technicianUserID as string;
       const serviceResponse = await this.technicianService.getTechnicianInfo(technicianUser_id);
@@ -63,7 +64,7 @@ class TechnicianController {
     };
   };
 
-  async fetchingIndividualBookingDetailsController(req: Request, res: Response) {
+  getBookingDetails = async (req: Request, res: Response) => {
     try {
       const booking_id: string = req.query.booking_id as string;
       const response = await this.technicianService.getBookingDetails(booking_id);
@@ -73,7 +74,7 @@ class TechnicianController {
     };
   };
 
-  async acceptRejectCancelNewBookingController(req: Request, res: Response) {
+  updateBookingStatus = async (req: Request, res: Response) => {
     try {
       const { booking_id, newStatus, technician_id, serviceDate } = req.body;
       await this.technicianService.updateBookingStatus(booking_id, newStatus, technician_id, serviceDate);
@@ -87,7 +88,7 @@ class TechnicianController {
     };
   };
 
-  async completeBookingController(req: Request, res: Response) {
+  completeBooking = async (req: Request, res: Response) => {
     try {
       const { booking_id, client_id, laborCharge } = req.body;
       await this.technicianService.completeBooking(booking_id, client_id, laborCharge);
@@ -103,20 +104,20 @@ class TechnicianController {
     };
   };
 
-  async clearNotificationController(req: Request, res: Response) {
+  deleteNotification = async (req: Request, res: Response) => {
     try {
       const technicianUser_id: string = req.body.technicianUser_id as string;
-      await this.technicianService.clearTechnicianNotifications(technicianUser_id);
+      await this.technicianService.deleteNotification(technicianUser_id);
       res.status(HTTP_statusCode.OK).send("Notification cleared successfully");
     } catch (error) {
       res.status(HTTP_statusCode.InternalServerError).send("Can't clear notifications.")
     };
   };
 
-  async modifyAvailableSlotsController(req: Request, res: Response) {
+  updateAvailableSlots = async (req: Request, res: Response) => {
     try {
       const technician_id = req.body.technician_id as string;
-      const slots = req.body.slots as ISlotType[];
+      const slots = req.body.slots as ISlot[];
       await this.technicianService.updateAvailableSlots(technician_id, slots);
       res.status(HTTP_statusCode.OK).send("Slot modified completed successfully");
     } catch (error: any) {
@@ -128,17 +129,17 @@ class TechnicianController {
     };
   };
 
-  async fetchWalletInformationController(req: Request, res: Response) {
+  getWallet = async (req: Request, res: Response) => {
     try {
       const user_id: string = req.query.user_id as string;
-      const serviceResponse = await this.technicianService.fetchWalletInformationService(user_id);
+      const serviceResponse = await this.technicianService.getWallet(user_id);
       res.status(HTTP_statusCode.OK).json(serviceResponse);
     } catch (error) {
       res.status(HTTP_statusCode.InternalServerError).send("Something wrong, Please try again later.")
     };
   };
 
-  async fetchningRatingWithReviewerDetailsController(req: Request, res: Response) {
+  getRatingWithReviewerDetails = async (req: Request, res: Response) => {
     try {
       const technicianUser_id = req.query.technicianUser_id as string;
       const serviceResponse = await this.technicianService.getRatingWithReviewerDetails(technicianUser_id);

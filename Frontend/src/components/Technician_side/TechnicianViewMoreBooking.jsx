@@ -10,6 +10,7 @@ import ServiceLocationMap from './MapPage';
 import { CloseX_mark } from '../../../public/svgs/Icons';
 import WorkCompletedModal from './WorkCompletedModal';
 import AlertRedDot from '../Common/AlertRedDot';
+import Reveal from "../../../public/Animation/Animated";
 
 const TechnicianViewMoreBooking = () => {
   const [bookingDetails, setBookingDetails] = useState(null);
@@ -121,10 +122,10 @@ const TechnicianViewMoreBooking = () => {
       <div className="container-fluid">
         <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }}>
         </div>
-        <div className="card card-body blur shadow-blur mx-4 mb-5 mt-n6 overflow-hidden">
+        <div className="card card-body blur-sm shadow-blur mx-4 mb-5 mt-n6 overflow-hidden">
           <div className="col-xl-12 col-lg-12 col-md-12 d-flex flex-column">
             {bookingDetails ? (
-              <>
+              <Reveal>
                 <div className='d-flex justify-content-end gap-2 mt-3 me-3'>
                   {bookingDetails?.booking_status === "Requested" ? (
                     <>
@@ -198,7 +199,7 @@ const TechnicianViewMoreBooking = () => {
                             </tr>
                             <tr>
                               <td><p className="text-xs mb-0">Service type</p></td>
-                              <td><p className="text-xs font-weight-bold mb-0">{bookingDetails?.Booking_profession}</p></td>
+                              <td><p className="text-xs font-weight-bold mb-0">{bookingDetails?.booking_profession}</p></td>
                             </tr>
                             <tr>
                               <td><p className="text-xs mb-0">Booking Date</p></td>
@@ -226,7 +227,7 @@ const TechnicianViewMoreBooking = () => {
                             </tr>
                             <tr>
                               <td><p className="text-xs mb-0">Payment Status</p></td>
-                              <td><p className="text-xs font-weight-bold mb-0 d-flex">{bookingDetails?.Payment_Status}<span className='ms-1'>{bookingDetails?.Payment_Status === "Requested" && <AlertRedDot />}</span></p></td>
+                              <td><p className="text-xs font-weight-bold mb-0 d-flex">{bookingDetails?.payment_status}<span className='ms-1'>{bookingDetails?.payment_status === "Requested" && <AlertRedDot />}</span></p></td>
                             </tr>
                           </tbody>
                         </table>
@@ -243,7 +244,7 @@ const TechnicianViewMoreBooking = () => {
                     </div>
                   )}
                 </div>
-              </>
+              </Reveal>
             ) : (
               <p className="text-center">Loading booking details...</p>
             )}

@@ -6,25 +6,31 @@ import TechnicianRepository from "../Repository/technicianRepository";
 import Technician from "../Model/technicianModel";
 import Rating from "../Model/reviewModal";
 import Booking from "../Model/bookingModel";
+import WalletRepository from "../Repository/walletRepository";
+import Wallet from "../Model/walletModal";
+import UserRepository from "../Repository/userRepository";
+import User from "../Model/userModal";
 
 
 const technicianRepository = new TechnicianRepository(Technician, Rating, Booking);
-const technicianService = new TechnicianService(technicianRepository);
+const walletRepository = new WalletRepository(Wallet);
+const userRepository = new UserRepository(User, Booking, Rating)
+const technicianService = new TechnicianService(technicianRepository, walletRepository, userRepository);
 const technicianController = new TechnicianController(technicianService);
 
 const router = Router();
 
-router.get("/fetchTechnicianInformation", verifyToken, technicianController.fetchTechnicianInformationController.bind(technicianController));
-router.patch("/joinTechnician", verifyToken, technicianController.joinNewTechnicianController.bind(technicianController));
-router.patch("/changeprofession", verifyToken, technicianController.changeProfessionController.bind(technicianController));
-router.patch("/changeAvailabilityStatus", verifyToken, technicianController.changeAvailabilityStatusController.bind(technicianController));
-router.get("/fetchTechnicianBookingHistory", verifyToken, technicianController.fetchTechnicianBookingHistoryController.bind(technicianController));
-router.get("/fetchingIndividualBookingDetails", verifyToken, technicianController.fetchingIndividualBookingDetailsController.bind(technicianController));
-router.patch("/acceptRejectCancelNewBooking", verifyToken, technicianController.acceptRejectCancelNewBookingController.bind(technicianController));
-router.post("/confirmBooking", verifyToken, technicianController.completeBookingController.bind(technicianController));
-router.patch("/clearNotification", verifyToken, technicianController.clearNotificationController.bind(technicianController));
-router.patch("/modifyAvailableSlots", verifyToken, technicianController.modifyAvailableSlotsController.bind(technicianController));
-router.get("/wallet", verifyToken, technicianController.fetchWalletInformationController.bind(technicianController));
-router.get("/fetchningRatingWithReviewerDetails", verifyToken, technicianController.fetchningRatingWithReviewerDetailsController.bind(technicianController));
+router.get("/fetchTechnicianInformation", verifyToken, technicianController.getTechnicianInfo);
+router.patch("/joinTechnician", verifyToken, technicianController.createTechnician);
+router.patch("/changeprofession", verifyToken, technicianController.updateProfession);
+router.patch("/changeAvailabilityStatus", verifyToken, technicianController.updateAvailableStatus);
+router.get("/fetchTechnicianBookingHistory", verifyToken, technicianController.getBookings);
+router.get("/fetchingIndividualBookingDetails", verifyToken, technicianController.getBookingDetails);
+router.patch("/acceptRejectCancelNewBooking", verifyToken, technicianController.updateBookingStatus);
+router.post("/confirmBooking", verifyToken, technicianController.completeBooking);
+router.patch("/clearNotification", verifyToken, technicianController.deleteNotification);
+router.patch("/modifyAvailableSlots", verifyToken, technicianController.updateAvailableSlots);
+router.get("/wallet", verifyToken, technicianController.getWallet);
+router.get("/fetchningRatingWithReviewerDetails", verifyToken, technicianController.getRatingWithReviewerDetails);
 
 export default router;

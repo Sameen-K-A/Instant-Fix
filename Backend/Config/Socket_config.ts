@@ -1,8 +1,20 @@
 import { Server as SocketServer } from "socket.io";
 import { Server as HttpServer } from "http";
-import ChatServices from "../Services/chatServices";
-const chatService = new ChatServices();
-let io:SocketServer;
+
+import User from "../../Backend/Model/userModal";
+import Booking from "../../Backend/Model/bookingModel";
+import Rating from "../../Backend/Model/reviewModal";
+import Chat from "../../Backend/Model/chatModel";
+
+import ChatServices from "../../Backend/Services/chatServices";
+import UserRepository from "../../Backend/Repository/userRepository";
+import ChatRepository from "../../Backend/Repository/chatRepository"; 
+
+const userRepository = new UserRepository(User, Booking, Rating);
+const chatRepository = new ChatRepository(Chat);
+const chatService = new ChatServices(chatRepository, userRepository);
+
+let io: SocketServer;
 
 const configSocketIO = (server: HttpServer) => {
    io = new SocketServer(server, {
@@ -25,10 +37,10 @@ const configSocketIO = (server: HttpServer) => {
          try {
             let savedMessage: null | any = null
             if (firstTimeChat === true) {
-               const connectionDetails: any = await chatService.createConnectionAndSaveMessageService(messageDetails);
+               const connectionDetails: any = await chatService.createChat(messageDetails);
                savedMessage = connectionDetails?.details[0];
             } else {
-               savedMessage = await chatService.saveNewChatService(messageDetails.senderID, messageDetails.receiverID, messageDetails.message);
+               savedMessage = await chatService.saveChat(messageDetails);
             };
             const chatRoom = [messageDetails.senderID, messageDetails.receiverID].sort().join("-");
             io.to(chatRoom).emit("receiveMessage", savedMessage);
@@ -48,4 +60,4 @@ const configSocketIO = (server: HttpServer) => {
    });
 }
 
-export {configSocketIO, io};
+export { configSocketIO, io };

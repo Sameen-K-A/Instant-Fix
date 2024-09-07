@@ -1,51 +1,66 @@
 import { Router } from "express";
-import UserController from "../Controllers/userController";
-import { verifyToken } from "../Config/jwt_config"; 
+import { verifyToken } from "../Config/jwt_config";
 import upload from "../Config/Multer_config"
+import UserController from "../Controllers/userController";
+import UserServices from "../Services/userServices";
+import UserRepository from "../Repository/userRepository";
+import TechnicianRepository from "../Repository/technicianRepository";
+import WalletRepository from "../Repository/walletRepository";
+import User from "../Model/userModal";
+import Booking from "../Model/bookingModel";
+import Rating from "../Model/reviewModal";
+import Technician from "../Model/technicianModel";
+import Wallet from "../Model/walletModal";
+
+
+const userRepository = new UserRepository(User, Booking, Rating);
+const technicianRepository = new TechnicianRepository(Technician, Rating, Booking);
+const walletRepository = new WalletRepository(Wallet);
+const userService = new UserServices(userRepository, technicianRepository, walletRepository);
+const userController = new UserController(userService);
 
 const router = Router();
-const userController = new UserController()
 
-router.post("/login", userController.loginController);
-router.post("/register", userController.register_controller);
-router.post("/verifyotp", userController.verifyOTP_controller);
-router.get("/resendOTP", userController.resendOTP_controller);
+router.post("/login", userController.login);
+router.post("/register", userController.register);
+router.post("/verifyotp", userController.otpVerification);
+router.get("/resendOTP", userController.resendOTP);
 
 // user address session;
-router.patch("/address", verifyToken, userController.add_EditAddress_controller);
-router.delete("/address", verifyToken, userController.deleteAddress_controller);
+router.patch("/address", verifyToken, userController.createUpdateAddress);
+router.delete("/address", verifyToken, userController.deleteAddress);
 
 // user change password
-router.patch("/changepassword", verifyToken, userController.changePassword_controller);
+router.patch("/changepassword", verifyToken, userController.updatePassword);
 
 // user change personal details
-router.patch("/editprofile", verifyToken, upload.single('profile'), userController.editprofile_controller);
+router.patch("/editprofile", verifyToken, upload.single('profile'), userController.updateProfile);
 
 // fetching saved technician information 
-router.patch("/saveTechnician", verifyToken, userController.saveTechnicianController);
-router.patch("/unSaveTechnician", verifyToken, userController.unSaveTechnicianController);
-router.get("/fetchSavedTechnicianDetails", verifyToken, userController.fetchSavedTechnicianDetailsController);
+router.patch("/saveTechnician", verifyToken, userController.followTechnician);
+router.patch("/unSaveTechnician", verifyToken, userController.unfollowTechnician);
+router.get("/fetchSavedTechnicianDetails", verifyToken, userController.getFollowedTechnicians);
 
 //fetching technicians details
-router.get("/fetchTechnician", verifyToken, userController.fetchTechnician_controller);
-router.get("/fetchTechnicianIndividualInformation", verifyToken, userController.fetchTechnicianIndividualInformationController)
+router.get("/fetchTechnician", verifyToken, userController.getTechnicians);
+router.get("/fetchTechnicianIndividualInformation", verifyToken, userController.getTechnicianWithPersonalDetails);
 
 // chatting area
-router.get("/fetchAlreadyChattedTechnicians", verifyToken, userController.fetchAlreadyChattedTechnicians_controller);
+router.get("/fetchAlreadyChattedTechnicians", verifyToken, userController.getChatFriends);
 
 // booking new technician area
-router.post("/bookTechnician", verifyToken, userController.bookTechnician_controller);
+router.post("/bookTechnician", verifyToken, userController.bookTechnician);
 
 // booking history and its related details
-router.get("/fetchUserBookingHistory", verifyToken, userController.fetchUserBookingHistory_controller);
-router.get("/fetchIndividualBookingInformation", verifyToken, userController.fetchIndividualBookingInformation_controller);
-router.patch("/cancelBooking", verifyToken, userController.cancelBooking_controller);
+router.get("/fetchUserBookingHistory", verifyToken, userController.getBookingsHistory);
+router.get("/fetchIndividualBookingInformation", verifyToken, userController.getBookingDetails);
+router.patch("/cancelBooking", verifyToken, userController.cancelBooking);
 
 // payment side
-router.post("/proceedToPayment", verifyToken, userController.proceedToPaymentController);
-router.post("/verifyPayment", verifyToken, userController.verifyPaymentController);
+router.post("/proceedToPayment", verifyToken, userController.proceedToPayment);
+router.post("/verifyPayment", verifyToken, userController.verifyPayment);
 
 //  technician feedback side
-router.post("/submitReview", verifyToken, userController.submitReviewController);
+router.post("/submitReview", verifyToken, userController.submitReview);
 
 export default router;

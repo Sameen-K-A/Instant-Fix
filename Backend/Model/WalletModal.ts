@@ -1,7 +1,7 @@
-import { WalletType } from "../interfaces";
 import { Schema, model } from "mongoose";
+import { IWallet } from "../Interfaces/common.interface";
 
-const walletSchema = new Schema<WalletType>({
+const walletSchema: Schema = new Schema<IWallet>({
    user_id: {
       type: String,
    },
@@ -30,5 +30,5 @@ const walletSchema = new Schema<WalletType>({
    versionKey: false,
 });
 
-const Wallet = model<WalletType>("Wallet", walletSchema);
+const Wallet = model<IWallet>("Wallet", walletSchema);
 export default Wallet;

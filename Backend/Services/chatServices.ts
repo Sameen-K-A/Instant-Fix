@@ -1,65 +1,59 @@
-import ChatRepository from "../Repository/chatRepository";
-import { ChatType } from "../Model/chatModel";
-import UserRepository from "../Repository/userRepository";
+import { IChat, IChatMessage } from "../Interfaces/common.interface";
+import { IUserRepository } from "../Interfaces/user.repository.interface";
+import { IChatRepository } from "../Interfaces/chat.repository.interface";
+import { IChatService } from "../Interfaces/chat.service.interface";
 
-export type newMesssageType = {
-  senderID: string,
-  receiverID: string,
-  message: string
-};
+class ChatServices implements IChatService {
+  private chatRepository: IChatRepository;
+  private userRepository: IUserRepository;
 
-class ChatServices {
+  constructor(chatRepository: IChatRepository, userRepository: IUserRepository) {
+    this.chatRepository = chatRepository;
+    this.userRepository = userRepository;
+  }
 
-  private chatRepository: ChatRepository;
-  private userRepository: UserRepository;
-
-  constructor() {
-    this.chatRepository = new ChatRepository();
-    this.userRepository = new UserRepository();
-  };
-
-  async fetchTwoMembersChatService(senderID: string, receiverID: string) {
+  getChat = async (senderID: string, receiverID: string): Promise<IChat[]> => {
     try {
-      return await this.chatRepository.fetchTwoMembersChatRepository(senderID, receiverID);
+      return await this.chatRepository.getChat(senderID, receiverID);
     } catch (error) {
       throw error;
     };
   };
 
-  async saveNewChatService(senderID: string, receiverID: string, message: string) {
+  saveChat = async (newMessageDetails: IChatMessage): Promise<IChatMessage> => {
     try {
-      const newMessageDetails: newMesssageType = {
-        senderID: senderID,
-        receiverID: receiverID,
-        message: message
-      }
-      await this.chatRepository.saveNewChatRepository(newMessageDetails);
+      await this.chatRepository.saveChat(newMessageDetails);
       return newMessageDetails;
+    } catch (error) {
+      throw error;
+    };
+  };
+
+  createChat = async (messageDetails: IChatMessage): Promise<IChat> => {
+    try {
+      const newChatDocument: IChat = {
+        chatMembers: [messageDetails.senderID, messageDetails.receiverID],
+        details: [
+          {
+            senderID: messageDetails.senderID,
+            receiverID: messageDetails.receiverID,
+            message: messageDetails.message,
+          },
+        ],
+      };
+
+      const connectionDetails = await this.chatRepository.createChat(newChatDocument);
+      await this.userRepository.createConnectionToChatFriends(
+        messageDetails.receiverID,
+        messageDetails.senderID
+      );
+
+      return connectionDetails;
     } catch (error) {
       throw error;
     }
   };
 
-  async createConnectionAndSaveMessageService(messageDetails: newMesssageType) {
-    try {
-      const newChatDocument: ChatType = {
-        chatMembers: [messageDetails.senderID, messageDetails.receiverID],
-        details: [{
-          senderID: messageDetails.senderID,
-          receiverID: messageDetails.receiverID,
-          message: messageDetails.message
-        }]
-      };
-      const connectionDetails = this.chatRepository.createConnectionAndSaveMessageRepository(newChatDocument);
-      await Promise.all([
-        this.userRepository.addNewConnectionToAlreadyChattedTechnicianListRepository(messageDetails.receiverID, messageDetails.senderID),
-        connectionDetails
-      ])
-      return connectionDetails;
-    } catch (error) {
-      return error;
-    }
-  }
-}
+};
 
 export default ChatServices;

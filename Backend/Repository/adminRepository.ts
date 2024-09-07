@@ -1,7 +1,6 @@
-import { IAdminRepository, IBookings, IUsers, ITechnicians } from "../Interfaces/adminInterfaces";
-import { IBookingDetails } from "../Interfaces/techinicianInterfaces";
-import { IUser } from "../Interfaces/userInterface";
 import { Model } from "mongoose";
+import { IAdminRepository } from "../Interfaces/admin.repository.interface";
+import { IBookingDetails, IBookingHistory, ITechnicians, IUser } from "../Interfaces/common.interface";
 
 class AdminRepository implements IAdminRepository {
    private userModel: Model<IUser>;
@@ -12,7 +11,7 @@ class AdminRepository implements IAdminRepository {
       this.bookingModel = bookingModel;
    };
 
-   findUser = async (): Promise<IUsers[]> => {
+   findUser = async (): Promise<IUser[]> => {
       try {
          return await this.userModel.aggregate([
             { $match: {} },
@@ -81,7 +80,7 @@ class AdminRepository implements IAdminRepository {
       };
    };
 
-   findBooking = async (): Promise<IBookings[]> => {
+   findBooking = async (): Promise<IBookingHistory[]> => {
       try {
          return await this.bookingModel.aggregate([
             { $match: {} },

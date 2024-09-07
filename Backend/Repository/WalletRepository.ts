@@ -1,32 +1,43 @@
-import { TransactionType, WalletType } from "../interfaces";
-import Wallet from "../Model/walletModal";
+import { Model } from "mongoose";
+import { IWalletRepository } from "../Interfaces/wallet.repository.interface";
+import { ITransaction, IWallet } from "../Interfaces/common.interface";
 
-class WalletRepository {
+class WalletRepository implements IWalletRepository {
+   private walletModel: Model<IWallet>;
 
-   async addNewWalletForTechnicianRepository(walletData: WalletType) {
+   constructor(walletModel: Model<IWallet>) {
+      this.walletModel = walletModel
+   }
+
+   createWallet = async (walletData: IWallet): Promise<IWallet> => {
       try {
-         return await Wallet.create(walletData);
+         return await this.walletModel.create(walletData);
       } catch (error) {
          throw error;
       };
    };
 
-   async fetchWalletDetails(user_id: string) {
+   getWallet = async (user_id: string): Promise<IWallet | null> => {
       try {
-         return await Wallet.findOne({ user_id: user_id }, { _id: 0 });
+         return await this.walletModel.findOne({ user_id: user_id }, { _id: 0 });
       } catch (error) {
          throw error;
       };
    };
 
-   async addNewTransactionAndUpdateTotalAmount(technicianUser_id: string, newTransactionDetails: TransactionType, newAmount: number) {
+   updateWallet = async (technicianUser_id: string, newTransactionDetails: ITransaction, newAmount: number): Promise<boolean> => {
       try {
-         return await Wallet.updateOne({ user_id: technicianUser_id }, { $inc: { balanceAmount: newAmount }, $push: { transactions: newTransactionDetails } });
+         const updateResult = await this.walletModel.updateOne({ user_id: technicianUser_id }, { $inc: { balanceAmount: newAmount }, $push: { transactions: newTransactionDetails } });
+         if (updateResult.modifiedCount === 1) {
+            return true;
+         } else {
+            throw new Error("Failed to update wallet");
+         };
       } catch (error) {
          throw error;
       };
    };
 
-}
+};
 
 export default WalletRepository;

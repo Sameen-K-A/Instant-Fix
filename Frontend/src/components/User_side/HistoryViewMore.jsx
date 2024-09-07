@@ -106,12 +106,12 @@ const UserHistoryViewMore = () => {
       </nav>
       <div className="container-fluid pe-6">
         <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }} />
-        <div className="card card-body blur shadow-blur mx-4 mb-5 mt-n6 overflow-hidden">
+        <div className="card card-body blur-sm shadow-blur mx-4 mb-5 mt-n6 overflow-hidden">
           <Reveal>
             <div className="col-xl-12 col-lg-12 col-md-12 d-flex flex-column">
               {bookingDetails?.booking_id ? (
-                <div className={`container-fluid ${bookingDetails?.Payment_Status !== "Requested" && "mt-5"}`}>
-                  {bookingDetails?.Payment_Status === "Requested" && (
+                <div className={`container-fluid ${bookingDetails?.payment_status !== "Requested" && "mt-5"}`}>
+                  {bookingDetails?.payment_status === "Requested" && (
                     <div className="d-flex justify-content-end gap-2 mt-3 me-3">
                       <div className="ms-2 d-flex flex-column justify-content-end">
                         <button
@@ -132,7 +132,7 @@ const UserHistoryViewMore = () => {
                           <tbody>
                             {[
                               { label: "Booking ID", value: bookingDetails?.booking_id },
-                              { label: "Service type", value: bookingDetails?.Booking_profession },
+                              { label: "Service type", value: bookingDetails?.booking_profession },
                               { label: "Booking Date", value: bookingDetails?.bookingDate },
                               { label: "Booking Time", value: bookingDetails?.bookingTime },
                               { label: "Booking status", value: bookingDetails?.booking_status },
@@ -151,7 +151,7 @@ const UserHistoryViewMore = () => {
                                 ),
                               },
                               { label: "Service Cost", value: bookingDetails?.serviceCost },
-                              { label: "Payment Status", value: bookingDetails?.Payment_Status },
+                              { label: "Payment Status", value: bookingDetails?.payment_status },
                             ].map((row, index) => (
                               <tr key={index}>
                                 <td><p className="text-xs mb-0">{row.label}</p></td>

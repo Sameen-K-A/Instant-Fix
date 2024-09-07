@@ -1,33 +1,41 @@
-import User from "../Model/userModal";
-import { SingleRatingType, userAddressType, userType } from "../interfaces";
-import BookingModel from "../Model/bookingModel"
-import { newBookingType } from "../interfaces";
-import Rating from "../Model/reviewModal";
+import { Model } from "mongoose";
+import { IUserRepository } from "../Interfaces/user.repository.interface";
+import { IBookingDetails, IBookingHistory, IFollowedTechnician, IRatingReview, IReviewerDetail, ISingleRating, ITechnicians, IUser, IUserAddress, IUserWithITechnician } from "../Interfaces/common.interface";
 
-class UserRepository {
+class UserRepository implements IUserRepository {
 
-  async findUserByEmail(email: string) {
+  private userModel = Model<IUser>
+  private bookingModel = Model<IBookingDetails>
+  private ratingModel = Model<IRatingReview>
+
+  constructor(userModel: Model<IUser>, bookingModel: Model<IBookingDetails>, ratingModel: Model<IRatingReview>) {
+    this.userModel = userModel;
+    this.bookingModel = bookingModel;
+    this.ratingModel = ratingModel;
+  }
+
+  findByEmail = async (email: string): Promise<IUser | null> => {
     try {
-      return await User.findOne({ email });
+      return await this.userModel.findOne({ email });
     } catch (error) {
       throw error;
     }
   };
 
-  async findUserByUser_id(user_id: string) {
+  findByUser_id = async (user_id: string): Promise<IUser | null> => {
     try {
-      return await User.findOne({ user_id: user_id });
+      return await this.userModel.findOne({ user_id: user_id });
     } catch (error) {
       throw error;
     }
   };
 
-  async loginUserRepository(email: string) {
+  login = async (email: string): Promise<IUserWithITechnician> => {
     try {
-      const userDetails = await User.aggregate([
+      const userDetails = await this.userModel.aggregate([
         { $match: { email: email } },
         { $lookup: { from: 'technicians', localField: 'user_id', foreignField: 'user_id', as: 'technicianDetails' } },
-        { $project: { _id: 0, alreadychattedtechnician: 0 } },
+        { $project: { _id: 0, alreadychattedtechnician: 0, "technicianDetails._id": 0 } },
       ]);
       return userDetails[0];
     } catch (error) {
@@ -35,74 +43,108 @@ class UserRepository {
     }
   };
 
-  async registerUserRepository(userData: userType) {
+  register = async (userData: IUser): Promise<IUser> => {
     try {
-      return await User.create(userData);
+      return await this.userModel.create(userData);
     } catch (error) {
       throw error;
-    }
+    };
   };
 
-  async add_EditAddressRepository(addressData: userAddressType, user_id: string) {
+  createUpdateAddress = async (addressData: IUserAddress, user_id: string): Promise<boolean> => {
     try {
-      return await User.updateOne({ user_id: user_id }, { $set: { addressDetails: addressData } },);
+      const updateResult = await this.userModel.updateOne({ user_id: user_id }, { $set: { addressDetails: addressData } });
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Failed to update address");
+      };
     } catch (error) {
       throw error;
-    }
+    };
   };
 
-  async deleteAddressRepository(user_id: string) {
+  deleteAddress = async (user_id: string): Promise<boolean> => {
     try {
-      return await User.updateOne({ user_id: user_id }, { $set: { addressDetails: null } });
+      const updateResult = await this.userModel.updateOne({ user_id: user_id }, { $set: { addressDetails: null } });
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Failed to delete address");
+      };
     } catch (error) {
       throw error
-    }
+    };
   };
 
-  async accessIsTechnician(user_id: string) {
+  accessIsTechnician = async (user_id: string): Promise<boolean> => {
     try {
-      return await User.updateOne({ user_id }, { isTechnician: true });
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  };
-
-  async changepasswordRepository(user_id: string, hashedNewPassword: string) {
-    try {
-      return await User.updateOne({ user_id: user_id }, { password: hashedNewPassword });
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  async editProfileRepository(user_id: string, updatedInformation: { name: string, phone: string, profileIMG?: string }) {
-    try {
-      return await User.updateOne({ user_id: user_id }, { $set: updatedInformation });
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  async saveTechnicianRepository(user_id: string, technicianUser_id: string) {
-    try {
-      return await User.updateOne({ user_id: user_id }, { $addToSet: { savedTechnicians: technicianUser_id } });
+      const updateResult = await this.userModel.updateOne({ user_id }, { isTechnician: true });
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Failed to access is technician");
+      };
     } catch (error) {
       throw error;
     };
   };
 
-  async unSaveTechnicianRepository(user_id: string, technicianUser_id: string) {
+  updatePassword = async (user_id: string, hashedNewPassword: string): Promise<boolean> => {
     try {
-      return await User.updateOne({ user_id: user_id }, { $pull: { savedTechnicians: technicianUser_id } });
+      const updateResult = await this.userModel.updateOne({ user_id: user_id }, { password: hashedNewPassword });
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Failed to upload password");
+      };
     } catch (error) {
       throw error;
     };
   };
 
-  async fetchSavedTechnicianDetailsRepository(user_id: string) {
+  updateProfile = async (user_id: string, updatedInformation: { name: string, phone: string, profileIMG?: string }): Promise<boolean> => {
     try {
-      const response = await User.aggregate([
+      const updateResult = await this.userModel.updateOne({ user_id: user_id }, { $set: updatedInformation });
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Failed to update profile");
+      };
+    } catch (error) {
+      throw error;
+    };
+  };
+
+  followTechnician = async (user_id: string, technicianUser_id: string): Promise<boolean> => {
+    try {
+      const updateResult = await this.userModel.updateOne({ user_id: user_id }, { $addToSet: { savedTechnicians: technicianUser_id } });
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Failed to follow technician");
+      };
+    } catch (error) {
+      throw error;
+    };
+  };
+
+  unfollowTechnician = async (user_id: string, technicianUser_id: string): Promise<boolean> => {
+    try {
+      const updateResult = await this.userModel.updateOne({ user_id: user_id }, { $pull: { savedTechnicians: technicianUser_id } });
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Failed to unfollow technician");
+      };
+    } catch (error) {
+      throw error;
+    };
+  };
+
+  getFollowedTechnicians = async (user_id: string): Promise<IFollowedTechnician[]> => {
+    try {
+      const response = await this.userModel.aggregate([
         { $match: { user_id: user_id } },
         { $unwind: "$savedTechnicians" },
         { $lookup: { from: "users", localField: "savedTechnicians", foreignField: "user_id", as: "SavedTechnicianPersonalInformation" } },
@@ -125,34 +167,40 @@ class UserRepository {
     };
   };
 
-  async fetchTechnicianRepository(user_id: string, skipCount: number = 0, limitCount: number = 10) {
+  getTechnicians = async (user_id: string): Promise<ITechnicians[]> => {
     try {
-      return await User.aggregate([
+      const result = await this.userModel.aggregate([
         { $match: { isTechnician: true, user_id: { $ne: user_id }, addressDetails: { $ne: null } } },
         { $lookup: { from: "technicians", localField: "user_id", foreignField: "user_id", as: "technicianDetails" } },
         { $unwind: "$technicianDetails" },
         {
           $project: {
             _id: 0,
+            email: 0,
+            phone: 0,
             password: 0,
             isBlocked: 0,
             isTechnician: 0,
+            addressDetails: 0,
+            savedTechnicians: 0,
             alreadychattedtechnician: 0,
             "technicianDetails._id": 0,
+            "technicianDetails.user_id": 0,
+            "technicianDetails.technician_id": 0,
+            "technicianDetails.notifications": 0,
+            "technicianDetails.availableSlots": 0,
           }
         },
-        { $skip: skipCount },
-        { $limit: limitCount },
       ]);
+      return result;
     } catch (error) {
-      console.log("Fetch technician repository error : ", error);
       throw error;
-    }
+    };
   };
 
-  async fetchTechnicianIndividualInformationRepository(technicianUser_id: string) {
+  getTechnicianWithPersonalDetails = async (technicianUser_id: string): Promise<IUserWithITechnician> => {
     try {
-      const result = await User.aggregate([
+      const result = await this.userModel.aggregate([
         { $match: { user_id: technicianUser_id } },
         { $lookup: { from: "technicians", localField: "user_id", foreignField: "user_id", as: "technicianDetails" } },
         { $unwind: "$technicianDetails" },
@@ -167,9 +215,11 @@ class UserRepository {
             isTechnician: 0,
             addressDetails: 0,
             alreadychattedtechnician: 0,
+            savedTechnicians: 0,
             "technicianDetails._id": 0,
             "technicianDetails.technician_id": 0,
             "ratingInformation._id": 0,
+            "technicianDetails.notifications": 0,
             "ratingInformation.user_id": 0,
             "reviewerDetails._id": 0,
             "reviewerDetails.email": 0,
@@ -183,29 +233,29 @@ class UserRepository {
           },
         },
       ]);
-
       return result[0];
     } catch (error) {
       throw error;
     }
   };
 
-  async fetchSingleTechnicianDetailsRepository(technicianUserID: string): Promise<any[]> {
+  getTechnicianDetails = async (technicianUserID: string): Promise<IUserWithITechnician> => {
     try {
-      return await User.aggregate([
+      const result = await this.userModel.aggregate([
         { $match: { user_id: technicianUserID } },
         { $lookup: { from: "technicians", localField: "user_id", foreignField: "user_id", as: "technicianDetails" } },
         { $unwind: "$technicianDetails" },
         { $project: { _id: 0, password: 0 } },
       ]);
+      return result[0];
     } catch (error) {
       throw error;
     };
   };
 
-  async fetchAlreadyChattedTechniciansRepository(user_id: string) {
+  getChatFriends = async (user_id: string): Promise<IReviewerDetail[]> => {
     try {
-      return await User.aggregate([
+      return await this.userModel.aggregate([
         { $match: { user_id: user_id } },
         { $unwind: "$alreadychattedtechnician" },
         { $lookup: { from: "users", localField: "alreadychattedtechnician", foreignField: "user_id", as: "technicianPersonalDetails" } },
@@ -217,38 +267,43 @@ class UserRepository {
     };
   };
 
-  async addNewConnectionToAlreadyChattedTechnicianListRepository(user_id: string, technicianUser_id: string) {
+  createConnectionToChatFriends = async (user_id: string, technicianUser_id: string): Promise<boolean> => {
     try {
-      return await User.bulkWrite([
+      const updateResult = await this.userModel.bulkWrite([
         {
           updateOne: {
             filter: { user_id: user_id },
             update: { $addToSet: { alreadychattedtechnician: technicianUser_id } }
-          }
+          },
         },
         {
           updateOne: {
             filter: { user_id: technicianUser_id },
             update: { $addToSet: { alreadychattedtechnician: user_id } }
-          }
-        }
+          },
+        },
       ]);
+      if (updateResult.modifiedCount === 2) {
+        return true;
+      } else {
+        throw new Error("Failed to create connection");
+      };
+    } catch (error) {
+      throw error;
+    };
+  };
+
+  bookTechnician = async (newBookingDetails: IBookingDetails): Promise<IBookingDetails> => {
+    try {
+      return await this.bookingModel.create(newBookingDetails);
     } catch (error) {
       throw error;
     }
   };
 
-  async bookTechnicianRepository(newBookingDetails: newBookingType) {
+  getBookingsHistory = async (user_id: string): Promise<IBookingHistory[]> => {
     try {
-      return await BookingModel.create(newBookingDetails);
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  async fetchUserBookingHistoryRepository(user_id: string) {
-    try {
-      return await BookingModel.aggregate([
+      return await this.bookingModel.aggregate([
         { $match: { client_id: user_id } },
         { $lookup: { from: "users", localField: "technicianUser_id", foreignField: "user_id", as: "technicianPersonal" } },
         { $unwind: "$technicianPersonal" },
@@ -274,9 +329,9 @@ class UserRepository {
     }
   };
 
-  async fetchIndividualBookingInformationRepository(booking_id: string) {
+  getBookingDetails = async (booking_id: string): Promise<IBookingDetails> => {
     try {
-      const response = await BookingModel.aggregate([
+      const response = await this.bookingModel.aggregate([
         { $match: { booking_id: booking_id } },
         { $lookup: { from: "users", localField: "technicianUser_id", foreignField: "user_id", as: "technicianDetails" } },
         { $unwind: "$technicianDetails" },
@@ -290,42 +345,62 @@ class UserRepository {
             "technicianDetails.addressDetails": 0,
             "technicianDetails.alreadychattedtechnician": 0,
             "technicianDetails.savedTechnicians": 0,
-          }
-        }
+          },
+        },
       ]);
       return response[0];
     } catch (error) {
       throw error;
-    }
+    };
   };
 
-  async cancelBookingRepository(booking_id: string) {
+  cancelBooking = async (booking_id: string): Promise<boolean> => {
     try {
-      return await BookingModel.updateOne({ booking_id: booking_id }, { $set: { booking_status: "Cancelled" } });
+      const updateResult = await this.bookingModel.updateOne({ booking_id: booking_id }, { $set: { booking_status: "Cancelled" } });
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Failed to cancel booking");
+      };
     } catch (error) {
       throw error;
     };
   };
 
-  async updateBookingPaymentStatus(booking_id: string, Payment_Status: string) {
+  updateBookingPaymentStatus = async (booking_id: string, payment_status: string): Promise<boolean> => {
     try {
-      return await BookingModel.updateOne({ booking_id: booking_id }, { Payment_Status: Payment_Status });
+      const updateResult = await this.bookingModel.updateOne({ booking_id: booking_id }, { payment_status: payment_status });
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Failed to update booking payment status");
+      };
     } catch (error) {
       throw error;
     };
   };
 
-  async updateBookingReviewAdded(booking_id: string, reviewAdded: boolean) {
+  updateBookingReviewAdded = async (booking_id: string, reviewAdded: boolean): Promise<boolean> => {
     try {
-      return await BookingModel.updateOne({ booking_id: booking_id }, { reviewAdded: reviewAdded });
+      const updateResult = await this.bookingModel.updateOne({ booking_id: booking_id }, { reviewAdded: reviewAdded });
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Failed to update booking review added");
+      };
     } catch (error) {
       throw error;
     };
   };
 
-  async addNewFeedbackToTechnician(technician_id: string, feedbackInformation: SingleRatingType) {
+  addNewFeedbackToTechnician = async (technician_id: string, feedbackInformation: ISingleRating): Promise<boolean> => {
     try {
-      return await Rating.updateOne({ user_id: technician_id }, { $push: { reviews: feedbackInformation } });
+      const updateResult = await this.ratingModel.updateOne({ user_id: technician_id }, { $push: { reviews: feedbackInformation } });
+      if (updateResult.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Failed to added feedback");
+      };
     } catch (error) {
       throw error;
     };

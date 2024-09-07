@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
-import { RatingReviewType } from "../interfaces";
+import { IRatingReview } from "../Interfaces/common.interface";
 
-const ratingSchema: Schema = new Schema<RatingReviewType>({
+const ratingSchema: Schema = new Schema<IRatingReview>({
    user_id: {
       type: String,
    },
@@ -27,5 +27,5 @@ const ratingSchema: Schema = new Schema<RatingReviewType>({
    versionKey: false,
 });
 
-const Rating = model<RatingReviewType>("Rating", ratingSchema);
+const Rating = model<IRatingReview>("Rating", ratingSchema);
 export default Rating;
