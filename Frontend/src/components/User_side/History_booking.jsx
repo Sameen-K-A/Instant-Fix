@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import UserNavbar from "./NavbarPage";
-import userAxiosInstance from "../../config/axiosInstance/userInstance";
+import userAxiosInstance from "../../Config/AxiosInstance/userInstance"; 
 import { toast } from "sonner";
 import { Base_URL } from "../../config/credentials";
 import { useNavigate } from "react-router-dom";
@@ -8,12 +8,14 @@ import backgroundImage from "../../../public/images/HeaderBanner_2.png";
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import AlertRedDot from "../Common/AlertRedDot"; 
 import Reveal from "../../../public/Animation/Animated";
+import { useUserAuthContext } from "../../Contexts/UserAuthContext";
 
 const UserBookingHistoryTable = () => {
-
+  
   const [bookingDetailsArray, setBookingDetailsArray] = useState([]);
   const { userDetails } = useUserDetails();
   const navigate = useNavigate();
+  const { setIsLogged } = useUserAuthContext();
 
   useEffect(() => {
     (async () => {
@@ -22,6 +24,7 @@ const UserBookingHistoryTable = () => {
         setBookingDetailsArray(response.data);
       } catch (error) {
         if (error.response.status === 401) {
+          setIsLogged(false);
           navigate("/login", { state: { message: "Authorization failed, please login" } });
         } else {
           toast.error("Can't find booking history, please wait for a moment.");

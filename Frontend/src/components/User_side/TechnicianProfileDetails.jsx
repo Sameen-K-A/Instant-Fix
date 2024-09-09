@@ -8,10 +8,11 @@ import BookingConfirmModalDetails from './BookingConfirmModal';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { toast } from 'sonner';
-import userAxiosInstance from '../../config/axiosInstance/userInstance';
+import userAxiosInstance from '../../Config/AxiosInstance/userInstance'; 
 import { RiUserFollowFill } from "react-icons/ri";
 import { useUserDetails } from '../../Contexts/UserDetailsContext'; 
 import Reveal from '../../../public/Animation/Animated';
+import { useUserAuthContext } from '../../Contexts/UserAuthContext';
 
 const TechnicianProfileDetails = () => {
   const location = useLocation();
@@ -23,6 +24,7 @@ const TechnicianProfileDetails = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [availableDates, setAvailableDates] = useState([]);
   const [bookingSuccess, setBookingSuccess] = useState(false);
+  const { setIsLogged } = useUserAuthContext();
 
   useEffect(() => {
     (async () => {
@@ -34,6 +36,7 @@ const TechnicianProfileDetails = () => {
         setAvailableDates(availableDatesFromTechnicianSide.map((slotInto) => slotInto.slotBooked === false && slotInto.slotDate));
       } catch (error) {
         if (error.response.status === 401) {
+          setIsLogged(false);
           navigate("/login", { state: { message: "Authorization failed, please login" } });
         } else {
           toast.error("Something went wrong, can't find the technician information. Please try again later.");

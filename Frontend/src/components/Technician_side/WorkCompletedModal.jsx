@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import userAxiosInstance from "../../config/axiosInstance/userInstance";
+import userAxiosInstance from "../../Config/AxiosInstance/userInstance"; 
 import triggerConfetti from "../../Utils/confetti";
+import { useUserAuthContext } from "../../Contexts/UserAuthContext";
 
 const WorkCompletedModal = ({ setWorkCompleted, bookingDetails, setBookingDetails }) => {
   const [isYes, setIsYes] = useState(false);
   const [laborCharge, setLaborCharge] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { setIsLogged } = useUserAuthContext();
 
   const enterLabourCharge = (event) => {
     let input = event.target.value;
@@ -38,6 +40,7 @@ const WorkCompletedModal = ({ setWorkCompleted, bookingDetails, setBookingDetail
       triggerConfetti();
     } catch (error) {
       if (error.response && error.response.status === 401) {
+        setIsLogged(false);
         navigate("/login", { state: { message: "Authorization failed please login" } });
       } else if (error.response && error.response.status === 301) {
         toast.error("Booking details is not changed");

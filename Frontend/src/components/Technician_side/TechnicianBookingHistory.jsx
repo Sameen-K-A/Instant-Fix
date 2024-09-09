@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import TechnicianNavbar from "./NavbarPage";
 import { useNavigate } from "react-router-dom";
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
-import userAxiosInstance from "../../config/axiosInstance/userInstance";
+import userAxiosInstance from "../../Config/AxiosInstance/userInstance"; 
 import { useUserDetails } from "../../Contexts/UserDetailsContext"; 
 import { toast } from "sonner";
 import { io } from 'socket.io-client';
 import { Base_URL } from "../../config/credentials"; 
 import Reveal from "../../../public/Animation/Animated";
+import { useUserAuthContext } from "../../Contexts/UserAuthContext";
 
 const socket = io(Base_URL);
 
@@ -16,6 +17,7 @@ const TechnicianBookingHistoryTable = () => {
   const [bookingDetailsArray, setBookingDetailsArray] = useState([]);
   const { userDetails } = useUserDetails();
   const navigate = useNavigate();
+  const { setIsLogged } = useUserAuthContext();
 
   const fetchBookingDetails = async () => {
     try {
@@ -23,6 +25,7 @@ const TechnicianBookingHistoryTable = () => {
       setBookingDetailsArray(response.data);
     } catch (error) {
       if (error.response.status === 401) {
+        setIsLogged(false);
         navigate("/login", { state: { message: "Authorization failed, please login" } });
       } else {
         toast.error("Can't fetch booking history, Please try again later");

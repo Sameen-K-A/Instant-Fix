@@ -6,11 +6,13 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { Backbtn } from '../../../public/svgs/Icons';
-import userAxiosInstance from '../../config/axiosInstance/userInstance';
+import userAxiosInstance from '../../Config/AxiosInstance/userInstance';
 import { useUserDetails } from '../../Contexts/UserDetailsContext'; 
+import { useUserAuthContext } from '../../Contexts/UserAuthContext';
 
 const TechnicianRole = () => {
   const { userDetails, setUserDetails } = useUserDetails();
+  const { setIsLogged } = useUserAuthContext();
   const professions = ["Painter", "Welder", "Electrician", "Plumber", "Automobile Mechanic", "AC Mechanic", "Other"];
   const [selectedProfessionIndex, setSelectedProfessionIndex] = useState(null);
   const [enteredOtherProfession, setEnteredOtherProfession] = useState("");
@@ -56,6 +58,7 @@ const TechnicianRole = () => {
             navigate("/technician");
           } catch (error) {
             if (error.response.status === 401) {
+              setIsLogged(false);
               navigate("/login", { state: { message: "Authorization failed please login" } });
             } else {
               console.log(error);

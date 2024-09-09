@@ -6,15 +6,17 @@ import profileDefault_1 from "../../../../public/images/profile_1.jpg";
 import profileDefault_2 from "../../../../public/images/profile_2.jpg";
 import profileDefault_3 from "../../../../public/images/profile_3.jpg";
 import profileDefault_4 from "../../../../public/images/profile_4.jpg";
-import userAxiosInstance from "../../../config/axiosInstance/userInstance";
+import userAxiosInstance from "../../../Config/AxiosInstance/userInstance"; 
 import { toast } from "sonner";
 import { useUserDetails } from "../../../Contexts/UserDetailsContext";
+import { useUserAuthContext } from "../../../Contexts/UserAuthContext";
 
 const EditUserInfo = ({ cancelEdit }) => {
   const [selectedDefaultimgIndex, setSelectedDefaultimgIndex] = useState(null);
   const [userSelectedImg, setUserSelectedImg] = useState(null);
   const fileInputRef = useRef(null);
   const { userDetails, setUserDetails } = useUserDetails();
+  const { setIsLogged } = useUserAuthContext();
 
   const defaultImages = [profileDefault_1, profileDefault_2, profileDefault_3, profileDefault_4];
 
@@ -61,6 +63,7 @@ const EditUserInfo = ({ cancelEdit }) => {
         if (error.response?.status === 301) {
           toast.warning("No changes found.");
         } else if (error.response?.status === 401) {
+          setIsLogged(false);
           navigate("/login", { state: { message: "Authorization failed, please login." } });
         } else {
           console.error("Error:", error);

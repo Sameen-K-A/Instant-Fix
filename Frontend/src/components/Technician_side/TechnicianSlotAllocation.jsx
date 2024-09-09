@@ -3,7 +3,7 @@ import Footer from '../common/Footer';
 import TechnicianNavbar from './NavbarPage';
 import backgroundImage from "../../../public/Images/HeaderBanner_2.png";
 import Calendar from 'react-calendar';
-import userAxiosInstance from '../../config/axiosInstance/userInstance';
+import userAxiosInstance from '../../Config/AxiosInstance/userInstance'; 
 import { toast } from 'sonner';
 import { useUserDetails } from '../../Contexts/UserDetailsContext'; 
 import 'react-calendar/dist/Calendar.css';

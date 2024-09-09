@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useUserDetails } from "../../../Contexts/UserDetailsContext";
-import userAxiosInstance from "../../../config/axiosInstance/userInstance";
+import userAxiosInstance from "../../../Config/AxiosInstance/userInstance"; 
 import { Base_URL } from "../../../config/credentials";
 import { Delete } from "../../../../public/svgs/Icons";
 import { toast } from "sonner";

@@ -1,12 +1,13 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUserAuthContext } from "../../Contexts/UserAuthContext";
 
 const UserProtecter = ({ children }) => {
+  const { isLogged } = useUserAuthContext();
   const navigate = useNavigate();
-  const userToken = sessionStorage.getItem("userToken");
 
   useEffect(() => {
-    if (!userToken) {
+    if (!isLogged) {
       navigate("/login", {
         state: { message: "Authorization failed, please login" },
         replace: true
@@ -14,7 +15,7 @@ const UserProtecter = ({ children }) => {
     }
   }, []);
 
-  if (userToken) {
+  if (isLogged) {
     return children;
   }
 };

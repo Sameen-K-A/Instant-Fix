@@ -5,8 +5,8 @@ export const useUserDetails = () =>  useContext(UserDetailsContext);
 
 const UserProvider = ({ children }) => {
    const [userDetails, setUserDetails] = useState(() => {
-      const userDetailsFromSessionStorage = sessionStorage.getItem("userDetails");
-      return userDetailsFromSessionStorage ? JSON.parse(userDetailsFromSessionStorage) : null;
+      const userDetailsFromlocalStorage = localStorage.getItem("userDetails");
+      return userDetailsFromlocalStorage ? JSON.parse(userDetailsFromlocalStorage) : null;
    });
 
    return (

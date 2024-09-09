@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { toast } from 'sonner';
-import userAxiosInstance from '../../../config/axiosInstance/userInstance';
+import userAxiosInstance from '../../../Config/AxiosInstance/userInstance';
 import { useNavigate } from 'react-router-dom';
 import { useUserDetails } from '../../../Contexts/UserDetailsContext'; 
+import { useUserAuthContext } from '../../../Contexts/UserAuthContext';
 
 const AddressModal = () => {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ const AddressModal = () => {
   const [isLoading, setIsloading] = useState(false);
   const [defaultDistrict, setDefaultDistrict] = useState(districtArray[1]);
   const { userDetails, setUserDetails } = useUserDetails();
+  const { setIsLogged } = useUserAuthContext();
 
   useEffect(() => {
     if (userDetails?.addressDetails?.district) {
@@ -82,7 +84,8 @@ const AddressModal = () => {
         setIsloading(false);
       } catch (error) {
         if (error.response?.status === 401) {
-          navigate("/login", { state: { message: "Authorization failed please login" } });
+          setIsLogged(false);
+          navigate("/login", { state: { message: "Authorization failed, please login" } });
         } else {
           console.log(error);
           toast.warning("Something went wrong, please try again later");

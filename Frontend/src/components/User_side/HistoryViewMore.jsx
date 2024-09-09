@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import UserNavbar from './NavbarPage';
-import userAxiosInstance from '../../config/axiosInstance/userInstance'; 
+import userAxiosInstance from '../../Config/AxiosInstance/userInstance'; 
 import confirmAlert from '../Common/SweetAlert/confirmAlert';
 import { toast } from "sonner";
 import { loadRazorpayScript, proceedToPayment } from '../../Utils/razorPay';
@@ -11,6 +11,7 @@ import { Base_URL, razorpayURL } from "../../config/credentials";
 import Reveal from '../../../public/Animation/Animated';
 import RatingStar from "../Common/StarRating";
 import { useUserDetails } from '../../Contexts/UserDetailsContext';
+import { useUserAuthContext } from '../../Contexts/UserAuthContext';
 
 const UserHistoryViewMore = () => {
   const [bookingDetails, setBookingDetails] = useState({});
@@ -19,6 +20,7 @@ const UserHistoryViewMore = () => {
   const navigate = useNavigate();
   const [rating, setRating] = useState(3);
   const [enteredFeedback, setEnteredFeedback] = useState("");
+  const { setIsLogged } = useUserAuthContext();
 
   useEffect(() => {
     const fetchBookingDetails = async (booking_id) => {
@@ -66,6 +68,7 @@ const UserHistoryViewMore = () => {
 
   const handleError = (error) => {
     if (error.response.status === 401) {
+      setIsLogged(false);
       navigate("/login", { state: { message: "Authorization failed, please login" } });
     } else {
       toast.error("Something went wrong, please try again later.");
@@ -87,6 +90,7 @@ const UserHistoryViewMore = () => {
         toast.success("Thank you for your feedback. Have a good day.");
       } catch (error) {
         if (error.response.status === 401) {
+          setIsLogged(false);
           navigate("/login", { state: { message: "Authorization failed please login" } });
         } else {
           toast.error("Something wrong. Please try again later");

@@ -7,7 +7,7 @@ import FollowingInformation from './user-Personal details/FollowingInfo';
 import TechnicianFeedbacks from '../Technician_side/TechnicianFeedbacks';
 import UserChangePassword from "./user-Personal details/ChangePassword";
 import TechnicianChangeProfession from '../Technician_side/TechnicianChangeProfession';
-import userAxiosInstance from '../../config/axiosInstance/userInstance'; 
+import userAxiosInstance from '../../Config/AxiosInstance/userInstance';
 import backgroundImage from "../../../public/Images/HeaderBanner_2.png";
 import { Base_URL } from '../../config/credentials';
 import { useLocation } from 'react-router-dom';

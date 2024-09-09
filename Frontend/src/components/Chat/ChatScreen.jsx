@@ -4,11 +4,12 @@ import RecieverMsg from "./RecieverMsg";
 import SenderMsg from "./SenderMsg";
 import { Send } from '../../../public/svgs/Icons';
 import { toast } from 'sonner';
-import userAxiosInstance from "../../config/axiosInstance/userInstance";
+import userAxiosInstance from "../../Config/AxiosInstance/userInstance";
 import io from "socket.io-client";
 const socket = io(Base_URL);
 import { useUserDetails } from "../../Contexts/UserDetailsContext"; 
 import { useNavigate } from "react-router-dom";
+import { useUserAuthContext } from "../../Contexts/UserAuthContext";
 
 const ChatScreen = ({ currentChatting }) => {
   const [chatHistory, setChatHistory] = useState(null);
@@ -16,6 +17,7 @@ const ChatScreen = ({ currentChatting }) => {
   const [newMsg, setNewMsg] = useState("");
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
+  const { setIsLogged } = useUserAuthContext();
 
   useEffect(() => {
     (async () => {
@@ -25,6 +27,7 @@ const ChatScreen = ({ currentChatting }) => {
         socket.emit("joinChatRoom", { senderID: userDetails?.user_id, receiverID: currentChatting?.user_id });
       } catch (error) {
         if (error.response.status === 401) {
+          setIsLogged(false);
           navigate("/login", { state: { message: "Authorization failed, please login" } });
         } else {
           toast.error("Something wrong, Can't fetch chat history. Please try again later");
@@ -61,6 +64,7 @@ const ChatScreen = ({ currentChatting }) => {
         setNewMsg("");
       } catch (error) {
         if (error.response.status === 401) {
+          setIsLogged(false);
           navigate("/login", { state: { message: "Authorization failed, please login" } });
         } else {
           toast.error("Something went wrong, please try again later");

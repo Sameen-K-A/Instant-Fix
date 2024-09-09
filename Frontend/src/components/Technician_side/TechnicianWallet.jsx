@@ -2,7 +2,7 @@ import TechnicianNavbar from "./NavbarPage";
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import { useEffect, useState } from "react";
-import userAxiosInstance from "../../config/axiosInstance/userInstance";
+import userAxiosInstance from "../../Config/AxiosInstance/userInstance"; 
 import { toast } from "sonner";
 import Reveal from "../../../public/Animation/Animated";
 

@@ -1,17 +1,18 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUserAuthContext } from "../../Contexts/UserAuthContext";
 
 const GuestProtector = ({ children }) => {
   const navigate = useNavigate();
-  const userToken = sessionStorage.getItem("userToken");
+  const { isLogged } = useUserAuthContext();
 
   useEffect(() => {
-    if (userToken) {
+    if (isLogged) {
       navigate("/");
     }
   }, []);
 
-  if (!userToken) {
+  if (!isLogged) {
     return children;
   }
 

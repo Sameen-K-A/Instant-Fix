@@ -2,16 +2,18 @@ import { useEffect, useState } from "react";
 import Reveal from "../../../public/Animation/Animated";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import userAxiosInstance from "../../config/axiosInstance/userInstance";
+import userAxiosInstance from "../../Config/AxiosInstance/userInstance"; 
 import { useUserDetails } from "../../Contexts/UserDetailsContext"; 
 import { Base_URL } from "../../config/credentials"; 
 import { Star } from "../../../public/svgs/Icons";
+import { useUserAuthContext } from "../../Contexts/UserAuthContext";
 
 const TechnicianFeedbacks = () => {
 
   const [ratingDetails, setRatingDetails] = useState([]);
   const { userDetails, setUserDetails } = useUserDetails();
   const navigate = useNavigate();
+  const { setIsLogged } = useUserAuthContext();
 
   useEffect(() => {
     (async () => {
@@ -26,6 +28,7 @@ const TechnicianFeedbacks = () => {
         };
       } catch (error) {
         if (error.response.status === 401) {
+          setIsLogged(false);
           navigate("/login", { state: { message: "Authorization failed, please login" } });
         } else {
           toast.error("Something went wrong, please try again later.");

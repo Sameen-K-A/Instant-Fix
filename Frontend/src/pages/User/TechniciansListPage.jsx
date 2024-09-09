@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import TechnicianProfileCard from '../../Components/User_side/TechnicianProfileCard';
 import UserNavbar from '../../Components/User_side/NavbarPage';
 import Footer from '../../Components/common/Footer'; 
-import userAxiosInstance from '../../config/axiosInstance/userInstance'; 
+import userAxiosInstance from '../../Config/AxiosInstance/userInstance'; 
 import { toast } from 'sonner';
 import NoResultFoundImage from "../../../public/images/NoResultFound.png";
 import { useUserDetails } from "../../Contexts/UserDetailsContext"
 import Reveal from '../../../public/Animation/Animated';
+import { useUserAuthContext } from '../../Contexts/UserAuthContext';
 
 const TechniciansListPage = () => {
   const [primaryTechniciansList, setPrimaryTechnicianList] = useState([]);
@@ -19,6 +20,7 @@ const TechniciansListPage = () => {
   const district = ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kollam", "Kottayam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"];
   const navigate = useNavigate();
   const { userDetails } = useUserDetails();
+  const { setIsLogged } = useUserAuthContext();
 
   useEffect(() => {
     (async () => {
@@ -32,6 +34,7 @@ const TechniciansListPage = () => {
         setTechniciansArray(responseDetails.data);
       } catch (error) {
         if (error.response?.status === 401) {
+          setIsLogged(false);
           navigate("/login", { state: { message: "Authorization failed, please login" } });
         } else {
           console.log(error);

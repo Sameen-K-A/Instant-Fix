@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AboutUS, Account, Booking, Chat, CloseSideBarIcon, Contact, Home, OpenSideBarIcon, PowerBtn, Worker } from '../../../public/svgs/Icons';
-import confirmAlert from '../Common/SweetAlert/confirmAlert'; 
-import AlertRedDot from '../Common/AlertRedDot'; 
+import confirmAlert from '../Common/SweetAlert/confirmAlert';
+import AlertRedDot from '../Common/AlertRedDot';
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
+import { useUserAuthContext } from "../../Contexts/UserAuthContext";
+import { toast } from 'sonner';
+import userAxiosInstance from "../../Config/AxiosInstance/userInstance";
 import '../../../public/css/sidebar.css';
 
 const UserSideBar = () => {
   const [isSidebarClosed, setIsSidebarClosed] = useState(true);
   const navigate = useNavigate();
   const { userDetails, setUserDetails } = useUserDetails();
+  const { setIsLogged } = useUserAuthContext();
 
   const toggleSidebar = () => {
     setIsSidebarClosed(!isSidebarClosed);
@@ -17,14 +21,19 @@ const UserSideBar = () => {
 
   const handleLogout = () => {
     confirmAlert("Do you want to logout?")
-      .then((result) => {
+      .then(async (result) => {
         if (result.isConfirmed) {
-          sessionStorage.removeItem("userToken");
-          sessionStorage.removeItem("userDetails");
-          localStorage.removeItem("userRefreshToken");
-          setUserDetails(null);
-          navigate("/");
-        }
+          try {
+            await userAxiosInstance.get("/logout");
+            localStorage.removeItem("userDetails");
+            localStorage.removeItem("userIsLogged");
+            setUserDetails(null);
+            setIsLogged(false);
+            navigate("/");
+          } catch (error) {
+            toast.error("Something wrong please try again later");
+          };
+        };
       });
   };
 

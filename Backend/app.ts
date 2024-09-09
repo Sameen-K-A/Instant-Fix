@@ -1,6 +1,7 @@
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import cookie_parser from "cookie-parser"
 import user_routes from './Routes/user_routes';
 import admin_routes from './Routes/admin_routes';
 import technician_routes from './Routes/technician_routes';
@@ -21,8 +22,12 @@ configSocketIO(server);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use(cookie_parser());
 app.use(morgan('dev'));
-app.use(cors());
+app.use(cors({
+   origin: "http://localhost:5173",
+   credentials: true
+}));
 app.use('/admin', admin_routes);
 app.use('/technician', technician_routes);
 app.use('/chat', chat_routes);

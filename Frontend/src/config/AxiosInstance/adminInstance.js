@@ -3,6 +3,7 @@ import { Base_URL } from "../credentials";
 
 const adminAxiosInstance = axios.create({
    baseURL: `${Base_URL}/admin`,
+   withCredentials: true
 });
 
 adminAxiosInstance.interceptors.request.use(

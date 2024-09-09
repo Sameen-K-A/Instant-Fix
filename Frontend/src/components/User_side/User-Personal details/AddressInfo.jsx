@@ -1,13 +1,15 @@
-import userAxiosInstance from "../../../config/axiosInstance/userInstance";
+import userAxiosInstance from "../../../Config/AxiosInstance/userInstance";
 import confirmAlert from "../../Common/SweetAlert/confirmAlert";
 import { toast } from "sonner";
 import AlertRedDot from "../../Common/AlertRedDot";
 import AddressModal from "./AddressModal";
 import { useUserDetails } from "../../../Contexts/UserDetailsContext";
+import { useUserAuthContext } from "../../../Contexts/UserAuthContext";
 
 const AddressInformation = () => {
 
   const { userDetails, setUserDetails } = useUserDetails();
+  const { setIsLogged } = useUserAuthContext();
   const handleDelete = () => {
     confirmAlert("Do you want to delete this Address")
       .then(async (result) => {
@@ -20,6 +22,7 @@ const AddressInformation = () => {
             toast.success("The address has been deleted successfully.");
           } catch (error) {
             if (error.response.status === 401) {
+              setIsLogged(false);
               navigate("/login", { state: { message: "Authorization failed please login" } });
             } else {
               console.log(error);

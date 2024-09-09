@@ -63,4 +63,7 @@ router.post("/verifyPayment", verifyToken, userController.verifyPayment);
 //  technician feedback side
 router.post("/submitReview", verifyToken, userController.submitReview);
 
+// logout
+router.get("/logout", userController.logout)
+
 export default router;

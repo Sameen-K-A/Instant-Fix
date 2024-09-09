@@ -7,18 +7,24 @@ import GoogleIcon from "../../../public/svgs/GoogleIcon";
 import { toast } from 'sonner';
 import axios from 'axios';
 import { Base_URL } from '../../config/credentials';
-import { useUserDetails } from '../../Contexts/UserDetailsContext'; 
+import { useUserDetails } from '../../Contexts/UserDetailsContext';
+import { useUserAuthContext } from '../../Contexts/UserAuthContext';
 
 const UserLogin = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { setUserDetails } = useUserDetails()
+  const { setUserDetails } = useUserDetails();
+  const { setIsLogged } = useUserAuthContext();
 
   useEffect(() => {
     if (location.state?.message) {
       if (location.state.message === "Registration process completed successfully, please login") {
         toast.success("Registration process completed successfully, please login.");
       } else if (location.state.message === "Authorization failed, please login") {
+        setIsLogged(false);
+        setUserDetails(null);
+        localStorage.removeItem("userDetails");
+        localStorage.removeItem("userIsLogged");
         toast.error(location.state.message);
       };
     };
@@ -41,11 +47,10 @@ const UserLogin = () => {
     validateOnBlur: true,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post(`${Base_URL}/login`, values);
-        console.log(response.data)
-        sessionStorage.setItem("userToken", response.data.userToken);
-        localStorage.setItem("userRefreshToken", response.data.userRefreshToken);
-        sessionStorage.setItem("userDetails", JSON.stringify(response.data.userData));
+        const response = await axios.post(`${Base_URL}/login`, values, { withCredentials: true });
+        localStorage.setItem("userDetails", JSON.stringify(response.data.userData));
+        localStorage.setItem("userIsLogged", JSON.stringify(true));
+        setIsLogged(true);
         setUserDetails(response.data.userData);
         navigate("/");
       } catch (error) {

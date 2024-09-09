@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
-import userAxiosInstance from "../../config/axiosInstance/userInstance";
+import userAxiosInstance from '../../Config/AxiosInstance/userInstance';
 import { useNavigate } from 'react-router-dom';
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import triggerConfetti from '../../Utils/confetti';
+import { useUserAuthContext } from '../../Contexts/UserAuthContext';
 
 const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selectedDate, setSelectedDate, setBookingSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -19,6 +20,7 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selec
   const [phoneNumber, setPhoneNumber] = useState('');
   const [alternateNumber, setAlternateNumber] = useState('');
   const [errors, setErrors] = useState({});
+  const { setIsLogged } = useUserAuthContext();
 
   const validateForm = () => {
     const newErrors = {};
@@ -67,6 +69,7 @@ const BookingConfirmModalDetails = ({ setIsBookingOpen, technicianDetails, selec
       triggerConfetti();
     } catch (error) {
       if (error.response.status === 401) {
+        setIsLogged(false);
         navigate("/login", { state: { message: "Authorization failed, please login" } });
       } else if (error.response.status === 409) {
         toast.error("Booking failed. Please try again later.");

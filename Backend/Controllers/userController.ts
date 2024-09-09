@@ -15,7 +15,17 @@ class UserController {
       try {
          const { email, password } = req.body;
          const serviceResponse = await this.userService.login(email, password);
-         return res.status(HTTP_statusCode.OK).json(serviceResponse);
+         res.cookie("RefreshToken", serviceResponse.userRefreshToken, {
+            httpOnly: true,
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+         });
+         res.cookie("AccessToken", serviceResponse.userToken, {
+            httpOnly: true,
+            sameSite: 'strict',
+            maxAge: 15 * 60 * 1000,
+         });
+         res.status(HTTP_statusCode.OK).json({ userData: serviceResponse.userData });
       } catch (error: any) {
          if (error.message === "email not found") {
             res.status(HTTP_statusCode.NotFound).json({ message: "email not found" });
@@ -295,6 +305,16 @@ class UserController {
          res.status(HTTP_statusCode.OK).send("Feedback submitted successfully");
       } catch (error) {
          res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later");
+      };
+   };
+
+   logout = async (req: Request, res: Response) => {
+      try {
+         res.clearCookie("AccessToken", { httpOnly: true });
+         res.clearCookie("RefreshToken", { httpOnly: true });
+         res.status(HTTP_statusCode.OK).json('Logged out successfully');
+      } catch (error) {
+         res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later")
       };
    };
 

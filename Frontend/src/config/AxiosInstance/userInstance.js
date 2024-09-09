@@ -3,17 +3,7 @@ import { Base_URL } from "../credentials";
 
 const userAxiosInstance = axios.create({
    baseURL: Base_URL,
+   withCredentials: true,
 });
-
-userAxiosInstance.interceptors.request.use(
-   (config) => {
-      const accessToken = sessionStorage.getItem("userToken");
-      config.headers['Authorization'] = `Bearer ${accessToken}`;
-      return config;
-   },
-   (error) => {
-      throw error;
-   }
-);
 
 export default userAxiosInstance;

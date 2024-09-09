@@ -4,13 +4,14 @@ import TechnicianNavbar from './NavbarPage';
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
 import confirmAlert from '../Common/SweetAlert/confirmAlert';
 import { toast } from 'sonner';
-import userAxiosInstance from '../../config/axiosInstance/userInstance';
+import userAxiosInstance from '../../Config/AxiosInstance/userInstance'; 
 import { useUserDetails } from '../../Contexts/UserDetailsContext'; 
 import ServiceLocationMap from './MapPage';
 import { CloseX_mark } from '../../../public/svgs/Icons';
 import WorkCompletedModal from './WorkCompletedModal';
 import AlertRedDot from '../Common/AlertRedDot';
 import Reveal from "../../../public/Animation/Animated";
+import { useUserAuthContext } from '../../Contexts/UserAuthContext';
 
 const TechnicianViewMoreBooking = () => {
   const [bookingDetails, setBookingDetails] = useState(null);
@@ -24,6 +25,7 @@ const TechnicianViewMoreBooking = () => {
   const { userDetails } = useUserDetails();
   const location = useLocation();
   const navigate = useNavigate();
+  const { setIsLogged } = useUserAuthContext();
   const mapContainerRef = useRef(null);
 
   useEffect(() => {
@@ -37,6 +39,7 @@ const TechnicianViewMoreBooking = () => {
           setDestinationLatitude(response.data.serviceLocation.location.coordinates[1])
         } catch (error) {
           if (error.response.status === 401) {
+            setIsLogged(false);
             navigate("/login", { state: { message: "Authorization failed, please login" } });
           } else {
             toast.error("Can't collect booking details. Please try again later.");
@@ -74,6 +77,7 @@ const TechnicianViewMoreBooking = () => {
             toast.success(`Booking updated successfully.`);
           } catch (error) {
             if (error.response.status === 401) {
+              setIsLogged(false);
               navigate("/login", { state: { message: "Authorization failed, please login" } });
             } else if (error.response && error.response.status === 301) {
               toast.error("Booking status is not changed.");

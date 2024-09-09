@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import confirmAlert from "../Common/SweetAlert/confirmAlert";
-import userAxiosInstance from "../../config/axiosInstance/userInstance";
+import userAxiosInstance from "../../Config/AxiosInstance/userInstance"; 
 import { useUserDetails } from "../../Contexts/UserDetailsContext"; 
+import { useUserAuthContext } from "../../Contexts/UserAuthContext";
 
 const TechnicianChangeProfession = ({ profession }) => {
 
@@ -11,6 +12,7 @@ const TechnicianChangeProfession = ({ profession }) => {
   const professions = ["Painter", "Welder", "Electrician", "Plumber", "Automobile Mechanic", "AC Mechanic", "Other"];
   const [selectedProfessionIndex, setSelectedProfessionIndex] = useState(null);
   const [enteredOtherProfession, setEnteredOtherProfession] = useState("");
+  const { setIsLogged } = useUserAuthContext();
 
   const handleSave = () => {
     if (selectedProfessionIndex === null) {
@@ -42,6 +44,7 @@ const TechnicianChangeProfession = ({ profession }) => {
             setIsEdit(false);
           } catch (error) {
             if (error.response.status === 401) {
+              setIsLogged(false);
               navigate("/login", { state: { message: "Authorization failed please login" } });
             } else if (error.response.status === 301) {
               toast.warning("No changes found");

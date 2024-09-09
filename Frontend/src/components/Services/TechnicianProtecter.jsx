@@ -1,13 +1,15 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useUserAuthContext } from "../../Contexts/UserAuthContext";
+import { useUserDetails } from "../../Contexts/UserDetailsContext";
 
 const TechnicianProtecter = ({ children }) => {
+  const { isLogged } = useUserAuthContext();
+  const { userDetails } = useUserDetails();
   const navigate = useNavigate();
-  const userToken = sessionStorage.getItem("userToken");
-  const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
 
   useEffect(() => {
-    if (!userToken) {
+    if (!isLogged) {
       navigate("/login", {
         state: { message: "Authorization failed please login" },
         replace: true
@@ -23,9 +25,9 @@ const TechnicianProtecter = ({ children }) => {
     }
   }, []);
 
-  if (userToken && userDetails?.isTechnician) {
+  if (isLogged && userDetails?.isTechnician) {
     return children;
-  }
+  };
 };
 
 export default TechnicianProtecter;

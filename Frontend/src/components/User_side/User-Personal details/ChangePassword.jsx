@@ -1,14 +1,16 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import userAxiosInstance from '../../../config/axiosInstance/userInstance';
+import userAxiosInstance from '../../../Config/AxiosInstance/userInstance'; 
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import confirmAlert from '../../Common/SweetAlert/confirmAlert';
 import { useUserDetails } from '../../../Contexts/UserDetailsContext';
+import { useUserAuthContext } from '../../../Contexts/UserAuthContext';
 
 const UserChangePassword = () => {
   const { userDetails } = useUserDetails();
+  const { setIsLogged } = useUserAuthContext();
   const navigate = useNavigate();
 
   const formik = useFormik({
@@ -39,6 +41,7 @@ const UserChangePassword = () => {
               if (error.response?.data?.message === 'Current password is wrong') {
                 toast.error('Current password is wrong.');
               } else if (error.response.status === 401) {
+                setIsLogged(false);
                 navigate('/login', { state: { message: 'Authorization failed please login' } });
               } else {
                 console.log(error);

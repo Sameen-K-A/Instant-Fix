@@ -1,37 +1,65 @@
 import jwt from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction, Request } from 'express';
 import dotenv from 'dotenv';
 import HTTP_statusCode from '../Enums/httpStatusCode';
 
 dotenv.config();
+
 const secret_key = process.env.JWT_SECRET as string;
+const accessTokenTime = process.env.Access_Token_Expirey_Time as string;
+const refreshTokenTime = process.env.Refresh_Token_Expirey_Time as string;
 
 const createToken = (user_id: string): string => {
-   const newToken = jwt.sign({ user_id }, secret_key, { expiresIn: '5h' });
-   return newToken;
+   return jwt.sign({ user_id }, secret_key, { expiresIn: accessTokenTime });
 };
 
 const createRefreshToken = (user_id: string): string => {
-   const newRefershToken = jwt.sign({ user_id }, secret_key, { expiresIn: '7d' });
-   return newRefershToken;
+   return jwt.sign({ user_id }, secret_key, { expiresIn: refreshTokenTime });
 };
 
-const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-   const authHeader = req.headers['authorization'];
-   if (!authHeader) {
-      return res.status(HTTP_statusCode.Unauthorized).json({ message: 'Access denied. access token not valid' });
-   }
-   const accessToken = authHeader.split(' ')[1];
-   if (!accessToken) {
-      return res.status(HTTP_statusCode.Unauthorized).json({ message: 'Access denied. access token not valid' });
-   }
-   jwt.verify(accessToken, secret_key, (err) => {
-      if (err) {
-         return res.status(HTTP_statusCode.Unauthorized).json({ message: 'Access denied. access token not valid' });
+const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
+   try {
+      const accessToken: string = req.cookies.AccessToken;
+      if (accessToken) {
+         jwt.verify(accessToken, secret_key, async (err, decoded) => {
+            if (err) {
+               await handleRefreshToken(req, res, next);
+            } else {
+               next();
+            };
+         });
       } else {
-         next();
-      }
-   });
+         await handleRefreshToken(req, res, next);
+      };
+   } catch (error) {
+      res.status(HTTP_statusCode.Unauthorized).json({ message: 'Access denied. Access token not valid.' });
+   };
+};
+
+const handleRefreshToken = async (req: Request, res: Response, next: NextFunction) => {
+   const refreshToken: string = req.cookies.RefreshToken;
+   if (refreshToken) {
+      jwt.verify(refreshToken, secret_key, (err, decoded) => {
+         if (err) {
+            return res.status(HTTP_statusCode.Unauthorized).json({ message: 'Access denied. Refresh token not valid.' });
+         } else {
+            const { user_id } = decoded as jwt.JwtPayload;
+            if (!user_id) {
+               return res.status(HTTP_statusCode.Unauthorized).json({ message: 'Access denied. Token payload invalid.' });
+            } else {
+               const newAccessToken = createToken(user_id);
+               res.cookie("AccessToken", newAccessToken, {
+                  httpOnly: false,
+                  sameSite: 'strict',
+                  maxAge: 15 * 60 * 1000,
+               });
+               next();
+            };
+         };
+      });
+   } else {
+      return res.status(HTTP_statusCode.Unauthorized).json({ message: 'Access denied. Refresh token not provided.' });
+   };
 };
 
 export { createToken, verifyToken, createRefreshToken };

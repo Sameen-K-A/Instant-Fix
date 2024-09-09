@@ -3,24 +3,32 @@ import { useNavigate } from 'react-router-dom';
 import { Account, Booking, Calendar, Chat, Home, Leave, PowerBtn, Settings, Wallet } from '../../../public/svgs/Icons';
 import confirmAlert from "../Common/SweetAlert/confirmAlert";
 import AlertRedDot from "../Common/AlertRedDot";
-import { useUserDetails } from '../../Contexts/UserDetailsContext'; 
+import { useUserDetails } from '../../Contexts/UserDetailsContext';
+import userAxiosInstance from "../../Config/AxiosInstance/userInstance";
+import {useUserAuthContext} from "../../Contexts/UserAuthContext";
 import '../../../public/css/techniciansidebar.css';
 
 const TechnicianSidebar = () => {
   const [showMore, setShowMore] = useState(false);
   const { userDetails, setUserDetails } = useUserDetails();
+  const { setIsLogged } = useUserAuthContext();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     confirmAlert("Do you want to logout?")
-      .then((result) => {
+      .then(async (result) => {
         if (result.isConfirmed) {
-          sessionStorage.removeItem("userToken");
-          sessionStorage.removeItem("userDetails");
-          localStorage.removeItem("userRefreshToken");
-          setUserDetails(null);
-          navigate("/");
-        }
+          try {
+            await userAxiosInstance.get("/logout");
+            localStorage.removeItem("userDetails");
+            localStorage.removeItem("userIsLogged");
+            setUserDetails(null);
+            setIsLogged(false);
+            navigate("/");
+          } catch (error) {
+            toast.error("Something wrong please try again later");
+          };
+        };
       });
   };
 
