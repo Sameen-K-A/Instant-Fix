@@ -33,7 +33,7 @@ const AccountDetails = () => {
       const afterChanged = {
         ...userDetails, technicianDetails: [{ ...userDetails.technicianDetails[0], availability: changedStatus === "Active" ? true : false }]
       };
-      sessionStorage.setItem("userDetails", JSON.stringify(afterChanged));
+      localStorage.setItem("userDetails", JSON.stringify(afterChanged));
       setUserDetails(afterChanged);
       toast.success("Status changed successfully");
     } catch (error) {

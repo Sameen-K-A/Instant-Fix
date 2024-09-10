@@ -3,17 +3,27 @@ import { PowerBtn } from "../../../public/svgs/Icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import confirmAlert from '../Common/SweetAlert/confirmAlert';
 import { GiQuickSlash } from "react-icons/gi";
+import adminAxiosInstance from "../../Config/AxiosInstance/adminInstance";
+import { toast } from 'sonner';
+import { useAdminAuthContext } from '../../Contexts/AdminAuthContext';
 
 const AdminNavbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { setAdminIsLogged } = useAdminAuthContext();
 
   const handleLogout = () => {
     confirmAlert("Logout?")
-      .then((result) => {
+      .then(async (result) => {
         if (result.isConfirmed) {
-          sessionStorage.removeItem("adminToken");
-          navigate("/admin", { state: { message: "Logout successfully" } });
+          try {
+            await adminAxiosInstance.get("/logout");
+            setAdminIsLogged(false);
+            localStorage.removeItem("adminIsLogged");
+            navigate("/admin", { state: { message: "Logout successfully" } });
+          } catch (error) {
+            toast.error("Something wrong please try agian later.");
+          }
         }
       });
   };
@@ -22,7 +32,7 @@ const AdminNavbar = () => {
     <div className='p-4'>
       <nav className="navbar navbar-expand-md card py-2">
         <div className="container-fluid">
-        <p className="navbar-brand mb-0 cursor-pointer" onClick={() => navigate("/admin/dashboard")}><GiQuickSlash style={{ transform: 'rotate(-180deg)' }} className="text-primary" size={30} /><span className=" text-bold text-primary" style={{marginLeft:"-15px"}}>Instant Fix</span></p>
+          <p className="navbar-brand mb-0 cursor-pointer" onClick={() => navigate("/admin/dashboard")}><GiQuickSlash style={{ transform: 'rotate(-180deg)' }} className="text-primary" size={30} /><span className=" text-bold text-primary" style={{ marginLeft: "-15px" }}>Instant Fix</span></p>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav ms-auto gap-3 d-flex align-items-center justify-content-center">
               <li className="nav-item d-flex align-items-center">

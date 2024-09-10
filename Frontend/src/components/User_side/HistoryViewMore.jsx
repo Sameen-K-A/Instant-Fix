@@ -50,7 +50,7 @@ const UserHistoryViewMore = () => {
       .then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
+            const userDetails = JSON.parse(localStorage.getItem("userDetails"));
             await userAxiosInstance.patch("/cancelBooking", {
               booking_id: bookingDetails.booking_id,
               technician_id: bookingDetails.technicianUser_id,

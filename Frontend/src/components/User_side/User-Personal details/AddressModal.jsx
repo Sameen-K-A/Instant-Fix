@@ -77,7 +77,7 @@ const AddressModal = () => {
         document.body.style = '';
 
         const afterChanging = { ...userDetails, addressDetails: addAndEditAddressDetails };
-        sessionStorage.setItem("userDetails", JSON.stringify(afterChanging));
+        localStorage.setItem("userDetails", JSON.stringify(afterChanging));
         setUserDetails(afterChanging);
         toast.success("The address has been added successfully.");
         formik.resetForm();

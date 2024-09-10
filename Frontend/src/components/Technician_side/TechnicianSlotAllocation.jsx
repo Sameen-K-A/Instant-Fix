@@ -27,7 +27,7 @@ const TechnicianSlotAllocation = () => {
       setUserDetails(afterFetching);
       const today = new Date().setHours(0, 0, 0, 0);
       setSelectedDates(afterFetching.technicianDetails[0].availableSlots.filter(slotInfo => new Date(slotInfo.slotDate).setHours(0, 0, 0, 0) >= today));
-      sessionStorage.setItem("userDetails", JSON.stringify(afterFetching));
+      localStorage.setItem("userDetails", JSON.stringify(afterFetching));
     } catch (error) {
       toast.error("Can't fetch technician details, please try again later.");
     };
@@ -97,7 +97,7 @@ const TechnicianSlotAllocation = () => {
       });
       const afterChanging = { ...userDetails, technicianDetails: [{ ...userDetails.technicianDetails[0], availableSlots: selectedDates }] };
       setUserDetails(afterChanging);
-      sessionStorage.setItem("userDetails", JSON.stringify(afterChanging));
+      localStorage.setItem("userDetails", JSON.stringify(afterChanging));
       toast.success("Slot availability modified successfully.");
     } catch (error) {
       toast.error("Something went wrong, please try again later.");

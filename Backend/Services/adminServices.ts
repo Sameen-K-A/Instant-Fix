@@ -1,4 +1,4 @@
-import { createToken } from "../Config/jwt_config";
+import { createToken, createRefreshToken } from "../Config/jwt_config";
 import { IAdminServices } from "../Interfaces/admin.service.interface";
 import { IAdminRepository } from "../Interfaces/admin.repository.interface";
 import { IBookingHistory, ITechnicians, IUser } from "../Interfaces/common.interface";
@@ -12,14 +12,15 @@ class AdminServices implements IAdminServices {
       this.adminRepository = adminRepository;
    };
 
-   login = (email: string, password: string): string => {
+   login = (email: string, password: string): { adminAccessToken: string, adminRefreshToken: string } => {
       try {
          const orginalEmail = process.env.Admin_email as string;
          const orginalPassword = process.env.Admin_password as string;
          if (orginalEmail === email) {
             if (orginalPassword === password) {
-               const adminToken: string = createToken(email);
-               return adminToken;
+               const adminAccessToken: string = createToken(email);
+               const adminRefreshToken: string = createRefreshToken(email);
+               return { adminAccessToken, adminRefreshToken };
             } else {
                throw new Error("Wrong password");
             };

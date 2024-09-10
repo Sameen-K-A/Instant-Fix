@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import confirmAlert from "../Common/SweetAlert/confirmAlert";
-import adminAxiosInstance from "../../config/axiosInstance/adminInstance"
+import adminAxiosInstance from "../../Config/AxiosInstance/adminInstance";
 import { useNavigate } from "react-router-dom";
 import AdminNavbar from "./AdminNavbar";
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
 import NoResultFoundImage from "../../../public/images/NoResultFound.png";
 import Reveal from "../../../public/Animation/Animated";
+import { useAdminAuthContext } from "../../Contexts/AdminAuthContext";
 
 const AdminTechnicianList = () => {
   const [orginalArray, setOrginalArray] = useState([]);
   const [techniciansArray, setTechniciansArray] = useState([]);
+  const { setAdminIsLogged } = useAdminAuthContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,6 +23,7 @@ const AdminTechnicianList = () => {
         setTechniciansArray(response.data);
       } catch (error) {
         if (error.response.status === 401) {
+          setAdminIsLogged(false);
           navigate("/admin", { state: { message: "Authorization failed please login" } });
         } else {
           console.log(error);
@@ -47,6 +50,7 @@ const AdminTechnicianList = () => {
           } catch (error) {
             console.log(error);
             if (error.response.status === 401) {
+              setAdminIsLogged(false);
               navigate("/admin", { state: { message: "Authorization failed please login" } });
             } else {
               toast.warning("Something wrong please try again later");
@@ -72,6 +76,7 @@ const AdminTechnicianList = () => {
             setOrginalArray(afterblockingOrginal);
           } catch (error) {
             if (error.response.status === 401) {
+              setAdminIsLogged(false);
               navigate("/admin", { state: { message: "Authorization failed please login" } });
             } else {
               console.log(error);

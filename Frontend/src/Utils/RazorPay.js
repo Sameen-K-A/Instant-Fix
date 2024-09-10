@@ -1,5 +1,5 @@
 import { toast } from "sonner";
-import userAxiosInstance from "../config/axiosInstance/userInstance";
+import userAxiosInstance from "../Config/AxiosInstance/userInstance"; 
 import { razorpayKeyID, razorpayURL } from "../config/credentials";
 
 export const loadRazorpayScript = async () => {
@@ -43,8 +43,8 @@ const openRazorpayPayment = ({ order_id, amount, currency }, booking_id, technic
       image: '../../public/svgs/FavIcon.svg',
       handler: (response) => handleSuccessPayment(response, booking_id, amount, technicianUser_id, setBookingDetails),
       prefill: {
-         name: JSON.parse(sessionStorage.getItem("userDetails"))?.name,
-         email: JSON.parse(sessionStorage.getItem("userDetails"))?.email,
+         name: JSON.parse(localStorage.getItem("userDetails"))?.name,
+         email: JSON.parse(localStorage.getItem("userDetails"))?.email,
       },
       theme: {
          color: "#3399cc",

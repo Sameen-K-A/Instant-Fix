@@ -39,7 +39,7 @@ const TechnicianChangeProfession = ({ profession }) => {
             await userAxiosInstance.patch(`/technician/changeprofession`, { user_id: userDetails.user_id, profession: finalProfession });
             toast.success("Changes commit successfully");
             const afterChanging = { ...userDetails, technicianDetails: [{ ...userDetails.technicianDetails[0], profession: finalProfession }] };
-            sessionStorage.setItem("userDetails", JSON.stringify(afterChanging));
+            localStorage.setItem("userDetails", JSON.stringify(afterChanging));
             setUserDetails(afterChanging);
             setIsEdit(false);
           } catch (error) {

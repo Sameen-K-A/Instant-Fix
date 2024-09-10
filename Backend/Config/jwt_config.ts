@@ -49,7 +49,7 @@ const handleRefreshToken = async (req: Request, res: Response, next: NextFunctio
             } else {
                const newAccessToken = createToken(user_id);
                res.cookie("AccessToken", newAccessToken, {
-                  httpOnly: false,
+                  httpOnly: true,
                   sameSite: 'strict',
                   maxAge: 15 * 60 * 1000,
                });
@@ -63,3 +63,56 @@ const handleRefreshToken = async (req: Request, res: Response, next: NextFunctio
 };
 
 export { createToken, verifyToken, createRefreshToken };
+
+
+
+
+
+/////////////////////////////////////////////////////////////// for handlling admin jsonwebtoken ////////////////////////////////////////////////
+
+
+
+export const adminVerifyToken = async (req: Request, res: Response, next: NextFunction) => {
+   try {
+      const accessToken: string = req.cookies.AdminAccessToken;
+      if (accessToken) {
+         jwt.verify(accessToken, secret_key, async (err, decoded) => {
+            if (err) {
+               await handleAdminRefreshToken(req, res, next);
+            } else {
+               next();
+            };
+         });
+      } else {
+         await handleAdminRefreshToken(req, res, next);
+      };
+   } catch (error) {
+      res.status(HTTP_statusCode.Unauthorized).json({ message: 'Access denied. Access token not valid.' });
+   };
+};
+
+const handleAdminRefreshToken = async (req: Request, res: Response, next: NextFunction) => {
+   const refreshToken: string = req.cookies.AdminRefreshToken;
+   if (refreshToken) {
+      jwt.verify(refreshToken, secret_key, (err, decoded) => {
+         if (err) {
+            return res.status(HTTP_statusCode.Unauthorized).json({ message: 'Access denied. Refresh token not valid.' });
+         } else {
+            const { user_id } = decoded as jwt.JwtPayload;
+            if (!user_id) {
+               return res.status(HTTP_statusCode.Unauthorized).json({ message: 'Access denied. Token payload invalid.' });
+            } else {
+               const newAccessToken = createToken(user_id);
+               res.cookie("AdminAccessToken", newAccessToken, {
+                  httpOnly: true,
+                  sameSite: 'strict',
+                  maxAge: 15 * 60 * 1000,
+               });
+               next();
+            };
+         };
+      });
+   } else {
+      return res.status(HTTP_statusCode.Unauthorized).json({ message: 'Access denied. Refresh token not provided.' });
+   };
+};

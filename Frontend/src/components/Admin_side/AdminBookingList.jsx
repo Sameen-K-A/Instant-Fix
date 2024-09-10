@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import AdminNavbar from "./AdminNavbar";
-import adminAxiosInstance from "../../config/axiosInstance/adminInstance";
+import adminAxiosInstance from "../../Config/AxiosInstance/adminInstance"; 
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
 import Reveal from "../../../public/Animation/Animated";
 import NoResultFoundImage from "../../../public/images/NoResultFound.png";
+import { useAdminAuthContext } from "../../Contexts/AdminAuthContext";
 
 const AdminBookingHistoryTable = () => {
 
   const [bookingDetailsArray, setBookingDetailsArray] = useState([]);
   const navigate = useNavigate();
+  const { setAdminIsLogged } = useAdminAuthContext();
 
   useEffect(() => {
     (async () => {
@@ -19,6 +21,7 @@ const AdminBookingHistoryTable = () => {
         setBookingDetailsArray(response.data);
       } catch (error) {
         if (error.response.status === 401) {
+          setAdminIsLogged(false);
           navigate("/login", { state: { message: "Authorization failed, please login" } });
         } else {
           toast.error("Can't find booking history, please wait for a moment.");

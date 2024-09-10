@@ -13,6 +13,16 @@ class AdminController {
       try {
          const { email, password } = req.body;
          const serviceResponse = await this.adminService.login(email, password);
+         res.cookie("AdminRefreshToken", serviceResponse.adminRefreshToken, {
+            httpOnly: true,
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+         });
+         res.cookie("AdminAccessToken", serviceResponse.adminAccessToken, {
+            httpOnly: true,
+            sameSite: 'strict',
+            maxAge: 15 * 60 * 1000,
+         });
          res.status(HTTP_statusCode.OK).send(serviceResponse);
       } catch (error: any) {
          if (error.message === "Wrong email") {
@@ -69,6 +79,16 @@ class AdminController {
          res.status(HTTP_statusCode.OK).json(response);
       } catch (error) {
          res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later");
+      };
+   };
+
+   logout = async (req: Request, res: Response) => {
+      try {
+         res.clearCookie("AdminRefreshToken", { httpOnly: true });
+         res.clearCookie("AdminAccessToken", { httpOnly: true });
+         res.status(HTTP_statusCode.OK).send('Logged out successfully');
+      } catch (error) {
+         res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later")
       };
    };
 

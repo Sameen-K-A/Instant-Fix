@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAdminAuthContext } from "../../Contexts/AdminAuthContext";
 
 const AdminProtecter = ({ children }) => {
 
   const navigate = useNavigate();
-  const adminToken = sessionStorage.getItem("adminToken");
+  const { adminIsLogged } = useAdminAuthContext();
 
   useEffect(() => {
-    if (!adminToken) {
+    if (!adminIsLogged) {
       navigate("/admin", {
         state: { message: "Authorization failed please login" },
         replace: true
@@ -15,7 +16,7 @@ const AdminProtecter = ({ children }) => {
     }
   })
 
-  if (adminToken) {
+  if (adminIsLogged) {
     return children;
   }
 }

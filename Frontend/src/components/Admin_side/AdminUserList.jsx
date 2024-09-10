@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import confirmAlert from "../Common/SweetAlert/confirmAlert";
-import adminAxiosInstance from "../../config/axiosInstance/adminInstance";
+import adminAxiosInstance from "../../Config/AxiosInstance/adminInstance"; 
 import { useNavigate } from "react-router-dom";
 import AdminNavbar from "./AdminNavbar";
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
 import NoResultFoundImage from "../../../public/images/NoResultFound.png";
 import Reveal from "../../../public/Animation/Animated";
+import { useAdminAuthContext } from "../../Contexts/AdminAuthContext";
 
 const AdminUserList = () => {
   const [orginalArray, setOrginalArray] = useState([]);
   const [usersArray, setUsersArray] = useState([]);
   const navigate = useNavigate();
+  const { setAdminIsLogged } = useAdminAuthContext();
 
   useEffect(() => {
     (async () => {
@@ -21,6 +23,7 @@ const AdminUserList = () => {
         setUsersArray(response.data);
       } catch (error) {
         if (error.response.status === 401) {
+          setAdminIsLogged(false);
           navigate("/admin", { state: { message: "Authorization failed please login" } });
         } else {
           console.log(error);
@@ -46,6 +49,7 @@ const AdminUserList = () => {
             setOrginalArray(afterUnblockingOrginal);
           } catch (error) {
             if (error.response.status === 401) {
+              setAdminIsLogged(false);
               navigate("/admin", { state: { message: "Authorization failed please login" } });
             } else {
               console.log(error);
@@ -84,6 +88,7 @@ const AdminUserList = () => {
             setOrginalArray(afterblockingOrginal);
           } catch (error) {
             if (error.response.status === 401) {
+              setAdminIsLogged(false);
               navigate("/admin", { state: { message: "Authorization failed please login" } });
             } else {
               console.log(error);

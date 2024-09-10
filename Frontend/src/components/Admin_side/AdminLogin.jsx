@@ -7,10 +7,12 @@ import axios from 'axios';
 import { Base_URL } from '../../config/credentials';
 import backgroundImage from '../../../public/Images/HeaderBanner_3.jpg';
 import Reveal from "../../../public/Animation/Animated";
+import { useAdminAuthContext } from "../../Contexts/AdminAuthContext";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { setAdminIsLogged } = useAdminAuthContext();
 
   const formik = useFormik({
     initialValues: {
@@ -27,8 +29,9 @@ const AdminLogin = () => {
     onSubmit: async (values) => {
       const { email, password } = values;
       try {
-        const response = await axios.post(`${Base_URL}/admin/login`, { email, password });
-        sessionStorage.setItem('adminToken', response.data);
+        await axios.post(`${Base_URL}/admin/login`, { email, password }, { withCredentials: true });
+        localStorage.setItem('adminIsLogged', JSON.stringify(true));
+        setAdminIsLogged(true);
         navigate('/admin/dashboard');
       } catch (error) {
         if (error.response.data.message === 'Email not found') {
@@ -44,6 +47,8 @@ const AdminLogin = () => {
 
   useEffect(() => {
     if (location.state?.message === 'Authorization failed please login') {
+      setAdminIsLogged(false);
+      localStorage.removeItem('adminIsLogged');
       toast.error('Authorization failed please login.');
     } else if (location.state?.message === 'Logout successfully') {
       toast.success(location.state?.message);

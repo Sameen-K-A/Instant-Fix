@@ -6,15 +6,4 @@ const adminAxiosInstance = axios.create({
    withCredentials: true
 });
 
-adminAxiosInstance.interceptors.request.use(
-   (config) => {
-      const accessToken = sessionStorage.getItem("adminToken");
-      config.headers['Authorization'] = `Bearer ${accessToken}`;
-      return config;
-   },
-   (error) => {
-      throw error;
-   }
-);
-
 export default adminAxiosInstance;

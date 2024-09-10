@@ -1,6 +1,6 @@
 import { Router } from "express";
 import AdminController from "../Controllers/adminController";
-import { verifyToken } from "../Config/jwt_config";
+import { adminVerifyToken } from "../Config/jwt_config";
 import AdminServices from "../Services/adminServices";
 import AdminRepository from "../Repository/adminRepository";
 import User from "../Model/userModal";
@@ -13,10 +13,11 @@ const adminService = new AdminServices(adminRepository);
 const adminController = new AdminController(adminService);
 
 router.post("/login", adminController.login);
-router.get("/fetchUser", verifyToken, adminController.findUser);
-router.patch("/unblockUser", verifyToken, adminController.unBlock);
-router.patch("/blockUser", verifyToken, adminController.block);
-router.get("/fetchTechnicians", verifyToken, adminController.findTechnician);
-router.get("/fetchBookings", verifyToken, adminController.findBooking);
+router.get("/fetchUser", adminVerifyToken, adminController.findUser);
+router.patch("/unblockUser", adminVerifyToken, adminController.unBlock);
+router.patch("/blockUser", adminVerifyToken, adminController.block);
+router.get("/fetchTechnicians", adminVerifyToken, adminController.findTechnician);
+router.get("/fetchBookings", adminVerifyToken, adminController.findBooking);
+router.get("/logout", adminController.logout);
 
 export default router;

@@ -33,7 +33,7 @@ const FollowingInformation = () => {
       await userAxiosInstance.patch("/unSaveTechnician", { technicianId: technicianUser_id, user_id: userDetails.user_id, });
       const updatedUnSavedTechniciansID = userDetails.savedTechnicians.filter((technician_id) => technician_id !== technicianUser_id);
       const afterUnSaveComplete = { ...userDetails, savedTechnicians: updatedUnSavedTechniciansID, };
-      sessionStorage.setItem("userDetails", JSON.stringify(afterUnSaveComplete));
+      localStorage.setItem("userDetails", JSON.stringify(afterUnSaveComplete));
       setUserDetails(afterUnSaveComplete);
       const updatedUnSavedTechniciansInformation = savedTechnicianDetails.filter((technicianInfo) => technicianInfo.SavedTechnicianPersonalInformation.user_id !== technicianUser_id);
       setSavedTechnicianDetails(updatedUnSavedTechniciansInformation);

@@ -20,7 +20,7 @@ const TechnicianRole = () => {
   const location = useLocation();
 
   useEffect(() => {
-    setUserDetails(JSON.parse(sessionStorage.getItem("userDetails")));
+    setUserDetails(JSON.parse(localStorage.getItem("userDetails")));
     if (location.state?.message) {
       toast.error(location.state?.message);
     }
@@ -49,11 +49,10 @@ const TechnicianRole = () => {
       .then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
             const response = await userAxiosInstance.patch(`/technician/joinTechnician?user_id=${userDetails?.user_id}&profession=${finalProfession}`);
             userDetails.isTechnician = true;
             userDetails.technicianDetails.push(response.data);
-            sessionStorage.setItem("userDetails", JSON.stringify(userDetails));
+            localStorage.setItem("userDetails", JSON.stringify(userDetails));
             setUserDetails(userDetails);
             navigate("/technician");
           } catch (error) {

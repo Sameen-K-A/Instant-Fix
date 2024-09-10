@@ -16,7 +16,7 @@ const NotificationCard = () => {
       await userAxiosInstance.patch("/technician/clearNotification", { technicianUser_id: userDetails?.user_id });
       const afterClearing = { ...userDetails, technicianDetails: [{ ...userDetails.technicianDetails[0], notifications: [] }] };
       setUserDetails(afterClearing);
-      sessionStorage.setItem("userDetails", JSON.stringify(afterClearing));
+      localStorage.setItem("userDetails", JSON.stringify(afterClearing));
     } catch (error) {
       toast.error("Can't clear the notifications.")
     }

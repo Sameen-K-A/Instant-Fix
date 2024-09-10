@@ -58,7 +58,7 @@ const EditUserInfo = ({ cancelEdit }) => {
         setUserDetails(updatedDetails);
         cancelEdit();
         toast.success("Profile updated successfully");
-        sessionStorage.setItem("userDetails", JSON.stringify(updatedDetails));
+        localStorage.setItem("userDetails", JSON.stringify(updatedDetails));
       } catch (error) {
         if (error.response?.status === 301) {
           toast.warning("No changes found.");

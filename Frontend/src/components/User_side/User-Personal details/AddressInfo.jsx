@@ -18,7 +18,7 @@ const AddressInformation = () => {
             await userAxiosInstance.delete(`/address?user_id=${userDetails.user_id}`);
             const afterDeletedAddressArray = { ...userDetails, addressDetails: null };
             setUserDetails(afterDeletedAddressArray);
-            sessionStorage.setItem("userDetails", JSON.stringify(afterDeletedAddressArray));
+            localStorage.setItem("userDetails", JSON.stringify(afterDeletedAddressArray));
             toast.success("The address has been deleted successfully.");
           } catch (error) {
             if (error.response.status === 401) {

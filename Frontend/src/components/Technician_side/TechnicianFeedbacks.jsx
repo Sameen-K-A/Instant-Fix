@@ -24,7 +24,7 @@ const TechnicianFeedbacks = () => {
           console.log("its working");
           const afterFindingTechnicianRating = { ...userDetails, technicianDetails: [{ ...userDetails.technicianDetails[0], rating: response.data.technicianRating.rating }] }
           setUserDetails(afterFindingTechnicianRating);
-          sessionStorage.setItem("userDetails", JSON.stringify(afterFindingTechnicianRating));
+          localStorage.setItem("userDetails", JSON.stringify(afterFindingTechnicianRating));
         };
       } catch (error) {
         if (error.response.status === 401) {

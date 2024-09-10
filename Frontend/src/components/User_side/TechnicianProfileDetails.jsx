@@ -67,7 +67,7 @@ const TechnicianProfileDetails = () => {
       await userAxiosInstance.patch("/saveTechnician", { technicianId: technicianDetails.user_id, user_id: userDetails.user_id });
       const updatedSavedTechnicians = [...userDetails.savedTechnicians, technicianDetails.user_id];
       const afterFollowedComplete = { ...userDetails, savedTechnicians: updatedSavedTechnicians };
-      sessionStorage.setItem("userDetails", JSON.stringify(afterFollowedComplete));
+      localStorage.setItem("userDetails", JSON.stringify(afterFollowedComplete));
       setUserDetails(afterFollowedComplete);
     } catch (error) {
       toast.error("Can't save technician. Please try again later");
@@ -79,7 +79,7 @@ const TechnicianProfileDetails = () => {
       await userAxiosInstance.patch("/unSaveTechnician", { technicianId: technicianDetails.user_id, user_id: userDetails.user_id });
       const updatedUnSavedTechnicians = userSavedTechnicians.filter((technician_id) => technician_id !== technicianDetails.user_id);
       const afterUnSaveComplete = { ...userDetails, savedTechnicians: updatedUnSavedTechnicians };
-      sessionStorage.setItem("userDetails", JSON.stringify(afterUnSaveComplete));
+      localStorage.setItem("userDetails", JSON.stringify(afterUnSaveComplete));
       setUserDetails(afterUnSaveComplete);
     } catch (error) {
       toast.error("Can't unsave technician. Please try again later");
