@@ -1,4 +1,4 @@
-import { IBookingHistory, ITechnicians, IUser } from "./common.interface";
+import { IBookingHistory, ILocation, ITechnicians, IUser } from "./common.interface";
 
 export interface IAdminServices {
    login(email: string, password: string): { adminAccessToken: string, adminRefreshToken: string };
@@ -6,5 +6,7 @@ export interface IAdminServices {
    unBlock(user_id: string): Promise<boolean>;
    block(user_id: string): Promise<boolean>;
    findTechnician(): Promise<ITechnicians[]>;
+   fetchbookingsLocation(): Promise<ILocation[]>;
+   getCategories(): Promise<{ profession: string; count: number }[] | null>;
    findBooking(): Promise<IBookingHistory[]>;
 };

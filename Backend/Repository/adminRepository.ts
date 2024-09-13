@@ -1,14 +1,16 @@
 import { Model } from "mongoose";
 import { IAdminRepository } from "../Interfaces/admin.repository.interface";
-import { IBookingDetails, IBookingHistory, ITechnicians, IUser } from "../Interfaces/common.interface";
+import { IBookingDetails, IBookingHistory, ILocation, ITechnicianDetails, ITechnicians, IUser } from "../Interfaces/common.interface";
 
 class AdminRepository implements IAdminRepository {
    private userModel: Model<IUser>;
    private bookingModel: Model<IBookingDetails>;
+   private technicianModel: Model<ITechnicianDetails>;
 
-   constructor(userModel: Model<IUser>, bookingModel: Model<IBookingDetails>) {
+   constructor(userModel: Model<IUser>, bookingModel: Model<IBookingDetails>, technicianModel: Model<ITechnicianDetails>) {
       this.userModel = userModel;
       this.bookingModel = bookingModel;
+      this.technicianModel = technicianModel
    };
 
    findUser = async (): Promise<IUser[]> => {
@@ -112,6 +114,31 @@ class AdminRepository implements IAdminRepository {
                },
             },
          ]);
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   getCategories = async (): Promise<{ profession: string; count: number }[] | null> => {
+      try {
+         const res: { profession: string; count: number }[] = await this.technicianModel.aggregate([
+            { $group: { _id: "$profession", count: { $sum: 1 } } },
+            { $project: { _id: 0, profession: "$_id", count: 1 } },
+         ]);
+         return res;
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   fetchbookingsLocation = async (): Promise<ILocation[]> => {
+      try {
+         let result = await this.bookingModel.aggregate([
+            { $match: {} },
+            { $project: { _id: 0, location: "$serviceLocation.location" } },
+         ]);
+         result = result.map((item) => item.location);
+         return result;
       } catch (error) {
          throw error;
       };

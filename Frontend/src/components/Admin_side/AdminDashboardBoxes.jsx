@@ -2,7 +2,7 @@ const Boxes = ({ mainContent, price, percentage, svgIcon }) => {
   return (
     <div className="col-xl-12 col-sm-12 mb-2">
       <div className="card shadow">
-        <div className="card-body p-3">
+        <div className="card-body p-4">
           <div className="row">
             <div className="col-8">
               <div className="numbers">

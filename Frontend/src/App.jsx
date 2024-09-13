@@ -27,6 +27,7 @@ import AdminUserList from "./Components/Admin_side/AdminUserList";
 import AdminTechnicianList from './Components/Admin_side/AdminTechnicianList';
 import AdminBookingHistoryTable from './Components/Admin_side/AdminBookingList';
 import AdminViewMoreBookingDetails from './Components/Admin_side/AdminViewMoreBookingDetails';
+import AdminAuthProvider from './Contexts/AdminAuthContext';
 
 // Technician side
 import TechnicianProtecter from './Components/Services/TechnicianProtecter';
@@ -39,12 +40,12 @@ import TechnicianWalletPage from './components/Technician_side/TechnicianWallet'
 
 // common side
 import NotFound from './Components/Common/Page404';
+import AppErrorBoundary from './Error/ErrorBounday';
 
 // Style css and others
 import "../public/Css/index.css";
 import "../public/Css/user_home.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import AdminAuthProvider from './Contexts/AdminAuthContext';
 
 function App() {
   return (
@@ -52,42 +53,44 @@ function App() {
       <UserAuthProvider>
         <UserProvider>
           <BrowserRouter>
-            <Routes>
+            <AppErrorBoundary>
+              <Routes>
 
-              {/* User side */}
-              <Route path='/' element={<UserHomePage />} />;
-              <Route path='/login' element={<GuestProtector><UserLogin /></GuestProtector>} />;
-              <Route path='/register' element={<GuestProtector><UserRegister /></GuestProtector>} />;
-              <Route path='/otp' element={<GuestProtector><UserOTP /></GuestProtector>} />;
-              <Route path='/accountdetails' element={<UserProtecter><AccountDetails /></UserProtecter>} />;
-              <Route path='/allTechnicians' element={<UserProtecter><TechniciansListPage /></UserProtecter>} />;
-              <Route path='/bookingHistory' element={<UserProtecter><UserBookingHistoryTable /></UserProtecter>} />;
-              <Route path='/viewmoreHistory' element={<UserProtecter><UserHistoryViewMore /></UserProtecter>} />;
-              <Route path='/chat' element={<UserProtecter><ChatPage /></UserProtecter>} />;
-              <Route path='/techniciandetails' element={<UserProtecter><TechnicianProfileDetails /></UserProtecter>} />;
+                {/* User side */}
+                <Route path='/' element={<UserHomePage />} />;
+                <Route path='/login' element={<GuestProtector><UserLogin /></GuestProtector>} />;
+                <Route path='/register' element={<GuestProtector><UserRegister /></GuestProtector>} />;
+                <Route path='/otp' element={<GuestProtector><UserOTP /></GuestProtector>} />;
+                <Route path='/accountdetails' element={<UserProtecter><AccountDetails /></UserProtecter>} />;
+                <Route path='/allTechnicians' element={<UserProtecter><TechniciansListPage /></UserProtecter>} />;
+                <Route path='/bookingHistory' element={<UserProtecter><UserBookingHistoryTable /></UserProtecter>} />;
+                <Route path='/viewmoreHistory' element={<UserProtecter><UserHistoryViewMore /></UserProtecter>} />;
+                <Route path='/chat' element={<UserProtecter><ChatPage /></UserProtecter>} />;
+                <Route path='/techniciandetails' element={<UserProtecter><TechnicianProfileDetails /></UserProtecter>} />;
 
-              {/* Admin side */}
-              <Route path='/admin' element={<NotAdminProtector><AdminLogin /></NotAdminProtector>} />;
-              <Route path='/admin/dashboard' element={<AdminProtecter><AdminDashboard />  </AdminProtecter>} />;
-              <Route path='/admin/users' element={<AdminProtecter><AdminUserList /></AdminProtecter>} />;
-              <Route path='/admin/technicians' element={<AdminProtecter><AdminTechnicianList /></AdminProtecter>} />;
-              <Route path='/admin/bookings' element={<AdminProtecter><AdminBookingHistoryTable /></AdminProtecter>} />;
-              <Route path='/admin/viewmoreBookingDetails' element={<AdminProtecter><AdminViewMoreBookingDetails /></AdminProtecter>} />;
+                {/* Admin side */}
+                <Route path='/admin' element={<NotAdminProtector><AdminLogin /></NotAdminProtector>} />;
+                <Route path='/admin/dashboard' element={<AdminProtecter><AdminDashboard />  </AdminProtecter>} />;
+                <Route path='/admin/users' element={<AdminProtecter><AdminUserList /></AdminProtecter>} />;
+                <Route path='/admin/technicians' element={<AdminProtecter><AdminTechnicianList /></AdminProtecter>} />;
+                <Route path='/admin/bookings' element={<AdminProtecter><AdminBookingHistoryTable /></AdminProtecter>} />;
+                <Route path='/admin/viewmoreBookingDetails' element={<AdminProtecter><AdminViewMoreBookingDetails /></AdminProtecter>} />;
 
-              {/* Technician side */}
-              <Route path='/technician' element={<TechnicianProtecter><TechnicianHome /></TechnicianProtecter>} />;
-              <Route path='/technician/joinTechnician' element={<UserProtecter><TechnicianRole /></UserProtecter>} />;
-              <Route path='/technician/accountdetails' element={<TechnicianProtecter><AccountDetails /></TechnicianProtecter>} />;
-              <Route path='/technician/chat' element={<TechnicianProtecter><ChatPage /></TechnicianProtecter>} />;
-              <Route path='/technician/technicianBookingHistory' element={<TechnicianProtecter><TechnicianBookingHistoryTable /></TechnicianProtecter>} />;
-              <Route path='/technician/technicianBookingViewmore' element={<TechnicianProtecter><TechnicianViewMoreBooking /></TechnicianProtecter>} />;
-              <Route path='/technician/slotAllocation' element={<TechnicianProtecter><TechnicianSlotAllocation /></TechnicianProtecter>} />;
-              <Route path='/technician/wallet' element={<TechnicianProtecter><TechnicianWalletPage /></TechnicianProtecter>} />;
+                {/* Technician side */}
+                <Route path='/technician' element={<TechnicianProtecter><TechnicianHome /></TechnicianProtecter>} />;
+                <Route path='/technician/joinTechnician' element={<UserProtecter><TechnicianRole /></UserProtecter>} />;
+                <Route path='/technician/accountdetails' element={<TechnicianProtecter><AccountDetails /></TechnicianProtecter>} />;
+                <Route path='/technician/chat' element={<TechnicianProtecter><ChatPage /></TechnicianProtecter>} />;
+                <Route path='/technician/technicianBookingHistory' element={<TechnicianProtecter><TechnicianBookingHistoryTable /></TechnicianProtecter>} />;
+                <Route path='/technician/technicianBookingViewmore' element={<TechnicianProtecter><TechnicianViewMoreBooking /></TechnicianProtecter>} />;
+                <Route path='/technician/slotAllocation' element={<TechnicianProtecter><TechnicianSlotAllocation /></TechnicianProtecter>} />;
+                <Route path='/technician/wallet' element={<TechnicianProtecter><TechnicianWalletPage /></TechnicianProtecter>} />;
 
-              {/* common */}
-              <Route path='*' element={<NotFound />} />;
+                {/* common */}
+                <Route path='*' element={<NotFound />} />;
 
-            </Routes>
+              </Routes>
+            </AppErrorBoundary>
           </BrowserRouter>
           <Toaster richColors expand={false} position="bottom-right" closeButton="true" toastOptions={{ style: { padding: '18px', borderRadius: '8px' } }} />
         </UserProvider>

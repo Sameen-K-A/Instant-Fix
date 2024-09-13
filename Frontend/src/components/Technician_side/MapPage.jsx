@@ -1,9 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl, { Marker, Map } from 'mapbox-gl';
 import axios from 'axios';
-import { Map_Box_Access_Token } from '../../config/credentials'; 
+import { Map_Box_Access_Token, MapDirectionURL } from '../../config/credentials'; 
 import { LocationSymbolForMap } from '../../../public/svgs/Icons';
-import { MapDirectionURL } from '../../config/credentials'; 
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 mapboxgl.accessToken = Map_Box_Access_Token;

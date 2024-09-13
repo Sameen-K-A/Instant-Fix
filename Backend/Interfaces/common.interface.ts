@@ -23,11 +23,13 @@ export interface IUserAddress {
    pincode: string;
    phone: string;
    alternatePhone: string;
-   location?: {
-      type: "Point";
-      coordinates: [number, number];
-   };
+   location?: ILocation;
 };
+
+export interface ILocation {
+   type: "Point";
+   coordinates: [number, number];
+}
 
 export interface IBookingDetails {
    _id?: mongoose.Types.ObjectId;

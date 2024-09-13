@@ -82,6 +82,24 @@ class AdminController {
       };
    };
 
+   fetchbookingsLocation = async (req: Request, res: Response) => {
+      try {
+         const response = await this.adminService.fetchbookingsLocation();
+         res.status(HTTP_statusCode.OK).json(response);
+      } catch (error) {
+         res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later");
+      };
+   };
+
+   getCategories = async (req: Request, res: Response) => {
+      try {
+         const response = await this.adminService.getCategories();
+         res.status(HTTP_statusCode.OK).json(response);
+      } catch (error) {
+         res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later");
+      };
+   };
+
    logout = async (req: Request, res: Response) => {
       try {
          res.clearCookie("AdminRefreshToken", { httpOnly: true });

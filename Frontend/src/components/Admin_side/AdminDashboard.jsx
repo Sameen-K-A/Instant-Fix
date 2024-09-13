@@ -2,6 +2,9 @@ import React from 'react';
 import Boxes from './AdminDashboardBoxes';
 import AdminNavbar from './AdminNavbar';
 import Reveal from "../../../public/Animation/Animated";
+import BookingChart from './Home/Chart';
+import BookingsMap from './Home/BookingsMap';
+import PieChartComponent from './Home/PieChart';
 
 const AdminDashboard = () => {
   return (
@@ -17,23 +20,11 @@ const AdminDashboard = () => {
                 <Boxes mainContent={"New Clients"} price={"+3,462"} percentage={"+2%"} />
                 <Boxes mainContent={"Sales"} price={"$103,430"} percentage={"+5%"} />
               </div>
-              <div className="col-lg-7">
-                <div className="card min-height-300 p-3">
-
-                </div>
-              </div>
+              <BookingChart />
             </div>
             <div className="row mt-4">
-              <div className="col-lg-7">
-                <div className="card min-height-300 p-3">
-
-                </div>
-              </div>
-              <div className="col-lg-5">
-                <div className="card min-height-300 p-3">
-
-                </div>
-              </div>
+              <BookingsMap />
+              <PieChartComponent />
             </div>
           </div>
         </Reveal>
