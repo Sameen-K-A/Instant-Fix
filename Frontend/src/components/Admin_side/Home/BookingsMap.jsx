@@ -61,7 +61,7 @@ const BookingsMap = () => {
   }, [bookingLocations]);
 
   return (
-    <div className="col-lg-8">
+    <div className="col-lg-8 mb-3">
       <div className="card min-height-400 p-3">
         <h6 className='m-2 mb-3'>Booking locations</h6>
         <div ref={mapContainer} className="map-container height-400 w-100 rounded-3" />

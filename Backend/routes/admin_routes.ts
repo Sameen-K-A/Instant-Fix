@@ -21,6 +21,7 @@ router.get("/fetchTechnicians", adminVerifyToken, adminController.findTechnician
 router.get("/fetchBookings", adminVerifyToken, adminController.findBooking);
 router.get("/fetchbookingsLocation", adminVerifyToken, adminController.fetchbookingsLocation);
 router.get("/getCategories", adminVerifyToken, adminController.getCategories);
+router.get("/filteredBooking", adminVerifyToken, adminController.filteredBooking);
 router.get("/logout", adminController.logout);
 
 export default router;

@@ -153,3 +153,9 @@ export interface IChatMessage {
    message: string,
    time?: string;
 };
+
+export interface IFilteredBookings {
+   bookingDate: string;
+   totalBookings: number;
+   bookings: IBookingDetails[];
+};

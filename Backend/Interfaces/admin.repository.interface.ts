@@ -1,4 +1,4 @@
-import { IBookingHistory, ILocation, ITechnicians, IUser } from "./common.interface";
+import { IBookingHistory, IFilteredBookings, ILocation, ITechnicians, IUser } from "./common.interface";
 
 export interface IAdminRepository {
    findUser(): Promise<IUser[]>;
@@ -7,5 +7,6 @@ export interface IAdminRepository {
    findTechnician(): Promise<ITechnicians[]>;
    fetchbookingsLocation(): Promise<ILocation[]>;
    getCategories(): Promise<{ profession: string; count: number }[] | null>;
+   filteredBooking(selectedDates: string[]): Promise<IFilteredBookings[]>;
    findBooking(): Promise<IBookingHistory[]>;
 };

@@ -268,7 +268,7 @@ class UserServices implements IUserService {
             client_id: client_id as string,
             technicianUser_id: technicianDetails.user_id as string,
             bookingTime: date.toLocaleTimeString(),
-            bookingDate: date.toLocaleDateString(),
+            bookingDate: date.toLocaleDateString('en-CA'),
             booking_profession: technicianDetails?.technicianDetails.profession as string,
             booking_status: "Requested",
             serviceDate: selectedDate,

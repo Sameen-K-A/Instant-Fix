@@ -1,6 +1,6 @@
 import { Model } from "mongoose";
 import { IAdminRepository } from "../Interfaces/admin.repository.interface";
-import { IBookingDetails, IBookingHistory, ILocation, ITechnicianDetails, ITechnicians, IUser } from "../Interfaces/common.interface";
+import { IBookingDetails, IBookingHistory, IFilteredBookings, ILocation, ITechnicianDetails, ITechnicians, IUser } from "../Interfaces/common.interface";
 
 class AdminRepository implements IAdminRepository {
    private userModel: Model<IUser>;
@@ -126,6 +126,31 @@ class AdminRepository implements IAdminRepository {
             { $project: { _id: 0, profession: "$_id", count: 1 } },
          ]);
          return res;
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   filteredBooking = async (selectedDates: string[]): Promise<IFilteredBookings[]> => {
+      try {
+         const response: IFilteredBookings[] = await this.bookingModel.aggregate([
+            { $match: { bookingDate: { $in: selectedDates } } },
+            {
+               $group: {
+                  _id: "$bookingDate",
+                  totalBookings: { $sum: 1 },
+                  bookings: {
+                     $push: {
+                        booking_status: "$booking_status",
+                        booking_profession: "$booking_profession",
+                        serviceCompletedDate: "$serviceCompletedDate",
+                     },
+                  },
+               },
+            },
+            { $project: { _id: 0, bookingDate: "$_id", totalBookings: 1, bookings: 1, }, },
+         ]);
+         return response;
       } catch (error) {
          throw error;
       };

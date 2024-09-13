@@ -100,6 +100,16 @@ class AdminController {
       };
    };
 
+   filteredBooking = async (req: Request, res: Response) => {
+      try {
+         const selectedDates: string[] = req.query.selectedDates as string[];
+         const response = await this.adminService.filteredBooking(selectedDates);
+         res.status(HTTP_statusCode.OK).json(response);
+      } catch (error) {
+         res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later");
+      };
+   };
+
    logout = async (req: Request, res: Response) => {
       try {
          res.clearCookie("AdminRefreshToken", { httpOnly: true });

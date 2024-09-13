@@ -1,7 +1,7 @@
 import { createToken, createRefreshToken } from "../Config/jwt_config";
 import { IAdminServices } from "../Interfaces/admin.service.interface";
 import { IAdminRepository } from "../Interfaces/admin.repository.interface";
-import { IBookingHistory, ILocation, ITechnicians, IUser } from "../Interfaces/common.interface";
+import { IBookingHistory, IFilteredBookings, ILocation, ITechnicians, IUser } from "../Interfaces/common.interface";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -73,6 +73,14 @@ class AdminServices implements IAdminServices {
    fetchbookingsLocation = async (): Promise<ILocation[]> => {
       try {
          return await this.adminRepository.fetchbookingsLocation();
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   filteredBooking = async (selectedDates: string[]): Promise<IFilteredBookings[]> => {
+      try {
+         return this.adminRepository.filteredBooking(selectedDates);
       } catch (error) {
          throw error;
       };
