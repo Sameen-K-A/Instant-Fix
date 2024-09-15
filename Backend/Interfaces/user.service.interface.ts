@@ -10,6 +10,7 @@ export interface IUserService {
    deleteAddress(user_id: string): Promise<boolean>;
    updatePassword(user_id: string, currentPass: string, newPass: string): Promise<boolean>;
    updateProfile(user_id: string, name: string, phone: string, profileIMG: string | null): Promise<boolean>;
+   getPreSignedURL(imageName: string): Promise<string>;
    getTechnicians(user_id: string): Promise<ITechnicians[]>;
    getTechnicianWithPersonalDetails(technicianUser_id: string): Promise<IUserWithITechnician>;
    followTechnician(user_id: string, technicianUser_id: string): Promise<boolean>;

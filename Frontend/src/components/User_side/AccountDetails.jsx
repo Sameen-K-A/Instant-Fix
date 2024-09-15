@@ -15,6 +15,7 @@ import { AvailabilityDot, Star } from '../../../public/svgs/Icons';
 import { toast } from 'sonner';
 import { useUserDetails } from '../../Contexts/UserDetailsContext';
 import Reveal from "../../../public/Animation/Animated";
+import ProfileImage from './User-Personal details/profileImage';
 
 const AccountDetails = () => {
   const { userDetails, setUserDetails } = useUserDetails();
@@ -47,6 +48,7 @@ const AccountDetails = () => {
       <nav className="bg-transparent shadow-none position-absolute ps-5 mt-5 w-100 z-index-2">
         <h6 className="font-weight-bolder mb-0 ms-2">{nowTechnician && "Technician "}Account Details</h6>
         <p className="text-sm mt-0 ms-2">{nowTechnician ? "Profile/ Technician details" : "Profile/ Account Details"}</p>
+        <ProfileImage />
       </nav>
       <div className={`container-fluid ${!nowTechnician && " pe-6"}`}>
         <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }} />

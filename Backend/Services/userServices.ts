@@ -13,6 +13,7 @@ import { IUserRepository } from "../Interfaces/user.repository.interface";
 import { ITechnicianRepository } from "../Interfaces/technician.repository.interface";
 import { Orders } from "razorpay/dist/types/orders";
 import { IWalletRepository } from "../Interfaces/wallet.repository.interface";
+import generatePreSignedURL from '../Config/s3_config';
 dotenv.config();
 
 class UserServices implements IUserService {
@@ -170,6 +171,16 @@ class UserServices implements IUserService {
             updatedInformation.profileIMG = profileIMG;
          };
          return await this.userRepository.updateProfile(user_id, updatedInformation);
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   getPreSignedURL = async (imageName: string): Promise<string> => {
+      try {
+         const bucketName: string = process.env.S3_bucketName as string;
+         const URL = generatePreSignedURL(bucketName, imageName);
+         return URL;
       } catch (error) {
          throw error;
       };

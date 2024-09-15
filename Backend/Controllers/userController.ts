@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import HTTP_statusCode from "../Enums/httpStatusCode";
 import { IUserService } from "../Interfaces/user.service.interface";
 import { IUser } from "../Interfaces/common.interface";
+import generatePreSignedURL from "../Config/s3_config";
 
 class UserController {
 
@@ -131,7 +132,7 @@ class UserController {
    updateProfile = async (req: Request, res: Response) => {
       try {
          const { user_id, name, phone, defaultProfileImage } = req.body;
-         const selectedProfileImage = req.file;
+         const selectedProfileImage: Express.Multer.File = req.file as Express.Multer.File;
          let profileIMG: string | null = null;
          if (selectedProfileImage) {
             profileIMG = selectedProfileImage.filename;
@@ -146,6 +147,16 @@ class UserController {
          } else {
             res.status(HTTP_statusCode.InternalServerError).json({ message: 'Internal Server Error' });
          };
+      };
+   };
+
+   getPreSignedURL = async (req: Request, res: Response) => {
+      try {
+         const { imageName } = req.query;
+         const url = await this.userService.getPreSignedURL(imageName as string)
+         res.status(HTTP_statusCode.OK).json({ url });
+      } catch (error) {
+         res.status(HTTP_statusCode.InternalServerError).send("Somthing wrong please try again later");
       };
    };
 

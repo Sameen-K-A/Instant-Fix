@@ -35,6 +35,7 @@ router.patch("/changepassword", verifyToken, userController.updatePassword);
 
 // user change personal details
 router.patch("/editprofile", verifyToken, upload.single('profile'), userController.updateProfile);
+router.get("/getPreSignedURL", verifyToken, userController.getPreSignedURL);
 
 // fetching saved technician information 
 router.patch("/saveTechnician", verifyToken, userController.followTechnician);
