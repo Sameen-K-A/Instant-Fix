@@ -26,8 +26,8 @@ class UserServices implements IUserService {
 
    constructor(userRepository: IUserRepository, technicianRepository: ITechnicianRepository, walletRepository: IWalletRepository) {
       this.userRepository = userRepository;
-      this.technicianRepository = technicianRepository
-      this.walletRepository = walletRepository
+      this.technicianRepository = technicianRepository;
+      this.walletRepository = walletRepository;
    };
 
    login = async (email: string, password: string): Promise<{ userData: IUserWithITechnician; userToken: string; userRefreshToken: string }> => {

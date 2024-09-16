@@ -11,6 +11,7 @@ import Booking from "../Model/bookingModel";
 import Rating from "../Model/reviewModal";
 import Technician from "../Model/technicianModel";
 import Wallet from "../Model/walletModal";
+import passport from "passport";
 
 
 const userRepository = new UserRepository(User, Booking, Rating);
@@ -20,6 +21,9 @@ const userService = new UserServices(userRepository, technicianRepository, walle
 const userController = new UserController(userService);
 
 const router = Router();
+
+router.get("/auth/google", passport.authenticate("google", { scope: ['profile', 'email'] }));
+router.get("/auth/google/callback", passport.authenticate("google", { session: false}), userController.loginGoogleCallback);
 
 router.post("/login", userController.login);
 router.post("/register", userController.register);

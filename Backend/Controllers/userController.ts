@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import HTTP_statusCode from "../Enums/httpStatusCode";
 import { IUserService } from "../Interfaces/user.service.interface";
 import { IUser } from "../Interfaces/common.interface";
-import generatePreSignedURL from "../Config/s3_config";
 
 class UserController {
 
@@ -37,6 +36,29 @@ class UserController {
          } else {
             res.status(HTTP_statusCode.InternalServerError).json({ message: "Something wrong please try again later" });
          };
+      };
+   };
+
+   loginGoogleCallback = async (req: Request, res: Response) => {
+      try {
+         const information = req.user as { userDetails: IUser, userToken: string, userRefreshToken: string };
+         if (information) {
+            res.cookie("RefreshToken", information.userRefreshToken, {
+               httpOnly: true,
+               sameSite: 'strict',
+               maxAge: 7 * 24 * 60 * 60 * 1000,
+            });
+            res.cookie("AccessToken", information.userToken, {
+               httpOnly: true,
+               sameSite: 'strict',
+               maxAge: 15 * 60 * 1000,
+            });
+            res.status(HTTP_statusCode.OK).json({ userData: information.userDetails });
+         } else {
+            res.status(HTTP_statusCode.NotFound).send("Email not found please register your account");
+         }
+      } catch (error) {
+         res.status(HTTP_statusCode.InternalServerError).json({ message: "Something wrong please try again later" });
       };
    };
 
