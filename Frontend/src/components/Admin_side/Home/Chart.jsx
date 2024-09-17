@@ -40,7 +40,7 @@ const Chart = () => {
     const selectedDates = [];
     const today = new Date();
 
-    for (let i = totalDays; i > 0; i--) {
+    for (let i = totalDays - 1; i >= 0; i--) {
       const date = new Date();
       date.setDate(today.getDate() - i);
       selectedDates.push(date.toLocaleDateString('en-CA'));

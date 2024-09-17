@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import UserNavbar from './NavbarPage'; 
+import UserNavbar from './NavbarPage';
 import backgroundImage from "../../../public/Images/HeaderBanner_2.png";
 import { CloseX_mark, FollowTechnician, MsgToTechnician, Star } from '../../../public/svgs/Icons';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -7,9 +7,9 @@ import BookingConfirmModalDetails from './BookingConfirmModal';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { toast } from 'sonner';
-import userAxiosInstance from '../../Config/AxiosInstance/userInstance'; 
+import userAxiosInstance from '../../Config/AxiosInstance/userInstance';
 import { RiUserFollowFill } from "react-icons/ri";
-import { useUserDetails } from '../../Contexts/UserDetailsContext'; 
+import { useUserDetails } from '../../Contexts/UserDetailsContext';
 import Reveal from '../../../public/Animation/Animated';
 import { useUserAuthContext } from '../../Contexts/UserAuthContext';
 
@@ -24,6 +24,7 @@ const TechnicianProfileDetails = () => {
   const [availableDates, setAvailableDates] = useState([]);
   const [bookingSuccess, setBookingSuccess] = useState(false);
   const { setIsLogged } = useUserAuthContext();
+  const [profileImageLoaded, setProfileImageLoaded] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -92,7 +93,12 @@ const TechnicianProfileDetails = () => {
         <div className="container-fluid row d-flex justify-content-between">
           <div className="col-lg-3 col-md-5 col-12">
             <div className="d-flex flex-column align-items-center justify-content-center min-vh-85">
-              <img src={`${technicianDetails?.profileIMG}`} alt="profile_image" className='rounded-circle w-50 m-3' />
+              <div className="avatar my-3 avatar-xxxl rounded-circle">
+                {!profileImageLoaded && (
+                  <div className="skeleton-loader rounded-circle" />
+                )}
+                <img src={`${technicianDetails?.profileIMG}`} alt="profile_image" className='m-3' style={{ display: profileImageLoaded ? 'block' : 'none' }} onLoad={() => setProfileImageLoaded(true)} />
+              </div>
               <h5 className="mb-1 text-dark">{technicianDetails?.name}</h5>
               <p className="m-0 text-sm">{technicianDetails?.technicianDetails?.profession}</p>
               <div className="d-flex justify-content-center m-2">

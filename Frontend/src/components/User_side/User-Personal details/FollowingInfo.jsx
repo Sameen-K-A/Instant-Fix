@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const FollowingInformation = () => {
   const { userDetails, setUserDetails } = useUserDetails();
   const [savedTechnicianDetails, setSavedTechnicianDetails] = useState([]);
+  const [imageLoaded, setImageLoaded] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,26 +42,39 @@ const FollowingInformation = () => {
     };
   };
 
+  const handleImageLoad = (userId) => {
+    setImageLoaded(prevState => ({ ...prevState, [userId]: true }));
+  };
+
   return (
     <div className="col-12 col-xl-4 mb-4">
       <div className="card card-body py-2">
         <h6 className="mb-5 mt-3 text-center">Saved Technicians</h6>
         <div className="max-height-400" style={{ overflowY: "auto" }}>
           {savedTechnicianDetails.length !== 0 ? (
-            savedTechnicianDetails.map((technician) => (
-              <li className="list-group-item border-0 d-flex mb-1 bg-gray-100 border-radius-lg align-items-center" key={technician.SavedTechnicianPersonalInformation.user_id} >
-                <a className="avatar rounded-circle me-3" onClick={() => gotoTechnicianProfile(technician.SavedTechnicianPersonalInformation)}>
-                  <img alt="Image placeholder" src={`${technician.SavedTechnicianPersonalInformation.profileIMG}`} />
-                </a>
-                <div className="flex-grow-1 d-flex justify-content-between align-items-center">
-                  <div className="flex-column">
-                    <p className="text-bold text-sm m-0">{technician.SavedTechnicianPersonalInformation.name}</p>
-                    <p className="text-xs mt-1 m-0">{technician.SavedTechnicianProfessionInformation.profession}</p>
+            savedTechnicianDetails.map((technician) => {
+              const { user_id, profileIMG } = technician.SavedTechnicianPersonalInformation;
+              return (
+                <li className="list-group-item border-0 d-flex mb-1 bg-gray-100 border-radius-lg align-items-center" key={user_id}>
+                  <a className="avatar rounded-circle me-3" onClick={() => gotoTechnicianProfile(technician.SavedTechnicianPersonalInformation)}>
+                    {!imageLoaded[user_id] && (
+                      <div className="skeleton-loader" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+                    )}
+                    <img alt="Image placeholder" src={profileIMG}
+                      style={{ display: imageLoaded[user_id] ? 'block' : 'none', width: '50px', height: '50px', borderRadius: '50%' }}
+                      onLoad={() => handleImageLoad(user_id)}
+                    />
+                  </a>
+                  <div className="flex-grow-1 d-flex justify-content-between align-items-center">
+                    <div className="flex-column">
+                      <p className="text-bold text-sm m-0">{technician.SavedTechnicianPersonalInformation.name}</p>
+                      <p className="text-xs mt-1 m-0">{technician.SavedTechnicianProfessionInformation.profession}</p>
+                    </div>
+                    <div className="cursor-pointer" onClick={() => unSaveTechnician(user_id)}><Delete /></div>
                   </div>
-                  <div className="cursor-pointer" onClick={() => unSaveTechnician(technician.SavedTechnicianPersonalInformation.user_id)} ><Delete /></div>
-                </div>
-              </li>
-            ))
+                </li>
+              );
+            })
           ) : (
             <p className="text-center text-xs mb-7 mt-5">
               <strong className="text-sm">No saved technicians</strong>

@@ -46,6 +46,7 @@ const ProfileImage = () => {
             if (response.data?.URL) {
                await uploadImageToS3(response.data.URL, selectedImage);
                await updateDataBase(response.data.uniqueImageName);
+               setSelectedImage(null)
             } else {
                toast.error("Failed to upload image.");
             }
@@ -90,9 +91,15 @@ const ProfileImage = () => {
                </div>
             </div>
          </div>
-         <button className='btn bg-gradient-primary' onClick={handleUploadImage} disabled={isLoading}>
-            {isLoading ? 'Loading...' : 'Upload your profile image'}
-         </button>
+         {!isLoading ? (
+            selectedImage &&
+            <div className='d-flex gap-2 mt-3'>
+               <button className='btn btn-outline-primary' onClick={() => setSelectedImage(null)}>Cancel</button>
+               <button className='btn bg-gradient-primary' onClick={handleUploadImage} disabled={isLoading}>Upload your profile image</button>
+            </div>
+         ) : (
+            <p className='text-sm text-bold mt-3'>Loading . . .</p>
+         )}
       </>
    );
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Base_URL } from '../../config/credentials';
+import { Base_URL } from '../../Config/credentials'; 
 import axios from 'axios';
 import backgroundImage from "../../../public/Images/HeaderBanner_3.jpg";
 import { toast } from 'sonner';
