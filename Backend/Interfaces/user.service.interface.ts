@@ -9,8 +9,9 @@ export interface IUserService {
    createUpdateAddress(addressData: IUserAddress, user_id: string): Promise<boolean>;
    deleteAddress(user_id: string): Promise<boolean>;
    updatePassword(user_id: string, currentPass: string, newPass: string): Promise<boolean>;
-   updateProfile(user_id: string, name: string, phone: string, profileIMG: string | null): Promise<boolean>;
-   getPreSignedURL(imageName: string): Promise<string>;
+   updateProfileDetails(user_id: string, name: string, phone: string): Promise<boolean>;
+   updateProfileImage(user_id: string, imageName: string): Promise<string>;
+   getPreSignedURL(imageName: string, imageType: string): Promise<{ URL: string; uniqueImageName: string }>;
    getTechnicians(user_id: string): Promise<ITechnicians[]>;
    getTechnicianWithPersonalDetails(technicianUser_id: string): Promise<IUserWithITechnician>;
    followTechnician(user_id: string, technicianUser_id: string): Promise<boolean>;

@@ -1,5 +1,4 @@
 import { Fragment } from "react";
-import { Base_URL } from "../../config/credentials"; 
 
 const ChatFriends = ({ instantChatTechnicianDetails, previousChattedTechnicians, setCurrentChatting }) => {
 
@@ -17,7 +16,7 @@ const ChatFriends = ({ instantChatTechnicianDetails, previousChattedTechnicians,
               profileIMG: instantChatTechnicianDetails?.profileIMG
             })
           }}>
-            <img src={`${Base_URL}/${instantChatTechnicianDetails?.profileIMG}`} alt="profile_image" className="ms-4" width={"45px"} height={"45px"} style={{ borderRadius: "50%" }} />
+            <img src={`${instantChatTechnicianDetails?.profileIMG}`} alt="profile_image" className="ms-4" width={"45px"} height={"45px"} style={{ borderRadius: "50%" }} />
             <div className="ms-3">
               <h6 className="mt-2 text-sm">{instantChatTechnicianDetails?.name}</h6>
             </div>
@@ -38,7 +37,7 @@ const ChatFriends = ({ instantChatTechnicianDetails, previousChattedTechnicians,
                     profileIMG: technician?.technicianPersonalDetails?.profileIMG
                   })
                 }}>
-                  <img src={`${Base_URL}/${technician?.technicianPersonalDetails?.profileIMG}`} alt="profile_image" className="ms-4" width={"45px"} height={"45px"} style={{ borderRadius: "50%" }} />
+                  <img src={`${technician?.technicianPersonalDetails?.profileIMG}`} alt="profile_image" className="ms-4" width={"45px"} height={"45px"} style={{ borderRadius: "50%" }} />
                   <div>
                     <h6 className="ms-3 mt-2 text-sm">{technician?.technicianPersonalDetails?.name}</h6>
                   </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TechnicianSideBar from "./TechnicianSidebar";
-import { Base_URL } from "../../config/credentials";
+import { Base_URL } from "../../Config/credentials"; 
 import { Bell } from "../../../public/svgs/Icons";
 import io from "socket.io-client";
 import { toast } from "sonner";
@@ -16,7 +16,6 @@ const TechnicianNavbar = () => {
   const [showNotification, setShowNotification] = useState(false);
   const { userDetails } = useUserDetails();
   const navigate = useNavigate();
-  const userProfile = userDetails?.profileIMG;
 
   useEffect(() => {
     if (userDetails) {
@@ -47,7 +46,7 @@ const TechnicianNavbar = () => {
               </p>
             </div>
             <div className="circle">
-              <img src={`${Base_URL}/${userProfile}`} width={"30px"} alt="img" />
+              <img src={`${userDetails?.profileIMG}`} width={"30px"} alt="img" />
             </div>
           </div>
         </div>

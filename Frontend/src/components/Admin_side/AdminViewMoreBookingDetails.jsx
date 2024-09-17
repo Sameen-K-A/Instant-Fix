@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
 import AdminNavbar from './AdminNavbar';
-import { Base_URL } from '../../config/credentials';
 import Reveal from "../../../public/Animation/Animated";
 
 const AdminViewMoreBookingDetails = () => {
@@ -86,7 +85,7 @@ const AdminViewMoreBookingDetails = () => {
                       <div className="card card-plain">
                         <h6 className="mb-3 text-dark">Client Information</h6>
                         <div className=" d-flex gap-3 align-items-center">
-                          <img src={`${Base_URL}/${bookingDetails?.userDetails?.profileIMG}`} width="100" className="mb-3" alt="Client Profile" />
+                          <img src={`${bookingDetails?.userDetails?.profileIMG}`} width="100" className="mb-3" alt="Client Profile" />
                           <div>
                             <p className="text-sm mb-2"><span className="text-black-50">Name: </span><b>{bookingDetails?.userDetails?.name}</b></p>
                             <p className="text-sm mb-2"><span className="text-black-50">Email: </span><b>{bookingDetails?.userDetails?.email}</b></p>
@@ -98,7 +97,7 @@ const AdminViewMoreBookingDetails = () => {
                       <div className="card card-plain align-self-start">
                         <h6 className="mb-3 text-dark">Technician Information</h6>
                         <div className="d-flex gap-3 align-items-center">
-                          <img src={`${Base_URL}/${bookingDetails?.technicianDetails?.profileIMG}`} width="100" className="mb-3" alt="Technician Profile" />
+                          <img src={`${bookingDetails?.technicianDetails?.profileIMG}`} width="100" className="mb-3" alt="Technician Profile" />
                           <div>
                             <p className="text-sm mb-2"><span className="text-black-50">Name: </span><b>{bookingDetails?.technicianDetails?.name}</b></p>
                             <p className="text-sm mb-2"><span className="text-black-50">Email: </span><b>{bookingDetails?.technicianDetails?.email}</b></p>

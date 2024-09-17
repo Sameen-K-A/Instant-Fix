@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import UserNavbar from './NavbarPage'; 
 import backgroundImage from "../../../public/Images/HeaderBanner_2.png";
-import { Base_URL } from '../../config/credentials';
 import { CloseX_mark, FollowTechnician, MsgToTechnician, Star } from '../../../public/svgs/Icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BookingConfirmModalDetails from './BookingConfirmModal';
@@ -93,7 +92,7 @@ const TechnicianProfileDetails = () => {
         <div className="container-fluid row d-flex justify-content-between">
           <div className="col-lg-3 col-md-5 col-12">
             <div className="d-flex flex-column align-items-center justify-content-center min-vh-85">
-              <img src={`${Base_URL}/${technicianDetails?.profileIMG}`} alt="profile_image" className='rounded-circle w-50 m-3' />
+              <img src={`${technicianDetails?.profileIMG}`} alt="profile_image" className='rounded-circle w-50 m-3' />
               <h5 className="mb-1 text-dark">{technicianDetails?.name}</h5>
               <p className="m-0 text-sm">{technicianDetails?.technicianDetails?.profession}</p>
               <div className="d-flex justify-content-center m-2">
@@ -168,7 +167,7 @@ const TechnicianProfileDetails = () => {
                           return (
                             <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center" key={index + 1}>
                               <a className="avatar rounded-circle me-3">
-                                <img alt="Image placeholder" src={`${Base_URL}/${feedback?.reviewerProfileIMG}`} />
+                                <img alt="Image placeholder" src={`${feedback?.reviewerProfileIMG}`} />
                               </a>
                               <div className="flex-grow-1 d-flex justify-content-between align-items-center">
                                 <div>

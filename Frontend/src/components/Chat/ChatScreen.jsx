@@ -83,7 +83,7 @@ const ChatScreen = ({ currentChatting }) => {
     <>
       <div className="card p-3 shadow">
         <div className='d-flex align-items-center'>
-          <img src={`${Base_URL}/${currentChatting?.profileIMG}`} alt="profile_image" width="45px" height="45px" style={{ borderRadius: "50%" }} />
+          <img src={`${currentChatting?.profileIMG}`} alt="profile_image" width="45px" height="45px" style={{ borderRadius: "50%" }} />
           <h6 className="ms-2 mt-2">{currentChatting?.name}</h6>
         </div>
       </div>

@@ -151,17 +151,10 @@ class UserController {
       };
    };
 
-   updateProfile = async (req: Request, res: Response) => {
+   updateProfileDetails = async (req: Request, res: Response) => {
       try {
-         const { user_id, name, phone, defaultProfileImage } = req.body;
-         const selectedProfileImage: Express.Multer.File = req.file as Express.Multer.File;
-         let profileIMG: string | null = null;
-         if (selectedProfileImage) {
-            profileIMG = selectedProfileImage.filename;
-         } else if (defaultProfileImage) {
-            profileIMG = defaultProfileImage.split("/").pop();
-         };
-         await this.userService.updateProfile(user_id, name, phone, profileIMG);
+         const { user_id, name, phone } = req.body;
+         await this.userService.updateProfileDetails(user_id, name, phone);
          res.status(HTTP_statusCode.OK).send("Changes completed successfully");
       } catch (error: any) {
          if (error.message === "Failed to update profile") {
@@ -172,11 +165,25 @@ class UserController {
       };
    };
 
+   updateProfileImage = async (req: Request, res: Response) => {
+      try {
+         const { user_id, imageName } = req.body;
+         const result = await this.userService.updateProfileImage(user_id, imageName);
+         res.status(HTTP_statusCode.OK).json(result);
+      } catch (error: any) {
+         if (error.message === "Failed to update user profile") {
+            res.status(HTTP_statusCode.NoChange).send("Failed to update user profile");
+         } else {
+            res.status(HTTP_statusCode.InternalServerError).send("Something went wrong, please try again later");
+         };
+      };
+   };
+
    getPreSignedURL = async (req: Request, res: Response) => {
       try {
-         const { imageName } = req.query;
-         const url = await this.userService.getPreSignedURL(imageName as string)
-         res.status(HTTP_statusCode.OK).json({ url });
+         const { imageName, imageType } = req.query;
+         const response = await this.userService.getPreSignedURL(imageName as string, imageType as string)
+         res.status(HTTP_statusCode.OK).json(response);
       } catch (error) {
          res.status(HTTP_statusCode.InternalServerError).send("Somthing wrong please try again later");
       };

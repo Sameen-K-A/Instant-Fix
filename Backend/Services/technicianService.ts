@@ -5,6 +5,7 @@ import { ITechnicianRepository } from "../Interfaces/technician.repository.inter
 import { IUserRepository } from "../Interfaces/user.repository.interface";
 import { IWalletRepository } from "../Interfaces/wallet.repository.interface";
 import { IBookingDetails, IBookingHistory, IFeedbackRepository, IRatingReview, ISlot, ITechnicianDetails, IWallet } from "../Interfaces/common.interface";
+import { generateGetPreSignedURL } from "../Config/s3_config"
 
 class TechnicianService implements ITechnicianService {
 
@@ -156,7 +157,7 @@ class TechnicianService implements ITechnicianService {
          const result = await this.technicianRepository.getRatingWithReviewerDetails(userId);
          result.reviews = result.reviews.map(review => {
             const reviewer = result.reviewerDetails?.find(reviewer => reviewer.user_id === review.rated_user_id);
-            return { ...review, reviewerName: reviewer?.name, reviewerProfileIMG: reviewer?.profileIMG, };
+            return { ...review, reviewerName: reviewer?.name, reviewerProfileIMG: reviewer?.profileIMG && generateGetPreSignedURL(reviewer?.profileIMG) };
          });
          delete result.reviewerDetails;
          return result;

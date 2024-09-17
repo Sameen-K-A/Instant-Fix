@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Base_URL } from "../../config/credentials";
-import profile from "../../../public/images/userDefaultProfile.png";
+import defaultProfile from "../../../public/images/userDefaultProfile.png";
 import UserSideBar from "./UserSidebar";
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import { GiQuickSlash } from "react-icons/gi";
@@ -21,7 +20,7 @@ const UserNavbar = () => {
               <p className="text-dark text-sm mb-0 me-3 cursor-pointer" onClick={() => { navigate("/login") }}>Login</p>
             )}
             <div className="circle">
-              <img src={userProfile ? `${Base_URL}/${userProfile}` : profile} width={"30px"} height={"30px"} alt="img" />
+              <img src={userProfile ? `${userProfile}` : defaultProfile} width={"30px"} height={"30px"} alt="img" />
             </div>
           </div>
         </div>

@@ -9,7 +9,6 @@ import UserChangePassword from "./user-Personal details/ChangePassword";
 import TechnicianChangeProfession from '../Technician_side/TechnicianChangeProfession';
 import userAxiosInstance from '../../Config/AxiosInstance/userInstance';
 import backgroundImage from "../../../public/Images/HeaderBanner_2.png";
-import { Base_URL } from '../../config/credentials';
 import { useLocation } from 'react-router-dom';
 import { AvailabilityDot, Star } from '../../../public/svgs/Icons';
 import { toast } from 'sonner';
@@ -48,18 +47,12 @@ const AccountDetails = () => {
       <nav className="bg-transparent shadow-none position-absolute ps-5 mt-5 w-100 z-index-2">
         <h6 className="font-weight-bolder mb-0 ms-2">{nowTechnician && "Technician "}Account Details</h6>
         <p className="text-sm mt-0 ms-2">{nowTechnician ? "Profile/ Technician details" : "Profile/ Account Details"}</p>
-        <ProfileImage />
       </nav>
       <div className={`container-fluid ${!nowTechnician && " pe-6"}`}>
         <div className="page-header min-height-200 border-radius-xl mt-4" style={{ backgroundImage: `url(${backgroundImage})` }} />
-
         <div className="card card-body blur-sm shadow-blur mx-4 mt-n6 overflow-hidden">
           <div className="row gx-4">
-            <div className="col-auto">
-              <div className="avatar avatar-xl position-relative">
-                <img src={`${Base_URL}/${userDetails?.profileIMG}`} alt="profile_image" className="w-100 h-100 border-radius-lg shadow-sm" />
-              </div>
-            </div>
+            <ProfileImage />
             <div className="col-auto my-auto">
               <div className="h-100">
                 <h5 className="mb-1 text-dark">{userDetails?.name}</h5>
@@ -83,10 +76,7 @@ const AccountDetails = () => {
                   </li>
                   <li className="nav-item px-3">
                     <p className='mb-0 text-sm mb-1 text-bold text-center'>Availability status</p>
-                    <select
-                      className="form-select"
-                      value={userDetails.technicianDetails[0]?.availability ? "Active" : "Non active"}
-                      onChange={(e) => changeAvailabilityStatus(e)}>
+                    <select className="form-select" value={userDetails.technicianDetails[0]?.availability ? "Active" : "Non active"} onChange={(e) => changeAvailabilityStatus(e)}>
                       <option value="Active">Active</option>
                       <option value="Non active">Non active</option>
                     </select>

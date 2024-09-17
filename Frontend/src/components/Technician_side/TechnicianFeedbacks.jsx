@@ -3,8 +3,7 @@ import Reveal from "../../../public/Animation/Animated";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import userAxiosInstance from "../../Config/AxiosInstance/userInstance"; 
-import { useUserDetails } from "../../Contexts/UserDetailsContext"; 
-import { Base_URL } from "../../config/credentials"; 
+import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import { Star } from "../../../public/svgs/Icons";
 import { useUserAuthContext } from "../../Contexts/UserAuthContext";
 
@@ -52,7 +51,7 @@ const TechnicianFeedbacks = () => {
                 return (
                   <li className="list-group-item border-0 d-flex p-3 mb-1 mt-3 bg-gray-100 border-radius-lg align-items-center" key={index + 1}>
                     <a className="avatar rounded-circle me-3">
-                      <img alt="Image placeholder" src={`${Base_URL}/${feedback?.reviewerProfileIMG}`} />
+                      <img alt="Image placeholder" src={`${feedback?.reviewerProfileIMG}`} />
                     </a>
                     <div className="flex-grow-1 d-flex justify-content-between align-items-center">
                       <div>

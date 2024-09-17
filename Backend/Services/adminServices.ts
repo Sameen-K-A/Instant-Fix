@@ -2,6 +2,7 @@ import { createToken, createRefreshToken } from "../Config/jwt_config";
 import { IAdminServices } from "../Interfaces/admin.service.interface";
 import { IAdminRepository } from "../Interfaces/admin.repository.interface";
 import { IBookingHistory, IFilteredBookings, ILocation, ITechnicians, IUser } from "../Interfaces/common.interface";
+import { generateGetPreSignedURL } from "../Config/s3_config";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -86,13 +87,20 @@ class AdminServices implements IAdminServices {
       };
    };
 
-   findBooking = async (): Promise<IBookingHistory[]> => {
+   findBooking = async (): Promise<any[]> => {
       try {
-         return await this.adminRepository.findBooking();
+         let response = await this.adminRepository.findBooking();
+         response = response.map((booking: any) => ({
+            ...booking,
+            technicianDetails: { ...booking.technicianDetails, profileIMG: booking.technicianDetails?.profileIMG && generateGetPreSignedURL(booking.technicianDetails?.profileIMG) },
+            userDetails: { ...booking.userDetails, profileIMG: booking.userDetails?.profileIMG && generateGetPreSignedURL(booking.userDetails?.profileIMG) }
+         }));
+         return response;
       } catch (error) {
          throw error;
-      };
+      }
    };
+
 
 };
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useUserDetails } from "../../../Contexts/UserDetailsContext";
-import userAxiosInstance from "../../../Config/AxiosInstance/userInstance"; 
-import { Base_URL } from "../../../config/credentials";
+import userAxiosInstance from "../../../Config/AxiosInstance/userInstance";
 import { Delete } from "../../../../public/svgs/Icons";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
@@ -51,7 +50,7 @@ const FollowingInformation = () => {
             savedTechnicianDetails.map((technician) => (
               <li className="list-group-item border-0 d-flex mb-1 bg-gray-100 border-radius-lg align-items-center" key={technician.SavedTechnicianPersonalInformation.user_id} >
                 <a className="avatar rounded-circle me-3" onClick={() => gotoTechnicianProfile(technician.SavedTechnicianPersonalInformation)}>
-                  <img alt="Image placeholder" src={`${Base_URL}/${technician.SavedTechnicianPersonalInformation.profileIMG}`} />
+                  <img alt="Image placeholder" src={`${technician.SavedTechnicianPersonalInformation.profileIMG}`} />
                 </a>
                 <div className="flex-grow-1 d-flex justify-content-between align-items-center">
                   <div className="flex-column">

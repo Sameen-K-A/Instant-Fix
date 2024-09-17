@@ -22,7 +22,6 @@ configSocketIO(server);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
 app.use(cookie_parser());
 app.use(passport.initialize());
 app.use(morgan('dev'));

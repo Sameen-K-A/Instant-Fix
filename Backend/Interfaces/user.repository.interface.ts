@@ -9,7 +9,8 @@ export interface IUserRepository {
    deleteAddress(user_id: string): Promise<boolean>;
    accessIsTechnician(user_id: string): Promise<boolean>;
    updatePassword(user_id: string, hashedNewPassword: string): Promise<boolean>;
-   updateProfile(user_id: string, updatedInformation: { name: string, phone: string, profileIMG?: string }): Promise<boolean>;
+   updateProfileDetails(user_id: string, updatedInformation: { name: string, phone: string }): Promise<boolean>;
+   updateProfileImage(user_id: string, imageName: string): Promise<boolean>;
    followTechnician(user_id: string, technicianUser_id: string): Promise<boolean>;
    unfollowTechnician(user_id: string, technicianUser_id: string): Promise<boolean>;
    getFollowedTechnicians(user_id: string): Promise<IFollowedTechnician[]>;

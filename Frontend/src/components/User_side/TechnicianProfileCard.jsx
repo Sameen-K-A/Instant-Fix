@@ -1,5 +1,4 @@
 import React from 'react';
-import { Base_URL } from '../../config/credentials';
 import { Star } from '../../../public/svgs/Icons';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,7 +15,7 @@ const TechnicianProfileCard = ({ technicianData }) => {
       <div className="card text-center">
         <div className='p-3 d-flex align-items-center justify-content-center'>
           <div className="avatar avatar-xxl mt-3">
-            <img src={`${Base_URL}/${technicianData?.profileIMG}`} alt="profile_image" className="w-100 border-radius-lg shadow-sm" />
+            <img src={`${technicianData?.profileIMG}`} alt="profile_image" className="w-100 border-radius-lg shadow-sm" />
           </div>
         </div>
         <div className="card-body p-3 card-details">

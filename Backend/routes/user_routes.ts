@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { verifyToken } from "../Config/jwt_config";
-import upload from "../Config/Multer_config"
 import UserController from "../Controllers/userController";
 import UserServices from "../Services/userServices";
 import UserRepository from "../Repository/userRepository";
@@ -38,7 +37,8 @@ router.delete("/address", verifyToken, userController.deleteAddress);
 router.patch("/changepassword", verifyToken, userController.updatePassword);
 
 // user change personal details
-router.patch("/editprofile", verifyToken, upload.single('profile'), userController.updateProfile);
+router.patch("/editprofile", verifyToken, userController.updateProfileDetails);
+router.patch("/updateProfileImage", verifyToken, userController.updateProfileImage);
 router.get("/getPreSignedURL", verifyToken, userController.getPreSignedURL);
 
 // fetching saved technician information 

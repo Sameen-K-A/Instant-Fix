@@ -10,12 +10,12 @@ AWS.config.update({
 
 const S3: AWS.S3 = new AWS.S3();
 
-function generatePreSignedURL(bucketName: string, imageName: string): string {
+function generatePutPreSignedURL(imageName: string, imageType: string): string {
    const params = {
-      Bucket: bucketName,
+      Bucket: process.env.S3_bucketName as string,
       Key: imageName,
       Expires: 120,
-      ContentType: 'image/jpeg',
+      ContentType: imageType,
    };
 
    try {
@@ -24,7 +24,22 @@ function generatePreSignedURL(bucketName: string, imageName: string): string {
    } catch (error) {
       throw error;
    };
-
 };
 
-export default generatePreSignedURL;
+function generateGetPreSignedURL(imageName: string): string {
+   const params = {
+      Bucket: process.env.S3_bucketName as string,
+      Key: imageName,
+      Expires: 3600 * 24 * 7
+   };
+
+   try {
+      const url = S3.getSignedUrl("getObject", params);
+      return url;
+   } catch (error) {
+      throw error;
+   }
+}
+
+
+export { generatePutPreSignedURL, generateGetPreSignedURL };

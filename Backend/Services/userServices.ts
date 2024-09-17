@@ -7,13 +7,13 @@ import axios from "axios";
 import dotenv from "dotenv";
 import Razorpay from "razorpay";
 import crypto from "crypto";
-import { IBookingDetails, IBookingHistory, IFeedbackRepository, IFollowedTechnician, IReview, IReviewerDetail, ISingleRating, ITechnicians, ITransaction, IUser, IUserAddress, IUserWithITechnician } from "../Interfaces/common.interface";
+import { IBookingDetails, IBookingHistory, IChat, IFeedbackRepository, IFollowedTechnician, IReview, IReviewerDetail, ISingleRating, ITechnicians, ITransaction, IUser, IUserAddress, IUserWithITechnician } from "../Interfaces/common.interface";
 import { IUserService } from "../Interfaces/user.service.interface";
 import { IUserRepository } from "../Interfaces/user.repository.interface";
 import { ITechnicianRepository } from "../Interfaces/technician.repository.interface";
 import { Orders } from "razorpay/dist/types/orders";
 import { IWalletRepository } from "../Interfaces/wallet.repository.interface";
-import generatePreSignedURL from '../Config/s3_config';
+import { generateGetPreSignedURL, generatePutPreSignedURL } from '../Config/s3_config';
 dotenv.config();
 
 class UserServices implements IUserService {
@@ -39,7 +39,8 @@ class UserServices implements IUserService {
          if (userData.isBlocked) throw new Error("User is blocked");
          const userToken = createToken(userData.user_id as string);
          const userRefreshToken = createRefreshToken(userData.user_id as string);
-         userData = { ...userData, password: "" };
+         const profileImageS3_bucketURl = generateGetPreSignedURL(userData.profileIMG as string);
+         userData = { ...userData, password: "", profileIMG: profileImageS3_bucketURl };
          return { userData, userToken, userRefreshToken };
       } catch (error) {
          throw error;
@@ -161,26 +162,33 @@ class UserServices implements IUserService {
       };
    };
 
-   updateProfile = async (user_id: string, name: string, phone: string, profileIMG: string | null): Promise<boolean> => {
+   updateProfileDetails = async (user_id: string, name: string, phone: string): Promise<boolean> => {
       try {
-         const updatedInformation: { name: string; phone: string; profileIMG?: string } = {
+         const updatedInformation: { name: string; phone: string } = {
             name: name,
             phone: phone,
          };
-         if (profileIMG) {
-            updatedInformation.profileIMG = profileIMG;
-         };
-         return await this.userRepository.updateProfile(user_id, updatedInformation);
+         return await this.userRepository.updateProfileDetails(user_id, updatedInformation);
       } catch (error) {
          throw error;
       };
    };
 
-   getPreSignedURL = async (imageName: string): Promise<string> => {
+   updateProfileImage = async (user_id: string, imageName: string): Promise<string> => {
       try {
-         const bucketName: string = process.env.S3_bucketName as string;
-         const URL = generatePreSignedURL(bucketName, imageName);
-         return URL;
+         await this.userRepository.updateProfileImage(user_id, imageName);
+         const newProfileImageURL = generateGetPreSignedURL(imageName);
+         return newProfileImageURL;
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   getPreSignedURL = async (imageName: string, imageType: string): Promise<{ URL: string; uniqueImageName: string }> => {
+      try {
+         const uniqueImageName = `${Date.now()}_${imageName}`;
+         const URL = generatePutPreSignedURL(uniqueImageName, imageType);
+         return { URL, uniqueImageName };
       } catch (error) {
          throw error;
       };
@@ -188,20 +196,22 @@ class UserServices implements IUserService {
 
    getTechnicians = async (user_id: string): Promise<ITechnicians[]> => {
       try {
-         return await this.userRepository.getTechnicians(user_id);
+         const result = await this.userRepository.getTechnicians(user_id);
+         const afterUpdation: ITechnicians[] = result.map((technician) => ({ ...technician, profileIMG: generateGetPreSignedURL(technician.profileIMG) }));
+         return afterUpdation;
       } catch (error) {
          throw error;
-      };
+      }
    };
 
    getTechnicianWithPersonalDetails = async (technicianUser_id: string): Promise<IUserWithITechnician> => {
       try {
-         const result: IUserWithITechnician = await this.userRepository.getTechnicianWithPersonalDetails(technicianUser_id);
-
+         let result: IUserWithITechnician = await this.userRepository.getTechnicianWithPersonalDetails(technicianUser_id);
+         result = { ...result, profileIMG: generateGetPreSignedURL(result.profileIMG) };
          if (result.ratingInformation?.reviews) {
             result.ratingInformation.reviews = result.ratingInformation.reviews.map((review: IReview) => {
                const reviewer: IReviewerDetail | undefined = result.reviewerDetails?.find((reviewer: IReviewerDetail) => reviewer.user_id === review.rated_user_id);
-               return { ...review, reviewerName: reviewer?.name, reviewerProfileIMG: reviewer?.profileIMG };
+               return { ...review, reviewerName: reviewer?.name, reviewerProfileIMG: reviewer?.profileIMG && generateGetPreSignedURL(reviewer.profileIMG) };
             });
          };
          delete result.reviewerDetails;
@@ -229,19 +239,27 @@ class UserServices implements IUserService {
 
    getFollowedTechnicians = async (user_id: string): Promise<IFollowedTechnician[]> => {
       try {
-         return await this.userRepository.getFollowedTechnicians(user_id);
-      } catch (error) {
-         throw error;
-      };
-   };
-
-   getChatFriends = async (user_id: string): Promise<IReviewerDetail[]> => {
-      try {
-         return await this.userRepository.getChatFriends(user_id);
+         let result: IFollowedTechnician[] = await this.userRepository.getFollowedTechnicians(user_id);
+         result = result.map((technician) => ({
+            ...technician,
+            SavedTechnicianPersonalInformation: { ...technician.SavedTechnicianPersonalInformation, profileIMG: generateGetPreSignedURL(technician.SavedTechnicianPersonalInformation?.profileIMG) }
+         }));
+         return result;
       } catch (error) {
          throw error;
       }
    };
+
+   getChatFriends = async (user_id: string): Promise<any[]> => {
+      try {
+         let response = await this.userRepository.getChatFriends(user_id);
+         response = response.map((friend: any) => ({ ...friend, technicianPersonalDetails: { ...friend.technicianPersonalDetails, profileIMG: generateGetPreSignedURL(friend.technicianPersonalDetails?.profileIMG) } }));
+         return response;
+      } catch (error) {
+         throw error;
+      }
+   };
+
 
    bookTechnician = async (client_id: string, client_name: string, technicianDetails: any, serviceLocation: IUserAddress, selectedDate: string): Promise<IBookingDetails> => {
       try {
@@ -323,13 +341,16 @@ class UserServices implements IUserService {
       }
    };
 
-   getBookingDetails = async (booking_id: string): Promise<IBookingDetails> => {
+   getBookingDetails = async (booking_id: string): Promise<any> => {
       try {
-         return await this.userRepository.getBookingDetails(booking_id)
+         let response: any = await this.userRepository.getBookingDetails(booking_id);
+         response = { ...response, technicianDetails: { ...response.technicianDetails, profileIMG: generateGetPreSignedURL(response.technicianDetails?.profileIMG) } };
+         return response;
       } catch (error) {
          throw error;
       }
    };
+
 
    cancelBooking = async (booking_id: string, technician_id: string, userName: string, serviceDate: string): Promise<boolean> => {
       try {

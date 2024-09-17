@@ -103,13 +103,26 @@ class UserRepository implements IUserRepository {
     };
   };
 
-  updateProfile = async (user_id: string, updatedInformation: { name: string, phone: string, profileIMG?: string }): Promise<boolean> => {
+  updateProfileDetails = async (user_id: string, updatedInformation: { name: string, phone: string }): Promise<boolean> => {
     try {
       const updateResult = await this.userModel.updateOne({ user_id: user_id }, { $set: updatedInformation });
       if (updateResult.modifiedCount === 1) {
         return true;
       } else {
         throw new Error("Failed to update profile");
+      };
+    } catch (error) {
+      throw error;
+    };
+  };
+
+  updateProfileImage = async (user_id: string, imageName: string): Promise<boolean> => {
+    try {
+      const response = await this.userModel.updateOne({ user_id: user_id }, { profileIMG: imageName });
+      if (response.modifiedCount === 1) {
+        return true;
+      } else {
+        throw new Error("Failed to update user profile");
       };
     } catch (error) {
       throw error;
