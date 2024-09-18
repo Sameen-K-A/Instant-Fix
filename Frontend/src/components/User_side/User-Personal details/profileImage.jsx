@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import userAxiosInstance from '../../../Config/AxiosInstance/userInstance';
+import userAxiosInstance from '../../../Config/userInstance';
 import { toast } from "sonner";
 import axios from 'axios';
 import { useUserDetails } from '../../../Contexts/UserDetailsContext';

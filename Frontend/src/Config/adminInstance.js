@@ -1,8 +1,7 @@
 import axios from "axios";
-import { Base_URL } from "../credentials";
 
 const adminAxiosInstance = axios.create({
-   baseURL: `${Base_URL}/admin`,
+   baseURL: `${import.meta.env.VITE_BASE_URL}/admin`,
    withCredentials: true
 });
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import confirmAlert from "../Common/SweetAlert/confirmAlert";
-import userAxiosInstance from "../../Config/AxiosInstance/userInstance"; 
+import userAxiosInstance from "../../Config/userInstance"; 
 import { useUserDetails } from "../../Contexts/UserDetailsContext"; 
 import { useUserAuthContext } from "../../Contexts/UserAuthContext";
 

@@ -1,11 +1,10 @@
 import React, { useRef, useEffect, useState, memo } from 'react';
 import mapboxgl, { Marker, Map } from 'mapbox-gl';
-import { Map_Box_Access_Token } from '../../../Config/credentials';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { toast } from 'sonner';
-import adminAxiosInstance from '../../../Config/AxiosInstance/adminInstance';
+import adminAxiosInstance from '../../../Config/adminInstance';
 
-mapboxgl.accessToken = Map_Box_Access_Token;
+mapboxgl.accessToken = import.meta.env.VITE_MAP_BOX_ACCESS_TOKEN;
 
 const BookingsMap = () => {
   const mapContainer = useRef(null);

@@ -5,7 +5,6 @@ import * as Yup from 'yup';
 import backgroundImage from "../../../public/Images/HeaderBanner_3.jpg";
 import { toast } from 'sonner';
 import axios from 'axios';
-import { Base_URL } from '../../config/credentials';
 import { useUserDetails } from '../../Contexts/UserDetailsContext';
 import { useUserAuthContext } from '../../Contexts/UserAuthContext';
 import { GoogleLogin } from "@react-oauth/google";
@@ -47,7 +46,7 @@ const UserLogin = () => {
     validateOnBlur: true,
     onSubmit: async (values) => {
       try {
-        const response = await axios.post(`${Base_URL}/login`, values, { withCredentials: true });
+        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/login`, values, { withCredentials: true });
         localStorage.setItem("userDetails", JSON.stringify(response.data.userData));
         localStorage.setItem("userIsLogged", JSON.stringify(true));
         setIsLogged(true);
@@ -70,7 +69,7 @@ const UserLogin = () => {
 
   const handleGoogleLoginSuccess = async (response) => {
     try {
-      const res = await axios.post(`${Base_URL}/google/auth`, { token: response.credential }, { withCredentials: true });
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/google/auth`, { token: response.credential }, { withCredentials: true });
       localStorage.setItem("userDetails", JSON.stringify(res.data.userData));
       localStorage.setItem("userIsLogged", JSON.stringify(true));
       setIsLogged(true);

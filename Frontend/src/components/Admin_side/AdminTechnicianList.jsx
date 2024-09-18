@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import confirmAlert from "../Common/SweetAlert/confirmAlert";
-import adminAxiosInstance from "../../Config/AxiosInstance/adminInstance";
+import adminAxiosInstance from "../../Config/adminInstance";
 import { useNavigate } from "react-router-dom";
 import AdminNavbar from "./AdminNavbar";
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";

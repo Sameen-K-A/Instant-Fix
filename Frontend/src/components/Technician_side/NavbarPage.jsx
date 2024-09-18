@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import TechnicianSideBar from "./TechnicianSidebar";
-import { Base_URL } from "../../Config/credentials"; 
 import { Bell } from "../../../public/svgs/Icons";
 import io from "socket.io-client";
 import { toast } from "sonner";
@@ -10,7 +9,7 @@ import notificationAudio from "/public/Audio/notificationAudio.wav";
 import { GiQuickSlash } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
 
-const socket = io(Base_URL);
+const socket = io(import.meta.env.VITE_BASE_URL);
 
 const TechnicianNavbar = () => {
   const [showNotification, setShowNotification] = useState(false);

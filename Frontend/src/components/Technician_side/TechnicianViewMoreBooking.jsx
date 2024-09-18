@@ -4,7 +4,7 @@ import TechnicianNavbar from './NavbarPage';
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
 import confirmAlert from '../Common/SweetAlert/confirmAlert';
 import { toast } from 'sonner';
-import userAxiosInstance from '../../Config/AxiosInstance/userInstance'; 
+import userAxiosInstance from '../../Config/userInstance'; 
 import { useUserDetails } from '../../Contexts/UserDetailsContext'; 
 import ServiceLocationMap from './MapPage';
 import { CloseX_mark } from '../../../public/svgs/Icons';

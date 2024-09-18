@@ -1,6 +1,5 @@
 import Reveal from "../../../public/Animation/Animated";
 import { Instagram, Github, Linkedin } from "../../../public/svgs/Icons";
-import { gitHub_URL, insta_URL, linkedIn_URL } from "../../config/credentials";
 
 const Footer = () => {
   return (
@@ -9,13 +8,13 @@ const Footer = () => {
         <div className="col-lg-12 col-md-12 col-sm-12">
           <Reveal>
             <ul className="social overflow-hidden text-center">
-              <li className='mx-2 d-inline-block' onClick={() => window.location.href = linkedIn_URL}>
+              <li className='mx-2 d-inline-block' onClick={() => window.location.href = import.meta.env.VITE_LINKEDIN_URL}>
                 <a className='bg-gradient-primary d-inline-block'><Linkedin /></a>
               </li>
-              <li className='mx-2 d-inline-block' onClick={() => window.location.href = insta_URL}>
+              <li className='mx-2 d-inline-block' onClick={() => window.location.href = import.meta.env.VITE_INSTAGRAM_URL}>
                 <a className='bg-gradient-primary d-inline-block'><Instagram /></a>
               </li>
-              <li className='mx-2 d-inline-block' onClick={() => window.location.href = gitHub_URL}>
+              <li className='mx-2 d-inline-block' onClick={() => window.location.href = import.meta.env.VITE_GITHUB_URL}>
                 <a className='bg-gradient-primary d-inline-block'><Github /></a>
               </li>
             </ul>

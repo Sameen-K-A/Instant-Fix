@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from 'sonner';
 import UserProvider from './Contexts/UserDetailsContext';
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { googleClientID } from './config/credentials';
 
 // User side
 import UserLogin from './components/User_side/Login';
@@ -50,6 +49,7 @@ import "../public/Css/user_home.css";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function App() {
+  const googleClientID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   return (
     <GoogleOAuthProvider clientId={googleClientID}>
       <AdminAuthProvider>

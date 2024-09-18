@@ -3,7 +3,6 @@ import backgroundImage from "../../../public/Images/HeaderBanner_3.jpg";
 import { toast } from 'sonner';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { Base_URL } from '../../config/credentials';
 
 const UserOTP = () => {
   const [otp, setOtp] = useState(["", "", "", ""]);
@@ -60,7 +59,7 @@ const UserOTP = () => {
     event.preventDefault();
     const enteredOTP = otp.join("");
     try {
-      await axios.post(`${Base_URL}/verifyotp`, { enteredOTP: enteredOTP });
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/verifyotp`, { enteredOTP: enteredOTP });
       navigate("/login", { state: { message: "Registration process completed successfully, please login" } });
     } catch (error) {
       if (error.response.data.message === "Incorrect OTP") {
@@ -77,7 +76,7 @@ const UserOTP = () => {
   const resendOTP_handle = async () => {
     setIsLoading(true);
     try {
-      await axios.get(`${Base_URL}/resendOTP`);
+      await axios.get(`${import.meta.env.VITE_BASE_URL}/resendOTP`);
       toast.success("OTP sent to your email. Please check it.");
       setMinutes(2);
       setSeconds(0);

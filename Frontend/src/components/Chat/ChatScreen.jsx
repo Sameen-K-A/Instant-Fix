@@ -1,12 +1,11 @@
-import { Fragment, useEffect, useRef, useState } from "react";
-import { Base_URL } from "../../config/credentials"; 
+import { Fragment, useEffect, useRef, useState } from "react"; 
 import RecieverMsg from "./RecieverMsg";
 import SenderMsg from "./SenderMsg";
 import { Send } from '../../../public/svgs/Icons';
 import { toast } from 'sonner';
-import userAxiosInstance from "../../Config/AxiosInstance/userInstance";
+import userAxiosInstance from "../../Config/userInstance";
 import io from "socket.io-client";
-const socket = io(Base_URL);
+const socket = io(import.meta.env.VITE_BASE_URL);
 import { useUserDetails } from "../../Contexts/UserDetailsContext"; 
 import { useNavigate } from "react-router-dom";
 import { useUserAuthContext } from "../../Contexts/UserAuthContext";

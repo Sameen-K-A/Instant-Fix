@@ -1,11 +1,10 @@
 import { toast } from "sonner";
-import userAxiosInstance from "../Config/AxiosInstance/userInstance"; 
-import { razorpayKeyID, razorpayURL } from "../config/credentials";
+import userAxiosInstance from "../Config/userInstance"; 
 
 export const loadRazorpayScript = async () => {
    try {
       const script = document.createElement("script");
-      script.src = razorpayURL;
+      script.src = import.meta.env.VITE_RAZORPAY_URL;
       script.async = true;
       document.body.appendChild(script);
       await new Promise((resolve, reject) => {
@@ -34,7 +33,7 @@ export const proceedToPayment = async (booking_id, amount, technicianUser_id, se
 
 const openRazorpayPayment = ({ order_id, amount, currency }, booking_id, technicianUser_id, setBookingDetails) => {
    const options = {
-      key: razorpayKeyID,
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
       amount,
       currency,
       name: "Instant-Fix",

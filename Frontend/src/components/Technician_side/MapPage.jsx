@@ -1,11 +1,10 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl, { Marker, Map } from 'mapbox-gl';
-import axios from 'axios';
-import { Map_Box_Access_Token, MapDirectionURL } from '../../config/credentials'; 
+import axios from 'axios'; 
 import { LocationSymbolForMap } from '../../../public/svgs/Icons';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-mapboxgl.accessToken = Map_Box_Access_Token;
+mapboxgl.accessToken = import.meta.env.VITE_MAP_BOX_ACCESS_TOKEN;
 
 const ServiceLocationMap = ({ currentLocation, destination }) => {
    const mapContainer = useRef(null);
@@ -32,7 +31,7 @@ const ServiceLocationMap = ({ currentLocation, destination }) => {
          .addTo(map.current);
 
       const fetchDirection = async () => {
-         const query = `${MapDirectionURL}/${currentLocation.longitude},${currentLocation.latitude};${destination.longitude},${destination.latitude}?geometries=geojson&access_token=${Map_Box_Access_Token}`;
+         const query = `${import.meta.env.VITE_MAP_DIRECTION_URL}/${currentLocation.longitude},${currentLocation.latitude};${destination.longitude},${destination.latitude}?geometries=geojson&access_token=${import.meta.env.VITE_MAP_BOX_ACCESS_TOKEN}`;
 
          try {
             const response = await axios.get(query);

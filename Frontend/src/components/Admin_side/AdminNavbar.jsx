@@ -3,7 +3,7 @@ import { PowerBtn } from "../../../public/svgs/Icons";
 import { useNavigate, useLocation } from "react-router-dom";
 import confirmAlert from '../Common/SweetAlert/confirmAlert';
 import { GiQuickSlash } from "react-icons/gi";
-import adminAxiosInstance from "../../Config/AxiosInstance/adminInstance";
+import adminAxiosInstance from "../../Config/adminInstance";
 import { toast } from 'sonner';
 import { useAdminAuthContext } from '../../Contexts/AdminAuthContext';
 

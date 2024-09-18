@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from 'react';
 import { PieChart, Pie, ResponsiveContainer, Cell } from 'recharts';
-import adminAxiosInstance from '../../../Config/AxiosInstance/adminInstance';
+import adminAxiosInstance from '../../../Config/adminInstance';
 import { toast } from 'sonner';
 
 const PieChartComponent = () => {

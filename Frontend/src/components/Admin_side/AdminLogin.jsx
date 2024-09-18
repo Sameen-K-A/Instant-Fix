@@ -4,7 +4,6 @@ import * as Yup from 'yup';
 import { toast } from 'sonner';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Base_URL } from '../../config/credentials';
 import backgroundImage from '../../../public/Images/HeaderBanner_3.jpg';
 import Reveal from "../../../public/Animation/Animated";
 import { useAdminAuthContext } from "../../Contexts/AdminAuthContext";
@@ -29,7 +28,7 @@ const AdminLogin = () => {
     onSubmit: async (values) => {
       const { email, password } = values;
       try {
-        await axios.post(`${Base_URL}/admin/login`, { email, password }, { withCredentials: true });
+        await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/login`, { email, password }, { withCredentials: true });
         localStorage.setItem('adminIsLogged', JSON.stringify(true));
         setAdminIsLogged(true);
         navigate('/admin/dashboard');

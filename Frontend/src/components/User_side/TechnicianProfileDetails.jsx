@@ -7,7 +7,7 @@ import BookingConfirmModalDetails from './BookingConfirmModal';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { toast } from 'sonner';
-import userAxiosInstance from '../../Config/AxiosInstance/userInstance';
+import userAxiosInstance from '../../Config/userInstance';
 import { RiUserFollowFill } from "react-icons/ri";
 import { useUserDetails } from '../../Contexts/UserDetailsContext';
 import Reveal from '../../../public/Animation/Animated';

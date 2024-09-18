@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
-import userAxiosInstance from '../../Config/AxiosInstance/userInstance';
+import userAxiosInstance from '../../Config/userInstance';
 import { useNavigate } from 'react-router-dom';
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import triggerConfetti from '../../Utils/confetti';

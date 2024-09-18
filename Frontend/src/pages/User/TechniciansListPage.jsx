@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import TechnicianProfileCard from '../../Components/User_side/TechnicianProfileCard';
 import UserNavbar from '../../Components/User_side/NavbarPage';
 import Footer from '../../Components/common/Footer'; 
-import userAxiosInstance from '../../Config/AxiosInstance/userInstance'; 
+import userAxiosInstance from '../../Config/userInstance'; 
 import { toast } from 'sonner';
 import NoResultFoundImage from "../../../public/images/NoResultFound.png";
 import { useUserDetails } from "../../Contexts/UserDetailsContext"

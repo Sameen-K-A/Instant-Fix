@@ -4,7 +4,7 @@ import { Account, Booking, Calendar, Chat, Home, Leave, PowerBtn, Settings, Wall
 import confirmAlert from "../Common/SweetAlert/confirmAlert";
 import AlertRedDot from "../Common/AlertRedDot";
 import { useUserDetails } from '../../Contexts/UserDetailsContext';
-import userAxiosInstance from "../../Config/AxiosInstance/userInstance";
+import userAxiosInstance from "../../Config/userInstance";
 import {useUserAuthContext} from "../../Contexts/UserAuthContext";
 import '../../../public/css/techniciansidebar.css';
 

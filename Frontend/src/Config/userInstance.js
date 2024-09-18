@@ -1,8 +1,7 @@
 import axios from "axios";
-import { Base_URL } from "../credentials";
 
 const userAxiosInstance = axios.create({
-   baseURL: Base_URL,
+   baseURL: import.meta.env.VITE_BASE_URL,
    withCredentials: true,
 });
 

@@ -3,15 +3,14 @@ import Footer from '../common/Footer';
 import TechnicianNavbar from './NavbarPage';
 import backgroundImage from "../../../public/Images/HeaderBanner_2.png";
 import Calendar from 'react-calendar';
-import userAxiosInstance from '../../Config/AxiosInstance/userInstance'; 
+import userAxiosInstance from '../../Config/userInstance'; 
 import { toast } from 'sonner';
 import { useUserDetails } from '../../Contexts/UserDetailsContext'; 
 import 'react-calendar/dist/Calendar.css';
 import { io } from 'socket.io-client';
-import { Base_URL } from '../../config/credentials'; 
 import Reveal from '../../../public/Animation/Animated';
 
-const socket = io(Base_URL);
+const socket = io(import.meta.env.VITE_BASE_URL);
 
 const TechnicianSlotAllocation = () => {
   const [selectedDates, setSelectedDates] = useState([]);

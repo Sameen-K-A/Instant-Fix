@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ComposedChart, Line, Bar, XAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { toast } from 'sonner';
-import adminAxiosInstance from '../../../Config/AxiosInstance/adminInstance';
+import adminAxiosInstance from '../../../Config/adminInstance';
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {

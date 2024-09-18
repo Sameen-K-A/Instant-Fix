@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import UserNavbar from "./NavbarPage";
-import userAxiosInstance from "../../Config/AxiosInstance/userInstance"; 
+import userAxiosInstance from "../../Config/userInstance"; 
 import { toast } from "sonner";
-import { Base_URL } from "../../config/credentials";
 import { useNavigate } from "react-router-dom";
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
@@ -20,7 +19,7 @@ const UserBookingHistoryTable = () => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await userAxiosInstance.get(`${Base_URL}/fetchUserBookingHistory`, { params: { user_id: userDetails.user_id } });
+        const response = await userAxiosInstance.get(`${import.meta.env.VITE_BASE_URL}/fetchUserBookingHistory`, { params: { user_id: userDetails.user_id } });
         setBookingDetailsArray(response.data);
       } catch (error) {
         if (error.response.status === 401) {

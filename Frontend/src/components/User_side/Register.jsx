@@ -1,8 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { Base_URL } from '../../Config/credentials'; 
+import * as Yup from 'yup'; 
 import axios from 'axios';
 import backgroundImage from "../../../public/Images/HeaderBanner_3.jpg";
 import { toast } from 'sonner';
@@ -41,7 +40,7 @@ const UserRegister = () => {
     validateOnBlur: true,
     onSubmit: async (values) => {
       try {
-        await axios.post(`${Base_URL}/register`, { ...values });
+        await axios.post(`${import.meta.env.VITE_BASE_URL}/register`, { ...values });
         navigate("/otp", { state: { message: "OTP sent to your email. Please check it" } });
       } catch (error) {
         if (error.response.data.message === "Email already exists") {

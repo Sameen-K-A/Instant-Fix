@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { Backbtn } from '../../../public/svgs/Icons';
-import userAxiosInstance from '../../Config/AxiosInstance/userInstance';
+import userAxiosInstance from '../../Config/userInstance';
 import { useUserDetails } from '../../Contexts/UserDetailsContext'; 
 import { useUserAuthContext } from '../../Contexts/UserAuthContext';
 

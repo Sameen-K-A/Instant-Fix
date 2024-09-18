@@ -2,15 +2,14 @@ import { useEffect, useState } from "react";
 import TechnicianNavbar from "./NavbarPage";
 import { useNavigate } from "react-router-dom";
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
-import userAxiosInstance from "../../Config/AxiosInstance/userInstance"; 
+import userAxiosInstance from "../../Config/userInstance"; 
 import { useUserDetails } from "../../Contexts/UserDetailsContext"; 
 import { toast } from "sonner";
 import { io } from 'socket.io-client';
-import { Base_URL } from "../../config/credentials"; 
 import Reveal from "../../../public/Animation/Animated";
 import { useUserAuthContext } from "../../Contexts/UserAuthContext";
 
-const socket = io(Base_URL);
+const socket = io(import.meta.env.VITE_BASE_URL);
 
 const TechnicianBookingHistoryTable = () => {
 

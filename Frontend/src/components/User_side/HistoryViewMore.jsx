@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import UserNavbar from './NavbarPage';
-import userAxiosInstance from '../../Config/AxiosInstance/userInstance'; 
+import userAxiosInstance from '../../Config/userInstance'; 
 import confirmAlert from '../Common/SweetAlert/confirmAlert';
 import { toast } from "sonner";
 import { loadRazorpayScript, proceedToPayment } from '../../Utils/razorPay';
 import AlertRedDot from '../Common/AlertRedDot';
 import backgroundImage from "../../../public/images/HeaderBanner_2.png";
-import { Base_URL, razorpayURL } from "../../config/credentials";
 import Reveal from '../../../public/Animation/Animated';
 import RatingStar from "../Common/StarRating";
 import { useUserDetails } from '../../Contexts/UserDetailsContext';
@@ -40,7 +39,7 @@ const UserHistoryViewMore = () => {
   useEffect(() => {
     loadRazorpayScript();
     return () => {
-      const script = document.querySelector(`script[src="${razorpayURL}"]`);
+      const script = document.querySelector(`script[src="${import.meta.env.VITE_RAZORPAY_URL}"]`);
       if (script) document.body.removeChild(script);
     };
   }, []);

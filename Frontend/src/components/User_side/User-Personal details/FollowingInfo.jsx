@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useUserDetails } from "../../../Contexts/UserDetailsContext";
-import userAxiosInstance from "../../../Config/AxiosInstance/userInstance";
+import userAxiosInstance from "../../../Config/userInstance";
 import { Delete } from "../../../../public/svgs/Icons";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";

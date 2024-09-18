@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Reveal from "../../../public/Animation/Animated";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import userAxiosInstance from "../../Config/AxiosInstance/userInstance"; 
+import userAxiosInstance from "../../Config/userInstance"; 
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import { Star } from "../../../public/svgs/Icons";
 import { useUserAuthContext } from "../../Contexts/UserAuthContext";
