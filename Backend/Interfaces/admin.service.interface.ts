@@ -7,7 +7,7 @@ export interface IAdminServices {
    block(user_id: string): Promise<boolean>;
    findTechnician(): Promise<ITechnicians[]>;
    fetchbookingsLocation(): Promise<ILocation[]>;
-   getCategories(): Promise<{ profession: string; count: number }[] | null>;
+   getCategories(): Promise<{ categories: { profession: string; count: number }[]; userCount: number; technicianCount: number; bookingCount: number } | null>;
    filteredBooking(selectedDates: string[]): Promise<IFilteredBookings[]>;
    findBooking(): Promise<IBookingHistory[]>;
 };

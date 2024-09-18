@@ -317,6 +317,10 @@ h4 {
 
 /* --------------------------------------------------Min width in pixels -------------------------------------------------------------*/
 
+.min-width-50 {
+  min-width: 50px !important;
+}
+
 .min-width-100 {
   min-width: 100px !important;
 }
@@ -372,6 +376,10 @@ h4 {
 }
 
 /* -------------------------------------------------- Min height in pixels -------------------------------------------------------------*/
+
+.min-height-50 {
+  min-height: 50px !important;
+}
 
 .min-height-100 {
   min-height: 100px !important;

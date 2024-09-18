@@ -63,12 +63,23 @@ class AdminServices implements IAdminServices {
       };
    };
 
-   getCategories = async (): Promise<{ profession: string; count: number }[] | null> => {
+   getCategories = async (): Promise<{ categories: { profession: string; count: number }[]; userCount: number; technicianCount: number; bookingCount: number } | null> => {
       try {
-         return await this.adminRepository.getCategories();
+         const [categories, users, bookings] = await Promise.all([
+            this.adminRepository.getCategories(),
+            this.adminRepository.findUser(),
+            this.adminRepository.findBooking(),
+         ]);
+         const technicians = users.filter((user: IUser) => (user.isTechnician === true));
+         return {
+            categories: categories || [],
+            userCount: users.length,
+            technicianCount: technicians.length,
+            bookingCount: bookings.length,
+         };
       } catch (error) {
          throw error;
-      };
+      }
    };
 
    fetchbookingsLocation = async (): Promise<ILocation[]> => {

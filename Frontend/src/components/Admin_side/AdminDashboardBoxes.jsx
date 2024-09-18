@@ -1,4 +1,4 @@
-const Boxes = ({ mainContent, price, percentage, svgIcon }) => {
+const Boxes = ({ mainContent, price, SvgIcon }) => {
   return (
     <div className="col-xl-12 col-sm-12 mb-2">
       <div className="card shadow">
@@ -7,15 +7,12 @@ const Boxes = ({ mainContent, price, percentage, svgIcon }) => {
             <div className="col-8">
               <div className="numbers">
                 <p className="text-sm mb-0 text-capitalize font-weight-bold">{mainContent}</p>
-                <h5 className="font-weight-bolder mb-0">
-                  {price}
-                  <span className="text-success text-sm font-weight-bolder">{percentage}</span>
-                </h5>
+                <h5 className="font-weight-bolder mb-0">{price}</h5>
               </div>
             </div>
             <div className="col-4 d-flex align-items-center justify-content-end">
-              <div className="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-                
+              <div className="bg-gradient-primary shadow text-center border-radius-md d-flex align-items-center justify-content-center min-width-50 min-height-50">
+                  {SvgIcon}
               </div>
             </div>
           </div>

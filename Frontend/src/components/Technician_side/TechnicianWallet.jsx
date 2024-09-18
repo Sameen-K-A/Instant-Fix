@@ -44,7 +44,7 @@ const TechnicianWalletPage = () => {
           <Reveal>
             <div className="container-fluid py-4">
               <div className="row">
-                <div className="col-12 col-xl-4 mb-4">
+                {/* <div className="col-12 col-xl-4 mb-4">
                   <div className="card col-12 mt-3 min-height-200">
                     <div className="card-body p-3">
                       <div className="card-header pb-0 p-3">
@@ -52,8 +52,8 @@ const TechnicianWalletPage = () => {
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-12 col-xl-8 mb-4">
+                </div> */}
+                <div className="col-12  mb-4">
                   <div className="card col-12 mt-3">
                     <div className="card-body p-3">
                       <div className="card-header pb-0 p-3">

@@ -1,21 +1,7 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo } from 'react';
 import { PieChart, Pie, ResponsiveContainer, Cell } from 'recharts';
-import adminAxiosInstance from '../../../Config/adminInstance';
-import { toast } from 'sonner';
 
-const PieChartComponent = () => {
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await adminAxiosInstance.get('/getCategories');
-        setCategories(response.data);
-      } catch (error) {
-        toast.error('Something went wrong, please try again later.');
-      }
-    })();
-  }, []);
+const PieChartComponent = ({categories}) => {
 
   const COLORS = ['#825554', '#E1AAA8', '#4B152E', '#341701', '#F5D9D8'];
 

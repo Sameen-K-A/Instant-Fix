@@ -18,7 +18,7 @@ class AdminRepository implements IAdminRepository {
          return await this.userModel.aggregate([
             { $match: {} },
             { $sort: { _id: -1 } },
-            { $project: { _id: 0, password: 0, profileIMG: 0, isTechnician: 0, addressDetails: 0, alreadychattedtechnician: 0, savedTechnicians: 0 } },
+            { $project: { _id: 0, password: 0, profileIMG: 0, addressDetails: 0, alreadychattedtechnician: 0, savedTechnicians: 0 } },
          ]);
       } catch (error) {
          throw error;
