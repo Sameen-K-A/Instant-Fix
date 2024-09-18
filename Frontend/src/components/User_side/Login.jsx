@@ -3,12 +3,12 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import backgroundImage from "../../../public/Images/HeaderBanner_3.jpg";
-import GoogleIcon from "../../../public/svgs/GoogleIcon";
 import { toast } from 'sonner';
 import axios from 'axios';
 import { Base_URL } from '../../config/credentials';
 import { useUserDetails } from '../../Contexts/UserDetailsContext';
 import { useUserAuthContext } from '../../Contexts/UserAuthContext';
+import { GoogleLogin } from "@react-oauth/google";
 
 const UserLogin = () => {
   const navigate = useNavigate();
@@ -68,15 +68,23 @@ const UserLogin = () => {
     }
   });
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLoginSuccess = async (response) => {
     try {
-      const width = 1200;
-      const height = 500;
-      const left = (window.screen.width / 2) - (width / 2);
-      const top = (window.screen.height / 2) - (height / 2);
-      window.open('http://localhost:3000/auth/google', '_blank', `width=${width},height=${height},top=${top},left=${left}`);
+      const res = await axios.post(`${Base_URL}/google/auth`, { token: response.credential }, { withCredentials: true });
+      localStorage.setItem("userDetails", JSON.stringify(res.data.userData));
+      localStorage.setItem("userIsLogged", JSON.stringify(true));
+      setIsLogged(true);
+      setUserDetails(res.data.userData);
+      navigate("/");
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.data.message === "User not found") {
+        toast.error("Email not found");
+      } else if (error.response && error.response.data.message === "User is blocked") {
+        toast.error("Your account has been blocked, please contact with our team.");
+      } else {
+        console.error("login error => ", error);
+        toast.error("Something went wrong, please try again later.");
+      }
     }
   };
 
@@ -106,13 +114,13 @@ const UserLogin = () => {
                   {formik.touched.password && formik.errors.password ? <div className="text-danger text-bold text-xs ps-1 mt-1">{formik.errors.password}</div> : null}
                   <button type="submit" className="btn bg-gradient-primary w-100 my-4 mb-2" disabled={formik.isSubmitting}>Sign in</button>
                   <p className="text-sm my-2 mt-3 mb-3 text-center font-weight-bold">or</p>
-                  <div className="btn btn-outline-light w-100 text-dark d-flex align-items-center justify-content-center" onClick={handleGoogleLogin}>
-                    <GoogleIcon /> Login with Google
-                  </div>
-                  <p className="text-sm mt-3 mb-0">Don't have an account yet?
-                    <a className="text-dark font-weight-bolder" style={{ cursor: "pointer" }} onClick={() => navigate("/register")}> <u>Register</u></a>
-                  </p>
                 </form>
+                <div className="d-flex justify-content-center w-100">
+                  <GoogleLogin shape='circle' logo_alignment='center' size='large' onSuccess={handleGoogleLoginSuccess} />
+                </div>
+                <p className="text-sm mt-3 mb-0">Don't have an account yet?
+                  <a className="text-dark font-weight-bolder" style={{ cursor: "pointer" }} onClick={() => navigate("/register")}> <u>Register</u></a>
+                </p>
               </div>
             </div>
           </div>

@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import HTTP_statusCode from "../Enums/httpStatusCode";
 import { IUserService } from "../Interfaces/user.service.interface";
 import { IUser } from "../Interfaces/common.interface";
-
 class UserController {
 
    private userService: IUserService;
@@ -39,26 +38,29 @@ class UserController {
       };
    };
 
-   loginGoogleCallback = async (req: Request, res: Response) => {
+   verifyGoogleAuth = async (req: Request, res: Response) => {
       try {
-         const information = req.user as { userDetails: IUser, userToken: string, userRefreshToken: string };
-         if (information) {
-            res.cookie("RefreshToken", information.userRefreshToken, {
-               httpOnly: true,
-               sameSite: 'strict',
-               maxAge: 7 * 24 * 60 * 60 * 1000,
-            });
-            res.cookie("AccessToken", information.userToken, {
-               httpOnly: true,
-               sameSite: 'strict',
-               maxAge: 15 * 60 * 1000,
-            });
-            res.status(HTTP_statusCode.OK).json({ userData: information.userDetails });
+         const token: string = req.body.token as string;
+         const serviceResponse = await this.userService.verifyGoogleAuth(token);
+         res.cookie("RefreshToken", serviceResponse.userRefreshToken, {
+            httpOnly: true,
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+         });
+         res.cookie("AccessToken", serviceResponse.userToken, {
+            httpOnly: true,
+            sameSite: 'strict',
+            maxAge: 15 * 60 * 1000,
+         });
+         res.status(HTTP_statusCode.OK).json({ userData: serviceResponse.userData });
+      } catch (error: any) {
+         if (error.message === "User not found") {
+            res.status(HTTP_statusCode.NotFound).json({ message: "User not found" });
+         } else if (error.message === "User is blocked") {
+            res.status(HTTP_statusCode.NoAccess).json({ message: "User is blocked" });
          } else {
-            res.status(HTTP_statusCode.NotFound).send("Email not found please register your account");
-         }
-      } catch (error) {
-         res.status(HTTP_statusCode.InternalServerError).json({ message: "Something wrong please try again later" });
+            res.status(HTTP_statusCode.InternalServerError).json({ message: "Something wrong please try again later" });
+         };
       };
    };
 

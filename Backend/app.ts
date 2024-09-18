@@ -9,7 +9,6 @@ import chat_routes from "./Routes/chat_routes";
 import DB_Connection from "./Config/database_config";
 import { configSocketIO } from './Config/socket_config';
 import { createServer } from "http";
-import passport from "./Config/passport_config";
 import morgan from "morgan";
 
 dotenv.config();
@@ -23,7 +22,6 @@ configSocketIO(server);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookie_parser());
-app.use(passport.initialize());
 app.use(morgan('dev'));
 app.use(cors({
    origin: "http://localhost:5173",

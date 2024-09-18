@@ -3,6 +3,7 @@ import { IBookingDetails, IBookingHistory, IFollowedTechnician, IReviewerDetail,
 
 export interface IUserService {
    login(email: string, password: string): Promise<{ userData: IUserWithITechnician; userToken: string; userRefreshToken: string }>;
+   verifyGoogleAuth(token: string): Promise<{ userData: IUserWithITechnician; userToken: string; userRefreshToken: string }>;
    register(userData: IUser): Promise<void>;
    otpVerification(enteredOTP: string): Promise<IUser>;
    resendOTP(): Promise<void>;

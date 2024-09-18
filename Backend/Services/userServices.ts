@@ -7,14 +7,16 @@ import axios from "axios";
 import dotenv from "dotenv";
 import Razorpay from "razorpay";
 import crypto from "crypto";
-import { IBookingDetails, IBookingHistory, IChat, IFeedbackRepository, IFollowedTechnician, IReview, IReviewerDetail, ISingleRating, ITechnicians, ITransaction, IUser, IUserAddress, IUserWithITechnician } from "../Interfaces/common.interface";
+import { IBookingDetails, IBookingHistory, IFeedbackRepository, IFollowedTechnician, IReview, IReviewerDetail, ISingleRating, ITechnicians, ITransaction, IUser, IUserAddress, IUserWithITechnician } from "../Interfaces/common.interface";
 import { IUserService } from "../Interfaces/user.service.interface";
 import { IUserRepository } from "../Interfaces/user.repository.interface";
 import { ITechnicianRepository } from "../Interfaces/technician.repository.interface";
 import { Orders } from "razorpay/dist/types/orders";
 import { IWalletRepository } from "../Interfaces/wallet.repository.interface";
 import { generateGetPreSignedURL, generatePutPreSignedURL } from '../Config/s3_config';
+import { OAuth2Client } from "google-auth-library";
 dotenv.config();
+const client = new OAuth2Client(`${process.env.Google_clientID}`);
 
 class UserServices implements IUserService {
    private userRepository: IUserRepository;
@@ -42,6 +44,33 @@ class UserServices implements IUserService {
          const profileImageS3_bucketURl = generateGetPreSignedURL(userData.profileIMG as string);
          userData = { ...userData, password: "", profileIMG: profileImageS3_bucketURl };
          return { userData, userToken, userRefreshToken };
+      } catch (error) {
+         throw error;
+      };
+   };
+
+   verifyGoogleAuth = async (token: string): Promise<{ userData: IUserWithITechnician; userToken: string; userRefreshToken: string }> => {
+      try {
+         const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: process.env.Google_clientID as string,
+         });
+         const payload = ticket.getPayload();
+         if (payload?.email) {
+            let userData: IUserWithITechnician = await this.userRepository.login(payload.email)
+            if (!userData) {
+               throw new Error("User not found");
+            } else {
+               if (userData.isBlocked) throw new Error("User is blocked");
+               const userToken = createToken(userData.user_id as string);
+               const userRefreshToken = createRefreshToken(userData.user_id as string);
+               const profileImageS3_bucketURl = generateGetPreSignedURL(userData.profileIMG as string);
+               userData = { ...userData, password: "", profileIMG: profileImageS3_bucketURl };
+               return { userData, userToken, userRefreshToken };
+            };
+         } else {
+            throw new Error("User not found");
+         };
       } catch (error) {
          throw error;
       };
