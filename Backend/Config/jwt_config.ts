@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { Response, NextFunction, Request } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import dotenv from 'dotenv';
 import HTTP_statusCode from '../Enums/httpStatusCode';
 
@@ -25,6 +25,8 @@ const verifyToken = async (req: Request, res: Response, next: NextFunction) => {
             if (err) {
                await handleRefreshToken(req, res, next);
             } else {
+               const { user_id } = decoded as jwt.JwtPayload;
+               req.user_id = user_id;
                next();
             };
          });
@@ -48,6 +50,7 @@ const handleRefreshToken = async (req: Request, res: Response, next: NextFunctio
                return res.status(HTTP_statusCode.Unauthorized).json({ message: 'Access denied. Token payload invalid.' });
             } else {
                const newAccessToken = createToken(user_id);
+               req.user_id = user_id;
                res.cookie("AccessToken", newAccessToken, {
                   httpOnly: true,
                   sameSite: 'strict',
@@ -63,6 +66,7 @@ const handleRefreshToken = async (req: Request, res: Response, next: NextFunctio
 };
 
 export { createToken, verifyToken, createRefreshToken };
+
 
 
 

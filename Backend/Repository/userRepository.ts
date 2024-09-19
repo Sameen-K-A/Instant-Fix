@@ -419,6 +419,18 @@ class UserRepository implements IUserRepository {
     };
   };
 
+  userIsBlocked = async (user_id: string): Promise<boolean> => {
+    try {
+      const userDetails: IUser | null = await this.userModel.findOne({ user_id: user_id });
+      if (userDetails?.isBlocked === true) {
+        return true;
+      };
+      return false
+    } catch (error) {
+      throw error;
+    }
+  };
+
 };
 
 export default UserRepository;

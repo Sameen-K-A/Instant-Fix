@@ -8,6 +8,7 @@ import UserRepository from "../Repository/userRepository";
 import User from "../Model/userModal";
 import Booking from "../Model/bookingModel";
 import Rating from "../Model/reviewModal";
+import isBloked from "../Middleware/userAuth";
 
 const chatRepository = new ChatRepository(Chat);
 const userRepository = new UserRepository(User, Booking, Rating);
@@ -16,6 +17,6 @@ const chatController = new ChatController(chatService);
 
 const router = Router();
 
-router.get("/fetchTwoMembersChat", verifyToken, chatController.getChat);
+router.get("/fetchTwoMembersChat", verifyToken, isBloked, chatController.getChat);
 
 export default router;

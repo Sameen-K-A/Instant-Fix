@@ -10,6 +10,7 @@ import WalletRepository from "../Repository/walletRepository";
 import Wallet from "../Model/walletModal";
 import UserRepository from "../Repository/userRepository";
 import User from "../Model/userModal";
+import isBloked from "../Middleware/userAuth";
 
 
 const technicianRepository = new TechnicianRepository(Technician, Rating, Booking);
@@ -20,17 +21,17 @@ const technicianController = new TechnicianController(technicianService);
 
 const router = Router();
 
-router.get("/fetchTechnicianInformation", verifyToken, technicianController.getTechnicianInfo);
-router.patch("/joinTechnician", verifyToken, technicianController.createTechnician);
-router.patch("/changeprofession", verifyToken, technicianController.updateProfession);
-router.patch("/changeAvailabilityStatus", verifyToken, technicianController.updateAvailableStatus);
-router.get("/fetchTechnicianBookingHistory", verifyToken, technicianController.getBookings);
-router.get("/fetchingIndividualBookingDetails", verifyToken, technicianController.getBookingDetails);
-router.patch("/acceptRejectCancelNewBooking", verifyToken, technicianController.updateBookingStatus);
-router.post("/confirmBooking", verifyToken, technicianController.completeBooking);
-router.patch("/clearNotification", verifyToken, technicianController.deleteNotification);
-router.patch("/modifyAvailableSlots", verifyToken, technicianController.updateAvailableSlots);
-router.get("/wallet", verifyToken, technicianController.getWallet);
-router.get("/fetchningRatingWithReviewerDetails", verifyToken, technicianController.getRatingWithReviewerDetails);
+router.get("/fetchTechnicianInformation", verifyToken, isBloked, technicianController.getTechnicianInfo);
+router.patch("/joinTechnician", verifyToken, isBloked, technicianController.createTechnician);
+router.patch("/changeprofession", verifyToken, isBloked, technicianController.updateProfession);
+router.patch("/changeAvailabilityStatus", verifyToken, isBloked, technicianController.updateAvailableStatus);
+router.get("/fetchTechnicianBookingHistory", verifyToken, isBloked, technicianController.getBookings);
+router.get("/fetchingIndividualBookingDetails", verifyToken, isBloked, technicianController.getBookingDetails);
+router.patch("/acceptRejectCancelNewBooking", verifyToken, isBloked, technicianController.updateBookingStatus);
+router.post("/confirmBooking", verifyToken, isBloked, technicianController.completeBooking);
+router.patch("/clearNotification", verifyToken, isBloked, technicianController.deleteNotification);
+router.patch("/modifyAvailableSlots", verifyToken, isBloked, technicianController.updateAvailableSlots);
+router.get("/wallet", verifyToken, isBloked, technicianController.getWallet);
+router.get("/fetchningRatingWithReviewerDetails", verifyToken, isBloked, technicianController.getRatingWithReviewerDetails);
 
 export default router;

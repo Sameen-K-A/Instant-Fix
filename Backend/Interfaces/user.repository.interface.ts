@@ -26,4 +26,5 @@ export interface IUserRepository {
    updateBookingPaymentStatus(booking_id: string, Payment_Status: string): Promise<boolean>;
    updateBookingReviewAdded(booking_id: string, reviewAdded: boolean): Promise<boolean>;
    addNewFeedbackToTechnician(technician_id: string, feedbackInformation: ISingleRating): Promise<boolean>;
+   userIsBlocked(user_id: string): Promise<boolean>;
 };
