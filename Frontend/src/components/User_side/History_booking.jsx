@@ -3,7 +3,7 @@ import UserNavbar from "./NavbarPage";
 import userAxiosInstance from "../../Config/userInstance"; 
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import backgroundImage from "../../../public/images/HeaderBanner_2.png";
+import backgroundImage from "../../../public/Images/HeaderBanner_2.png";
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import AlertRedDot from "../Common/AlertRedDot"; 
 import Reveal from "../../../public/Animation/Animated";

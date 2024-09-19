@@ -1,5 +1,5 @@
 import TechnicianNavbar from "./NavbarPage";
-import backgroundImage from "../../../public/images/HeaderBanner_2.png";
+import backgroundImage from "../../../public/Images/HeaderBanner_2.png";
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import { useEffect, useState } from "react";
 import userAxiosInstance from "../../Config/userInstance"; 

@@ -3,9 +3,9 @@ import AdminNavbar from "./AdminNavbar";
 import adminAxiosInstance from "../../Config/adminInstance"; 
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import backgroundImage from "../../../public/images/HeaderBanner_2.png";
+import backgroundImage from "../../../public/Images/HeaderBanner_2.png";
 import Reveal from "../../../public/Animation/Animated";
-import NoResultFoundImage from "../../../public/images/NoResultFound.png";
+import NoResultFoundImage from "../../../public/Images/NoResultFound.png";
 import { useAdminAuthContext } from "../../Contexts/AdminAuthContext";
 
 const AdminBookingHistoryTable = () => {

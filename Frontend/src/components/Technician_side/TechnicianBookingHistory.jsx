@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import TechnicianNavbar from "./NavbarPage";
 import { useNavigate } from "react-router-dom";
-import backgroundImage from "../../../public/images/HeaderBanner_2.png";
+import backgroundImage from "../../../public/Images/HeaderBanner_2.png";
 import userAxiosInstance from "../../Config/userInstance"; 
 import { useUserDetails } from "../../Contexts/UserDetailsContext"; 
 import { toast } from "sonner";

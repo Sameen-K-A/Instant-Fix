@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TechnicianProfileCard from '../../Components/User_side/TechnicianProfileCard';
 import UserNavbar from '../../Components/User_side/NavbarPage';
-import Footer from '../../Components/common/Footer'; 
+import Footer from '../../Components/Common/Footer'; 
 import userAxiosInstance from '../../Config/userInstance'; 
 import { toast } from 'sonner';
-import NoResultFoundImage from "../../../public/images/NoResultFound.png";
+import NoResultFoundImage from "../../../public/Images/NoResultFound.png";
 import { useUserDetails } from "../../Contexts/UserDetailsContext"
 import Reveal from '../../../public/Animation/Animated';
 import { useUserAuthContext } from '../../Contexts/UserAuthContext';

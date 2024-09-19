@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import UserNavbar from './NavbarPage';
 import TechnicianNavbar from '../Technician_side/NavbarPage';
-import UserInformation from './user-Personal details/UserInfo';
+import UserInformation from './User-Personal details/UserInfo';
 import AddressInformation from './User-Personal details/AddressInfo'; 
 import FollowingInformation from './User-Personal details/FollowingInfo'; 
 import TechnicianFeedbacks from '../Technician_side/TechnicianFeedbacks';

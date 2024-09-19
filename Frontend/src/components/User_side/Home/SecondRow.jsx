@@ -1,6 +1,6 @@
 import React from "react";
 import WaveShape from '../../Shapes/Wave';
-import backgroundImage from "../../../../public/images/HeaderBanner_3.jpg";
+import backgroundImage from "../../../../public/Images/HeaderBanner_3.jpg";
 import { useNavigate } from "react-router-dom";
 import Reveal from "../../../../public/Animation/Animated";
 

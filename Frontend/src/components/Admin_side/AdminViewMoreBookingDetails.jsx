@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import backgroundImage from "../../../public/images/HeaderBanner_2.png";
+import backgroundImage from "../../../public/Images/HeaderBanner_2.png";
 import AdminNavbar from './AdminNavbar';
 import Reveal from "../../../public/Animation/Animated";
 

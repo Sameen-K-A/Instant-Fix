@@ -4,8 +4,8 @@ import confirmAlert from "../Common/SweetAlert/confirmAlert";
 import adminAxiosInstance from "../../Config/adminInstance"; 
 import { useNavigate } from "react-router-dom";
 import AdminNavbar from "./AdminNavbar";
-import backgroundImage from "../../../public/images/HeaderBanner_2.png";
-import NoResultFoundImage from "../../../public/images/NoResultFound.png";
+import backgroundImage from "../../../public/Images/HeaderBanner_2.png";
+import NoResultFoundImage from "../../../public/Images/NoResultFound.png";
 import Reveal from "../../../public/Animation/Animated";
 import { useAdminAuthContext } from "../../Contexts/AdminAuthContext";
 

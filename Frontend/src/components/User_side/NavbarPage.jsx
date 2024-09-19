@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import defaultProfile from "../../../public/images/userDefaultProfile.png";
+import defaultProfile from "../../../public/Images/userDefaultProfile.png";
 import UserSideBar from "./UserSidebar";
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import { GiQuickSlash } from "react-icons/gi";

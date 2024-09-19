@@ -5,16 +5,16 @@ import UserProvider from './Contexts/UserDetailsContext';
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 // User side
-import UserLogin from './components/User_side/Login';
+import UserLogin from './Components/User_side/Login';
 import UserRegister from './Components/User_side/Register';
 import UserOTP from './Components/User_side/OTP';
 import GuestProtector from './Components/Services/GuestUser';
-import UserProtecter from './components/services/UserProtecter';
+import UserProtecter from './Components/Services/UserProtecter';
 import UserBookingHistoryTable from './Components/User_side/History_booking';
-import UserHistoryViewMore from './components/User_side/HistoryViewMore';
+import UserHistoryViewMore from './Components/User_side/HistoryViewMore';
 import TechniciansListPage from './pages/User/TechniciansListPage';
 import UserHomePage from './Pages/User/HomePage';
-import AccountDetails from './components/User_side/AccountDetails';
+import AccountDetails from './Components/User_side/AccountDetails';
 import ChatPage from './pages/User/ChatPage';
 import TechnicianProfileDetails from './Components/User_side/TechnicianProfileDetails';
 import UserAuthProvider from './Contexts/UserAuthContext';
@@ -33,11 +33,11 @@ import AdminAuthProvider from './Contexts/AdminAuthContext';
 // Technician side
 import TechnicianProtecter from './Components/Services/TechnicianProtecter';
 import TechnicianHome from './Components/Technician_side/TechnicianHome';
-import TechnicianRole from './components/Technician_side/TechnicianRole';
+import TechnicianRole from './Components/Technician_side/TechnicianRole';
 import TechnicianBookingHistoryTable from './Components/Technician_side/TechnicianBookingHistory';
-import TechnicianViewMoreBooking from './components/Technician_side/TechnicianViewMoreBooking';
-import TechnicianSlotAllocation from './components/Technician_side/TechnicianSlotAllocation';
-import TechnicianWalletPage from './components/Technician_side/TechnicianWallet';
+import TechnicianViewMoreBooking from './Components/Technician_side/TechnicianViewMoreBooking';
+import TechnicianSlotAllocation from './Components/Technician_side/TechnicianSlotAllocation';
+import TechnicianWalletPage from './Components/Technician_side/TechnicianWallet';
 
 // common side
 import NotFound from './Components/Common/Page404';

@@ -2,7 +2,7 @@ import React from 'react';
 import Footer from '../common/Footer'; 
 import TechnicianNavbar from './NavbarPage';  
 import { Communication, OnlineBar, PyChart } from '../../../public/svgs/Icons';
-import backgroundImage from "../../../public/images/HeaderBanner_3.jpg";
+import backgroundImage from "../../../public/Images/HeaderBanner_3.jpg";
 import Reveal from '../../../public/Animation/Animated';
 
 const TechnicianHome = () => {

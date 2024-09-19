@@ -7,7 +7,7 @@ import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import { useUserAuthContext } from "../../Contexts/UserAuthContext";
 import { toast } from 'sonner';
 import userAxiosInstance from "../../Config/userInstance";
-import '../../../public/css/sidebar.css';
+import '../../../public/Css/sidebar.css';
 
 const UserSideBar = () => {
   const [isSidebarClosed, setIsSidebarClosed] = useState(true);

@@ -1,7 +1,7 @@
 import React from "react";
-import plumberIMG from "/public/images/Banner-plumber-image.png";
-import electricanIMG from "/public/images/Banner-electrician-image.png";
-import cleanerIMG from "/public/images/Banner-cleaner-image.png";
+import plumberIMG from "/public/Images/Banner-plumber-image.png";
+import electricanIMG from "/public/Images/Banner-electrician-image.png";
+import cleanerIMG from "/public/Images/Banner-cleaner-image.png";
 import { useNavigate } from "react-router-dom";
 import Reveal from "../../../../public/Animation/Animated";
 

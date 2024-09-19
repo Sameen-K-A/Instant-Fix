@@ -6,7 +6,7 @@ import confirmAlert from '../Common/SweetAlert/confirmAlert';
 import { toast } from "sonner";
 import { loadRazorpayScript, proceedToPayment } from '../../Utils/razorPay';
 import AlertRedDot from '../Common/AlertRedDot';
-import backgroundImage from "../../../public/images/HeaderBanner_2.png";
+import backgroundImage from "../../../public/Images/HeaderBanner_2.png";
 import Reveal from '../../../public/Animation/Animated';
 import RatingStar from "../Common/StarRating";
 import { useUserDetails } from '../../Contexts/UserDetailsContext';
