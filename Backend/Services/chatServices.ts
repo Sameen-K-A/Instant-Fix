@@ -31,6 +31,7 @@ class ChatServices implements IChatService {
 
   createChat = async (messageDetails: IChatMessage): Promise<IChat> => {
     try {
+      const current: Date = new Date();
       const newChatDocument: IChat = {
         chatMembers: [messageDetails.senderID, messageDetails.receiverID],
         details: [
@@ -38,6 +39,7 @@ class ChatServices implements IChatService {
             senderID: messageDetails.senderID,
             receiverID: messageDetails.receiverID,
             message: messageDetails.message,
+            time: current.toISOString().slice(0, 16).replace('T', ', ')
           },
         ],
       };

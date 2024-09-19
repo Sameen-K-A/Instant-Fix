@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from "react"; 
+import { Fragment, useEffect, useRef, useState } from "react";
 import RecieverMsg from "./RecieverMsg";
 import SenderMsg from "./SenderMsg";
 import { Send } from '../../../public/svgs/Icons';
@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import userAxiosInstance from "../../Config/userInstance";
 import io from "socket.io-client";
 const socket = io(import.meta.env.VITE_BASE_URL);
-import { useUserDetails } from "../../Contexts/UserDetailsContext"; 
+import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import { useNavigate } from "react-router-dom";
 import { useUserAuthContext } from "../../Contexts/UserAuthContext";
 
@@ -53,10 +53,12 @@ const ChatScreen = ({ currentChatting }) => {
   const handleSendMsg = async () => {
     if (newMsg.trim()) {
       try {
+        const current = new Date();
         const messageDetails = {
           senderID: userDetails?.user_id,
           receiverID: currentChatting?.user_id,
-          message: newMsg
+          message: newMsg,
+          time: current.toISOString().slice(0, 16).replace('T', ', ')
         };
         const firstTimeChat = chatHistory.length === 0 ? true : false;
         socket.emit("sendMessage", { messageDetails, firstTimeChat });
@@ -90,10 +92,11 @@ const ChatScreen = ({ currentChatting }) => {
         {chatHistory !== null && (
           chatHistory.map((chat, index) => (
             <Fragment key={index + 1}>
+              {console.log(chat.details)}
               {chat?.details?.senderID === userDetails?.user_id ? (
-                <SenderMsg message={chat?.details?.message} />
+                <SenderMsg message={chat?.details?.message} time={chat?.details?.time} />
               ) : (
-                <RecieverMsg message={chat?.details?.message} />
+                <RecieverMsg message={chat?.details?.message} time={chat?.details?.time} />
               )}
             </Fragment>
           ))

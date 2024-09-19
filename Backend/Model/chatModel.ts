@@ -18,13 +18,13 @@ const chatSchema: Schema = new Schema<IChat>({
       type: String,
     },
     time: {
-      type: Date,
-      default: Date.now,
+      type: String,
     },
     _id: false
   }],
 }, {
   versionKey: false,
+  timestamps: true,
 });
 
 const Chat = model<IChat>("Chat", chatSchema);

@@ -143,7 +143,7 @@ export interface IChat {
       senderID: string;
       receiverID: string;
       message: string;
-      time?: Date;
+      time?: string;
    }[];
 };
 
