@@ -1,5 +1,5 @@
 import React from 'react';
-import Footer from '../common/Footer'; 
+import Footer from '../Common/Footer';
 import TechnicianNavbar from './NavbarPage';  
 import { Communication, OnlineBar, PyChart } from '../../../public/svgs/Icons';
 import backgroundImage from "../../../public/Images/HeaderBanner_3.jpg";

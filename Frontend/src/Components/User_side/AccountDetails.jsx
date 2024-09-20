@@ -14,7 +14,7 @@ import { AvailabilityDot, Star } from '../../../public/svgs/Icons';
 import { toast } from 'sonner';
 import { useUserDetails } from '../../Contexts/UserDetailsContext';
 import Reveal from "../../../public/Animation/Animated";
-import ProfileImage from './User-Personal details/profileImage';
+import ProfileImage from './User-Personal details/ProfileImage';
 
 const AccountDetails = () => {
   const { userDetails, setUserDetails } = useUserDetails();

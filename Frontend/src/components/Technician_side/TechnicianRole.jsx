@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import BackgroundShape from '../Common/backgroundShape';
+import BackgroundShape from '../Common/BackgroundShape';
 import UserNavbar from '../User_side/NavbarPage';
 import confirmAlert from '../Common/SweetAlert/confirmAlert';
 import { toast } from 'sonner';

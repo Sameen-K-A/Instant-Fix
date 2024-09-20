@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Footer from '../common/Footer'; 
+import Footer from '../Common/Footer'; 
 import TechnicianNavbar from './NavbarPage';
 import backgroundImage from "../../../public/Images/HeaderBanner_2.png";
 import Calendar from 'react-calendar';
