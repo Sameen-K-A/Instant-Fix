@@ -39,8 +39,8 @@ class UserServices implements IUserService {
          const comparePassword = await bcrypt.compare(password, userData.password as string);
          if (!comparePassword) throw new Error("Wrong password");
          if (userData.isBlocked) throw new Error("User is blocked");
-         const userToken = createToken(userData.user_id as string);
-         const userRefreshToken = createRefreshToken(userData.user_id as string);
+         const userToken = createToken(userData.user_id as string, process.env.userRole as string);
+         const userRefreshToken = createRefreshToken(userData.user_id as string, process.env.userRole as string);
          const profileImageS3_bucketURl = generateGetPreSignedURL(userData.profileIMG as string);
          userData = { ...userData, password: "", profileIMG: profileImageS3_bucketURl };
          return { userData, userToken, userRefreshToken };
@@ -62,8 +62,8 @@ class UserServices implements IUserService {
                throw new Error("User not found");
             } else {
                if (userData.isBlocked) throw new Error("User is blocked");
-               const userToken = createToken(userData.user_id as string);
-               const userRefreshToken = createRefreshToken(userData.user_id as string);
+               const userToken = createToken(userData.user_id as string, process.env.userRole as string);
+               const userRefreshToken = createRefreshToken(userData.user_id as string, process.env.userRole as string);
                const profileImageS3_bucketURl = generateGetPreSignedURL(userData.profileIMG as string);
                userData = { ...userData, password: "", profileIMG: profileImageS3_bucketURl };
                return { userData, userToken, userRefreshToken };

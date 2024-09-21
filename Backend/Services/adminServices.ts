@@ -1,7 +1,7 @@
 import { createToken, createRefreshToken } from "../Config/jwt_config";
 import { IAdminServices } from "../Interfaces/admin.service.interface";
 import { IAdminRepository } from "../Interfaces/admin.repository.interface";
-import { IBookingHistory, IFilteredBookings, ILocation, ITechnicians, IUser } from "../Interfaces/common.interface";
+import { IFilteredBookings, ILocation, ITechnicians, IUser } from "../Interfaces/common.interface";
 import { generateGetPreSignedURL } from "../Config/s3_config";
 import dotenv from "dotenv";
 dotenv.config();
@@ -19,8 +19,8 @@ class AdminServices implements IAdminServices {
          const orginalPassword = process.env.Admin_password as string;
          if (orginalEmail === email) {
             if (orginalPassword === password) {
-               const adminAccessToken: string = createToken(email);
-               const adminRefreshToken: string = createRefreshToken(email);
+               const adminAccessToken: string = createToken(email, process.env.adminRole as string);
+               const adminRefreshToken: string = createRefreshToken(email, process.env.adminRole as string);
                return { adminAccessToken, adminRefreshToken };
             } else {
                throw new Error("Wrong password");
