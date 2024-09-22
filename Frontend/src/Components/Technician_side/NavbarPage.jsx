@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import TechnicianSideBar from "./TechnicianSidebar";
-import { Bell } from "../../../public/svgs/Icons";
+import { Bell, Chat } from "../../../public/svgs/Icons";
 import io from "socket.io-client";
 import { toast } from "sonner";
 import NotificationCard from "./Notification";
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import notificationAudio from "/public/Audio/notificationAudio.wav";
 import { GiQuickSlash } from "react-icons/gi";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const socket = io(import.meta.env.VITE_BASE_URL);
 
@@ -15,10 +15,13 @@ const TechnicianNavbar = () => {
   const [showNotification, setShowNotification] = useState(false);
   const { userDetails } = useUserDetails();
   const navigate = useNavigate();
+  const location = useLocation();
+  console.log(location.pathname)
 
   useEffect(() => {
     if (userDetails) {
       socket.emit("joinTechnicianNoficationRoom", userDetails?.user_id);
+      socket.emit("chatNotificationRoom", userDetails.user_id);
       socket.on("notification_to_technician", (data) => {
         const audio = new Audio(notificationAudio);
         audio.play();
@@ -28,13 +31,30 @@ const TechnicianNavbar = () => {
         socket.off("notification_to_technician");
       };
     }
-  }, [userDetails]);
+  }, []);
+
+  useEffect(() => {
+    socket.on("newChatNotification", (message) => {
+      if (location.pathname !== "/technician/chat") {
+        const audio = new Audio(notificationAudio);
+        audio.play();
+        toast(
+          <div className="gap-2 d-flex justify-content-center align-items-center">
+            <Chat /><span>{message}</span>
+          </div>
+        );
+      };
+    });
+    return () => {
+      socket.off("newChatNotification");
+    };
+  }, []);
 
   return (
     <>
       <nav className="navbar navbar-light bg-light" style={{ zIndex: "9999" }}>
         <div className="container-fluid">
-        <p className="navbar-brand mb-0 cursor-pointer" onClick={() => navigate("/technician")}><GiQuickSlash style={{ transform: 'rotate(-180deg)' }} className="text-primary" size={30} /><span className=" text-bold text-primary" style={{marginLeft:"-15px"}}>Instant Fix</span></p>
+          <p className="navbar-brand mb-0 cursor-pointer" onClick={() => navigate("/technician")}><GiQuickSlash style={{ transform: 'rotate(-180deg)' }} className="text-primary" size={30} /><span className=" text-bold text-primary" style={{ marginLeft: "-15px" }}>Instant Fix</span></p>
           <div className="d-flex align-items-center my-2">
             <div className="position-relative me-2">
               <p className="font-weight-bold text-dark text-sm mb-0 me-3  cursor-pointer" onClick={() => setShowNotification(true)}>

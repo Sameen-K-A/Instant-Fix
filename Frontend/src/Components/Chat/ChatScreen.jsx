@@ -92,7 +92,6 @@ const ChatScreen = ({ currentChatting }) => {
         {chatHistory !== null && (
           chatHistory.map((chat, index) => (
             <Fragment key={index + 1}>
-              {console.log(chat.details)}
               {chat?.details?.senderID === userDetails?.user_id ? (
                 <SenderMsg message={chat?.details?.message} time={chat?.details?.time} />
               ) : (

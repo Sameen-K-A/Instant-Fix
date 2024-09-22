@@ -9,6 +9,7 @@ import Chat from "../../Backend/Model/chatModel";
 import ChatServices from "../../Backend/Services/chatServices";
 import UserRepository from "../../Backend/Repository/userRepository";
 import ChatRepository from "../../Backend/Repository/chatRepository"; 
+import { IChatMessage } from "../Interfaces/common.interface";
 
 const userRepository = new UserRepository(User, Booking, Rating);
 const chatRepository = new ChatRepository(Chat);
@@ -35,7 +36,7 @@ const configSocketIO = (server: HttpServer) => {
 
       socket.on("sendMessage", async ({ messageDetails, firstTimeChat }) => {
          try {
-            let savedMessage: null | any = null
+            let savedMessage: null | IChatMessage = null
             if (firstTimeChat === true) {
                const connectionDetails: any = await chatService.createChat(messageDetails);
                savedMessage = connectionDetails?.details[0];
@@ -44,6 +45,7 @@ const configSocketIO = (server: HttpServer) => {
             };
             const chatRoom = [messageDetails.senderID, messageDetails.receiverID].sort().join("-");
             io.to(chatRoom).emit("receiveMessage", savedMessage);
+            io.to(`chatNotificationRoom${savedMessage?.receiverID}`).emit("newChatNotification", savedMessage?.message);
          } catch (error) {
             console.log(error)
          }
@@ -52,6 +54,10 @@ const configSocketIO = (server: HttpServer) => {
       socket.on("joinTechnicianNoficationRoom", (technicianUserID) => {
          socket.join(`technicianNotificaionRoom${technicianUserID}`);
          console.log(`Technician ${technicianUserID} joined his notification room`);
+      });
+
+      socket.on("chatNotificationRoom", (user_id) => {
+         socket.join(`chatNotificationRoom${user_id}`);
       });
 
       socket.on("disconnect", () => {
