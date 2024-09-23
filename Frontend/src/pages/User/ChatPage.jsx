@@ -1,13 +1,16 @@
 import { useLocation } from "react-router-dom";
 import ChatFriends from "../../Components/Chat/ChatFriends";
-import UserNavbar from "../../Components/User_side/NavbarPage"; 
+import UserNavbar from "../../Components/User_side/NavbarPage";
 import { useEffect, useState } from "react";
-import userAxiosInstance from "../../Config/userInstance"; 
+import userAxiosInstance from "../../Config/userInstance";
 import { toast } from "sonner";
-import ChatScreen from "../../Components/Chat/ChatScreen"; 
-import TechnicianNavbar from "../../Components/Technician_side/NavbarPage"; 
+import ChatScreen from "../../Components/Chat/ChatScreen";
+import TechnicianNavbar from "../../Components/Technician_side/NavbarPage";
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
+import io from "socket.io-client";
+const socket = io(import.meta.env.VITE_BASE_URL);
 import Reveal from "../../../public/Animation/Animated";
+import { useUserAuthContext } from "../../Contexts/UserAuthContext";
 
 const ChatPage = () => {
 
@@ -16,6 +19,7 @@ const ChatPage = () => {
   const [previousChattedTechnicians, setPreviousChattedTechnicians] = useState([]);
   const [currentChatting, setCurrentChatting] = useState(null);
   const { userDetails } = useUserDetails();
+  const { setIsLogged } = useUserAuthContext();
 
   useEffect(() => {
     setInstantChatTechnicianDetails(location.state?.details);
@@ -26,12 +30,21 @@ const ChatPage = () => {
         setPreviousChattedTechnicians(response.data);
       } catch (error) {
         if (error.response.status === 401) {
+          setIsLogged(false);
           navigate("/login", { state: { message: "Authorization failed, please login" } });
         } else {
           toast.error("Something wrong, can't collection chatting details. Please try again later.")
         }
       }
     })();
+  }, []);
+
+  useEffect(() => {
+    socket.emit("enterToChatScreen", { user_id: userDetails?.user_id });
+
+    return () => {
+      socket.emit("leaveFromChatScreen", { user_id: userDetails?.user_id });
+    };
   }, []);
 
   return (

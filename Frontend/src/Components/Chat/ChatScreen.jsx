@@ -9,11 +9,13 @@ const socket = io(import.meta.env.VITE_BASE_URL);
 import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import { useNavigate } from "react-router-dom";
 import { useUserAuthContext } from "../../Contexts/UserAuthContext";
+import { GoDotFill } from "react-icons/go";
 
 const ChatScreen = ({ currentChatting }) => {
   const [chatHistory, setChatHistory] = useState(null);
   const { userDetails } = useUserDetails();
   const [newMsg, setNewMsg] = useState("");
+  const [isOnline, setIsOnline] = useState(false);
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
   const { setIsLogged } = useUserAuthContext();
@@ -80,12 +82,34 @@ const ChatScreen = ({ currentChatting }) => {
     }
   };
 
+  useEffect(() => {
+    socket.on("receiverIsOnline", ({ user_id }) => {
+      if (user_id === currentChatting?.user_id) {
+        setIsOnline(true);
+      };
+    });
+
+    socket.on("receiverIsOffline", ({ user_id }) => {
+      if (user_id === currentChatting?.user_id) {
+        setIsOnline(false);
+      }
+    });
+
+    return () => {
+      socket.off("receiverIsOnline");
+      socket.off("receiverIsOffline");
+    };
+  }, [currentChatting]);
+
   return (
     <>
       <div className="card p-3 shadow">
         <div className='d-flex align-items-center'>
           <img src={`${currentChatting?.profileIMG}`} alt="profile_image" width="45px" height="45px" style={{ borderRadius: "50%" }} />
-          <h6 className="ms-2 mt-2">{currentChatting?.name}</h6>
+          <div>
+            <h6 className="ms-2 mt-2 mb-0">{currentChatting?.name}</h6>
+            {isOnline ? <p className="text-xxs m-0 ms-2 opacity-8"><GoDotFill color="green" />Online</p> : <p className="text-xxs m-0 ms-2"><GoDotFill color="red" />Offline</p>}
+          </div>
         </div>
       </div>
       <div className="chat-container mt-4 p-3" style={{ overflowY: 'auto', height: 'calc(85vh - 180px)' }}>

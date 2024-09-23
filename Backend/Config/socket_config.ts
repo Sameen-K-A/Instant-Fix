@@ -8,7 +8,7 @@ import Chat from "../../Backend/Model/chatModel";
 
 import ChatServices from "../../Backend/Services/chatServices";
 import UserRepository from "../../Backend/Repository/userRepository";
-import ChatRepository from "../../Backend/Repository/chatRepository"; 
+import ChatRepository from "../../Backend/Repository/chatRepository";
 import { IChatMessage } from "../Interfaces/common.interface";
 
 const userRepository = new UserRepository(User, Booking, Rating);
@@ -16,6 +16,7 @@ const chatRepository = new ChatRepository(Chat);
 const chatService = new ChatServices(chatRepository, userRepository);
 
 let io: SocketServer;
+let onlineUser: { [key: string]: string } = {};
 
 const configSocketIO = (server: HttpServer) => {
    io = new SocketServer(server, {
@@ -30,13 +31,31 @@ const configSocketIO = (server: HttpServer) => {
 
       socket.on("joinChatRoom", ({ senderID, receiverID }) => {
          const roomName = [senderID, receiverID].sort().join("-");
+         onlineUser[senderID] = socket.id;
          socket.join(roomName);
+         if (onlineUser[receiverID]) {
+            io.emit("receiverIsOnline", { user_id: receiverID });
+         } else {
+            io.emit("receiverIsOffline", { user_id: receiverID });
+         }
          console.log(`User ${senderID} joined room: ${roomName}`);
+      });
+
+      socket.on("enterToChatScreen", ({ user_id }) => {
+         onlineUser[user_id] = socket.id;
+         io.emit("receiverIsOnline", { user_id });
+      });
+
+      socket.on("leaveFromChatScreen", ({ user_id }) => {
+         if (onlineUser[user_id]) {
+            delete onlineUser[user_id];
+            io.emit("receiverIsOffline", { user_id });
+         }
       });
 
       socket.on("sendMessage", async ({ messageDetails, firstTimeChat }) => {
          try {
-            let savedMessage: null | IChatMessage = null
+            let savedMessage: null | IChatMessage = null;
             if (firstTimeChat === true) {
                const connectionDetails: any = await chatService.createChat(messageDetails);
                savedMessage = connectionDetails?.details[0];
@@ -47,9 +66,9 @@ const configSocketIO = (server: HttpServer) => {
             io.to(chatRoom).emit("receiveMessage", savedMessage);
             io.to(`chatNotificationRoom${savedMessage?.receiverID}`).emit("newChatNotification", savedMessage?.message);
          } catch (error) {
-            console.log(error)
+            console.log(error);
          }
-      })
+      });
 
       socket.on("joinTechnicianNoficationRoom", (technicianUserID) => {
          socket.join(`technicianNotificaionRoom${technicianUserID}`);
@@ -61,9 +80,14 @@ const configSocketIO = (server: HttpServer) => {
       });
 
       socket.on("disconnect", () => {
+         const disconnectUser = Object.keys(onlineUser).find((user_id) => onlineUser[user_id] === socket.id);
+         if (disconnectUser) {
+            delete onlineUser[disconnectUser];
+            io.emit("receiverIsOffline", { user_id: disconnectUser });
+         }
          console.log(`User disconnected: ${socket.id}`);
       });
    });
-}
+};
 
 export { configSocketIO, io };
