@@ -15,12 +15,14 @@ class AdminController {
          const serviceResponse = await this.adminService.login(email, password);
          res.cookie("AdminRefreshToken", serviceResponse.adminRefreshToken, {
             httpOnly: true,
-            sameSite: 'strict',
+            sameSite: 'none',
+            secure: true,
             maxAge: 7 * 24 * 60 * 60 * 1000,
          });
          res.cookie("AdminAccessToken", serviceResponse.adminAccessToken, {
             httpOnly: true,
-            sameSite: 'strict',
+            sameSite: 'none',
+            secure: true,
             maxAge: 15 * 60 * 1000,
          });
          res.status(HTTP_statusCode.OK).send(serviceResponse);

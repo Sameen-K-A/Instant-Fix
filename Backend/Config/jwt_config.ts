@@ -64,7 +64,8 @@ const handleRefreshToken = async (req: Request, res: Response, next: NextFunctio
                const newAccessToken = createToken(user_id, role);
                res.cookie(accessTokenName, newAccessToken, {
                   httpOnly: true,
-                  sameSite: 'strict',
+                  sameSite: 'none',
+                  secure: true,
                   maxAge: 15 * 60 * 1000,
                });
                req.user_id = user_id;

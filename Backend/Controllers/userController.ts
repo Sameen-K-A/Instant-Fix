@@ -16,12 +16,14 @@ class UserController {
          const serviceResponse = await this.userService.login(email, password);
          res.cookie("RefreshToken", serviceResponse.userRefreshToken, {
             httpOnly: true,
-            sameSite: 'strict',
+            sameSite: 'none',
+            secure: true,
             maxAge: 7 * 24 * 60 * 60 * 1000,
          });
          res.cookie("AccessToken", serviceResponse.userToken, {
             httpOnly: true,
-            sameSite: 'strict',
+            sameSite: 'none',
+            secure: true,
             maxAge: 15 * 60 * 1000,
          });
          res.status(HTTP_statusCode.OK).json({ userData: serviceResponse.userData });
@@ -44,12 +46,14 @@ class UserController {
          const serviceResponse = await this.userService.verifyGoogleAuth(token);
          res.cookie("RefreshToken", serviceResponse.userRefreshToken, {
             httpOnly: true,
-            sameSite: 'strict',
+            sameSite: 'none',
+            secure: true,
             maxAge: 7 * 24 * 60 * 60 * 1000,
          });
          res.cookie("AccessToken", serviceResponse.userToken, {
             httpOnly: true,
-            sameSite: 'strict',
+            sameSite: 'none',
+            secure: true,
             maxAge: 15 * 60 * 1000,
          });
          res.status(HTTP_statusCode.OK).json({ userData: serviceResponse.userData });
