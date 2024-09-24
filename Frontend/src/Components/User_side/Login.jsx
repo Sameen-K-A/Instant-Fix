@@ -25,6 +25,12 @@ const UserLogin = () => {
         localStorage.removeItem("userDetails");
         localStorage.removeItem("userIsLogged");
         toast.error(location.state.message);
+      } else if (location.state.message === "Your account has been temporarily blocked. Please contact our team for assistance.") {
+        setIsLogged(false);
+        setUserDetails(null);
+        localStorage.removeItem("userDetails");
+        localStorage.removeItem("userIsLogged");
+        toast.error(location.state.message);
       };
     };
   }, [location.state]);

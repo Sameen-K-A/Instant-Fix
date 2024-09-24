@@ -4,6 +4,7 @@ import { IAdminRepository } from "../Interfaces/admin.repository.interface";
 import { IFilteredBookings, ILocation, ITechnicians, IUser } from "../Interfaces/common.interface";
 import { generateGetPreSignedURL } from "../Config/s3_config";
 import dotenv from "dotenv";
+import { io } from "../Config/socket_config";
 dotenv.config();
 
 class AdminServices implements IAdminServices {
@@ -49,7 +50,9 @@ class AdminServices implements IAdminServices {
 
    block = async (user_id: string): Promise<boolean> => {
       try {
-         return await this.adminRepository.block(user_id);
+         const result = await this.adminRepository.block(user_id);
+         io.emit(`AdminBlockMessage${user_id}`, { message: "Your account has been temporarily blocked. Please contact our team for assistance." });
+         return result;
       } catch (error) {
          throw error;
       };

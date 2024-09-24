@@ -8,6 +8,7 @@ import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import notificationAudio from "/public/Audio/notificationAudio.wav";
 import { GiQuickSlash } from "react-icons/gi";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useUserAuthContext } from "../../Contexts/UserAuthContext";
 
 const socket = io(import.meta.env.VITE_BASE_URL);
 
@@ -16,7 +17,7 @@ const TechnicianNavbar = () => {
   const { userDetails } = useUserDetails();
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location.pathname)
+  const { setIsLogged } = useUserAuthContext();
 
   useEffect(() => {
     if (userDetails) {
@@ -34,6 +35,10 @@ const TechnicianNavbar = () => {
   }, []);
 
   useEffect(() => {
+    socket.on(`AdminBlockMessage${userDetails?.user_id}`, (message) => {
+      setIsLogged(false);
+      navigate("/login", { state: { message: message?.message } });
+    });
     socket.on("newChatNotification", (message) => {
       if (location.pathname !== "/technician/chat") {
         const audio = new Audio(notificationAudio);

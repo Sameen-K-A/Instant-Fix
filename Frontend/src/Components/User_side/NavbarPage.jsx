@@ -8,6 +8,7 @@ import notificationAudio from "../../../public/Audio/notificationAudio.wav";
 import io from "socket.io-client";
 import { toast } from "sonner";
 import { Chat } from "../../../public/svgs/Icons";
+import { useUserAuthContext } from "../../Contexts/UserAuthContext";
 
 const socket = io(import.meta.env.VITE_BASE_URL);
 
@@ -17,6 +18,7 @@ const UserNavbar = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const userProfile = userDetails?.profileIMG;
   const location = useLocation();
+  const { setIsLogged } = useUserAuthContext();
 
   useEffect(() => {
     if (userDetails) {
@@ -25,6 +27,10 @@ const UserNavbar = () => {
   }, []);
 
   useEffect(() => {
+    socket.on(`AdminBlockMessage${userDetails?.user_id}`, (message) => {
+      setIsLogged(false);
+      navigate("/login", { state: { message: message?.message } });
+    });
     socket.on("newChatNotification", (message) => {
       if (location.pathname !== "/chat") {
         const audio = new Audio(notificationAudio);
@@ -38,6 +44,7 @@ const UserNavbar = () => {
     });
     return () => {
       socket.off("newChatNotification");
+      socket.off(`AdminBlockMessage${userDetails?.user_id}`)
     };
   }, []);
 
