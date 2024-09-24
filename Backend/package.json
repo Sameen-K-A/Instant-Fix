@@ -4,7 +4,9 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon --exec ts-node -P tsconfig.json app.ts"
+    "start": "nodemon --exec ts-node -P tsconfig.json app.ts",
+    "build": "tsc",
+    "serve": "node dist/app.js"
   },
   "keywords": [],
   "author": "",
