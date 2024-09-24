@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import sendConfirmBookingmail from "../Config/BookingConfirmEmail";
+import sendConfirmBookingmail from "../Config/bookingConfirmEmail";
 import { ITechnicianService } from "../Interfaces/technician.service.interface";
 import { ITechnicianRepository } from "../Interfaces/technician.repository.interface";
 import { IUserRepository } from "../Interfaces/user.repository.interface";

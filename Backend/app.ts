@@ -1,11 +1,11 @@
 import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import cookie_parser from "cookie-parser"
-import user_routes from './Routes/user_routes';
-import admin_routes from './Routes/admin_routes';
-import technician_routes from './Routes/technician_routes';
-import chat_routes from "./Routes/chat_routes";
+import cookie_parser from "cookie-parser";
+import user_routes from './routes/user_routes';
+import admin_routes from './routes/admin_routes';
+import technician_routes from './routes/technician_routes';
+import chat_routes from "./routes/chat_routes";
 import DB_Connection from "./Config/database_config";
 import { configSocketIO } from './Config/socket_config';
 import { createServer } from "http";
