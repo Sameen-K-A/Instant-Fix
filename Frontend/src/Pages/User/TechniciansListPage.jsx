@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TechnicianProfileCard from '../../Components/User_side/TechnicianProfileCard';
 import UserNavbar from '../../Components/User_side/NavbarPage';
-import Footer from '../../Components/Common/Footer'; 
-import userAxiosInstance from '../../Config/userInstance'; 
+import Footer from '../../Components/Common/Footer';
+import userAxiosInstance from '../../Config/userInstance';
 import { toast } from 'sonner';
 import NoResultFoundImage from "../../../public/Images/NoResultFound.png";
 import { useUserDetails } from "../../Contexts/UserDetailsContext"
 import Reveal from '../../../public/Animation/Animated';
 import { useUserAuthContext } from '../../Contexts/UserAuthContext';
+import Pagination from '../../Components/Common/Pagination';
 
 const TechniciansListPage = () => {
   const [primaryTechniciansList, setPrimaryTechnicianList] = useState([]);
@@ -16,6 +17,8 @@ const TechniciansListPage = () => {
   const [techniciansArray, setTechniciansArray] = useState([]);
   const [selectedDistrict, setSelectedDistrict] = useState([]);
   const [selectedProfession, setSelectedProfession] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const bookingsPerPage = 8;
   const professions = ["Painter", "Welder", "Electrician", "Plumber", "Automobile Mechanic", "AC Mechanic", "Carpenter"];
   const district = ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kollam", "Kottayam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"];
   const navigate = useNavigate();
@@ -62,10 +65,10 @@ const TechniciansListPage = () => {
     if (searchInput.length !== 0) {
       afterFiltering = afterFiltering.filter((data) => {
         return data.name.toLowerCase().includes(searchInput.toLowerCase()) || data?.technicianDetails?.profession.toLowerCase().includes(searchInput.toLowerCase());
-      })
+      });
     };
 
-    setTechniciansArray(afterFiltering)
+    setTechniciansArray(afterFiltering);
   }, [searchInput, selectedDistrict, selectedProfession, primaryTechniciansList]);
 
   const handleChangeDistrict = (event) => {
@@ -88,6 +91,9 @@ const TechniciansListPage = () => {
     };
   };
 
+  const totalPages = Math.ceil(techniciansArray.length / bookingsPerPage);
+  const currentTechnicians = techniciansArray.slice((currentPage - 1) * bookingsPerPage, currentPage * bookingsPerPage);
+
   return (
     <>
       <UserNavbar />
@@ -95,7 +101,6 @@ const TechniciansListPage = () => {
         <div className="col-lg-3 col-12 col-sm-6 mt-5 ps-5">
           <div className="col-11">
             <div className="card" style={{ minHeight: "100vh", padding: "20px" }}>
-
               <div className=" mt-5">
                 <h6>Profession</h6>
                 <ul className='d-flex flex-column mt-3 ps-0 ms-0'>
@@ -135,14 +140,14 @@ const TechniciansListPage = () => {
           </div>
           <Reveal>
             <div className="col-12">
-              {techniciansArray.length === 0 ? (
+              {currentTechnicians.length === 0 ? (
                 <div className='d-flex flex-column justify-content-center align-items-center mt-8'>
                   <img src={NoResultFoundImage} alt="No result found" className='mb-0' width={"400px"} />
                   <p className='text-center text-bold'>Sorry, no results found!</p>
                 </div>
               ) : (
                 <div className="row d-flex justify-content-start">
-                  {techniciansArray.map((technician) => {
+                  {currentTechnicians.map((technician) => {
                     return (
                       technician.technicianDetails?.availability && (
                         <TechnicianProfileCard key={technician.user_id} technicianData={technician} />
@@ -152,6 +157,11 @@ const TechniciansListPage = () => {
                 </div>
               )}
             </div>
+          </Reveal>
+          <Reveal>
+            {totalPages > 1 && (
+              <Pagination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
+            )}
           </Reveal>
         </div>
       </div>

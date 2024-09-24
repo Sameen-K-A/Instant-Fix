@@ -1,18 +1,22 @@
 import { useEffect, useState } from "react";
 import AdminNavbar from "./AdminNavbar";
-import adminAxiosInstance from "../../Config/adminInstance"; 
+import adminAxiosInstance from "../../Config/adminInstance";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import backgroundImage from "../../../public/Images/HeaderBanner_2.png";
 import Reveal from "../../../public/Animation/Animated";
 import NoResultFoundImage from "../../../public/Images/NoResultFound.png";
 import { useAdminAuthContext } from "../../Contexts/AdminAuthContext";
+import Pagination from "../Common/Pagination";
 
 const AdminBookingHistoryTable = () => {
 
   const [bookingDetailsArray, setBookingDetailsArray] = useState([]);
   const navigate = useNavigate();
   const { setAdminIsLogged } = useAdminAuthContext();
+  const [currentPage, setCurrentPage] = useState(1);
+  const bookingsPerPage = 4;
+  const totalPages = Math.ceil(bookingDetailsArray.length / bookingsPerPage);
 
   useEffect(() => {
     (async () => {
@@ -34,6 +38,8 @@ const AdminBookingHistoryTable = () => {
     navigate("/admin/viewmoreBookingDetails", { state: { bookingDetails: bookingDetails } });
   };
 
+  const currentBookings = bookingDetailsArray.slice((currentPage - 1) * bookingsPerPage, currentPage * bookingsPerPage);
+
   return (
     <>
       <AdminNavbar />
@@ -47,7 +53,7 @@ const AdminBookingHistoryTable = () => {
         <div className="card card-body blur-sm shadow-blur mx-4 mb-2 mt-n6 overflow-hidden">
           <div className="col-xl-12 col-lg-12 col-md-12 d-flex flex-column">
             <div className="container-fluid">
-              {bookingDetailsArray.length !== 0 ? (
+              {currentBookings.length !== 0 ? (
                 <Reveal>
                   <div className="card-header pb-0 mb-5 mt-3">
                     <h5 className="text-center">Booking History</h5>
@@ -66,10 +72,10 @@ const AdminBookingHistoryTable = () => {
                           </tr>
                         </thead>
                         <tbody className="text-center">
-                          {bookingDetailsArray.map((data, index) => {
+                          {currentBookings.map((data, index) => {
                             return (
                               <tr key={data?.booking_id}>
-                                <td className="text-xs text-bold"><p className="text-xs font-weight-bold mb-0"></p>{index + 1 < 10 ? `0${index + 1}` : index + 1}</td>
+                                <td className="text-xs text-bold"><p className="text-xs font-weight-bold mb-0">{index + 1 + (currentPage - 1) * bookingsPerPage}</p></td>
                                 <td><p className="text-xs font-weight-bold mb-0">{data?.technicianDetails?.name}</p></td>
                                 <td><p className="text-xs font-weight-bold mb-0">{data?.userDetails?.name}</p></td>
                                 <td><p className="text-xs font-weight-bold mb-0">{data?.bookingDate}</p></td>
@@ -100,6 +106,9 @@ const AdminBookingHistoryTable = () => {
             </div>
           </div>
         </div>
+        {totalPages > 1 && (
+          <Pagination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
+        )}
       </div>
     </>
   );

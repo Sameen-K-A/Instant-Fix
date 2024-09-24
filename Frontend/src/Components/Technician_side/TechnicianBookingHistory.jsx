@@ -2,18 +2,22 @@ import { useEffect, useState } from "react";
 import TechnicianNavbar from "./NavbarPage";
 import { useNavigate } from "react-router-dom";
 import backgroundImage from "../../../public/Images/HeaderBanner_2.png";
-import userAxiosInstance from "../../Config/userInstance"; 
-import { useUserDetails } from "../../Contexts/UserDetailsContext"; 
+import userAxiosInstance from "../../Config/userInstance";
+import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import { toast } from "sonner";
 import { io } from 'socket.io-client';
 import Reveal from "../../../public/Animation/Animated";
 import { useUserAuthContext } from "../../Contexts/UserAuthContext";
+import Pagination from "../Common/Pagination";
 
 const socket = io(import.meta.env.VITE_BASE_URL);
 
 const TechnicianBookingHistoryTable = () => {
 
   const [bookingDetailsArray, setBookingDetailsArray] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const bookingsPerPage = 4;
+  const totalPages = Math.ceil(bookingDetailsArray.length / bookingsPerPage);
   const { userDetails } = useUserDetails();
   const navigate = useNavigate();
   const { setIsLogged } = useUserAuthContext();
@@ -52,6 +56,8 @@ const TechnicianBookingHistoryTable = () => {
     navigate("/technician/technicianBookingViewmore", { state: { booking_id: bookingDetails.booking_id } });
   };
 
+  const currentBookings = bookingDetailsArray.slice((currentPage - 1) * bookingsPerPage, currentPage * bookingsPerPage);
+
   return (
     <>
       <TechnicianNavbar />
@@ -65,7 +71,7 @@ const TechnicianBookingHistoryTable = () => {
         <div className="card card-body blur-sm shadow-blur mx-4 mt-n6 overflow-hidden">
           <div className="col-xl-12 col-lg-12 col-md-12 d-flex flex-column" style={{ zIndex: "1" }}>
             <div className="container-fluid">
-              {bookingDetailsArray.length !== 0 ? (
+              {currentBookings.length !== 0 ? (
                 <Reveal>
                   <div className="card-header pb-0 mb-3 mt-3">
                     <h5 className="text-center mb-3">Booking History</h5>
@@ -84,7 +90,7 @@ const TechnicianBookingHistoryTable = () => {
                           </tr>
                         </thead>
                         <tbody className="text-center">
-                          {bookingDetailsArray.map((data, index) => {
+                          {currentBookings.map((data, index) => {
                             return (
                               <tr key={data?.booking_id}>
                                 <td className="text-xs text-bold"><p className="text-xs font-weight-bold mb-0"></p>{index + 1 < 10 ? `0${index + 1}` : index + 1}</td>
@@ -125,6 +131,9 @@ const TechnicianBookingHistoryTable = () => {
             </div>
           </div>
         </div>
+        {totalPages > 1 && (
+          <Pagination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
+        )}
       </div>
     </>
   );

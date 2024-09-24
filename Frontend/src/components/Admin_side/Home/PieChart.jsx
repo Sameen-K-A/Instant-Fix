@@ -15,7 +15,7 @@ const PieChartComponent = ({categories}) => {
 
   const renderLegend = () => {
     return categories.map((category, index) => {
-      const percentage = ((category?.count / categories.length) * 100);
+      const percentage = Math.ceil(((category?.count / categories.length) * 100));
       return (
         <div key={index} className="d-flex align-items-center mb-1 px-3">
           <span style={{ display: 'inline-block', width: 10, height: 10, backgroundColor: COLORS[index % COLORS.length] }} />

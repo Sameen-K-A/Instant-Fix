@@ -1,17 +1,21 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import confirmAlert from "../Common/SweetAlert/confirmAlert";
-import adminAxiosInstance from "../../Config/adminInstance"; 
+import adminAxiosInstance from "../../Config/adminInstance";
 import { useNavigate } from "react-router-dom";
 import AdminNavbar from "./AdminNavbar";
 import backgroundImage from "../../../public/Images/HeaderBanner_2.png";
 import NoResultFoundImage from "../../../public/Images/NoResultFound.png";
 import Reveal from "../../../public/Animation/Animated";
 import { useAdminAuthContext } from "../../Contexts/AdminAuthContext";
+import Pagination from "../Common/Pagination";
 
 const AdminUserList = () => {
   const [orginalArray, setOrginalArray] = useState([]);
   const [usersArray, setUsersArray] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 4;
+  const totalPages = Math.ceil(usersArray.length / usersPerPage);
   const navigate = useNavigate();
   const { setAdminIsLogged } = useAdminAuthContext();
 
@@ -26,7 +30,6 @@ const AdminUserList = () => {
           setAdminIsLogged(false);
           navigate("/admin", { state: { message: "Authorization failed please login" } });
         } else {
-          console.log(error);
           toast.warning("Something wrong please try again later");
         }
       }
@@ -43,16 +46,12 @@ const AdminUserList = () => {
               user.user_id === user_id ? { ...user, isBlocked: false } : user
             );
             setUsersArray(afterUnblocking);
-            const afterUnblockingOrginal = orginalArray.map((user) =>
-              user.user_id === user_id ? { ...user, isBlocked: false } : user
-            );
-            setOrginalArray(afterUnblockingOrginal);
+            setOrginalArray(afterUnblocking);
           } catch (error) {
             if (error.response.status === 401) {
               setAdminIsLogged(false);
               navigate("/admin", { state: { message: "Authorization failed please login" } });
             } else {
-              console.log(error);
               toast.warning("Something wrong please try again later");
             }
           }
@@ -66,6 +65,7 @@ const AdminUserList = () => {
       const afterSearch = orginalArray.filter((user) =>
         user.name.toLowerCase().includes(searchInput.toLowerCase())
       );
+      setCurrentPage(1)
       setUsersArray(afterSearch);
     } else {
       setUsersArray(orginalArray);
@@ -82,22 +82,20 @@ const AdminUserList = () => {
               user.user_id === user_id ? { ...user, isBlocked: true } : user
             );
             setUsersArray(afterblocking);
-            const afterblockingOrginal = orginalArray.map((user) =>
-              user.user_id === user_id ? { ...user, isBlocked: true } : user
-            );
-            setOrginalArray(afterblockingOrginal);
+            setOrginalArray(afterblocking);
           } catch (error) {
             if (error.response.status === 401) {
               setAdminIsLogged(false);
               navigate("/admin", { state: { message: "Authorization failed please login" } });
             } else {
-              console.log(error);
               toast.warning("Something wrong please try again later");
             }
           }
         }
       })
   }
+
+  const currentUsers = usersArray.slice((currentPage - 1) * usersPerPage, currentPage * usersPerPage);
 
   return (
     <>
@@ -115,7 +113,7 @@ const AdminUserList = () => {
               <div className="card-header pb-0 mb-5 mt-3 col-lg-5 col-12 ms-auto">
                 <input type="text" className="form-control ms-3" placeholder="Search user . . ." onChange={(e) => searchUser(e)} />
               </div>
-              {usersArray.length !== 0 ? (
+              {currentUsers.length !== 0 ? (
                 <Reveal>
                   <div className="card-body px-0 pt-0 pb-2">
                     <div className="table-responsive p-0 pb-3" style={{ maxHeight: "300px" }}>
@@ -131,10 +129,10 @@ const AdminUserList = () => {
                           </tr>
                         </thead>
                         <tbody className="text-center">
-                          {usersArray.map((user, index) => {
+                          {currentUsers.map((user, index) => {
                             return (
                               <tr key={user.user_id}>
-                                <td><p className="text-xs font-weight-bold mb-0">{index + 1}</p></td>
+                                <td><p className="text-xs font-weight-bold mb-0">{index + 1 + (currentPage - 1) * usersPerPage}</p></td>
                                 <td><p className="text-xs font-weight-bold mb-0">{user?.name}</p></td>
                                 <td><p className="text-xs font-weight-bold mb-0">{user?.email}</p></td>
                                 <td><p className="text-xs font-weight-bold mb-0">{user?.phone}</p></td>
@@ -165,6 +163,9 @@ const AdminUserList = () => {
             </div>
           </div>
         </div>
+        {totalPages > 1 && (
+          <Pagination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
+        )}
       </div>
     </>
   );

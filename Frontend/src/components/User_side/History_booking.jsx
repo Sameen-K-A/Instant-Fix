@@ -8,10 +8,15 @@ import { useUserDetails } from "../../Contexts/UserDetailsContext";
 import AlertRedDot from "../Common/AlertRedDot"; 
 import Reveal from "../../../public/Animation/Animated";
 import { useUserAuthContext } from "../../Contexts/UserAuthContext";
+import Pagination from "../Common/Pagination";
 
 const UserBookingHistoryTable = () => {
   
   const [bookingDetailsArray, setBookingDetailsArray] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1); 
+  const bookingsPerPage = 4;
+  const totalPages = Math.ceil(bookingDetailsArray.length / bookingsPerPage);
+
   const { userDetails } = useUserDetails();
   const navigate = useNavigate();
   const { setIsLogged } = useUserAuthContext();
@@ -36,6 +41,8 @@ const UserBookingHistoryTable = () => {
     navigate("/viewmoreHistory", { state: { booking_id: bookingDetails?.booking_id } });
   };
 
+  const currentBookings = bookingDetailsArray.slice((currentPage - 1) * bookingsPerPage, currentPage * bookingsPerPage);
+
   return (
     <>
       <UserNavbar />
@@ -48,7 +55,7 @@ const UserBookingHistoryTable = () => {
         <div className="card card-body blur-sm shadow-blur mx-4 mt-n6 overflow-hidden">
           <div className="col-xl-12 col-lg-12 col-md-12 d-flex flex-column" style={{ zIndex: "1" }}>
             <div className="container-fluid">
-              {bookingDetailsArray.length !== 0 ? (
+              {currentBookings.length !== 0 ? (
                 <Reveal>
                   <div className="card-header pb-0 mb-3 mt-3">
                     <h5 className="text-center mb-3">Booking History</h5>
@@ -67,26 +74,24 @@ const UserBookingHistoryTable = () => {
                           </tr>
                         </thead>
                         <tbody className="text-center">
-                          {bookingDetailsArray.map((data, index) => {
-                            return (
-                              <tr key={data?.booking_id}>
-                                <td className="text-xs text-bold"><p className="text-xs font-weight-bold mb-0"></p>{index + 1 < 10 ? `0${index + 1}` : index + 1}</td>
-                                <td><p className="text-xs font-weight-bold mb-0">{data?.technicianPersonal?.name}</p></td>
-                                <td><p className="text-xs font-weight-bold mb-0">{data?.bookingDate}</p></td>
-                                <td><p className="text-xs font-weight-bold mb-0">{data?.bookingTime}</p></td>
-                                <td className="text-sm">
-                                  <span
-                                    className={`badge badge-sm 
-                                      ${(data?.booking_status === "Rejected" || data?.booking_status === "Cancelled") && "bg-gradient-faded-danger"}  
-                                      ${(data?.booking_status === "Requested" || data?.booking_status === "Pending") && "bg-gradient-faded-warning"} 
-                                      ${data?.booking_status === "Completed" && "bg-success"}`}
-                                  >{data?.booking_status}
-                                  </span>
-                                </td>
-                                <td className="d-flex justify-content-center"><button className="btn bg-gradient-primary mb-0 text-center" onClick={() => handleViewmore(data)}>View more</button>{data.payment_status === "Requested" && <AlertRedDot />}</td>
-                              </tr>
-                            );
-                          })}
+                          {currentBookings.map((data, index) => (
+                            <tr key={data?.booking_id}>
+                              <td className="text-xs text-bold">{index + 1 < 10 ? `0${index + 1}` : index + 1}</td>
+                              <td><p className="text-xs font-weight-bold mb-0">{data?.technicianPersonal?.name}</p></td>
+                              <td><p className="text-xs font-weight-bold mb-0">{data?.bookingDate}</p></td>
+                              <td><p className="text-xs font-weight-bold mb-0">{data?.bookingTime}</p></td>
+                              <td className="text-sm">
+                                <span className={`badge badge-sm 
+                                  ${(data?.booking_status === "Rejected" || data?.booking_status === "Cancelled") && "bg-gradient-faded-danger"}  
+                                  ${(data?.booking_status === "Requested" || data?.booking_status === "Pending") && "bg-gradient-faded-warning"} 
+                                  ${data?.booking_status === "Completed" && "bg-success"}`}>{data?.booking_status}</span>
+                              </td>
+                              <td className="d-flex justify-content-center">
+                                <button className="btn bg-gradient-primary mb-0 text-center" onClick={() => handleViewmore(data)}>View more</button>
+                                {data.payment_status === "Requested" && <AlertRedDot />}
+                              </td>
+                            </tr>
+                          ))}
                         </tbody>
                       </table>
                     </div>
@@ -105,6 +110,9 @@ const UserBookingHistoryTable = () => {
             </div>
           </div>
         </div>
+        {totalPages > 1 && (
+          <Pagination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
+        )}
       </div>
     </>
   );
