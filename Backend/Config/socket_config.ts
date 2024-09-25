@@ -1,14 +1,14 @@
 import { Server as SocketServer } from "socket.io";
 import { Server as HttpServer } from "http";
 
-import User from "../../Backend/Model/userModal";
-import Booking from "../../Backend/Model/bookingModel";
-import Rating from "../../Backend/Model/reviewModal";
-import Chat from "../../Backend/Model/chatModel";
+import User from "../Model/userModal";
+import Booking from "../Model/bookingModel";
+import Rating from "../Model/reviewModal";
+import Chat from "../Model/chatModel";
 
-import ChatServices from "../../Backend/Services/chatServices";
-import UserRepository from "../../Backend/Repository/userRepository";
-import ChatRepository from "../../Backend/Repository/chatRepository";
+import ChatServices from "../Services/chatServices";
+import UserRepository from "../Repository/userRepository";
+import ChatRepository from "../Repository/chatRepository";
 import { IChatMessage } from "../Interfaces/common.interface";
 
 const userRepository = new UserRepository(User, Booking, Rating);
