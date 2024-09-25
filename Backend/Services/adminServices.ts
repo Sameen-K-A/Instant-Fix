@@ -104,17 +104,20 @@ class AdminServices implements IAdminServices {
    findBooking = async (): Promise<any[]> => {
       try {
          let response = await this.adminRepository.findBooking();
-         response = response.map((booking: any) => ({
-            ...booking,
-            technicianDetails: { ...booking.technicianDetails, profileIMG: booking.technicianDetails?.profileIMG && generateGetPreSignedURL(booking.technicianDetails?.profileIMG) },
-            userDetails: { ...booking.userDetails, profileIMG: booking.userDetails?.profileIMG && generateGetPreSignedURL(booking.userDetails?.profileIMG) }
+         response = await Promise.all(response.map(async (booking: any) => {
+            const technicianProfileIMG = booking.technicianDetails?.profileIMG ? await generateGetPreSignedURL(booking.technicianDetails.profileIMG) : "";
+            const userProfileIMG = booking.userDetails?.profileIMG ? await generateGetPreSignedURL(booking.userDetails.profileIMG) : "";
+            return {
+               ...booking,
+               technicianDetails: { ...booking.technicianDetails, profileIMG: technicianProfileIMG },
+               userDetails: { ...booking.userDetails, profileIMG: userProfileIMG }
+            };
          }));
          return response;
       } catch (error) {
          throw error;
       }
    };
-
 
 };
 

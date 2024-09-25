@@ -155,16 +155,18 @@ class TechnicianService implements ITechnicianService {
    getRatingWithReviewerDetails = async (userId: string): Promise<IFeedbackRepository> => {
       try {
          const result = await this.technicianRepository.getRatingWithReviewerDetails(userId);
-         result.reviews = result.reviews.map(review => {
+         result.reviews = await Promise.all(result.reviews.map(async review => {
             const reviewer = result.reviewerDetails?.find(reviewer => reviewer.user_id === review.rated_user_id);
-            return { ...review, reviewerName: reviewer?.name, reviewerProfileIMG: reviewer?.profileIMG && generateGetPreSignedURL(reviewer?.profileIMG) };
-         });
+            const reviewerProfileIMG = reviewer?.profileIMG ? await generateGetPreSignedURL(reviewer.profileIMG) : "";
+            return { ...review, reviewerName: reviewer?.name, reviewerProfileIMG };
+         }));
          delete result.reviewerDetails;
          return result;
       } catch (error) {
          throw error;
       }
    };
+
 
 };
 

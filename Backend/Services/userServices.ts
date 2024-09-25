@@ -41,7 +41,7 @@ class UserServices implements IUserService {
          if (userData.isBlocked) throw new Error("User is blocked");
          const userToken = createToken(userData.user_id as string, process.env.userRole as string);
          const userRefreshToken = createRefreshToken(userData.user_id as string, process.env.userRole as string);
-         const profileImageS3_bucketURl = generateGetPreSignedURL(userData.profileIMG as string);
+         const profileImageS3_bucketURl = await generateGetPreSignedURL(userData.profileIMG as string);
          userData = { ...userData, password: "", profileIMG: profileImageS3_bucketURl };
          return { userData, userToken, userRefreshToken };
       } catch (error) {
@@ -64,7 +64,7 @@ class UserServices implements IUserService {
                if (userData.isBlocked) throw new Error("User is blocked");
                const userToken = createToken(userData.user_id as string, process.env.userRole as string);
                const userRefreshToken = createRefreshToken(userData.user_id as string, process.env.userRole as string);
-               const profileImageS3_bucketURl = generateGetPreSignedURL(userData.profileIMG as string);
+               const profileImageS3_bucketURl = await generateGetPreSignedURL(userData.profileIMG as string);
                userData = { ...userData, password: "", profileIMG: profileImageS3_bucketURl };
                return { userData, userToken, userRefreshToken };
             };
@@ -216,7 +216,7 @@ class UserServices implements IUserService {
    getPreSignedURL = async (imageName: string, imageType: string): Promise<{ URL: string; uniqueImageName: string }> => {
       try {
          const uniqueImageName = `${Date.now()}_${imageName}`;
-         const URL = generatePutPreSignedURL(uniqueImageName, imageType);
+         const URL = await generatePutPreSignedURL(uniqueImageName, imageType);
          return { URL, uniqueImageName };
       } catch (error) {
          throw error;
@@ -226,7 +226,10 @@ class UserServices implements IUserService {
    getTechnicians = async (user_id: string): Promise<ITechnicians[]> => {
       try {
          const result = await this.userRepository.getTechnicians(user_id);
-         const afterUpdation: ITechnicians[] = result.map((technician) => ({ ...technician, profileIMG: generateGetPreSignedURL(technician.profileIMG) }));
+         const afterUpdation: ITechnicians[] = await Promise.all(result.map(async (technician) => {
+            const profileImageURL = technician.profileIMG ? await generateGetPreSignedURL(technician.profileIMG) : null;
+            return { ...technician, profileIMG: profileImageURL } as ITechnicians;
+         }));
          return afterUpdation;
       } catch (error) {
          throw error;
@@ -236,18 +239,19 @@ class UserServices implements IUserService {
    getTechnicianWithPersonalDetails = async (technicianUser_id: string): Promise<IUserWithITechnician> => {
       try {
          let result: IUserWithITechnician = await this.userRepository.getTechnicianWithPersonalDetails(technicianUser_id);
-         result = { ...result, profileIMG: generateGetPreSignedURL(result.profileIMG) };
+         result = { ...result, profileIMG: await generateGetPreSignedURL(result.profileIMG) };
          if (result.ratingInformation?.reviews) {
-            result.ratingInformation.reviews = result.ratingInformation.reviews.map((review: IReview) => {
+            result.ratingInformation.reviews = await Promise.all(result.ratingInformation.reviews.map(async (review: IReview) => {
                const reviewer: IReviewerDetail | undefined = result.reviewerDetails?.find((reviewer: IReviewerDetail) => reviewer.user_id === review.rated_user_id);
-               return { ...review, reviewerName: reviewer?.name, reviewerProfileIMG: reviewer?.profileIMG && generateGetPreSignedURL(reviewer.profileIMG) };
-            });
-         };
+               const reviewerProfileIMG = reviewer?.profileIMG ? await generateGetPreSignedURL(reviewer.profileIMG) : "";
+               return { ...review, reviewerName: reviewer?.name, reviewerProfileIMG };
+            }));
+         }
          delete result.reviewerDetails;
          return result;
       } catch (error) {
          throw error;
-      };
+      }
    };
 
    followTechnician = async (user_id: string, technicianUser_id: string): Promise<boolean> => {
@@ -269,9 +273,9 @@ class UserServices implements IUserService {
    getFollowedTechnicians = async (user_id: string): Promise<IFollowedTechnician[]> => {
       try {
          let result: IFollowedTechnician[] = await this.userRepository.getFollowedTechnicians(user_id);
-         result = result.map((technician) => ({
-            ...technician,
-            SavedTechnicianPersonalInformation: { ...technician.SavedTechnicianPersonalInformation, profileIMG: generateGetPreSignedURL(technician.SavedTechnicianPersonalInformation?.profileIMG) }
+         result = await Promise.all(result.map(async (technician) => {
+            const profileIMG = technician.SavedTechnicianPersonalInformation?.profileIMG ? await generateGetPreSignedURL(technician.SavedTechnicianPersonalInformation.profileIMG) : "";
+            return { ...technician, SavedTechnicianPersonalInformation: { ...technician.SavedTechnicianPersonalInformation, profileIMG } };
          }));
          return result;
       } catch (error) {
@@ -282,7 +286,10 @@ class UserServices implements IUserService {
    getChatFriends = async (user_id: string): Promise<any[]> => {
       try {
          let response = await this.userRepository.getChatFriends(user_id);
-         response = response.map((friend: any) => ({ ...friend, technicianPersonalDetails: { ...friend.technicianPersonalDetails, profileIMG: generateGetPreSignedURL(friend.technicianPersonalDetails?.profileIMG) } }));
+         response = await Promise.all(response.map(async (friend: any) => {
+            const profileIMG = friend.technicianPersonalDetails?.profileIMG ? await generateGetPreSignedURL(friend.technicianPersonalDetails.profileIMG) : "";
+            return { ...friend, technicianPersonalDetails: { ...friend.technicianPersonalDetails, profileIMG } };
+         }));
          return response;
       } catch (error) {
          throw error;

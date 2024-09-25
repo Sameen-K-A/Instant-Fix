@@ -1,45 +1,43 @@
-import AWS from "aws-sdk";
+import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import dotenv from "dotenv";
 dotenv.config();
 
-AWS.config.update({
-   accessKeyId: process.env.S3_Access_key as string,
-   secretAccessKey: process.env.S3_Secret_key as string,
-   region: process.env.S3_Region as string
+const s3Client = new S3Client({
+   region: process.env.S3_Region as string,
+   credentials: {
+      accessKeyId: process.env.S3_Access_key as string,
+      secretAccessKey: process.env.S3_Secret_key as string,
+   },
 });
 
-const S3: AWS.S3 = new AWS.S3();
-
-function generatePutPreSignedURL(imageName: string, imageType: string): string {
-   const params = {
+async function generatePutPreSignedURL(imageName: string, imageType: string): Promise<string> {
+   const command = new PutObjectCommand({
       Bucket: process.env.S3_bucketName as string,
       Key: imageName,
-      Expires: 120,
       ContentType: imageType,
-   };
+   });
 
    try {
-      const url: string = S3.getSignedUrl("putObject", params);
+      const url = await getSignedUrl(s3Client, command, { expiresIn: 120 });
       return url;
    } catch (error) {
       throw error;
    };
 };
 
-function generateGetPreSignedURL(imageName: string): string {
-   const params = {
+async function generateGetPreSignedURL(imageName: string): Promise<string> {
+   const command = new GetObjectCommand({
       Bucket: process.env.S3_bucketName as string,
       Key: imageName,
-      Expires: 3600 * 24 * 7
-   };
+   });
 
    try {
-      const url = S3.getSignedUrl("getObject", params);
+      const url = await getSignedUrl(s3Client, command, { expiresIn: 3600 * 24 * 7 });
       return url;
    } catch (error) {
       throw error;
-   }
-}
-
+   };
+};
 
 export { generatePutPreSignedURL, generateGetPreSignedURL };
