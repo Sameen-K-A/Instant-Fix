@@ -1,0 +1,23 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const jwt_config_1 = require("../Config/jwt_config");
+const chatController_1 = __importDefault(require("../Controllers/chatController"));
+const chatServices_1 = __importDefault(require("../Services/chatServices"));
+const chatRepository_1 = __importDefault(require("../Repository/chatRepository"));
+const chatModel_1 = __importDefault(require("../Model/chatModel"));
+const userRepository_1 = __importDefault(require("../Repository/userRepository"));
+const userModal_1 = __importDefault(require("../Model/userModal"));
+const bookingModel_1 = __importDefault(require("../Model/bookingModel"));
+const reviewModal_1 = __importDefault(require("../Model/reviewModal"));
+const userAuth_1 = __importDefault(require("../Middleware/userAuth"));
+const chatRepository = new chatRepository_1.default(chatModel_1.default);
+const userRepository = new userRepository_1.default(userModal_1.default, bookingModel_1.default, reviewModal_1.default);
+const chatService = new chatServices_1.default(chatRepository, userRepository);
+const chatController = new chatController_1.default(chatService);
+const router = (0, express_1.Router)();
+router.get("/fetchTwoMembersChat", jwt_config_1.verifyToken, userAuth_1.default, chatController.getChat);
+exports.default = router;

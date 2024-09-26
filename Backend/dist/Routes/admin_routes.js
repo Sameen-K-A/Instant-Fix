@@ -1,0 +1,28 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const adminController_1 = __importDefault(require("../Controllers/adminController"));
+const jwt_config_1 = require("../Config/jwt_config");
+const adminServices_1 = __importDefault(require("../Services/adminServices"));
+const adminRepository_1 = __importDefault(require("../Repository/adminRepository"));
+const userModal_1 = __importDefault(require("../Model/userModal"));
+const bookingModel_1 = __importDefault(require("../Model/bookingModel"));
+const technicianModel_1 = __importDefault(require("../Model/technicianModel"));
+const router = (0, express_1.Router)();
+const adminRepository = new adminRepository_1.default(userModal_1.default, bookingModel_1.default, technicianModel_1.default);
+const adminService = new adminServices_1.default(adminRepository);
+const adminController = new adminController_1.default(adminService);
+router.post("/login", adminController.login);
+router.get("/fetchUser", jwt_config_1.adminVerifyToken, adminController.findUser);
+router.patch("/unblockUser", jwt_config_1.adminVerifyToken, adminController.unBlock);
+router.patch("/blockUser", jwt_config_1.adminVerifyToken, adminController.block);
+router.get("/fetchTechnicians", jwt_config_1.adminVerifyToken, adminController.findTechnician);
+router.get("/fetchBookings", jwt_config_1.adminVerifyToken, adminController.findBooking);
+router.get("/fetchbookingsLocation", jwt_config_1.adminVerifyToken, adminController.fetchbookingsLocation);
+router.get("/getCategories", jwt_config_1.adminVerifyToken, adminController.getCategories);
+router.get("/filteredBooking", jwt_config_1.adminVerifyToken, adminController.filteredBooking);
+router.get("/logout", adminController.logout);
+exports.default = router;
