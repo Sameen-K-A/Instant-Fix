@@ -25,6 +25,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).json({ userData: serviceResponse.userData });
             }
             catch (error) {
+                console.log("User:= login error", error);
                 if (error.message === "email not found") {
                     res.status(httpStatusCode_1.default.NotFound).json({ message: "email not found" });
                 }
@@ -60,6 +61,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).json({ userData: serviceResponse.userData });
             }
             catch (error) {
+                console.log("User:= google login error", error);
                 if (error.message === "User not found") {
                     res.status(httpStatusCode_1.default.NotFound).json({ message: "User not found" });
                 }
@@ -80,6 +82,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).send("OTP sended to mail");
             }
             catch (error) {
+                console.log("User:= register error", error);
                 if (error.message === "Email already exists") {
                     res.status(httpStatusCode_1.default.Conflict).json({ message: "Email already exists" });
                 }
@@ -100,6 +103,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).json(serviceResponse);
             }
             catch (error) {
+                console.log("User:= otp verification error", error);
                 if (error.message === "Incorrect OTP") {
                     res.status(httpStatusCode_1.default.Unauthorized).json({ message: "Incorrect OTP" });
                 }
@@ -119,6 +123,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).send("OTP sended");
             }
             catch (error) {
+                console.log("User:= resend otp error", error);
                 if (error.message === "Email not send") {
                     res.status(httpStatusCode_1.default.InternalServerError).json({ message: "Email not send" });
                 }
@@ -136,6 +141,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).json({ message: "Address modified successfully" });
             }
             catch (error) {
+                console.log("User:= update address error", error);
                 if (error.message === "Failed to update address") {
                     res.status(httpStatusCode_1.default.NoChange).send("Failed to update address");
                 }
@@ -153,6 +159,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).send(serviceResponse);
             }
             catch (error) {
+                console.log("User:= delete address error", error);
                 if (error.message === "Failed to delete address") {
                     res.status(httpStatusCode_1.default.NoChange).send("Failed to update address");
                 }
@@ -170,6 +177,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).send("Password changed successfully");
             }
             catch (error) {
+                console.log("User:= update password error", error);
                 if (error.message === "Current password is wrong") {
                     res.status(httpStatusCode_1.default.Unauthorized).json({ message: "Current password is wrong" });
                 }
@@ -190,6 +198,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).send("Changes completed successfully");
             }
             catch (error) {
+                console.log("User:= update profile details error", error);
                 if (error.message === "Failed to update profile") {
                     res.status(httpStatusCode_1.default.NoChange).send("Failed to update profile");
                 }
@@ -207,6 +216,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).json(result);
             }
             catch (error) {
+                console.log("User:= update profile image error", error);
                 if (error.message === "Failed to update user profile") {
                     res.status(httpStatusCode_1.default.NoChange).send("Failed to update user profile");
                 }
@@ -224,6 +234,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).json(response);
             }
             catch (error) {
+                console.log("User:= generate presigned url error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).send("Somthing wrong please try again later");
             }
             ;
@@ -235,6 +246,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).send("Save technician completed successfully");
             }
             catch (error) {
+                console.log("User:= save technician error", error);
                 if (error.message === "Failed to follow technician") {
                     res.status(httpStatusCode_1.default.NoChange).send("Failed to follow technician");
                 }
@@ -252,6 +264,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).send("Unsave technician completed successfully");
             }
             catch (error) {
+                console.log("User:= un save error", error);
                 if (error.message === "Failed to unfollow technician") {
                     res.status(httpStatusCode_1.default.NoChange).send("Failed to unfollow technician");
                 }
@@ -269,6 +282,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).json(responseFromService);
             }
             catch (error) {
+                console.log("User:= get saved technician list error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).send("Something wrong, please try again later.");
             }
             ;
@@ -280,6 +294,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).json(serviceResponse);
             }
             catch (error) {
+                console.log("User:= fetch all technicians error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).json(error);
             }
             ;
@@ -291,6 +306,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).json(responseFromService);
             }
             catch (error) {
+                console.log("User:= get technician profile with personal detail error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).send("Somthing wrong please try again later");
             }
             ;
@@ -302,6 +318,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).json(techniciansList);
             }
             catch (error) {
+                console.log("User:= get chat friends error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).json(error);
             }
             ;
@@ -313,6 +330,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).json(response);
             }
             catch (error) {
+                console.log("User:= book technician slot error", error);
                 if (error.message === "Technician is not available on selected date") {
                     res.status(httpStatusCode_1.default.ServiceUnavailable).send("Technician is not available on selected date");
                 }
@@ -326,7 +344,6 @@ class UserController {
                     res.status(httpStatusCode_1.default.NoAccess).send("Unable to find location for the provided pincode.");
                 }
                 else {
-                    console.log(error);
                     res.status(httpStatusCode_1.default.InternalServerError).json(error);
                 }
                 ;
@@ -340,6 +357,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).json(response);
             }
             catch (error) {
+                console.log("User:= get booking history error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).json(error);
             }
             ;
@@ -351,6 +369,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).json(response);
             }
             catch (error) {
+                console.log("User:= get booking individual booking details error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).send("Something wrong please try again later.");
             }
         };
@@ -361,6 +380,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).send("Booking cancelled successfully.");
             }
             catch (error) {
+                console.log("User:= cancel booking error", error);
                 if (error.message === "Failed to cancel booking") {
                     res.status(httpStatusCode_1.default.NoChange).json("Failed to cancel booking");
                 }
@@ -378,6 +398,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).json({ order_id: response.id, currency: response.currency, amount: response.amount, });
             }
             catch (error) {
+                console.log("User:= proceed to payement error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).send("Something wrong please try again later.");
             }
             ;
@@ -389,6 +410,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).send("Payment verified successfully");
             }
             catch (error) {
+                console.log("User:= verify payment error", error);
                 if (error.message === "Invalid payment verification") {
                     res.status(httpStatusCode_1.default.BadRequest).send("Invalid payment verification");
                 }
@@ -409,6 +431,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).send("Feedback submitted successfully");
             }
             catch (error) {
+                console.log("User:= submit review error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).send("Something wrong please try again later");
             }
             ;
@@ -420,6 +443,7 @@ class UserController {
                 res.status(httpStatusCode_1.default.OK).json('Logged out successfully');
             }
             catch (error) {
+                console.log("User:= logout error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).send("Something wrong please try again later");
             }
             ;

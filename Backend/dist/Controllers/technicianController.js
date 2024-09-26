@@ -13,6 +13,7 @@ class TechnicianController {
                 res.status(httpStatusCode_1.default.OK).json(serviceResult);
             }
             catch (error) {
+                console.log("Technician:= create technician error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).json({ message: 'Internal Server Error' });
             }
             ;
@@ -24,6 +25,7 @@ class TechnicianController {
                 res.status(httpStatusCode_1.default.OK).send("Changes commit successfully");
             }
             catch (error) {
+                console.log("Technician:= update profession error", error);
                 if (error.message === "No changes found") {
                     res.status(httpStatusCode_1.default.NoChange).json({ message: "No changes found" });
                 }
@@ -41,6 +43,7 @@ class TechnicianController {
                 res.status(httpStatusCode_1.default.OK).send("Changes completed successfully");
             }
             catch (error) {
+                console.log("Technician:= update available status error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).json(error);
             }
             ;
@@ -52,6 +55,7 @@ class TechnicianController {
                 res.status(httpStatusCode_1.default.OK).json(result);
             }
             catch (error) {
+                console.log("Technician:= get booking error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).json({ message: "Something wrong please try again later" });
             }
             ;
@@ -63,6 +67,7 @@ class TechnicianController {
                 res.status(httpStatusCode_1.default.OK).json(serviceResponse);
             }
             catch (error) {
+                console.log("Technician:= get technician information error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).send("Something wrong please try again later.");
             }
             ;
@@ -74,6 +79,7 @@ class TechnicianController {
                 res.status(httpStatusCode_1.default.OK).json(response);
             }
             catch (error) {
+                console.log("Technician:= get booking details error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).send("Can't collect booking details");
             }
             ;
@@ -85,6 +91,7 @@ class TechnicianController {
                 res.status(httpStatusCode_1.default.OK).json({ message: "Status changed successfully" });
             }
             catch (error) {
+                console.log("Technicia:=n update booking status error", error);
                 if (error.message === "Status is not changed") {
                     res.status(httpStatusCode_1.default.NoChange).send("Status is not changed");
                 }
@@ -102,6 +109,7 @@ class TechnicianController {
                 res.status(httpStatusCode_1.default.OK).send("Booking completed");
             }
             catch (error) {
+                console.log("Technician:= complete booking error", error);
                 if (error.message === "Booking details is not changed") {
                     res.status(httpStatusCode_1.default.NoChange).send("Booking details is not changed");
                 }
@@ -122,6 +130,7 @@ class TechnicianController {
                 res.status(httpStatusCode_1.default.OK).send("Notification cleared successfully");
             }
             catch (error) {
+                console.log("Technician:= delete notification error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).send("Can't clear notifications.");
             }
             ;
@@ -134,6 +143,7 @@ class TechnicianController {
                 res.status(httpStatusCode_1.default.OK).send("Slot modified completed successfully");
             }
             catch (error) {
+                console.log("Technician:= update availbale slot error", error);
                 if (error.message === "Slot modification is failed.") {
                     res.status(httpStatusCode_1.default.NoChange).send("Slot modification is failed.");
                 }
@@ -151,6 +161,7 @@ class TechnicianController {
                 res.status(httpStatusCode_1.default.OK).json(serviceResponse);
             }
             catch (error) {
+                console.log("Technician:= get wallet error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).send("Something wrong, Please try again later.");
             }
             ;
@@ -162,6 +173,7 @@ class TechnicianController {
                 res.status(httpStatusCode_1.default.OK).json(serviceResponse);
             }
             catch (error) {
+                console.log("Technician:= get rating with reviewer details error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).send("Something wrong please try again later.");
             }
             ;

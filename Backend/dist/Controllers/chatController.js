@@ -14,6 +14,7 @@ class ChatController {
                 res.status(httpStatusCode_1.default.OK).json(chatHistory);
             }
             catch (error) {
+                console.log("chat:= get chat error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).json(error);
             }
             ;

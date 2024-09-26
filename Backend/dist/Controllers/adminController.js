@@ -25,6 +25,7 @@ class AdminController {
                 res.status(httpStatusCode_1.default.OK).send(serviceResponse);
             }
             catch (error) {
+                console.log("Admin:= login error", error);
                 if (error.message === "Wrong email") {
                     res.status(httpStatusCode_1.default.NotFound).json({ message: "Email not found" });
                 }
@@ -44,6 +45,7 @@ class AdminController {
                 res.status(httpStatusCode_1.default.OK).json(serviceResponse);
             }
             catch (error) {
+                console.log("Admin:= find user", error);
                 res.status(httpStatusCode_1.default.InternalServerError).json("Something wrong please try again later");
             }
             ;
@@ -55,6 +57,7 @@ class AdminController {
                 res.status(httpStatusCode_1.default.OK).json(serviceResponse);
             }
             catch (error) {
+                console.log("Admin:= unblock error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).json("Something went wrong, please try again later");
             }
             ;
@@ -66,6 +69,7 @@ class AdminController {
                 res.status(httpStatusCode_1.default.OK).json(serviceResponse);
             }
             catch (error) {
+                console.log("Admin:= block error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).json("Something went wrong, please try again later");
             }
             ;
@@ -76,6 +80,7 @@ class AdminController {
                 res.status(httpStatusCode_1.default.OK).json(controllResponse);
             }
             catch (error) {
+                console.log("Admin:= find technician error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).send("Something wrong please try again later");
             }
             ;
@@ -86,6 +91,7 @@ class AdminController {
                 res.status(httpStatusCode_1.default.OK).json(response);
             }
             catch (error) {
+                console.log("Admin:= find booking error ", error);
                 res.status(httpStatusCode_1.default.InternalServerError).send("Something wrong please try again later");
             }
             ;
@@ -96,6 +102,7 @@ class AdminController {
                 res.status(httpStatusCode_1.default.OK).json(response);
             }
             catch (error) {
+                console.log("Admin:= find booking technician error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).send("Something wrong please try again later");
             }
             ;
@@ -106,6 +113,7 @@ class AdminController {
                 res.status(httpStatusCode_1.default.OK).json(response);
             }
             catch (error) {
+                console.log("Admin:= get category error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).send("Something wrong please try again later");
             }
             ;
@@ -117,6 +125,7 @@ class AdminController {
                 res.status(httpStatusCode_1.default.OK).json(response);
             }
             catch (error) {
+                console.log("Admin:= filter booking error", error);
                 res.status(httpStatusCode_1.default.InternalServerError).send("Something wrong please try again later");
             }
             ;
@@ -128,6 +137,7 @@ class AdminController {
                 res.status(httpStatusCode_1.default.OK).send('Logged out successfully');
             }
             catch (error) {
+                console.log("Admin:= logout", error);
                 res.status(httpStatusCode_1.default.InternalServerError).send("Something wrong please try again later");
             }
             ;
