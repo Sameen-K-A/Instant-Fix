@@ -27,6 +27,7 @@ class AdminController {
          });
          res.status(HTTP_statusCode.OK).send(serviceResponse);
       } catch (error: any) {
+         console.log("Admin:= login error", error)
          if (error.message === "Wrong email") {
             res.status(HTTP_statusCode.NotFound).json({ message: "Email not found" });
          } else if (error.message === "Wrong password") {
@@ -42,6 +43,7 @@ class AdminController {
          const serviceResponse = await this.adminService.findUser();
          res.status(HTTP_statusCode.OK).json(serviceResponse);
       } catch (error) {
+         console.log("Admin:= find user", error)
          res.status(HTTP_statusCode.InternalServerError).json("Something wrong please try again later");
       };
    };
@@ -52,6 +54,7 @@ class AdminController {
          const serviceResponse = await this.adminService.unBlock(user_id);
          res.status(HTTP_statusCode.OK).json(serviceResponse);
       } catch (error: any) {
+         console.log("Admin:= unblock error", error)
          res.status(HTTP_statusCode.InternalServerError).json("Something went wrong, please try again later");
       };
    };
@@ -62,6 +65,7 @@ class AdminController {
          const serviceResponse = await this.adminService.block(user_id);
          res.status(HTTP_statusCode.OK).json(serviceResponse);
       } catch (error: any) {
+         console.log("Admin:= block error", error)
          res.status(HTTP_statusCode.InternalServerError).json("Something went wrong, please try again later");
       };
    };
@@ -71,6 +75,7 @@ class AdminController {
          const controllResponse = await this.adminService.findTechnician();
          res.status(HTTP_statusCode.OK).json(controllResponse);
       } catch (error) {
+         console.log("Admin:= find technician error", error)
          res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later");
       };
    };
@@ -80,6 +85,7 @@ class AdminController {
          const response = await this.adminService.findBooking();
          res.status(HTTP_statusCode.OK).json(response);
       } catch (error) {
+         console.log("Admin:= find booking error ", error)
          res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later");
       };
    };
@@ -89,6 +95,7 @@ class AdminController {
          const response = await this.adminService.fetchbookingsLocation();
          res.status(HTTP_statusCode.OK).json(response);
       } catch (error) {
+         console.log("Admin:= find booking technician error", error)
          res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later");
       };
    };
@@ -98,6 +105,7 @@ class AdminController {
          const response = await this.adminService.getCategories();
          res.status(HTTP_statusCode.OK).json(response);
       } catch (error) {
+         console.log("Admin:= get category error", error)
          res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later");
       };
    };
@@ -108,6 +116,7 @@ class AdminController {
          const response = await this.adminService.filteredBooking(selectedDates);
          res.status(HTTP_statusCode.OK).json(response);
       } catch (error) {
+         console.log("Admin:= filter booking error", error)
          res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later");
       };
    };
@@ -118,6 +127,7 @@ class AdminController {
          res.clearCookie("AdminAccessToken", { httpOnly: true });
          res.status(HTTP_statusCode.OK).send('Logged out successfully');
       } catch (error) {
+         console.log("Admin:= logout", error)
          res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later")
       };
    };

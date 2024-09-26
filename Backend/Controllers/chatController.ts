@@ -17,6 +17,7 @@ class ChatController {
       const chatHistory = await this.chatService.getChat(senderID, receiverID);
       res.status(HTTP_statusCode.OK).json(chatHistory);
     } catch (error) {
+      console.log("chat:= get chat error", error)
       res.status(HTTP_statusCode.InternalServerError).json(error);
     };
   };

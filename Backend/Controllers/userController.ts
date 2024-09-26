@@ -28,6 +28,7 @@ class UserController {
          });
          res.status(HTTP_statusCode.OK).json({ userData: serviceResponse.userData });
       } catch (error: any) {
+         console.log("User:= login error", error);
          if (error.message === "email not found") {
             res.status(HTTP_statusCode.NotFound).json({ message: "email not found" });
          } else if (error.message === "Wrong password") {
@@ -58,6 +59,7 @@ class UserController {
          });
          res.status(HTTP_statusCode.OK).json({ userData: serviceResponse.userData });
       } catch (error: any) {
+         console.log("User:= google login error", error);
          if (error.message === "User not found") {
             res.status(HTTP_statusCode.NotFound).json({ message: "User not found" });
          } else if (error.message === "User is blocked") {
@@ -74,6 +76,7 @@ class UserController {
          await this.userService.register(userData);
          res.status(HTTP_statusCode.OK).send("OTP sended to mail");
       } catch (error: any) {
+         console.log("User:= register error", error);
          if (error.message === "Email already exists") {
             res.status(HTTP_statusCode.Conflict).json({ message: "Email already exists" });
          } else if (error.message === "Email not send") {
@@ -90,6 +93,7 @@ class UserController {
          const serviceResponse = await this.userService.otpVerification(enteredOTP);
          res.status(HTTP_statusCode.OK).json(serviceResponse);
       } catch (error: any) {
+         console.log("User:= otp verification error", error);
          if (error.message === "Incorrect OTP") {
             res.status(HTTP_statusCode.Unauthorized).json({ message: "Incorrect OTP" })
          } else if (error.message === "OTP is expired") {
@@ -105,6 +109,7 @@ class UserController {
          await this.userService.resendOTP();
          res.status(HTTP_statusCode.OK).send("OTP sended");
       } catch (error: any) {
+         console.log("User:= resend otp error", error);
          if (error.message === "Email not send") {
             res.status(HTTP_statusCode.InternalServerError).json({ message: "Email not send" });
          } else {
@@ -119,6 +124,7 @@ class UserController {
          await this.userService.createUpdateAddress(addAndEditAddressDetails, user_id);
          res.status(HTTP_statusCode.OK).json({ message: "Address modified successfully" });
       } catch (error: any) {
+         console.log("User:= update address error", error);
          if (error.message === "Failed to update address") {
             res.status(HTTP_statusCode.NoChange).send("Failed to update address");
          } else {
@@ -133,6 +139,7 @@ class UserController {
          const serviceResponse = await this.userService.deleteAddress(user_id);
          res.status(HTTP_statusCode.OK).send(serviceResponse);
       } catch (error: any) {
+         console.log("User:= delete address error", error);
          if (error.message === "Failed to delete address") {
             res.status(HTTP_statusCode.NoChange).send("Failed to update address");
          } else {
@@ -147,6 +154,7 @@ class UserController {
          await this.userService.updatePassword(user_id, currentPass, newPass);
          res.status(HTTP_statusCode.OK).send("Password changed successfully");
       } catch (error: any) {
+         console.log("User:= update password error", error);
          if (error.message === "Current password is wrong") {
             res.status(HTTP_statusCode.Unauthorized).json({ message: "Current password is wrong" });
          } else if (error.message === "User not found") {
@@ -163,6 +171,7 @@ class UserController {
          await this.userService.updateProfileDetails(user_id, name, phone);
          res.status(HTTP_statusCode.OK).send("Changes completed successfully");
       } catch (error: any) {
+         console.log("User:= update profile details error", error);
          if (error.message === "Failed to update profile") {
             res.status(HTTP_statusCode.NoChange).send("Failed to update profile")
          } else {
@@ -177,6 +186,7 @@ class UserController {
          const result = await this.userService.updateProfileImage(user_id, imageName);
          res.status(HTTP_statusCode.OK).json(result);
       } catch (error: any) {
+         console.log("User:= update profile image error", error);
          if (error.message === "Failed to update user profile") {
             res.status(HTTP_statusCode.NoChange).send("Failed to update user profile");
          } else {
@@ -191,6 +201,7 @@ class UserController {
          const response = await this.userService.getPreSignedURL(imageName as string, imageType as string)
          res.status(HTTP_statusCode.OK).json(response);
       } catch (error) {
+         console.log("User:= generate presigned url error", error);
          res.status(HTTP_statusCode.InternalServerError).send("Somthing wrong please try again later");
       };
    };
@@ -201,6 +212,7 @@ class UserController {
          await this.userService.followTechnician(user_id as string, technicianId as string);
          res.status(HTTP_statusCode.OK).send("Save technician completed successfully");
       } catch (error: any) {
+         console.log("User:= save technician error", error);
          if (error.message === "Failed to follow technician") {
             res.status(HTTP_statusCode.NoChange).send("Failed to follow technician");
          } else {
@@ -215,6 +227,7 @@ class UserController {
          await this.userService.unfollowTechnician(user_id as string, technicianId as string);
          res.status(HTTP_statusCode.OK).send("Unsave technician completed successfully");
       } catch (error: any) {
+         console.log("User:= un save error", error);
          if (error.message === "Failed to unfollow technician") {
             res.status(HTTP_statusCode.NoChange).send("Failed to unfollow technician");
          } else {
@@ -229,6 +242,7 @@ class UserController {
          const responseFromService = await this.userService.getFollowedTechnicians(user_id);
          res.status(HTTP_statusCode.OK).json(responseFromService);
       } catch (error) {
+         console.log("User:= get saved technician list error", error);
          res.status(HTTP_statusCode.InternalServerError).send("Something wrong, please try again later.");
       };
    };
@@ -239,6 +253,7 @@ class UserController {
          const serviceResponse = await this.userService.getTechnicians(user_id);
          res.status(HTTP_statusCode.OK).json(serviceResponse);
       } catch (error) {
+         console.log("User:= fetch all technicians error", error);
          res.status(HTTP_statusCode.InternalServerError).json(error)
       };
    };
@@ -249,6 +264,7 @@ class UserController {
          const responseFromService = await this.userService.getTechnicianWithPersonalDetails(technicianUser_id);
          res.status(HTTP_statusCode.OK).json(responseFromService);
       } catch (error) {
+         console.log("User:= get technician profile with personal detail error", error);
          res.status(HTTP_statusCode.InternalServerError).send("Somthing wrong please try again later");
       };
    };
@@ -259,6 +275,7 @@ class UserController {
          const techniciansList = await this.userService.getChatFriends(user_id);
          res.status(HTTP_statusCode.OK).json(techniciansList);
       } catch (error) {
+         console.log("User:= get chat friends error", error);
          res.status(HTTP_statusCode.InternalServerError).json(error);
       };
    };
@@ -269,6 +286,7 @@ class UserController {
          const response = await this.userService.bookTechnician(client_id, client_name, technicianDetails, serviceLocation, selectedDate);
          res.status(HTTP_statusCode.OK).json(response);
       } catch (error: any) {
+         console.log("User:= book technician slot error", error);
          if (error.message === "Technician is not available on selected date") {
             res.status(HTTP_statusCode.ServiceUnavailable).send("Technician is not available on selected date");
          } else if (error.message === "Booking failed") {
@@ -278,7 +296,6 @@ class UserController {
          } else if (error.message === "Unable to find location for the provided pincode.") {
             res.status(HTTP_statusCode.NoAccess).send("Unable to find location for the provided pincode.")
          } else {
-            console.log(error);
             res.status(HTTP_statusCode.InternalServerError).json(error);
          };
       };
@@ -290,6 +307,7 @@ class UserController {
          const response = await this.userService.getBookingsHistory(user_id);
          res.status(HTTP_statusCode.OK).json(response);
       } catch (error) {
+         console.log("User:= get booking history error", error);
          res.status(HTTP_statusCode.InternalServerError).json(error);
       };
    };
@@ -300,6 +318,7 @@ class UserController {
          const response = await this.userService.getBookingDetails(booking_id);
          res.status(HTTP_statusCode.OK).json(response);
       } catch (error) {
+         console.log("User:= get booking individual booking details error", error);
          res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later.");
       }
    };
@@ -310,6 +329,7 @@ class UserController {
          await this.userService.cancelBooking(booking_id, technician_id, userName, serviceDate);
          res.status(HTTP_statusCode.OK).send("Booking cancelled successfully.");
       } catch (error: any) {
+         console.log("User:= cancel booking error", error);
          if (error.message === "Failed to cancel booking") {
             res.status(HTTP_statusCode.NoChange).json("Failed to cancel booking");
          } else {
@@ -324,6 +344,7 @@ class UserController {
          const response = await this.userService.proceedToPayment(booking_id, laborCost);
          res.status(HTTP_statusCode.OK).json({ order_id: response.id, currency: response.currency, amount: response.amount, });
       } catch (error) {
+         console.log("User:= proceed to payement error", error);
          res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later.");
       };
    };
@@ -334,6 +355,7 @@ class UserController {
          await this.userService.verifyPayment(payment_id, order_id, signature, booking_id, amount, technicianUser_id);
          res.status(HTTP_statusCode.OK).send("Payment verified successfully");
       } catch (error: any) {
+         console.log("User:= verify payment error", error);
          if (error.message === "Invalid payment verification") {
             res.status(HTTP_statusCode.BadRequest).send("Invalid payment verification");
          } else if (error.message === "Payment failed") {
@@ -350,6 +372,7 @@ class UserController {
          await this.userService.submitReview(user_id, technicianUser_id, enteredRating, enteredFeedback, booking_id);
          res.status(HTTP_statusCode.OK).send("Feedback submitted successfully");
       } catch (error) {
+         console.log("User:= submit review error", error);
          res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later");
       };
    };
@@ -360,6 +383,7 @@ class UserController {
          res.clearCookie("RefreshToken", { httpOnly: true });
          res.status(HTTP_statusCode.OK).json('Logged out successfully');
       } catch (error) {
+         console.log("User:= logout error", error);
          res.status(HTTP_statusCode.InternalServerError).send("Something wrong please try again later")
       };
    };
