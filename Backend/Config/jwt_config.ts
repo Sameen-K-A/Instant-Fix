@@ -5,7 +5,7 @@ import HTTP_statusCode from '../Enums/httpStatusCode';
 
 dotenv.config();
 
-const secret_key = process.env.JWT_SECRET as string;
+const secret_key = process.env.jwt_secret as string;
 const accessTokenTime = process.env.Access_Token_Expirey_Time as string;
 const refreshTokenTime = process.env.Refresh_Token_Expirey_Time as string;
 const userAccessTokenName = process.env.userAccessTokenName as string;

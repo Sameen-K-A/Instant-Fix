@@ -8,7 +8,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const httpStatusCode_1 = __importDefault(require("../Enums/httpStatusCode"));
 dotenv_1.default.config();
-const secret_key = process.env.JWT_SECRET;
+const secret_key = process.env.jwt_secret;
 const accessTokenTime = process.env.Access_Token_Expirey_Time;
 const refreshTokenTime = process.env.Refresh_Token_Expirey_Time;
 const userAccessTokenName = process.env.userAccessTokenName;

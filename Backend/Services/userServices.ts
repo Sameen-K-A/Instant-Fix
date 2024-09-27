@@ -380,7 +380,7 @@ class UserServices implements IUserService {
    getBookingDetails = async (booking_id: string): Promise<any> => {
       try {
          let response: any = await this.userRepository.getBookingDetails(booking_id);
-         response = { ...response, technicianDetails: { ...response.technicianDetails, profileIMG: generateGetPreSignedURL(response.technicianDetails?.profileIMG) } };
+         response = { ...response, technicianDetails: { ...response.technicianDetails, profileIMG: await generateGetPreSignedURL(response.technicianDetails?.profileIMG) } };
          return response;
       } catch (error) {
          throw error;

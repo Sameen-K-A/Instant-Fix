@@ -396,7 +396,7 @@ class UserServices {
         this.getBookingDetails = async (booking_id) => {
             try {
                 let response = await this.userRepository.getBookingDetails(booking_id);
-                response = { ...response, technicianDetails: { ...response.technicianDetails, profileIMG: (0, s3_config_1.generateGetPreSignedURL)(response.technicianDetails?.profileIMG) } };
+                response = { ...response, technicianDetails: { ...response.technicianDetails, profileIMG: await (0, s3_config_1.generateGetPreSignedURL)(response.technicianDetails?.profileIMG) } };
                 return response;
             }
             catch (error) {
